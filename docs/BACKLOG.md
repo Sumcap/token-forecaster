@@ -1,0 +1,272 @@
+# Backlog
+
+Phased plan. Each phase ships something usable and each predictor step must
+beat the previous baseline in evaluation before it replaces it.
+
+See [STATE-OF-PLAY.md](./STATE-OF-PLAY.md) for what the evaluation currently
+measures, which features were tested and rejected, and the prioritized next
+steps behind the Phase 4/5 items below.
+
+## Done (Phase 1 foundations, plus the Phase 2 skeleton)
+
+- Monorepo scaffold (pnpm workspaces, TypeScript strict, Vitest)
+- Shared Zod schemas: count quality, forecasts, thinking usage, observations
+- Versioned Anthropic model registry with pricing provenance, covering all
+  three models the shipped forecast profile is fitted on (Fable 5, Opus 4.8,
+  Opus 5). Lookup resolves dated snapshot ids onto their canonical entry, and
+  the profile's `modelAliases` map is generated from the registry rather than
+  hand-written, so a caller holding a dated id cannot silently degrade to the
+  blended `overall` group.
+- Pure context-budget module with explainable, configurable warnings + tests
+- Anthropic adapter: count_tokens, streaming with usage normalization,
+  registry-backed metadata
+- Local estimator (character heuristic) + race-safe CountReconciler +
+  fixture-driven race tests
+- Static forecast Baseline 0 (labelled, clamped, low confidence)
+- Playground: model selector, system/user prompts, Web Worker local counts,
+  debounced Anthropic verification, count-source label, context bar,
+  reserved-output input, warning panel, forecast panel, projected cost
+- Express server route for POST /api/count-tokens (server-side key only)
+- README, competitive analysis, literature review, ADRs 0001-0005
+
+## Phase 2 completion: live input meter hardening
+
+- [ ] Reverify triggers: model change, tools change, documents/images, explicit
+      "verify now" button, and immediately before execution
+- [ ] Conversation-history editor in the playground (multi-turn requests)
+- [ ] Tool-definition editor included in counts
+- [ ] Latency metrics: local count latency, verification latency, API call volume
+- [ ] Optional live check of registry limits against GET /v1/models/{id}
+      (drift detection for contextWindow / maxOutputTokens)
+
+## Phase 3: execution and telemetry
+
+> **⚠️ PORT NOTE (decided 9 August 2026): live telemetry wiring happens at the
+> sheep-manager import, not before.** For now the model is developed and tested
+> locally against the mined Claude Code history corpus
+> (`pnpm evaluate:claude-history`). When this repo is finally ported into
+> **sheep-manager**, that integration must wire up the already-built collection
+> pipeline as part of the import: call `JsonlTelemetryWriter` (or POST to the
+> ingest server in `examples/telemetry-server.mjs`) around every provider call,
+> and — critically — have sheep-manager declare `expectedOutputKind` +
+> `expectedOutputKindSource` *before* each call, per `docs/TELEMETRY.md`. That
+> caller-declared intent signal is the one thing the local corpus cannot
+> provide and the prerequisite for every "blocked on Phase 3 telemetry" item
+> below.
+>
+> **Amendment, same day: telemetry is production-optional and must never be
+> load-bearing.** Most users will never contribute history or loop context, so
+> the predictor's zero-context cold-start path is the product; telemetry-fed
+> improvements are opt-in bonuses on top. The cold-start audit ran the same
+> afternoon (STATE-OF-PLAY §6.18–§6.22): the pooled `thinking` fallback tier
+> shipped, the eval now grades the zero-context path on every regeneration,
+> and the fallback contract in README reflects it.
+>
+> **Update, 10 August 2026: the port landed.** sheep-manager (branch
+> `token-forecaster-port`) consumes `core`/`predictor`/`telemetry` as vendored
+> `pnpm pack` tarballs under its `vendor/`. `server/forecast.js` wraps the
+> predictor (turn + session totals, per-call boosted vs the turn-root prompt);
+> both SDK entry points in `server/console.js` (`runOnce`, `startConsole`) take
+> a pre-call forecast and, behind the opt-in `forecastTelemetry` setting
+> (default OFF), write turn-granularity observations to
+> `data/telemetry/observations.jsonl` with caller-declared `expectedOutputKind`
+> + `expectedOutputKindSource: "orchestrator_declared"` at every orchestrated
+> call site (loops stages/watcher/triage/judge, farmer, digest, brain, etc.).
+> Turn-granularity rows are tagged `metadata.workflowId = "sheep-manager-turn"`
+> — they pair with `turnTotals`, NOT the per-call ladder; do not feed them to
+> `buildHistoricalProfile` as per-call rows. The Agent SDK exposes no
+> `max_tokens`/`thinking`, so requests record the Claude Code default cap (32k)
+> and tri-state unknown thinking.
+
+- [ ] Server-side Messages API execution route with SSE streaming to the UI
+- [ ] Streaming usage updates (message_start / message_delta usage events)
+- [ ] Final usage reconciliation; finish reason; isCensored flag
+- [ ] Thinking-token and cache usage capture where reported
+- [x] packages/telemetry: salted identifier hashing, storage modes,
+      schema-valid append-only JSONL writer/reader, and accuracy summary. The
+      encrypted-VM collection contract is in `docs/TELEMETRY.md`; provider
+      execution still needs to call it.
+- [ ] Forecast-vs-actual comparison view (before / during / after states)
+- [ ] Observation export command (packages/cli: run, export)
+
+## Phase 4: heuristic forecasting
+
+- [x] Baseline 1: constraint extraction ("in one sentence", "20 examples",
+      word limits, JSON-only, full-copy tasks) — **one signal adopted,
+      5 August 2026.** Constraint extraction was built as `hasLimit` /
+      `hasExpansive` in `lib/load-history.mjs` and graded alongside message
+      length, verb class, path mention, question-vs-command and requirement
+      count. The original ancestry walk incorrectly treated injected `isMeta`
+      skill rows as new human turns, hiding the real prompt on 22% of calls.
+      After fixing it, prompt coverage is **89.9%** and `promptPath` clears the
+      gate: **-10.9 pinball/call, 95% CI [-21.9, -0.4]**. It is now shipped.
+      All other prompt ladders remain rejected; combined prompt R^2 is 0.244,
+      still below the pre-committed 0.25 programme threshold.
+- [x] ~~Task-family classifier (rules first)~~ **Rejected with the above.** The
+      verb-class classifier is the rules-first version. Against a 3.2% base
+      rate it moves P(`Write`) to 3.7% -- a **1.17x** lift on the one class
+      worth detecting (9.8x over-represented among the worst misses). It cannot
+      feed a `Write` detector.
+- [x] Baseline 2: hierarchical historical p50/p90/p99 groups with
+      minimum-sample thresholds, model aliases, rolling-window profile builder,
+      and explicit fallback chain. The bundled Claude Code profile contains
+      overall, per-model, per-model-by-thinking, and prompt-path groups. Raw
+      prompts are never stored; callers pass one derived boolean.
+- [x] Baseline 2a: extended thinking as a conditioning dimension. Measured
+      -10.1% pinball loss against per-model alone on the chronological holdout
+      (2.9x median / 3.3x p99 separation). An omitted `thinkingEnabled` is
+      treated as unknown, not as disabled, and falls back to a broader group.
+- [x] Rolling-origin cross-validation (5 forward-looking folds) reported as
+      mean +/- spread, alongside the original single 80/20 split. Fold-to-fold
+      spread is +/-70 total pinball, which retired every previously reported
+      +/-1-2% difference as noise. Only two effects survive it: learning from
+      history at all (-36%), and conditioning on thinking (-10% on top).
+- [x] Recency-window sweep (7 / 14 / 30 / 90 / all days) against the rolling
+      CV, compared to the full history fold-by-fold. **Rejected**: 7d is
+      significantly worse (t=+3.8), 14d is a coin flip (t=-0.1), and 30d/90d
+      are identical to the full history because the corpus is under 30 days
+      wide. A window is adopted only on a paired improvement of >=2 standard
+      errors; the machinery stays wired up and is re-swept on every run.
+- [x] Narrow the backoff ladder to model / thinking / effort / task. `tools`
+      was degenerate (constant for an agent workload, never recorded in
+      transcripts, and conflated an omitted count with "no tools") and `input`
+      had hurt p99 in five independent tests. Neither had ever produced a
+      shipped group, so removal left every holdout number unchanged.
+- [x] `previousOutputTokens` (the previous call's output size) as a conditioning
+      dimension: request field, `previousOutputBucket()`, the
+      model+thinking+prevOutput ladder rung, and a paired adoption gate wired
+      into the eval. **Built but NOT adopted.** It measured -16.4 +/- 4.4
+      (t=-3.8) on 3 August and -7.2 +/- 4.1 (t=-1.8) on 4 August, off 1.3% more
+      data; two independent implementations agree on the second number. The gate
+      re-tests it on every regeneration and will emit the tier the moment its
+      95% CI clears zero, so there is nothing left to build if the effect
+      returns. Under the corrected statistic (a paired block bootstrap over
+      per-call losses in session blocks, which replaced the 5-fold t on
+      4 August) it read **-8.2/call, CI [-18.4, +2.1]** in the morning and
+      **-3.7/call, CI [-15.1, +8.1]** that evening, on a corpus 1% larger. The
+      point estimate wanders and the verdict does not: real in direction, not
+      separable from zero on an effective sample of ~54 sessions.
+      See STATE-OF-PLAY.md 7.1.
+- [x] The oracle ceiling re-measured. The published "-49 pinball/call (~8%)"
+      was a **sample-floor artifact**: the oracle was a single joint
+      `model|thinking|action` rung at a 100-sample floor, and `Write` is 3% of
+      the corpus, so exactly one of six cells cleared the floor -- a model that
+      has left the workload. The oracle was scored as knowing nothing on ~68%
+      of `Write` calls. With a pooled `action=` rung added beneath the joint
+      one, the ceiling is **~-90/call (~17% of shipped loss)**, median over 12
+      corpus endpoints, range -50 to -126. A **binary** "is this a `Write`?"
+      detector is worth ~71% of it. See STATE-OF-PLAY.md 4.2a.
+- [ ] Forecast-vs-actual dashboard with rolling error and coverage
+
+## Phase 5: trained forecasting
+
+- [x] **Baseline 3 portable quantile correction (6 August 2026).** Three
+      24-tree depth-2 ensembles correct the historical p50/p90/p99 residuals
+      from privacy-safe prompt aggregates and exact completed parent-chain
+      history. Five-fold rolling origin: 671.2 → 650.4 pinball/call (−3.1%,
+      paired session-block CI [−30.2, −14.0]); coverage
+      49.6/86.9/98.6% → 49.2/87.8/98.7%. Adopted because the full CI is below
+      zero, but explicitly not called a breakthrough because it is below 5%.
+      Incomplete context skips the trained correction and returns low
+      confidence.
+- [x] Hurdle/mixture, semantic prompt, workload, session-history, online
+      conformal, and structured/hashed quantile candidates measured with oracle
+      ceilings first. Only the portable booster cleared the adoption gate;
+      none cleared the breakthrough gate. Full table:
+      `experiments/artifacts/breakthrough-probe.json`.
+
+- [ ] experiments/: Python pipeline (pandas, scikit-learn, Parquet export)
+- [ ] Curated Anthropic benchmark dataset (task families from the design doc;
+      one primary Sonnet model; repeated sampling on 5-10% of prompts)
+- [ ] Baselines B4-B6: linear / structured-feature / quantile regression
+- [ ] Cap-risk classifier trained on censored observations
+- [x] Online rolling conformal calibration tested at 64/128/256/512 call
+      windows. Best standalone effect −6.2/call, CI [−15.9, +3.7]: rejected.
+- [ ] Dataset splits: random, template-group, unseen-task, temporal, snapshot
+- [ ] Metrics: chronological empirical coverage and pinball loss are shipped;
+      add MAE / median AE / log1p AE, interval width, Brier score, and
+      calibration curves
+- [ ] Predictor artifact versioning + drift warnings (coverage regression)
+
+## Phase 6: integration package
+
+- [ ] packages/react: useTokenCount, useTokenForecast, useContextBudget,
+      meter and warning components extracted from the playground
+- [ ] Headless TypeScript API + middleware interface for the agent
+      orchestration app (the sheep-manager connection). The forecast half of
+      this contract is already stable and documented in the README
+      ("Integration contract"): pass model id, maxTokens and thinkingEnabled;
+      branch on `calibration.usedFallback`.
+- [ ] packages/cli: count, forecast, evaluate
+
+## Phase 7: workflow forecasts (out of MVP)
+
+- [ ] workflowId / agentId / stepId / attemptNumber / parentCallId telemetry
+- [ ] Call-count and loop-count distributions, branch probabilities,
+      context growth modeling
+
+## Status, 6 August 2026: Baseline 3 adopted; breakthrough blocked on telemetry
+
+The live corpus invalidated the stale 623.7/call headline: the current ladder
+reproduces at 678.6 on the latest chronological holdout and 671.2 on rolling
+origin. Baseline 3's portable correction is a real, repeatable 3.0% gain, but
+the remaining failure mode is a rare long artifact/action regime that prompt
+semantics does not identify accurately enough. A future `Write` label has an
+11.1% oracle ceiling; the leakage-free semantic detector reaches only 0.584
+AUC. The smallest unblocker is a caller-declared pre-call
+`expectedOutputKind`, paired with post-call observed kind/action and stable
+salted user/workload ids. The collection plan is in `docs/TELEMETRY.md`.
+
+## Superseded status, 5 August 2026: Phase 4 closed with one prompt feature
+
+Phases 5-7 below are unchanged, but read STATE-OF-PLAY.md 7.6 before starting
+any of them. The central prompt hypothesis still fails its broad R² threshold,
+but the corrected ancestry join exposed one narrow, useful bit: naming a path
+predicts a heavier tail and improves held-out pinball. What remains is a
+**calibrated reservation heuristic that knows its own ceiling**: it beats a
+static guess by 32%, tells a caller when it is guessing
+(`calibration.usedFallback`), and uses the only prompt feature that cleared the
+adoption gate.
+
+Phase 5's trained models are not blocked on modelling capacity -- prompt
+features explain 0.007 of the variance in log output on their own, and no
+functional form fixes that. They are blocked on **observing something new**. The
+one measurement that would justify resuming is a corpus with materially more
+*human turns* (not more calls): the depth-0 prompt effect is real and only
+failed to demonstrate out-of-sample because 104 turn-openers reached the
+holdout.
+
+## Known gaps / notes
+
+- The bundled historical profile describes output tokens per Claude Code API
+  call. It is not a full-task forecast, and a model with fewer than 100
+  observations uses the visible `overall` fallback (`calibration.usedFallback`
+  is the caller's signal; see the README integration contract). Replace it with
+  first-party direct-API telemetry before claiming workload-conditional
+  calibration.
+
+- The `thinking` dimension is inferred from emitted content blocks, not from the
+  recorded request configuration: a thinking block implies thinking was enabled,
+  but a thinking-enabled request that emits no thinking block is labelled "no".
+  This slightly inflates the no-thinking quantiles, which makes the measured
+  2.9x/3.3x separation a mild understatement rather than an overstatement. Not
+  fixable from transcripts — they never record the request's thinking config.
+  Blocked on Phase 3 telemetry; do not work around it in the eval script.
+
+- `probabilityOfOutputCap` remains unavailable and cannot be fitted: the corpus
+  has zero censored calls out of 13,644, so there is no signal to learn from,
+  and three quantiles cannot imply a cap probability. Blocked on Phase 3
+  execution telemetry run with a deliberately low `max_tokens`.
+
+- `pnpm evaluate:claude-history` requires `pnpm build` first: it generates the
+  profile's model aliases from the built model-registry dist.
+
+- The server requires `pnpm build` before `pnpm dev:server` (imports built
+  dists). Note: the script is deliberately not named `server`; `pnpm server`
+  is a pnpm built-in command that silently shadows a script of that name.
+- Sonnet 5 intro pricing ($2/$10 through 2026-08-31) is recorded in the
+  registry note but not modeled in cost projection; decide whether projected
+  cost should use intro or list price.
+- The local estimator is a plain character heuristic; a WASM tokenizer
+  approximation could upgrade quality from `character_heuristic` to
+  `local_estimate` without violating ADR 0002.

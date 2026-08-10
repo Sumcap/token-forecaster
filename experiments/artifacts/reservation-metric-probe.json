@@ -1,0 +1,566 @@
+{
+  "generatedAt": "2026-08-09T11:12:25.998Z",
+  "source": "/Users/polpedu/.claude/projects",
+  "calls": 14978,
+  "holdoutCalls": 2996,
+  "lomoCalls": 2996,
+  "kappaNote": "L_k at R=p90: one overflow token costs k wasted tokens. k=9 is 10x p90 pinball.",
+  "comparisons": {
+    "promptPath (ADOPTED)": {
+      "totalPinball": {
+        "n": 2996,
+        "meanDifference": -3.0361114819760333,
+        "ciLower": -10.868267441860665,
+        "ciUpper": 5.285288239815493,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP50": {
+        "n": 2996,
+        "meanDifference": 0.3940253671562083,
+        "ciLower": -1.0776226734348562,
+        "ciUpper": 2.3961173681090693,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP90": {
+        "n": 2996,
+        "meanDifference": -1.5305407209612807,
+        "ciLower": -4.637534033450116,
+        "ciUpper": 2.14413116763713,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP99": {
+        "n": 2996,
+        "meanDifference": -1.8995961281708442,
+        "ciLower": -7.379010806317584,
+        "ciUpper": 3.255307714533399,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k1": {
+        "n": 2996,
+        "meanDifference": -42.688584779706275,
+        "ciLower": -102.29403149029659,
+        "ciUpper": 25.84783327820046,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k4": {
+        "n": 2996,
+        "meanDifference": -32.41989319092123,
+        "ciLower": -78.66941431670281,
+        "ciUpper": 20.205202312138727,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k9": {
+        "n": 2996,
+        "meanDifference": -15.305407209612817,
+        "ciLower": -46.375340334500194,
+        "ciUpper": 21.441311676371438,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k19": {
+        "n": 2996,
+        "meanDifference": 18.923564753004005,
+        "ciLower": -54.18038293584145,
+        "ciUpper": 80.36102532427424,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k49": {
+        "n": 2996,
+        "meanDifference": 121.61048064085448,
+        "ciLower": -150.032874617737,
+        "ciUpper": 332.74658703071674,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP99_k99": {
+        "n": 2996,
+        "meanDifference": -189.95961281708946,
+        "ciLower": -737.901080631754,
+        "ciUpper": 325.5307714533372,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "prevOutput (REFUSED)": {
+      "totalPinball": {
+        "n": 2996,
+        "meanDifference": -0.21040387182910558,
+        "ciLower": -0.5372764227642276,
+        "ciUpper": 0,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP50": {
+        "n": 2996,
+        "meanDifference": 0.04672897196261682,
+        "ciLower": -0.0038910505836575876,
+        "ciUpper": 0.12518301610541727,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP90": {
+        "n": 2996,
+        "meanDifference": -0.07853805073431233,
+        "ciLower": -0.33636022514071295,
+        "ciUpper": 0.13573085846867777,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP99": {
+        "n": 2996,
+        "meanDifference": -0.17859479305741005,
+        "ciLower": -0.42849629918192433,
+        "ciUpper": 0,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k1": {
+        "n": 2996,
+        "meanDifference": -1.9656208277703604,
+        "ciLower": -4.55307467057101,
+        "ciUpper": 0,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k4": {
+        "n": 2996,
+        "meanDifference": -1.5230307076101468,
+        "ciLower": -3.891542002301496,
+        "ciUpper": 0,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k9": {
+        "n": 2996,
+        "meanDifference": -0.7853805073431241,
+        "ciLower": -3.3636022514071295,
+        "ciUpper": 1.357308584686775,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k19": {
+        "n": 2996,
+        "meanDifference": 0.6899198931909212,
+        "ciLower": -3.1038781163434903,
+        "ciUpper": 6.0197597830298335,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k49": {
+        "n": 2996,
+        "meanDifference": 5.115821094793057,
+        "ciLower": -3.0255025502550255,
+        "ciUpper": 21.0183850036049,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP99_k99": {
+        "n": 2996,
+        "meanDifference": -17.859479305740987,
+        "ciLower": -42.84962991819244,
+        "ciUpper": 0,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "boosted (ADOPTED)": {
+      "totalPinball": {
+        "n": 2996,
+        "meanDifference": -16.55490654205612,
+        "ciLower": -22.37808980493185,
+        "ciUpper": -11.722483288770064,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP50": {
+        "n": 2996,
+        "meanDifference": -2.2059412550066755,
+        "ciLower": -3.900755767700875,
+        "ciUpper": -0.5595306239267316,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP90": {
+        "n": 2996,
+        "meanDifference": -11.333477970627671,
+        "ciLower": -14.821453775582311,
+        "ciUpper": -8.73098842386468,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP99": {
+        "n": 2996,
+        "meanDifference": -3.015487316421874,
+        "ciLower": -5.6592302609844145,
+        "ciUpper": -0.3418561925878885,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k1": {
+        "n": 2996,
+        "meanDifference": -83.3454606141522,
+        "ciLower": -122.12689173457508,
+        "ciUpper": -52.03799814643188,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k4": {
+        "n": 2996,
+        "meanDifference": -94.59145527369826,
+        "ciLower": -126.73552631578947,
+        "ciUpper": -68.18248407643313,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k9": {
+        "n": 2996,
+        "meanDifference": -113.33477970627503,
+        "ciLower": -148.21453775582216,
+        "ciUpper": -87.30988423864649,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k19": {
+        "n": 2996,
+        "meanDifference": -150.82142857142858,
+        "ciLower": -212.99548736462094,
+        "ciUpper": -98.89336492890995,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k49": {
+        "n": 2996,
+        "meanDifference": -263.2813751668892,
+        "ciLower": -446.7823054331865,
+        "ciUpper": -92.7588809946714,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP99_k99": {
+        "n": 2996,
+        "meanDifference": -301.5487316421896,
+        "ciLower": -565.9230260984473,
+        "ciUpper": -34.18561925878999,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "window14 (REJECTED)": {
+      "totalPinball": {
+        "n": 2996,
+        "meanDifference": -1.0330807743658241,
+        "ciLower": -3.6904747861987435,
+        "ciUpper": 0.9295921985815564,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP50": {
+        "n": 2996,
+        "meanDifference": -0.6248331108144193,
+        "ciLower": -1.1192248062015504,
+        "ciUpper": -0.15021008403361344,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP90": {
+        "n": 2996,
+        "meanDifference": 0.6797730307076136,
+        "ciLower": -0.10248350795498555,
+        "ciUpper": 1.5302005943536428,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP99": {
+        "n": 2996,
+        "meanDifference": -1.0880206942590152,
+        "ciLower": -3.5982676414494734,
+        "ciUpper": 0.3627078163771716,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k1": {
+        "n": 2996,
+        "meanDifference": -9.832443257676903,
+        "ciLower": -21.344063689858082,
+        "ciUpper": 0.6419684821675422,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k4": {
+        "n": 2996,
+        "meanDifference": -3.596128170894526,
+        "ciLower": -11.456002850017812,
+        "ciUpper": 4.479872204472843,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k9": {
+        "n": 2996,
+        "meanDifference": 6.797730307076101,
+        "ciLower": -1.0248350795498642,
+        "ciUpper": 15.302005943536404,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k19": {
+        "n": 2996,
+        "meanDifference": 27.585447263017357,
+        "ciLower": 8.772400756143668,
+        "ciUpper": 49.39471228615863,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k49": {
+        "n": 2996,
+        "meanDifference": 89.94859813084112,
+        "ciLower": 32.02476515798463,
+        "ciUpper": 159.40081799591002,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP99_k99": {
+        "n": 2996,
+        "meanDifference": -108.8020694259012,
+        "ciLower": -359.82676414494597,
+        "ciUpper": 36.27078163771712,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "decay7 (REFUSED)": {
+      "totalPinball": {
+        "n": 2996,
+        "meanDifference": -1.87553738317758,
+        "ciLower": -4.913110187110113,
+        "ciUpper": 0.28079648894667625,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP50": {
+        "n": 2996,
+        "meanDifference": -0.5483978638184246,
+        "ciLower": -1.1540846097738877,
+        "ciUpper": 0.008951822916666666,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP90": {
+        "n": 2996,
+        "meanDifference": -0.024566088117485188,
+        "ciLower": -0.7196800595237979,
+        "ciUpper": 0.6141445336627579,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP99": {
+        "n": 2996,
+        "meanDifference": -1.3025734312416353,
+        "ciLower": -4.13381938690968,
+        "ciUpper": 0.6181991424487862,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k1": {
+        "n": 2996,
+        "meanDifference": -15.359145527369826,
+        "ciLower": -26.556521739130435,
+        "ciUpper": -3.2905929835454826,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k4": {
+        "n": 2996,
+        "meanDifference": -9.69158878504673,
+        "ciLower": -18.676844783715012,
+        "ciUpper": -0.5697498104624715,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k9": {
+        "n": 2996,
+        "meanDifference": -0.24566088117489987,
+        "ciLower": -7.196800595238095,
+        "ciUpper": 6.141445336627548,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k19": {
+        "n": 2996,
+        "meanDifference": 18.646194926568757,
+        "ciLower": 5.1329991153052195,
+        "ciUpper": 32.309802609568415,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k49": {
+        "n": 2996,
+        "meanDifference": 75.32176234979973,
+        "ciLower": 26.500453857791225,
+        "ciUpper": 123.52104442712393,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP99_k99": {
+        "n": 2996,
+        "meanDifference": -130.25734312416554,
+        "ciLower": -413.3819386909693,
+        "ciUpper": 61.81991424487851,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "thinkPooled LOMO (ADOPTED)": {
+      "totalPinball": {
+        "n": 2996,
+        "meanDifference": -54.92172229639647,
+        "ciLower": -68.23748065015451,
+        "ciUpper": -39.90834686586585,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP50": {
+        "n": 2996,
+        "meanDifference": -17.8619826435247,
+        "ciLower": -23.58847271553116,
+        "ciUpper": -11.859243040350329,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP90": {
+        "n": 2996,
+        "meanDifference": -26.307943925233808,
+        "ciLower": -34.559081097749086,
+        "ciUpper": -17.87212543553982,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "pinballP99": {
+        "n": 2996,
+        "meanDifference": -10.751795727636654,
+        "ciLower": -14.628497335701582,
+        "ciUpper": -6.82173231681494,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k1": {
+        "n": 2996,
+        "meanDifference": -217.05273698264352,
+        "ciLower": -292.5032786885246,
+        "ciUpper": -137.2348371676128,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k4": {
+        "n": 2996,
+        "meanDifference": -234.31275033377838,
+        "ciLower": -301.69556962025314,
+        "ciUpper": -160.8687673130194,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k9": {
+        "n": 2996,
+        "meanDifference": -263.07943925233644,
+        "ciLower": -345.59081097749,
+        "ciUpper": -178.7212543554007,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k19": {
+        "n": 2996,
+        "meanDifference": -320.6128170894526,
+        "ciLower": -489.26267281105993,
+        "ciUpper": -166.79518072289156,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP90_k49": {
+        "n": 2996,
+        "meanDifference": -493.2129506008011,
+        "ciLower": -983.6577042399173,
+        "ciUpper": -87.4577034416211,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "reserveP99_k99": {
+        "n": 2996,
+        "meanDifference": -1075.179572763685,
+        "ciLower": -1462.84973357016,
+        "ciUpper": -682.1732316814908,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    }
+  },
+  "shippedOverflowRates": {
+    "p90": 0.07910547396528705,
+    "p99": 0.009345794392523364
+  }
+}

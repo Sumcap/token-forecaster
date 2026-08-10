@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+*.tsbuildinfo
+
+# local env and secrets
+.env
+.env.*
+
+# local experiment data (privacy: observations stay local)
+experiments/datasets/local/
+experiments/artifacts/local/
+
+# editor and OS noise
+.DS_Store
+.idea/
+.vscode/
+
+# logs
+*.log

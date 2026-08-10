@@ -1,0 +1,261 @@
+{
+  "generatedAt": "2026-08-04T14:16:02.404Z",
+  "source": "/Users/polpedu/.claude/projects",
+  "naive": {
+    "Bash": {
+      "n": 7526,
+      "p50": 378,
+      "p90": 1461,
+      "p99": 4308.25
+    },
+    "Edit": {
+      "n": 2639,
+      "p50": 630,
+      "p90": 2106.200000000003,
+      "p99": 5838.959999999983
+    },
+    "Read": {
+      "n": 2026,
+      "p50": 183,
+      "p90": 1118,
+      "p99": 4337.25
+    },
+    "Write": {
+      "n": 469,
+      "p50": 2773,
+      "p90": 10049.599999999997,
+      "p99": 24245.64
+    },
+    "ToolSearch": {
+      "n": 102,
+      "p50": 474.5,
+      "p90": 1769.7000000000012,
+      "p99": 5394.989999999997
+    },
+    "(no-tool)": {
+      "n": 1009,
+      "p50": 827,
+      "p90": 2453.8,
+      "p99": 6325.3599999999915
+    },
+    "(other-tool)": {
+      "n": 670,
+      "p50": 444,
+      "p90": 2864.6000000000004,
+      "p99": 6441.909999999996
+    }
+  },
+  "naiveSpread": 15.153005464480874,
+  "gates": {
+    "Edit": {
+      "comparable": true,
+      "days": 27,
+      "cells": 51,
+      "sharedCells": 51,
+      "effect": 0.6791070474798302,
+      "z": 21.82169556480498,
+      "withinCellRatio": 1.713478651382514,
+      "naiveRatio": 1.6666666666666667,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 44,
+        "pooledRatio": 1.6135247547184508,
+        "q": 246.4209280784721,
+        "df": 43,
+        "p": 2.411072829781569e-30,
+        "iSquared": 0.8255018340556417
+      },
+      "signAgreement": 0.9512195121951219,
+      "signCells": 41,
+      "signP": 7.839844329282659e-10
+    },
+    "Read": {
+      "comparable": true,
+      "days": 28,
+      "cells": 55,
+      "sharedCells": 55,
+      "effect": 0.31773149268779866,
+      "z": -20.976068504566047,
+      "withinCellRatio": 0.4983700673006947,
+      "naiveRatio": 0.48412698412698413,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 45,
+        "pooledRatio": 0.46744144090190326,
+        "q": 96.4976288664005,
+        "df": 44,
+        "p": 0.000008471715687619239,
+        "iSquared": 0.5440302469927284
+      },
+      "signAgreement": 0.9512195121951219,
+      "signCells": 41,
+      "signP": 7.839844329282659e-10
+    },
+    "Write": {
+      "comparable": true,
+      "days": 27,
+      "cells": 50,
+      "sharedCells": 50,
+      "effect": 0.9157505730457969,
+      "z": 24.11488303100139,
+      "withinCellRatio": 7.397962957452773,
+      "naiveRatio": 7.335978835978836,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 25,
+        "pooledRatio": 6.668050226739934,
+        "q": 85.04400281081978,
+        "df": 24,
+        "p": 9.377761478563204e-9,
+        "iSquared": 0.7177931517006796
+      },
+      "signAgreement": 1,
+      "signCells": 19,
+      "signP": 0.0000038146972656250136
+    },
+    "ToolSearch": {
+      "comparable": true,
+      "days": 26,
+      "cells": 44,
+      "sharedCells": 44,
+      "effect": 0.4433256770471663,
+      "z": -1.5368670702521772,
+      "withinCellRatio": null,
+      "naiveRatio": 1.2552910052910053,
+      "heterogeneity": {
+        "testable": false,
+        "cells": 0
+      },
+      "signAgreement": null,
+      "signCells": 0,
+      "signP": null
+    },
+    "(no-tool)": {
+      "comparable": true,
+      "days": 28,
+      "cells": 61,
+      "sharedCells": 57,
+      "effect": 0.6873879359113267,
+      "z": 15.319680525252137,
+      "withinCellRatio": 1.9299232092568013,
+      "naiveRatio": 2.187830687830688,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 37,
+        "pooledRatio": 2.342530670324474,
+        "q": 89.21168187525737,
+        "df": 36,
+        "p": 0.000002071342697911819,
+        "iSquared": 0.5964654040449774
+      },
+      "signAgreement": 0.9722222222222222,
+      "signCells": 36,
+      "signP": 1.0768417268991503e-9
+    },
+    "(other-tool)": {
+      "comparable": true,
+      "days": 28,
+      "cells": 56,
+      "sharedCells": 56,
+      "effect": 0.5330172864149207,
+      "z": 2.170930718202145,
+      "withinCellRatio": 1.2671477836878768,
+      "naiveRatio": 1.1746031746031746,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 28,
+        "pooledRatio": 1.1526020772680996,
+        "q": 92.90632550628128,
+        "df": 27,
+        "p": 3.6474319943850226e-9,
+        "iSquared": 0.7093846963286201
+      },
+      "signAgreement": 0.6153846153846154,
+      "signCells": 26,
+      "signP": 0.32693958282470736
+    }
+  },
+  "classifier": {
+    "folds": [
+      {
+        "fold": 1,
+        "logLossModel": 1.1469687885616124,
+        "logLossBaseline": 1.3265695400598831,
+        "accuracy": 0.5719237435008665,
+        "accuracyBaseline": 0.5216637781629117
+      },
+      {
+        "fold": 2,
+        "logLossModel": 1.1756906714227668,
+        "logLossBaseline": 1.3620109340924142,
+        "accuracy": 0.5961871750433275,
+        "accuracyBaseline": 0.512998266897747
+      },
+      {
+        "fold": 3,
+        "logLossModel": 1.2807300851472783,
+        "logLossBaseline": 1.5001857977084438,
+        "accuracy": 0.5493934142114385,
+        "accuracyBaseline": 0.4592720970537262
+      },
+      {
+        "fold": 4,
+        "logLossModel": 1.1733723697859288,
+        "logLossBaseline": 1.4417813395534576,
+        "accuracy": 0.5909878682842288,
+        "accuracyBaseline": 0.4055459272097054
+      },
+      {
+        "fold": 5,
+        "logLossModel": 1.081959236042291,
+        "logLossBaseline": 1.354093429666101,
+        "accuracy": 0.6282271944922547,
+        "accuracyBaseline": 0.46471600688468157
+      }
+    ],
+    "meanLogLossGain": 0.22518397802408446
+  },
+  "mixture": {
+    "folds": [
+      {
+        "fold": 1,
+        "marginal": 463.3589551126524,
+        "mixture": 457.4963084922009,
+        "oracle": 397.4824863084921
+      },
+      {
+        "fold": 2,
+        "marginal": 556.6552623916799,
+        "mixture": 553.5719757365671,
+        "oracle": 515.4512353552857
+      },
+      {
+        "fold": 3,
+        "marginal": 697.7962270363945,
+        "mixture": 687.0590467937618,
+        "oracle": 558.3955043327561
+      },
+      {
+        "fold": 4,
+        "marginal": 697.0012034662027,
+        "mixture": 696.1541767764309,
+        "oracle": 549.5539861351821
+      },
+      {
+        "fold": 5,
+        "marginal": 804.8623036144579,
+        "mixture": 814.5478657487104,
+        "oracle": 635.9983132530131
+      }
+    ],
+    "mixtureVsMarginal": {
+      "mean": -2.1689156147432755,
+      "se": 3.0342769478538663
+    },
+    "oracleVsMarginal": {
+      "mean": -112.55848524733167,
+      "se": 22.2519290040217
+    },
+    "shareOfOracleCaptured": 0.019269232434830516
+  }
+}

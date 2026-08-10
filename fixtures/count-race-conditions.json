@@ -1,0 +1,89 @@
+{
+  "description": "Event-sequence fixtures for CountReconciler. Each scenario feeds events in order; 'resolve' events assert whether the response is applied or discarded, and 'expect' asserts the displayed count afterwards.",
+  "scenarios": [
+    {
+      "name": "happy path: type, verify, display verified",
+      "steps": [
+        { "op": "input", "localTokens": 120 },
+        { "op": "start", "ticket": "A" },
+        { "op": "resolve", "ticket": "A", "tokens": 118, "expectApplied": true },
+        { "op": "expect", "tokens": 118, "quality": "anthropic_verified", "pendingVerification": false }
+      ]
+    },
+    {
+      "name": "slow first response must not overwrite a newer verified count",
+      "steps": [
+        { "op": "input", "localTokens": 100 },
+        { "op": "start", "ticket": "A" },
+        { "op": "input", "localTokens": 200 },
+        { "op": "start", "ticket": "B" },
+        { "op": "resolve", "ticket": "B", "tokens": 205, "expectApplied": true },
+        { "op": "resolve", "ticket": "A", "tokens": 98, "expectApplied": false },
+        { "op": "expect", "tokens": 205, "quality": "anthropic_verified", "pendingVerification": false }
+      ]
+    },
+    {
+      "name": "response for stale input is discarded even if it is the only one",
+      "steps": [
+        { "op": "input", "localTokens": 100 },
+        { "op": "start", "ticket": "A" },
+        { "op": "input", "localTokens": 300 },
+        { "op": "resolve", "ticket": "A", "tokens": 97, "expectApplied": false },
+        { "op": "expect", "tokens": 300, "quality": "character_heuristic", "pendingVerification": true }
+      ]
+    },
+    {
+      "name": "out-of-order arrival: older ticket resolving after newer ticket started is discarded",
+      "steps": [
+        { "op": "input", "localTokens": 150 },
+        { "op": "start", "ticket": "A" },
+        { "op": "start", "ticket": "B" },
+        { "op": "resolve", "ticket": "A", "tokens": 149, "expectApplied": false },
+        { "op": "resolve", "ticket": "B", "tokens": 151, "expectApplied": true },
+        { "op": "expect", "tokens": 151, "quality": "anthropic_verified", "pendingVerification": false }
+      ]
+    },
+    {
+      "name": "newer ticket resolves first; the same-input older ticket still cannot apply afterwards",
+      "steps": [
+        { "op": "input", "localTokens": 80 },
+        { "op": "start", "ticket": "A" },
+        { "op": "start", "ticket": "B" },
+        { "op": "resolve", "ticket": "B", "tokens": 82, "expectApplied": true },
+        { "op": "resolve", "ticket": "A", "tokens": 79, "expectApplied": false },
+        { "op": "expect", "tokens": 82, "quality": "anthropic_verified", "pendingVerification": false }
+      ]
+    },
+    {
+      "name": "typing after verification returns to a pending local estimate",
+      "steps": [
+        { "op": "input", "localTokens": 50 },
+        { "op": "start", "ticket": "A" },
+        { "op": "resolve", "ticket": "A", "tokens": 48, "expectApplied": true },
+        { "op": "input", "localTokens": 55 },
+        { "op": "expect", "tokens": 55, "quality": "character_heuristic", "pendingVerification": true }
+      ]
+    },
+    {
+      "name": "failure of the latest request keeps the local estimate pending",
+      "steps": [
+        { "op": "input", "localTokens": 60 },
+        { "op": "start", "ticket": "A" },
+        { "op": "fail", "ticket": "A", "expectRelevant": true },
+        { "op": "expect", "tokens": 60, "quality": "character_heuristic", "pendingVerification": true }
+      ]
+    },
+    {
+      "name": "failure of a stale request is irrelevant and changes nothing",
+      "steps": [
+        { "op": "input", "localTokens": 60 },
+        { "op": "start", "ticket": "A" },
+        { "op": "input", "localTokens": 70 },
+        { "op": "start", "ticket": "B" },
+        { "op": "fail", "ticket": "A", "expectRelevant": false },
+        { "op": "resolve", "ticket": "B", "tokens": 71, "expectApplied": true },
+        { "op": "expect", "tokens": 71, "quality": "anthropic_verified", "pendingVerification": false }
+      ]
+    }
+  ]
+}

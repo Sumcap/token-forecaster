@@ -1,0 +1,1145 @@
+{
+  "generatedAt": "2026-08-04T15:41:34.024Z",
+  "source": "/Users/polpedu/.claude/projects",
+  "minGroup": 100,
+  "classMin": 100,
+  "asOf": null,
+  "coverage": {
+    "calls": 14840,
+    "withParent": 13539,
+    "afterUser": 1301,
+    "chainBroken": 0,
+    "exactDepth": 14840,
+    "withResult": 13538
+  },
+  "marginalContrasts": {
+    "loopDepth": [
+      {
+        "key": "d0",
+        "n": 1301,
+        "p50": 537,
+        "p90": 3070,
+        "p99": 11156,
+        "band": 10619
+      },
+      {
+        "key": "d1",
+        "n": 1018,
+        "p50": 352.5,
+        "p90": 1592.200000000001,
+        "p99": 6252.580000000017,
+        "band": 5900.080000000017
+      },
+      {
+        "key": "d2",
+        "n": 915,
+        "p50": 385,
+        "p90": 1978.0000000000016,
+        "p99": 6291.740000000005,
+        "band": 5906.740000000005
+      },
+      {
+        "key": "d3",
+        "n": 809,
+        "p50": 398,
+        "p90": 2197.2000000000007,
+        "p99": 7445.719999999973,
+        "band": 7047.719999999973
+      },
+      {
+        "key": "d4",
+        "n": 722,
+        "p50": 418,
+        "p90": 2127.199999999999,
+        "p99": 6585.799999999999,
+        "band": 6167.799999999999
+      },
+      {
+        "key": "d5",
+        "n": 649,
+        "p50": 427,
+        "p90": 2252.000000000002,
+        "p99": 7572.8799999999965,
+        "band": 7145.8799999999965
+      },
+      {
+        "key": "d6",
+        "n": 9426,
+        "p50": 439,
+        "p90": 1781,
+        "p99": 6200.75,
+        "band": 5761.75
+      }
+    ],
+    "prevAction": [
+      {
+        "key": "(other-tool)",
+        "n": 592,
+        "p50": 669,
+        "p90": 2636.5,
+        "p99": 8026.3500000000195,
+        "band": 7357.3500000000195
+      },
+      {
+        "key": "Bash",
+        "n": 7659,
+        "p50": 386,
+        "p90": 1727.999999999999,
+        "p99": 5821.760000000002,
+        "band": 5435.760000000002
+      },
+      {
+        "key": "Edit",
+        "n": 2789,
+        "p50": 424,
+        "p90": 1425.4000000000005,
+        "p99": 4213.159999999987,
+        "band": 3789.159999999987
+      },
+      {
+        "key": "Read",
+        "n": 1925,
+        "p50": 608,
+        "p90": 2868.2000000000007,
+        "p99": 10622.88,
+        "band": 10014.88
+      },
+      {
+        "key": "ToolSearch",
+        "n": 101,
+        "p50": 282,
+        "p90": 1351,
+        "p99": 4079,
+        "band": 3797
+      },
+      {
+        "key": "Write",
+        "n": 473,
+        "p50": 259,
+        "p90": 2115.8,
+        "p99": 7034.839999999999,
+        "band": 6775.839999999999
+      }
+    ],
+    "prevStop": [
+      {
+        "key": "(null)",
+        "n": 114,
+        "p50": 388,
+        "p90": 2951.6000000000004,
+        "p99": 12466.970000000027,
+        "band": 12078.970000000027
+      },
+      {
+        "key": "tool_use",
+        "n": 13425,
+        "p50": 424,
+        "p90": 1812.6000000000004,
+        "p99": 6372.880000000003,
+        "band": 5948.880000000003
+      }
+    ],
+    "prevOutput": [
+      {
+        "key": "200-800",
+        "n": 6870,
+        "p50": 395,
+        "p90": 1458,
+        "p99": 4926.439999999988,
+        "band": 4531.439999999988
+      },
+      {
+        "key": "800-3k",
+        "n": 3067,
+        "p50": 555,
+        "p90": 2281.8,
+        "p99": 6931.340000000022,
+        "band": 6376.340000000022
+      },
+      {
+        "key": "gte3k",
+        "n": 666,
+        "p50": 526.5,
+        "p90": 3973,
+        "p99": 16371.800000000068,
+        "band": 15845.300000000068
+      },
+      {
+        "key": "lt200",
+        "n": 2936,
+        "p50": 376,
+        "p90": 1829.5,
+        "p99": 6569.000000000007,
+        "band": 6193.000000000007
+      }
+    ],
+    "resultSize": [
+      {
+        "key": "500-5k",
+        "n": 4014,
+        "p50": 524,
+        "p90": 2328.700000000003,
+        "p99": 7487.659999999998,
+        "band": 6963.659999999998
+      },
+      {
+        "key": "5k-50k",
+        "n": 920,
+        "p50": 630.5,
+        "p90": 3018.2,
+        "p99": 12330.279999999952,
+        "band": 11699.779999999952
+      },
+      {
+        "key": "error",
+        "n": 523,
+        "p50": 285,
+        "p90": 866.8000000000002,
+        "p99": 2803.12,
+        "band": 2518.12
+      },
+      {
+        "key": "gte50k",
+        "n": 215,
+        "p50": 900,
+        "p90": 3140.3999999999996,
+        "p99": 6963.679999999997,
+        "band": 6063.679999999997
+      },
+      {
+        "key": "lt500",
+        "n": 7866,
+        "p50": 372,
+        "p90": 1473.5,
+        "p99": 5300.650000000029,
+        "band": 4928.650000000029
+      }
+    ],
+    "toolTime": [
+      {
+        "key": "30s-5m",
+        "n": 457,
+        "p50": 481,
+        "p90": 2346.400000000004,
+        "p99": 7047.24,
+        "band": 6566.24
+      },
+      {
+        "key": "5-30s",
+        "n": 2880,
+        "p50": 513,
+        "p90": 2111.3999999999996,
+        "p99": 7006.510000000001,
+        "band": 6493.510000000001
+      },
+      {
+        "key": "lt5s",
+        "n": 10168,
+        "p50": 399,
+        "p90": 1733,
+        "p99": 6135.98,
+        "band": 5736.98
+      }
+    ],
+    "wallTimeLeaky": [
+      {
+        "key": "30s-5m",
+        "n": 1531,
+        "p50": 2127,
+        "p90": 5545,
+        "p99": 15177.400000000001,
+        "band": 13050.400000000001
+      },
+      {
+        "key": "5-30s",
+        "n": 9771,
+        "p50": 447,
+        "p90": 1371,
+        "p99": 3301.899999999998,
+        "band": 2854.899999999998
+      },
+      {
+        "key": "lt5s",
+        "n": 2200,
+        "p50": 208.5,
+        "p90": 649,
+        "p99": 2443.509999999988,
+        "band": 2235.009999999988
+      }
+    ]
+  },
+  "leakCheck": {
+    "wall": {
+      "r": 0.507143575883976,
+      "n": 13539
+    },
+    "tool": {
+      "r": 0.03772115447668424,
+      "n": 13538
+    }
+  },
+  "gates": {
+    "800-3k": {
+      "days": 28,
+      "cells": 56,
+      "effect": 0.5732581687612208,
+      "z": 9.71954771461064,
+      "withinCellRatio": 1.3384808948498812,
+      "naiveRatio": 1.4050632911392404,
+      "signAgreement": 0.8043478260869565,
+      "signCells": 46,
+      "signP": 0.0000405603613273796,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 48,
+        "pooledRatio": 1.2579876093074056,
+        "q": 111.65533078436371,
+        "df": 47,
+        "p": 3.509673305993478e-7,
+        "iSquared": 0.5790617459118942
+      }
+    },
+    "gte3k": {
+      "days": 28,
+      "cells": 48,
+      "effect": 0.5587240142325968,
+      "z": 3.9640296922913025,
+      "withinCellRatio": 1.3385705155731311,
+      "naiveRatio": 1.3329113924050633,
+      "signAgreement": 0.7037037037037037,
+      "signCells": 27,
+      "signP": 0.052238985896110486,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 31,
+        "pooledRatio": 1.2176178543503442,
+        "q": 91.26492013491968,
+        "df": 30,
+        "p": 4.2177452410899276e-8,
+        "iSquared": 0.6712866240867784
+      }
+    },
+    "lt200": {
+      "days": 27,
+      "cells": 55,
+      "effect": 0.5092117834062738,
+      "z": 1.2141329743350997,
+      "withinCellRatio": 0.9703444415049014,
+      "naiveRatio": 0.9518987341772152,
+      "signAgreement": 0.5348837209302325,
+      "signCells": 43,
+      "signP": 0.7607916425613455,
+      "heterogeneity": {
+        "testable": true,
+        "cells": 45,
+        "pooledRatio": 0.9835894898321192,
+        "q": 77.92965680576964,
+        "df": 44,
+        "p": 0.0012216836031080974,
+        "iSquared": 0.43538824879384824
+      }
+    }
+  },
+  "candidates": {
+    "shipped": {
+      "foldMeans": [
+        445.2997639123109,
+        620.8662225969648,
+        627.6172849915682,
+        851.9736087689719,
+        574.1867114093964
+      ],
+      "mean": 623.9887183358426,
+      "sd": 131.4610277369663,
+      "vsShipped": null,
+      "legacyFoldDiff": null,
+      "legacyFoldSe": null,
+      "legacyFoldT": null
+    },
+    "prevAction": {
+      "foldMeans": [
+        443.91991568296777,
+        618.3461214165267,
+        640.2347723440137,
+        862.9100000000001,
+        574.7589261744971
+      ],
+      "mean": 628.033947123601,
+      "sd": 135.75395297982055,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": 4.041718328841001,
+        "ciLower": -5.570142089093649,
+        "ciUpper": 13.56621612903223,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": 4.045228787758629,
+      "legacyFoldSe": 2.867532607338524,
+      "legacyFoldT": 1.4107001878221617
+    },
+    "loopDepth": {
+      "foldMeans": [
+        442.18207419898795,
+        626.0855480607088,
+        622.5609106239463,
+        852.9932883642496,
+        565.447936241611
+      ],
+      "mean": 621.8539514979007,
+      "sd": 133.3472319149521,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -2.1414420485174963,
+        "ciLower": -6.498866596268893,
+        "ciUpper": 2.2720695040999397,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -2.134766837941709,
+      "legacyFoldSe": 2.164699146198744,
+      "legacyFoldT": -0.9861725319614982
+    },
+    "prevOutput": {
+      "foldMeans": [
+        441.8252613827989,
+        593.9871332209107,
+        626.4501349072509,
+        862.2079932546374,
+        576.9721140939594
+      ],
+      "mean": 620.2885273719114,
+      "sd": 136.36730229894286,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -3.6936354447440594,
+        "ciLower": -15.09569174757309,
+        "ciUpper": 8.098283403235405,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -3.700190963930993,
+      "legacyFoldSe": 5.585566688888897,
+      "legacyFoldT": -0.6624557847087579
+    },
+    "prevStop": {
+      "foldMeans": [
+        442.21755480607106,
+        620.2857504215854,
+        631.147554806071,
+        858.2340134907256,
+        571.9407885906039
+      ],
+      "mean": 624.7651324230113,
+      "sd": 134.67185897635648,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": 0.7733591644204769,
+        "ciLower": -1.8304335856847938,
+        "ciUpper": 3.560958811613832,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": 0.7764140871689506,
+      "legacyFoldSe": 1.594020179276581,
+      "legacyFoldT": 0.48707920844597646
+    },
+    "resultSize": {
+      "foldMeans": [
+        449.9205564924113,
+        611.2057335581786,
+        633.7270151770656,
+        850.4891568296791,
+        558.6098825503357
+      ],
+      "mean": 620.790468921534,
+      "sd": 131.21254581992733,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -3.2107614555255934,
+        "ciLower": -9.801305016928247,
+        "ciUpper": 4.456267296658842,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -3.1982494143083615,
+      "legacyFoldSe": 3.7186168060735394,
+      "legacyFoldT": -0.8600642607446746
+    },
+    "toolTime": {
+      "foldMeans": [
+        443.134249578415,
+        621.1707925801016,
+        631.0107251264754,
+        855.3757335581793,
+        570.7204026845636
+      ],
+      "mean": 624.2823807055471,
+      "sd": 133.52349698263086,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": 0.2898618598382749,
+        "ciLower": -5.286364678899106,
+        "ciUpper": 5.734631111111082,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": 0.2936623697045661,
+      "legacyFoldSe": 1.2562836061084963,
+      "legacyFoldT": 0.2337548371057901
+    },
+    "prevActionPrevOutput": {
+      "foldMeans": [
+        441.14612141652634,
+        597.7552445193935,
+        636.6885328836429,
+        870.3580269814502,
+        572.6521644295304
+      ],
+      "mean": 623.7200180461086,
+      "sd": 139.72387963157064,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -0.26997978436658226,
+        "ciLower": -10.938483830323376,
+        "ciUpper": 10.777908052230753,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -0.26870028973376064,
+      "legacyFoldSe": 6.24063541707234,
+      "legacyFoldT": -0.04305655943282385
+    },
+    "prevActionDepth": {
+      "foldMeans": [
+        444.5785834738615,
+        618.2978414839803,
+        642.5688870151771,
+        861.6177571669488,
+        567.6984731543627
+      ],
+      "mean": 626.952308458866,
+      "sd": 135.76291298067372,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": 2.954036388140155,
+        "ciLower": -6.729216803132832,
+        "ciUpper": 13.174519629747678,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": 2.96359012302363,
+      "legacyFoldSe": 3.588089116666917,
+      "legacyFoldT": 0.8259522064983149
+    },
+    "prevActionResult": {
+      "foldMeans": [
+        447.2821585160206,
+        616.2279595278249,
+        622.3006745362563,
+        852.4728330522772,
+        561.365402684564
+      ],
+      "mean": 619.9298056633886,
+      "sd": 132.16095008208845,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -4.067769541778953,
+        "ciLower": -11.808373764600397,
+        "ciUpper": 4.295110326566664,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -4.058912672453834,
+      "legacyFoldSe": 2.332132425797221,
+      "legacyFoldT": -1.7404297575710466
+    },
+    "chainRegime": {
+      "foldMeans": [
+        430.6654131534575,
+        604.4418381112986,
+        638.4258684654296,
+        861.8170151770662,
+        566.2237751677848
+      ],
+      "mean": 620.3147820150074,
+      "sd": 139.85421735090927,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -3.6782715633422627,
+        "ciLower": -21.168244444444156,
+        "ciUpper": 11.420702045329024,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -3.673936320835094,
+      "legacyFoldSe": 5.267113317302763,
+      "legacyFoldT": -0.6975236907787814
+    },
+    "prevOutputChainRegime": {
+      "foldMeans": [
+        441.11937605396304,
+        585.3758684654299,
+        640.1802360876898,
+        873.4151096121417,
+        583.9614765100667
+      ],
+      "mean": 624.8104133458583,
+      "sd": 140.71719341194935,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": 0.8307446091644298,
+        "ciLower": -12.154137812821244,
+        "ciUpper": 12.860907997594927,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": 0.8216950100157987,
+      "legacyFoldSe": 8.914654669711062,
+      "legacyFoldT": 0.09217350985087919
+    },
+    "prevOutputToolTime": {
+      "foldMeans": [
+        443.0482967959534,
+        591.8775885328834,
+        624.439207419899,
+        875.148482293424,
+        578.7277516778523
+      ],
+      "mean": 622.6482653440023,
+      "sd": 140.63538801283067,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -1.3345080862534142,
+        "ciLower": -11.185976845151966,
+        "ciUpper": 9.100623934538017,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -1.3404529918400159,
+      "legacyFoldSe": 7.4945898476333825,
+      "legacyFoldT": -0.1788560840675357
+    },
+    "wallTimeLEAKY": {
+      "foldMeans": [
+        410.0315008431707,
+        518.6250927487349,
+        521.0196627318721,
+        755.2163406408096,
+        511.55572147651003
+      ],
+      "mean": 543.2896636882194,
+      "sd": 113.82617577651084,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -80.68079177897623,
+        "ciLower": -106.13787714543902,
+        "ciUpper": -57.47658673310541,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -80.69905464762296,
+      "legacyFoldSe": 12.30134108863868,
+      "legacyFoldT": -6.560183484559688
+    },
+    "oracleAction": {
+      "foldMeans": [
+        415.7136593591905,
+        556.1501517706583,
+        592.4198650927485,
+        796.8531197301858,
+        527.3885906040271
+      ],
+      "mean": 577.7050773113621,
+      "sd": 124.48290855795716,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -46.284161051212934,
+        "ciLower": -61.69622371364672,
+        "ciUpper": -32.20279861111097,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -46.28364102448039,
+      "legacyFoldSe": 5.726503518663273,
+      "legacyFoldT": -8.082356166138231
+    },
+    "oracleActionPooled": {
+      "foldMeans": [
+        412.801905564924,
+        501.89092748735266,
+        496.6247217537941,
+        614.6743170320409,
+        478.2884060402684
+      ],
+      "mean": 500.85605557567607,
+      "sd": 65.17116529018675,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -123.10513477089113,
+        "ciLower": -179.80776393442625,
+        "ciUpper": -73.7795546129386,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -123.13266276016638,
+      "legacyFoldSe": 29.71158622939112,
+      "legacyFoldT": -4.144264187361421
+    },
+    "oracleWriteBinary": {
+      "foldMeans": [
+        442.21752107925846,
+        520.379005059022,
+        552.730539629005,
+        686.8779595278252,
+        523.8540771812086
+      ],
+      "mean": 545.2118204952639,
+      "sd": 79.75772529348912,
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -78.74814690027011,
+        "ciLower": -131.53759669545445,
+        "ciUpper": -33.91292682926809,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "legacyFoldDiff": -78.77689784057858,
+      "legacyFoldSe": 24.063378848513054,
+      "legacyFoldT": -3.273725536904242
+    }
+  },
+  "selection": {
+    "leader": "prevActionResult",
+    "tied": [
+      "loopDepth",
+      "prevOutput",
+      "resultSize",
+      "prevActionPrevOutput",
+      "prevActionResult",
+      "chainRegime",
+      "prevOutputToolTime"
+    ],
+    "chosen": "loopDepth",
+    "tieBand": 4.108031655909965
+  },
+  "byDepth": [
+    {
+      "depth": 0,
+      "n": 175,
+      "actualP50": 451,
+      "actualP99": 6017.439999999972,
+      "actualBand": 5566.439999999972,
+      "shippedBand": 6204.56,
+      "newBand": 11531.65142857143,
+      "shippedLoss": 817.2875999999994,
+      "newLoss": 857.9099428571429,
+      "lossGap": -40.62234285714351,
+      "bandGap": -5327.091428571429
+    },
+    {
+      "depth": 1,
+      "n": 151,
+      "actualP50": 264,
+      "actualP99": 3922.5,
+      "actualBand": 3658.5,
+      "shippedBand": 4937.158940397351,
+      "newBand": 4534.112582781457,
+      "shippedLoss": 390.81953642384116,
+      "newLoss": 365.91284768211943,
+      "lossGap": 24.906688741721723,
+      "bandGap": 403.0463576158945
+    },
+    {
+      "depth": 2,
+      "n": 132,
+      "actualP50": 381.5,
+      "actualP99": 6242.069999999995,
+      "actualBand": 5860.569999999995,
+      "shippedBand": 5281.484848484848,
+      "newBand": 4784.409090909091,
+      "shippedLoss": 976.2869696969695,
+      "newLoss": 979.9260606060602,
+      "lossGap": -3.639090909090669,
+      "bandGap": 497.07575757575705
+    },
+    {
+      "depth": 3,
+      "n": 121,
+      "actualP50": 315,
+      "actualP99": 9140.199999999983,
+      "actualBand": 8825.199999999983,
+      "shippedBand": 4995.173553719008,
+      "newBand": 5296.611570247934,
+      "shippedLoss": 944.7895867768593,
+      "newLoss": 918.9268595041323,
+      "lossGap": 25.862727272727057,
+      "bandGap": -301.4380165289258
+    },
+    {
+      "depth": 4,
+      "n": 116,
+      "actualP50": 368.5,
+      "actualP99": 4092.799999999999,
+      "actualBand": 3724.299999999999,
+      "shippedBand": 5432.974137931034,
+      "newBand": 5254.862068965517,
+      "shippedLoss": 483.07422413793125,
+      "newLoss": 478.4674137931037,
+      "lossGap": 4.606810344827579,
+      "bandGap": 178.1120689655172
+    },
+    {
+      "depth": 5,
+      "n": 111,
+      "actualP50": 357,
+      "actualP99": 9684.400000000001,
+      "actualBand": 9327.400000000001,
+      "shippedBand": 5002.72972972973,
+      "newBand": 4850.423423423424,
+      "shippedLoss": 828.7409009009009,
+      "newLoss": 824.6360360360361,
+      "lossGap": 4.104864864864794,
+      "bandGap": 152.3063063063064
+    },
+    {
+      "depth": 6,
+      "n": 2162,
+      "actualP50": 429.5,
+      "actualP99": 5641.009999999993,
+      "actualBand": 5211.509999999993,
+      "shippedBand": 4408.492599444959,
+      "newBand": 4227.007400555041,
+      "shippedLoss": 582.1432747456059,
+      "newLoss": 579.3381221091585,
+      "lossGap": 2.805152636447474,
+      "bandGap": 181.48519888991723
+    }
+  ],
+  "killCondition": {
+    "shallowActualBand": 5566.439999999972,
+    "deepActualBand": 5499.001601593618,
+    "shallowNewBand": 11531.65142857143,
+    "deepNewBand": 4353.641832669323,
+    "shallowNewLoss": 857.9099428571429,
+    "deepNewLoss": 601.894816733068,
+    "shallowShippedLoss": 817.2875999999994,
+    "deepShippedLoss": 605.9522509960159,
+    "deeperIsTighter": true,
+    "gainSlopePerDepth": 1.9894778339391068,
+    "bandSlopePerDepth": 433.5214850722593,
+    "compoundsWithDepth": true
+  },
+  "oracleRungUsage": {
+    "oracleAction": {
+      "usage": [
+        {
+          "rung": 0,
+          "label": "m|t|action",
+          "all": 2682,
+          "writes": 28
+        },
+        {
+          "rung": 1,
+          "label": "m|t",
+          "all": 286,
+          "writes": 60
+        }
+      ],
+      "writeCalls": 88,
+      "writesPriced": 28,
+      "writeCoverage": 0.3181818181818182
+    },
+    "oracleActionPooled": {
+      "usage": [
+        {
+          "rung": 0,
+          "label": "m|t|action",
+          "all": 2682,
+          "writes": 28
+        },
+        {
+          "rung": 1,
+          "label": "action",
+          "all": 278,
+          "writes": 60
+        },
+        {
+          "rung": 2,
+          "label": "m|t",
+          "all": 8,
+          "writes": 0
+        }
+      ],
+      "writeCalls": 88,
+      "writesPriced": 88,
+      "writeCoverage": 1
+    },
+    "oracleWriteBinary": {
+      "usage": [
+        {
+          "rung": 0,
+          "label": "m|t|write",
+          "all": 2908,
+          "writes": 28
+        },
+        {
+          "rung": 1,
+          "label": "write",
+          "all": 60,
+          "writes": 60
+        }
+      ],
+      "writeCalls": 88,
+      "writesPriced": 88,
+      "writeCoverage": 1
+    }
+  },
+  "writeCellSupport": {
+    "minGroup": 100,
+    "cells": [
+      {
+        "cell": "claude-fable-5|t=yes",
+        "n": 172,
+        "clears": true
+      },
+      {
+        "cell": "claude-opus-4-8|t=yes",
+        "n": 94,
+        "clears": false
+      },
+      {
+        "cell": "claude-fable-5|t=no",
+        "n": 62,
+        "clears": false
+      },
+      {
+        "cell": "claude-opus-5|t=yes",
+        "n": 56,
+        "clears": false
+      },
+      {
+        "cell": "claude-opus-5|t=no",
+        "n": 43,
+        "clears": false
+      },
+      {
+        "cell": "claude-opus-4-8|t=no",
+        "n": 41,
+        "clears": false
+      }
+    ],
+    "cellsClearing": 1,
+    "pooledSamples": 468
+  },
+  "oracles": {
+    "oracleAction": {
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -46.284161051212934,
+        "ciLower": -61.69622371364672,
+        "ciUpper": -32.20279861111097,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "shareOfShippedLoss": -0.07418066043188588
+    },
+    "oracleActionPooled": {
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -123.10513477089113,
+        "ciLower": -179.80776393442625,
+        "ciUpper": -73.7795546129386,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "shareOfShippedLoss": -0.1973033537273483
+    },
+    "oracleWriteBinary": {
+      "vsShipped": {
+        "n": 2968,
+        "meanDifference": -78.74814690027011,
+        "ciLower": -131.53759669545445,
+        "ciUpper": -33.91292682926809,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "shareOfShippedLoss": -0.12621141686862483
+    },
+    "binaryShareOfPooled": 0.6396820656329807
+  },
+  "inLoopOnly": {
+    "share": 0.9410377358490566,
+    "bestVsShipped": {
+      "mean": -4.824694506542221,
+      "se": 1.6846723453884522
+    }
+  },
+  "ceiling": {
+    "best": "loopDepth",
+    "oracleVsShipped": {
+      "n": 2968,
+      "meanDifference": -46.284161051212934,
+      "ciLower": -61.69622371364672,
+      "ciUpper": -32.20279861111097,
+      "blocks": 53,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "oraclePooledVsShipped": {
+      "n": 2968,
+      "meanDifference": -123.10513477089113,
+      "ciLower": -179.80776393442625,
+      "ciUpper": -73.7795546129386,
+      "blocks": 53,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "oracleWriteBinaryVsShipped": {
+      "n": 2968,
+      "meanDifference": -78.74814690027011,
+      "ciLower": -131.53759669545445,
+      "ciUpper": -33.91292682926809,
+      "blocks": 53,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "bestVsShipped": {
+      "n": 2968,
+      "meanDifference": -2.1414420485174963,
+      "ciLower": -6.498866596268893,
+      "ciUpper": 2.2720695040999397,
+      "blocks": 53,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "shippedPerCall": 623.9383793800534,
+    "legacyFoldDiffs": {
+      "best": -2.134766837941709
+    },
+    "shareCaptured": 0.017395229309507664
+  },
+  "minGroupSweep": [
+    {
+      "minGroup": 25,
+      "oracles": {
+        "oracleAction": {
+          "n": 2968,
+          "meanDifference": -116.69949123989385,
+          "ciLower": -168.1158105468759,
+          "ciUpper": -67.96973656105355,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2968,
+          "meanDifference": -116.45742587601244,
+          "ciLower": -167.99638020833413,
+          "ciUpper": -67.67269230769232,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2968,
+          "meanDifference": -75.7784332884099,
+          "ciLower": -124.01031664963918,
+          "ciUpper": -32.12521752357719,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCalls": 88,
+      "writesPricedByPooled": 88
+    },
+    {
+      "minGroup": 50,
+      "oracles": {
+        "oracleAction": {
+          "n": 2968,
+          "meanDifference": -67.20530997304577,
+          "ciLower": -92.34574459404405,
+          "ciUpper": -43.1974999999999,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2968,
+          "meanDifference": -123.85509770889661,
+          "ciLower": -181.04987151363287,
+          "ciUpper": -73.83957116451003,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2968,
+          "meanDifference": -83.44130053908378,
+          "ciLower": -135.73394067796545,
+          "ciUpper": -38.47373346560799,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCalls": 88,
+      "writesPricedByPooled": 88
+    },
+    {
+      "minGroup": 100,
+      "oracles": {
+        "oracleAction": {
+          "n": 2968,
+          "meanDifference": -46.284161051212934,
+          "ciLower": -61.69622371364672,
+          "ciUpper": -32.20279861111097,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2968,
+          "meanDifference": -123.10513477089113,
+          "ciLower": -179.80776393442625,
+          "ciUpper": -73.7795546129386,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2968,
+          "meanDifference": -78.74814690027011,
+          "ciLower": -131.53759669545445,
+          "ciUpper": -33.91292682926809,
+          "blocks": 53,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCalls": 88,
+      "writesPricedByPooled": 88
+    }
+  ]
+}

@@ -1,0 +1,560 @@
+{
+  "generatedAt": "2026-08-04T15:25:25.835Z",
+  "source": "/Users/polpedu/.claude/projects",
+  "minGroup": 100,
+  "endpoints": [
+    {
+      "asOf": "2026-07-30T13:16:20.000Z",
+      "calls": 11520,
+      "shippedPerCall": 673.756375868057,
+      "oracles": {
+        "oracleAction": {
+          "n": 2304,
+          "meanDifference": -108.13754774305605,
+          "ciLower": -169.43164107993584,
+          "ciUpper": -58.8547297297296,
+          "blocks": 73,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2304,
+          "meanDifference": -125.5235069444436,
+          "ciLower": -199.45709308372295,
+          "ciUpper": -62.58452411994755,
+          "blocks": 73,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2304,
+          "meanDifference": -122.73643229166714,
+          "ciLower": -195.895932885906,
+          "ciUpper": -57.623585746102286,
+          "blocks": 73,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.36470588235294116,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.18630399865637057,
+      "jointShareOfShipped": 0.16049947965795996,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-07-30T15:20:57.546Z",
+      "calls": 11815,
+      "shippedPerCall": 549.2150909860359,
+      "oracles": {
+        "oracleAction": {
+          "n": 2363,
+          "meanDifference": -83.13605586119407,
+          "ciLower": -122.4960194174752,
+          "ciUpper": -50.50012424565153,
+          "blocks": 78,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2363,
+          "meanDifference": -104.41775708844595,
+          "ciLower": -172.46446590909116,
+          "ciUpper": -50.931107905366694,
+          "blocks": 78,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2363,
+          "meanDifference": -94.217376216675,
+          "ciLower": -159.01653524492343,
+          "ciUpper": -41.83090553381781,
+          "blocks": 78,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.32051282051282054,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.19012179162990414,
+      "jointShareOfShipped": 0.15137248998736608,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-07-31T13:34:10.851Z",
+      "calls": 12111,
+      "shippedPerCall": 467.1109162195622,
+      "oracles": {
+        "oracleAction": {
+          "n": 2423,
+          "meanDifference": -68.88920346677578,
+          "ciLower": -97.35803690415155,
+          "ciUpper": -45.336076091010746,
+          "blocks": 81,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2423,
+          "meanDifference": -67.68082542302831,
+          "ciLower": -104.23753424657461,
+          "ciUpper": -35.76307767305831,
+          "blocks": 81,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2423,
+          "meanDifference": -60.15009492364928,
+          "ciLower": -94.77828018818587,
+          "ciUpper": -27.21710043988235,
+          "blocks": 81,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.23333333333333334,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.14489240793339844,
+      "jointShareOfShipped": 0.14747932680381826,
+      "pooledBeatsJoint": false
+    },
+    {
+      "asOf": "2026-07-31T14:24:02.102Z",
+      "calls": 12406,
+      "shippedPerCall": 469.1737912973397,
+      "oracles": {
+        "oracleAction": {
+          "n": 2482,
+          "meanDifference": -61.66282836422113,
+          "ciLower": -88.01139111111074,
+          "ciUpper": -39.9604559403775,
+          "blocks": 84,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2482,
+          "meanDifference": -67.36802578565556,
+          "ciLower": -101.04778418926556,
+          "ciUpper": -37.871980519480566,
+          "blocks": 84,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2482,
+          "meanDifference": -50.32682111200643,
+          "ciLower": -83.01768684477575,
+          "ciUpper": -20.60478400735282,
+          "blocks": 84,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.234375,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.14358863823013712,
+      "jointShareOfShipped": 0.1314285441940686,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-07-31T16:31:37.087Z",
+      "calls": 12701,
+      "shippedPerCall": 468.29208185753555,
+      "oracles": {
+        "oracleAction": {
+          "n": 2541,
+          "meanDifference": -51.19371507280603,
+          "ciLower": -79.19232126696767,
+          "ciUpper": -31.256255361266977,
+          "blocks": 87,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2541,
+          "meanDifference": -50.64890200708381,
+          "ciLower": -83.83349478079244,
+          "ciUpper": -25.063662846227707,
+          "blocks": 87,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2541,
+          "meanDifference": -34.754435261708274,
+          "ciLower": -64.83357644697173,
+          "ciUpper": -10.198776033322835,
+          "blocks": 87,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.3225806451612903,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.10815664831696277,
+      "jointShareOfShipped": 0.10932005271099213,
+      "pooledBeatsJoint": false
+    },
+    {
+      "asOf": "2026-08-03T12:22:37.465Z",
+      "calls": 12996,
+      "shippedPerCall": 499.9453653846147,
+      "oracles": {
+        "oracleAction": {
+          "n": 2600,
+          "meanDifference": -53.228715384615406,
+          "ciLower": -80.57083596214481,
+          "ciUpper": -32.427182009838866,
+          "blocks": 69,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2600,
+          "meanDifference": -66.10057692307718,
+          "ciLower": -109.42621292157595,
+          "ciUpper": -37.30997638326566,
+          "blocks": 69,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2600,
+          "meanDifference": -50.031442307692885,
+          "ciLower": -91.28929480381709,
+          "ciUpper": -18.106908948808012,
+          "blocks": 69,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.43373493975903615,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.13221560094316528,
+      "jointShareOfShipped": 0.10646906456201637,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-08-03T13:54:39.293Z",
+      "calls": 13292,
+      "shippedPerCall": 485.0359796916123,
+      "oracles": {
+        "oracleAction": {
+          "n": 2659,
+          "meanDifference": -50.04324934185794,
+          "ciLower": -77.48564558879143,
+          "ciUpper": -28.755873276427987,
+          "blocks": 48,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2659,
+          "meanDifference": -60.90411432869454,
+          "ciLower": -98.36287873063829,
+          "ciUpper": -30.38242413162709,
+          "blocks": 48,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2659,
+          "meanDifference": -44.49621662279057,
+          "ciLower": -83.40985245901565,
+          "ciUpper": -12.480729166666546,
+          "blocks": 48,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.40229885057471265,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.12556617834292955,
+      "jointShareOfShipped": 0.10317430342729549,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-08-03T14:46:50.022Z",
+      "calls": 13587,
+      "shippedPerCall": 505.67285136129465,
+      "oracles": {
+        "oracleAction": {
+          "n": 2718,
+          "meanDifference": -51.77474613686478,
+          "ciLower": -77.96128342245962,
+          "ciUpper": -31.288131212723933,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2718,
+          "meanDifference": -75.72177704194128,
+          "ciLower": -116.28754072924706,
+          "ciUpper": -43.811603074389055,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2718,
+          "meanDifference": -47.297994849155025,
+          "ciLower": -87.40081530139258,
+          "ciUpper": -14.54722653721674,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.35714285714285715,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.14974459640871515,
+      "jointShareOfShipped": 0.10238783038773937,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-08-03T16:06:03.968Z",
+      "calls": 13882,
+      "shippedPerCall": 553.6852250630164,
+      "oracles": {
+        "oracleAction": {
+          "n": 2777,
+          "meanDifference": -50.76529708318373,
+          "ciLower": -76.41980834272917,
+          "ciUpper": -30.119415645617185,
+          "blocks": 50,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2777,
+          "meanDifference": -103.93337054375235,
+          "ciLower": -155.0116064565709,
+          "ciUpper": -57.463763975154805,
+          "blocks": 50,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2777,
+          "meanDifference": -71.16780698595605,
+          "ciLower": -117.19953578336563,
+          "ciUpper": -29.24551127214154,
+          "blocks": 50,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.2891566265060241,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.18771201729633186,
+      "jointShareOfShipped": 0.09168620505885089,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-08-04T11:45:13.760Z",
+      "calls": 14177,
+      "shippedPerCall": 605.4624717912558,
+      "oracles": {
+        "oracleAction": {
+          "n": 2836,
+          "meanDifference": -50.42431593794045,
+          "ciLower": -77.37591694352038,
+          "ciUpper": -31.15183054062613,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2836,
+          "meanDifference": -122.80687940761511,
+          "ciLower": -183.2838312942712,
+          "ciUpper": -71.52787999999916,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2836,
+          "meanDifference": -84.09993300423193,
+          "ciLower": -138.85254691689047,
+          "ciUpper": -37.48227461858611,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.32558139534883723,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.2028315298292427,
+      "jointShareOfShipped": 0.08328231440796079,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-08-04T14:23:56.257Z",
+      "calls": 14473,
+      "shippedPerCall": 618.042366148533,
+      "oracles": {
+        "oracleAction": {
+          "n": 2895,
+          "meanDifference": -44.02663557858454,
+          "ciLower": -61.47452173913079,
+          "ciUpper": -29.365781592403128,
+          "blocks": 56,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2895,
+          "meanDifference": -118.37476683937852,
+          "ciLower": -173.8681781076054,
+          "ciUpper": -67.89969018932996,
+          "blocks": 56,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2895,
+          "meanDifference": -78.45680138169172,
+          "ciLower": -128.57511788175592,
+          "ciUpper": -32.10988046166498,
+          "blocks": 56,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.3146067415730337,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.19153179995904962,
+      "jointShareOfShipped": 0.07123562718353145,
+      "pooledBeatsJoint": true
+    },
+    {
+      "asOf": "2026-08-04T15:23:55.467Z",
+      "calls": 14768,
+      "shippedPerCall": 616.164069058903,
+      "oracles": {
+        "oracleAction": {
+          "n": 2954,
+          "meanDifference": -46.04852742044683,
+          "ciLower": -62.573077209996285,
+          "ciUpper": -32.30964596273324,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleActionPooled": {
+          "n": 2954,
+          "meanDifference": -119.81190250507608,
+          "ciLower": -177.29964285713987,
+          "ciUpper": -69.98626282364438,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "oracleWriteBinary": {
+          "n": 2954,
+          "meanDifference": -76.6050372376437,
+          "ciLower": -129.14563930013324,
+          "ciUpper": -30.684732106339826,
+          "blocks": 52,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "writeCoverage": {
+        "oracleAction": 0.3181818181818182,
+        "oracleActionPooled": 1,
+        "oracleWriteBinary": 1
+      },
+      "pooledShareOfShipped": 0.19444805129268664,
+      "jointShareOfShipped": 0.07473419780997448,
+      "pooledBeatsJoint": true
+    }
+  ],
+  "summary": {
+    "joint": {
+      "n": 12,
+      "median": -51.4842306048354,
+      "min": -108.13754774305605,
+      "max": -44.02663557858454,
+      "p25": -63.46942213985979,
+      "p75": -50.32904928891982
+    },
+    "pooled": {
+      "n": 12,
+      "median": -89.8275737928468,
+      "min": -125.5235069444436,
+      "max": -50.64890200708381,
+      "p25": -118.73405075580291,
+      "p75": -67.05116357001097
+    },
+    "binaryWrite": {
+      "n": 12,
+      "median": -65.65895095480266,
+      "min": -122.73643229166714,
+      "max": -34.754435261708274,
+      "p25": -79.86758428732676,
+      "p75": -49.34808044305842
+    },
+    "pooledBeatsJointAt": 10,
+    "endpointCount": 12,
+    "ciClearOfZero": {
+      "oracleAction": 12,
+      "oracleActionPooled": 12,
+      "oracleWriteBinary": 12
+    },
+    "pooledShareOfShipped": {
+      "n": 12,
+      "median": 0.16802429753254286,
+      "min": 0.10815664831696277,
+      "max": 0.2028315298292427,
+      "p25": 0.14074537890839417,
+      "p75": 0.19047429371219052
+    },
+    "jointShareOfShipped": {
+      "n": 12,
+      "median": 0.10482168399465593,
+      "min": 0.07123562718353145,
+      "max": 0.16049947965795996,
+      "p25": 0.08958523239612837,
+      "p75": 0.13544123984650602
+    }
+  }
+}

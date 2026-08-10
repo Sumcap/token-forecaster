@@ -1,0 +1,433 @@
+{
+  "generatedAt": "2026-08-03T15:18:59.974Z",
+  "source": "/Users/polpedu/.claude/projects",
+  "window": {
+    "corpusSpan": [
+      "2026-07-04",
+      "2026-08-03"
+    ],
+    "firstEffortDay": "2026-07-17",
+    "rowsInWindow": 8137,
+    "nullRowsInWindow": 786
+  },
+  "identifiability": {
+    "low": {
+      "n": 96,
+      "days": 1,
+      "models": [
+        "claude-opus-5"
+      ],
+      "cells": 1,
+      "cellsSharedWithReference": 1,
+      "nInSharedCells": 96
+    },
+    "medium": {
+      "n": 2433,
+      "days": 11,
+      "models": [
+        "claude-opus-4-8",
+        "claude-fable-5",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "cells": 21,
+      "cellsSharedWithReference": 16,
+      "nInSharedCells": 2011
+    },
+    "high": {
+      "n": 4680,
+      "days": 13,
+      "models": [
+        "claude-opus-5",
+        "claude-opus-4-8",
+        "claude-fable-5"
+      ],
+      "cells": 27,
+      "cellsSharedWithReference": null,
+      "nInSharedCells": null
+    },
+    "xhigh": {
+      "n": 109,
+      "days": 2,
+      "models": [
+        "claude-opus-5"
+      ],
+      "cells": 2,
+      "cellsSharedWithReference": 2,
+      "nInSharedCells": 109
+    },
+    "max": {
+      "n": 33,
+      "days": 1,
+      "models": [
+        "claude-opus-4-8"
+      ],
+      "cells": 1,
+      "cellsSharedWithReference": 1,
+      "nInSharedCells": 33
+    }
+  },
+  "naive": {
+    "levels": {
+      "low": {
+        "n": 96,
+        "p50": 263.5,
+        "p90": 972,
+        "p99": 1648.1499999999983
+      },
+      "medium": {
+        "n": 2433,
+        "p50": 376,
+        "p90": 1598,
+        "p99": 5896.759999999998
+      },
+      "high": {
+        "n": 4680,
+        "p50": 393,
+        "p90": 1649.1000000000004,
+        "p99": 6351.510000000001
+      },
+      "xhigh": {
+        "n": 109,
+        "p50": 824,
+        "p90": 3958.0000000000005,
+        "p99": 7893.080000000002
+      },
+      "max": {
+        "n": 33,
+        "p50": 1214,
+        "p90": 4109.6,
+        "p99": 5667.959999999999
+      }
+    },
+    "lowToMaxRatio": 4.6072106261859584
+  },
+  "windowRestricted": {
+    "levels": {
+      "low": {
+        "n": 96,
+        "p50": 263.5,
+        "p90": 972,
+        "p99": 1648.1499999999983
+      },
+      "medium": {
+        "n": 2433,
+        "p50": 376,
+        "p90": 1598,
+        "p99": 5896.759999999998
+      },
+      "high": {
+        "n": 4680,
+        "p50": 393,
+        "p90": 1649.1000000000004,
+        "p99": 6351.510000000001
+      },
+      "xhigh": {
+        "n": 109,
+        "p50": 824,
+        "p90": 3958.0000000000005,
+        "p99": 7893.080000000002
+      },
+      "max": {
+        "n": 33,
+        "p50": 1214,
+        "p90": 4109.6,
+        "p99": 5667.959999999999
+      }
+    },
+    "lowToMaxRatio": 4.6072106261859584
+  },
+  "withinCell": {
+    "low": {
+      "comparable": true,
+      "cells": 1,
+      "effect": 0.4407783417935702,
+      "z": -1.6454031002546843,
+      "withinCellMedianRatio": 0.8132716049382716,
+      "naiveMedianRatio": 0.6704834605597965
+    },
+    "medium": {
+      "comparable": true,
+      "cells": 16,
+      "effect": 0.4779103706496985,
+      "z": -1.9486480845603276,
+      "withinCellMedianRatio": 0.9340189606096733,
+      "naiveMedianRatio": 0.9567430025445293
+    },
+    "xhigh": {
+      "comparable": true,
+      "cells": 2,
+      "effect": 0.6531727445076391,
+      "z": 4.237602143280637,
+      "withinCellMedianRatio": 2.7419306312137204,
+      "naiveMedianRatio": 2.0966921119592876
+    },
+    "max": {
+      "comparable": true,
+      "cells": 1,
+      "effect": 0.5709728867623605,
+      "z": 0.8456452202283439,
+      "withinCellMedianRatio": 1.8792569659442724,
+      "naiveMedianRatio": 3.089058524173028
+    }
+  },
+  "perCell": {
+    "low": [
+      {
+        "day": "2026-07-31",
+        "model": "claude-opus-5",
+        "n": 96,
+        "p50": 263.5,
+        "referenceN": 197,
+        "referenceP50": 324,
+        "ratio": 0.8132716049382716,
+        "z": -1.6454031002546843
+      }
+    ],
+    "xhigh": [
+      {
+        "day": "2026-07-27",
+        "model": "claude-opus-5",
+        "n": 41,
+        "p50": 581,
+        "referenceN": 91,
+        "referenceP50": 406,
+        "ratio": 1.4310344827586208,
+        "z": 1.4359470592761738
+      },
+      {
+        "day": "2026-07-26",
+        "model": "claude-opus-5",
+        "n": 68,
+        "p50": 1290.5,
+        "referenceN": 77,
+        "referenceP50": 318,
+        "ratio": 4.0581761006289305,
+        "z": 4.284931580214575
+      }
+    ],
+    "max": [
+      {
+        "day": "2026-07-28",
+        "model": "claude-opus-4-8",
+        "n": 33,
+        "p50": 1214,
+        "referenceN": 19,
+        "referenceP50": 646,
+        "ratio": 1.8792569659442724,
+        "z": 0.8456452202283439
+      }
+    ]
+  },
+  "heterogeneity": {
+    "low": {
+      "testable": false,
+      "cells": 1
+    },
+    "medium": {
+      "testable": true,
+      "cells": 16,
+      "pooledRatio": 0.9649094011514034,
+      "q": 29.37462948403064,
+      "df": 15,
+      "p": 0.014387414291816045,
+      "iSquared": 0.48935526120747597
+    },
+    "xhigh": {
+      "testable": true,
+      "cells": 2,
+      "pooledRatio": 2.177001739970102,
+      "q": 6.317155554630495,
+      "df": 1,
+      "p": 0.011957529111565713,
+      "iSquared": 0.8417009061511875
+    },
+    "max": {
+      "testable": false,
+      "cells": 1
+    }
+  },
+  "withinSession": {
+    "sessions": 159,
+    "mixed": 3,
+    "levels": {
+      "low": {
+        "comparable": false
+      },
+      "medium": {
+        "comparable": true,
+        "sessions": 3,
+        "effect": 0.44666666666666666,
+        "z": -1.5637909677971733
+      },
+      "xhigh": {
+        "comparable": false
+      },
+      "max": {
+        "comparable": false
+      }
+    }
+  },
+  "collapsed": {
+    "cells": 3,
+    "nElevated": 142,
+    "effect": 0.6315107306486617,
+    "z": 4.034855860022756,
+    "medianRatio": 2.5173939197138075
+  },
+  "regression": {
+    "effort only": {
+      "low": {
+        "multiplier": 0.6984924303371707,
+        "se": 0.036581333758239784,
+        "t": -9.80912669126662
+      },
+      "medium": {
+        "multiplier": 0.9170321837654677,
+        "se": 0.06715206010985313,
+        "t": -1.2897997529786316
+      },
+      "xhigh": {
+        "multiplier": 2.1157876584541184,
+        "se": 0.21185428478060886,
+        "t": 3.5374651935394392
+      },
+      "max": {
+        "multiplier": 2.077261528525432,
+        "se": 0.08282638256056718,
+        "t": 8.82629943316525
+      },
+      "n": 7351,
+      "clusters": 159
+    },
+    "+ model FE": {
+      "low": {
+        "multiplier": 0.7350138004042949,
+        "se": 0.048746028053775106,
+        "t": -6.3157146577291385
+      },
+      "medium": {
+        "multiplier": 0.9405063958387574,
+        "se": 0.06547842874992445,
+        "t": -0.9367486509475955
+      },
+      "xhigh": {
+        "multiplier": 2.226413716377977,
+        "se": 0.2143315405474728,
+        "t": 3.734364480159625
+      },
+      "max": {
+        "multiplier": 1.8054348676415568,
+        "se": 0.09485708783541986,
+        "t": 6.228332538455545
+      },
+      "n": 7351,
+      "clusters": 159
+    },
+    "+ day FE": {
+      "low": {
+        "multiplier": 0.7473668174307526,
+        "se": 0.05288098755890668,
+        "t": -5.506689146612345
+      },
+      "medium": {
+        "multiplier": 0.9314369705988673,
+        "se": 0.05897449202964462,
+        "t": -1.204364008893625
+      },
+      "xhigh": {
+        "multiplier": 1.7624054072645838,
+        "se": 0.12580819086623232,
+        "t": 4.504313914103067
+      },
+      "max": {
+        "multiplier": 2.2984482149356684,
+        "se": 0.10389781730319582,
+        "t": 8.01012213416291
+      },
+      "n": 7351,
+      "clusters": 159
+    },
+    "+ day FE + model FE": {
+      "low": {
+        "multiplier": 0.816669217022459,
+        "se": 0.07646885173011858,
+        "t": -2.648413525895017
+      },
+      "medium": {
+        "multiplier": 0.9604668431367552,
+        "se": 0.0607634242319118,
+        "t": -0.6638173917791405
+      },
+      "xhigh": {
+        "multiplier": 1.906684347914303,
+        "se": 0.1173365694909164,
+        "t": 5.50012492151637
+      },
+      "max": {
+        "multiplier": 1.8185992629829015,
+        "se": 0.15117648480037493,
+        "t": 3.9560819914097984
+      },
+      "n": 7351,
+      "clusters": 159
+    },
+    "  same, day-clustered": {
+      "low": {
+        "multiplier": 0.816669217022459,
+        "se": 0.07128011832172905,
+        "t": -2.8412009687976347
+      },
+      "medium": {
+        "multiplier": 0.9604668431367552,
+        "se": 0.0655044621322747,
+        "t": -0.615772063096191
+      },
+      "xhigh": {
+        "multiplier": 1.906684347914303,
+        "se": 0.13104397051677247,
+        "t": 4.924803388642941
+      },
+      "max": {
+        "multiplier": 1.8185992629829015,
+        "se": 0.17352147157021802,
+        "t": 3.446643021358794
+      },
+      "n": 7351,
+      "clusters": 14
+    }
+  },
+  "placebo": {
+    "draws": 20000,
+    "headlineRatio": 4.6072106261859584,
+    "medianRandomRatio": 1.3337053571428572,
+    "p90RandomRatio": 1.9806996381182147,
+    "pValue": 0.02025
+  },
+  "verdict": {
+    "levels": {
+      "low": {
+        "pass": false,
+        "reason": "not significant",
+        "z": -1.6454031002546843
+      },
+      "medium": {
+        "pass": false,
+        "reason": "not significant",
+        "z": -1.9486480845603276
+      },
+      "xhigh": {
+        "pass": false,
+        "reason": "heterogeneous",
+        "z": 4.237602143280637,
+        "heterogeneityP": 0.011957529111565713
+      },
+      "max": {
+        "pass": false,
+        "reason": "not significant",
+        "z": 0.8456452202283439
+      }
+    },
+    "passing": []
+  }
+}

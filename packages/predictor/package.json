@@ -1,0 +1,23 @@
+{
+  "name": "@token-forecaster/predictor",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Output-length forecasting with hierarchical quantiles, portable trained corrections, and explicit cold-start fallback",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@token-forecaster/core": "workspace:*"
+  }
+}
