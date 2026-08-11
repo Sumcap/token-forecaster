@@ -1,7 +1,14 @@
 import { quantile } from "./stats.mjs";
 
-export const PORTABLE_BOOST_FEATURE_SCHEMA = "portable-precall-v2";
-export const PORTABLE_BOOST_FEATURE_COUNT = 37;
+/** Feature-vector width per schema; the newest is what the trainer defaults to. */
+export const PORTABLE_BOOST_FEATURE_COUNT_BY_SCHEMA = {
+  "portable-precall-v1": 36,
+  "portable-precall-v2": 37,
+  "portable-precall-v3": 38,
+};
+export const PORTABLE_BOOST_FEATURE_SCHEMA = "portable-precall-v3";
+export const PORTABLE_BOOST_FEATURE_COUNT =
+  PORTABLE_BOOST_FEATURE_COUNT_BY_SCHEMA[PORTABLE_BOOST_FEATURE_SCHEMA];
 const META_WIDTH = 24;
 
 function fnv1a(value) {
@@ -45,6 +52,10 @@ export function portableBoostFeatures(row) {
   // exactly like promptPath -- unknown (-1) is a missing turn root, never "no".
   features[36] =
     row.promptImage === "yes" ? 1 : row.promptImage === "no" ? 0 : -1;
+  // v3: short compression follow-up on the turn root. Binary, not tri-state --
+  // "no prompt observed" and "prompt that is not a compression follow-up" are
+  // the same thing for this bit.
+  features[37] = row.turnPrompt?.followupCompression ? 1 : 0;
   return features;
 }
 
@@ -139,9 +150,17 @@ export function trainPortableQuantileBoost(trainRows, baseForecast, options = {}
   const iterations = options.iterations ?? 48;
   const minimumLeaf = options.minimumLeaf ?? 150;
   const maxDepth = options.maxDepth ?? 3;
-  const features = trainRows.map(portableBoostFeatures);
+  // Training against an older schema means offering the tree fewer candidate
+  // columns; the extracted vector is always the newest width, so a v2 model
+  // trained here is byte-identical to one trained before v3 existed.
+  const featureSchema = options.featureSchema ?? PORTABLE_BOOST_FEATURE_SCHEMA;
+  const schemaWidth = PORTABLE_BOOST_FEATURE_COUNT_BY_SCHEMA[featureSchema];
+  if (schemaWidth === undefined) {
+    throw new Error(`Unknown boost feature schema: ${featureSchema}`);
+  }
+  const features = trainRows.map((row) => portableBoostFeatures(row));
   const thresholds = Array.from(
-    { length: PORTABLE_BOOST_FEATURE_COUNT },
+    { length: schemaWidth },
     (_, feature) => {
       const values = features.map((row) => row[feature]);
       return [...new Set([0.2, 0.4, 0.6, 0.8].map((p) => quantile(values, p)))];
@@ -169,7 +188,7 @@ export function trainPortableQuantileBoost(trainRows, baseForecast, options = {}
     return trees;
   });
   const model = {
-    featureSchema: PORTABLE_BOOST_FEATURE_SCHEMA,
+    featureSchema,
     learningRate,
     ensembles,
     trainingSamples: trainRows.length,

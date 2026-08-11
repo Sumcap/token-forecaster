@@ -2,9 +2,12 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { loadRequests } from "./load-history.mjs";
+import { derivePromptFeatures, loadRequests } from "./load-history.mjs";
 import { portableBoostFeatures } from "./quantile-boost.mjs";
-import { portableQuantileBoostFeatures } from "../../../packages/predictor/src/boosted.ts";
+import {
+  portableQuantileBoostFeatures,
+  promptForecastFeatures,
+} from "../../../packages/predictor/src/boosted.ts";
 
 const temporaryDirectories = [];
 
@@ -84,6 +87,7 @@ describe("loadRequests prompt ancestry", () => {
       artifactIntent: true,
       requestedFormat: "document",
       deliverableType: "artifact",
+      followupCompression: false,
     };
     const training = portableBoostFeatures({
       model: "claude-opus-5",
@@ -113,6 +117,7 @@ describe("loadRequests prompt ancestry", () => {
           artifactIntent: prompt.artifactIntent,
           requestedFormat: prompt.requestedFormat,
           deliverableType: prompt.deliverableType,
+          followupCompression: prompt.followupCompression,
         },
         agentLoop: {
           sessionPosition: 12,
@@ -126,6 +131,28 @@ describe("loadRequests prompt ancestry", () => {
       },
     });
     expect(runtime).toEqual([...training]);
+  });
+
+  it("derives the compression follow-up bit identically on both sides of the gate", () => {
+    const prompts = [
+      "let's summarize it",
+      "can you summarize it even further?",
+      "summarize this briefly in one sentence",
+      "make it shorter",
+      "tl;dr",
+      "summarize the architecture of this repo",
+      "summarize this file",
+      "read the docs and summarize it",
+      "write a new file src/foo.ts implementing the parser and tests",
+    ];
+    for (const prompt of prompts) {
+      expect(
+        derivePromptFeatures(prompt).followupCompression,
+        `training vs runtime disagree on: ${prompt}`,
+      ).toBe(promptForecastFeatures(prompt).followupCompression);
+    }
+    expect(derivePromptFeatures("let's summarize it").followupCompression).toBe(true);
+    expect(derivePromptFeatures("summarize this file").followupCompression).toBe(false);
   });
 
   it("captures paths resolved before the next call without retaining path text", async () => {

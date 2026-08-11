@@ -147,25 +147,41 @@ function metrics(records, field) {
   result.width = result.width.map((value) => value / records.length);
   return result;
 }
-function compare(records) {
+function comparePair(records, treatment, control) {
   const differences = records.map(
-    (record) => loss(record.row, record.boosted) - loss(record.row, record.baseline),
+    (record) => loss(record.row, record[treatment]) - loss(record.row, record[control]),
   );
   return blockBootstrapDifference(
     differences,
     records.map((record) => record.row.sessionId ?? null),
   );
 }
+const compare = (records) => comparePair(records, "boosted", "baseline");
+/** v3 minus v2 on identical folds: positive means the new feature costs loss. */
+const compareSchemas = (records) => comparePair(records, "candidate", "boosted");
+// Schema v3 (compression follow-up, feature 37) is graded against the shipped
+// v2 on identical folds. Both are trained here so the comparison is paired: the
+// only difference between the two models is the extra candidate column.
+const SHIPPED_SCHEMA = "portable-precall-v2";
+const CANDIDATE_SCHEMA = "portable-precall-v3";
+
 function fitAndScore(train, test, fold = null) {
   const base = makeBase(train);
-  const trained = trainPortableQuantileBoost(train, (row) => base(row).q);
+  const shipped = trainPortableQuantileBoost(train, (row) => base(row).q, {
+    featureSchema: SHIPPED_SCHEMA,
+  });
+  const candidate = trainPortableQuantileBoost(train, (row) => base(row).q, {
+    featureSchema: CANDIDATE_SCHEMA,
+  });
   return {
-    model: trained.model,
+    model: shipped.model,
+    candidateModel: candidate.model,
     records: test.map((row) => ({
       row,
       fold,
       baseline: base(row).q,
-      boosted: trained.predict(row),
+      boosted: shipped.predict(row),
+      candidate: candidate.predict(row),
     })),
   };
 }
@@ -179,7 +195,9 @@ const singleSplit = {
   holdoutFrom: new Date(rows[split].timestampMs).toISOString(),
   baseline: metrics(single.records, "baseline"),
   boosted: metrics(single.records, "boosted"),
+  candidate: metrics(single.records, "candidate"),
   comparison: compare(single.records),
+  schemaComparison: compareSchemas(single.records),
 };
 
 const blockSize = Math.floor((rows.length - split) / 5);
@@ -199,12 +217,16 @@ const rolling = {
       n: records.length,
       baseline: metrics(records, "baseline"),
       boosted: metrics(records, "boosted"),
+      candidate: metrics(records, "candidate"),
       comparison: compare(records),
+      schemaComparison: compareSchemas(records),
     };
   }),
   baseline: metrics(rollingRecords, "baseline"),
   boosted: metrics(rollingRecords, "boosted"),
+  candidate: metrics(rollingRecords, "candidate"),
   comparison: compare(rollingRecords),
+  schemaComparison: compareSchemas(rollingRecords),
 };
 
 function segment(accessor, minimum = 100) {
@@ -225,12 +247,60 @@ function segment(accessor, minimum = 100) {
           n: records.length,
           baseline: metrics(records, "baseline"),
           boosted: metrics(records, "boosted"),
+          candidate: metrics(records, "candidate"),
           comparison: compare(records),
+          schemaComparison: compareSchemas(records),
           writeRate: records.filter((record) => record.row.isWrite).length / records.length,
         },
       ]),
   );
 }
+
+/**
+ * Adoption gate for feature schema v3, graded on the rolling-origin holdout.
+ * The bundled profile only moves to v3 when the extra column costs nothing:
+ * no provable pinball regression against the shipped v2 (paired session-block
+ * bootstrap, lower bound of the v3−v2 CI at or below zero) and P90 coverage
+ * still inside the band the shipped correction holds (91.9% at adoption of
+ * §6.24; band 88–93%).
+ */
+const P90_COVERAGE_BAND = [0.88, 0.93];
+// A support floor comes first, because without it the gate is vacuous: the
+// trainer's minimum leaf is 150 rows, so a feature that fires on fewer than
+// that can never be chosen as a split and v3 trains byte-identical trees to v2
+// -- a zero difference that would read as "no regression" and adopt a schema
+// whose new column is dead. Grade support before grading loss.
+const BOOST_MINIMUM_LEAF = 150;
+const candidateFeatureRows = rows.filter(
+  (row) => row.turnPrompt?.followupCompression === true,
+).length;
+const candidateFeatureTurns = new Set(
+  rows
+    .filter((row) => row.turnPrompt?.followupCompression === true)
+    .map((row) => row.turnPrompt.promptHash),
+).size;
+const schemaGate = {
+  shippedSchema: SHIPPED_SCHEMA,
+  candidateSchema: CANDIDATE_SCHEMA,
+  rule:
+    `adopt v3 iff the new feature fires on >= ${BOOST_MINIMUM_LEAF} training rows ` +
+    "AND the paired rolling v3-v2 CI lower bound <= 0 (no provable pinball " +
+    `regression) AND v3 P90 coverage in [${P90_COVERAGE_BAND.join(", ")}]`,
+  candidateFeatureRows,
+  candidateFeatureTurns,
+  supported: candidateFeatureRows >= BOOST_MINIMUM_LEAF,
+  meanDifference: rolling.schemaComparison.meanDifference,
+  ciLower: rolling.schemaComparison.ciLower,
+  ciUpper: rolling.schemaComparison.ciUpper,
+  p90Coverage: rolling.candidate.coverage[1],
+  noRegression: rolling.schemaComparison.ciLower <= 0,
+  coverageInBand:
+    rolling.candidate.coverage[1] >= P90_COVERAGE_BAND[0] &&
+    rolling.candidate.coverage[1] <= P90_COVERAGE_BAND[1],
+};
+schemaGate.adopt =
+  schemaGate.supported && schemaGate.noRegression && schemaGate.coverageInBand;
+const deployedSchema = schemaGate.adopt ? CANDIDATE_SCHEMA : SHIPPED_SCHEMA;
 
 let deployment = null;
 if (baseProfileFile) {
@@ -243,13 +313,16 @@ if (baseProfileFile) {
     }
     return [1_000, 4_000, 12_000];
   };
-  const trained = trainPortableQuantileBoost(rows, profileBase);
+  const trained = trainPortableQuantileBoost(rows, profileBase, {
+    featureSchema: deployedSchema,
+  });
   const profile = { ...baseProfile, boostedCorrection: trained.model };
   deployment = {
     profileId: profile.id,
     trainingSamples: trained.model.trainingSamples,
     featureSchema: trained.model.featureSchema,
     treesPerQuantile: trained.model.ensembles.map((trees) => trees.length),
+    schemaGate,
   };
   if (profileOut) {
     await mkdir(path.dirname(profileOut), { recursive: true });
@@ -276,7 +349,7 @@ const report = {
   },
   method: {
     base: "model+thinking+promptPath -> pooled promptPath -> model+thinking -> model -> overall",
-    correction: "24 depth-2 trees per quantile; portable structured pre-call v1",
+    correction: `48 depth-3 trees per quantile; portable structured pre-call, deployed schema ${deployedSchema}`,
     adoption: "paired session-block bootstrap CI upper < 0",
     breakthrough: "at least 5% loss reduction or material width reduction without calibration damage",
   },
@@ -296,7 +369,17 @@ const report = {
             : "60+",
     ),
     byDeliverable: segment((row) => row.turnPrompt?.deliverableType ?? null),
+    byFollowupCompression: segment(
+      (row) =>
+        row.turnPrompt === null || row.turnPrompt === undefined
+          ? null
+          : row.turnPrompt.followupCompression
+            ? "yes"
+            : "no",
+      1,
+    ),
   },
+  schemaGate,
   deployment,
 };
 await mkdir(path.dirname(jsonOut), { recursive: true });
@@ -320,6 +403,23 @@ for (const fold of rolling.folds) {
   console.log(
     `  fold ${fold.fold}: ${fold.comparison.meanDifference.toFixed(1)} ` +
       `[${fold.comparison.ciLower.toFixed(1)}, ${fold.comparison.ciUpper.toFixed(1)}]`,
+  );
+}
+console.log(show("Rolling v3     ", rolling.candidate));
+console.log(
+  `Schema v3-v2 ${schemaGate.meanDifference.toFixed(2)} ` +
+    `[${schemaGate.ciLower.toFixed(2)}, ${schemaGate.ciUpper.toFixed(2)}] ` +
+    `p90cov=${(schemaGate.p90Coverage * 100).toFixed(1)}% ` +
+    `support=${candidateFeatureRows} calls / ${candidateFeatureTurns} turns -> ` +
+    `${schemaGate.adopt ? "ADOPTED" : "NOT ADOPTED"} (deploying ${deployedSchema})`,
+);
+const compressionSegment = report.segments.byFollowupCompression.yes;
+if (compressionSegment) {
+  console.log(
+    `  compression follow-ups n=${compressionSegment.n}: v3-v2 ` +
+      `${compressionSegment.schemaComparison.meanDifference.toFixed(2)} ` +
+      `[${compressionSegment.schemaComparison.ciLower.toFixed(2)}, ` +
+      `${compressionSegment.schemaComparison.ciUpper.toFixed(2)}]`,
   );
 }
 console.log(`Wrote ${jsonOut}`);
