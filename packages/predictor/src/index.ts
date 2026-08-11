@@ -6,7 +6,9 @@ export {
 export type { StaticBaselineConfig } from "./static.js";
 
 export {
+  BOOST_FEATURE_COUNT_BY_SCHEMA,
   QUANTILE_BOOST_FEATURE_COUNT,
+  SUPPORTED_BOOST_FEATURE_SCHEMAS,
   applyQuantileBoost,
   hasCompleteAgentLoopContext,
   portableQuantileBoostFeatures,
@@ -17,6 +19,7 @@ export type {
   BoostedForecastContext,
   ForecastDeliverableType,
   PortableBoostFeatureRequest,
+  PortableBoostFeatureSchema,
   PromptForecastFeatures,
   QuantileBoostLeaf,
   QuantileBoostNode,

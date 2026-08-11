@@ -138,6 +138,9 @@ export const promptForecastFeaturesSchema = z.object({
     "operation",
     "other",
   ]),
+  // Optional on purpose: telemetry rows written before feature schema v3 carry
+  // no such field, and absent must stay valid rather than become `false`.
+  followupCompression: z.boolean().optional(),
 });
 export type PromptForecastFeatureObservation = z.infer<
   typeof promptForecastFeaturesSchema
