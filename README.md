@@ -1,10 +1,19 @@
 # Token Forecaster
 
-Real-time token usage monitoring and probabilistic output-length forecasting
-for the Anthropic API. While you compose a Claude request, Token Forecaster
-shows a live, provider-counted input-token estimate, your context-window
-occupancy, and a historical forecast with measured holdout coverage for how
-many output tokens the request is likely to use before you send it.
+Token Forecaster answers a simple question before you send a Claude request:
+how many output tokens is the reply likely to use? It counts your input with
+Anthropic's own counting endpoint, and it forecasts the output length from
+around 16,000 real API calls measured in actual Claude Code sessions.
+
+Nothing here is a guess typed into a constant. Every number the forecaster
+ships was measured, tested against a held-out slice of history, and forced to
+beat the previous version in a statistical test before it was allowed in.
+
+![How Token Forecaster works, end to end](docs/current-model-flow.png)
+
+## What you get
+
+While you compose a request, the playground shows something like this:
 
 ```text
 Model                 Claude Opus 5        extended thinking: on
@@ -14,66 +23,123 @@ Reserved output       16,000 tokens
 Forecast output       p50: ~500 · p90: ~1,870 · p99: ~6,510
 Projected total       p50: ~18,920 · p90: ~20,290
 Context after p90     ~979,710 tokens
-Risk of output cap    unavailable until cap-aware calibration
 Estimated cost        $0.0617 to $0.0843
 ```
 
-## The core idea: two different problems
+The two halves of that panel are different problems, and the project treats
+them differently:
 
-**Input tokens are a provider-counting problem.** Anthropic exposes an official
-endpoint (`POST /v1/messages/count_tokens`) that estimates the tokenized size
-of a request, including system prompt, history, tools, images, and documents.
-Token Forecaster uses it as the authoritative pre-generation estimate; actual
-request usage can differ slightly. A fast local
-character heuristic keeps the UI moving while you type, and every number is
-labelled with its source:
+- **Input tokens are a counting problem.** Anthropic exposes an official
+  endpoint that counts a request the same way the API will bill it. We use
+  that as the source of truth, with a fast local estimate to keep the UI
+  responsive while you type. Every number is labelled with where it came from.
+- **Output tokens are a prediction problem.** Nobody can know the exact length
+  of a reply before it exists. So the forecast is a distribution, not a
+  number: a median (p50), a likely upper bound (p90), and an extreme bound
+  (p99), plus a confidence label.
 
-- `anthropic_verified` (the provider counted this request)
-- `local_exact` / `local_estimate` / `character_heuristic` (labelled estimates)
+## The data
 
-**Output tokens are a prediction problem.** Nothing can tell you exactly how
-long a generation will be before it runs. So Token Forecaster never claims
-"this will use 7,243 output tokens". It estimates a conditional distribution:
+The whole predictor is built from real usage: 471 Claude Code transcript
+files, 16,011 unique API calls after deduplication, zero calls cut off by the
+token limit. This is what those replies actually look like:
 
-```text
-p50: 3,100 tokens     (median)
-p90: 7,400 tokens     (likely upper bound)
-p99: 15,200 tokens    (extreme bound)
-P(hit max_tokens cap) and P(context overflow)
-confidence: low | medium | high
-```
+![Distribution of output lengths across 16,011 calls](docs/report-assets/data-distribution.png)
 
-Forecasts anchor on hierarchical historical quantiles and then apply a small
-quantile-specific correction from privacy-safe prompt intent and exact state
-already observed in the current agent loop. On the 9 August 2026 (afternoon)
-rolling-origin evaluation, the correction reduces total pinball from 505.0 to
-485.9 per call (3.8%, 95% paired session-bootstrap CI [-25.7, -13.6]); the
-corpus is a live rolling window, so absolute losses drift between
-regenerations while the paired verdicts should not. **The predictor is
-deliberately excellent cold**: a caller passing only `{model, maxTokens,
-thinkingEnabled}` scores within noise of the full base ladder, and a caller
-whose model the profile has never seen gets pooled thinking-conditioned
-quantiles (adopted 9 August: −43 pinball/call vs the blended fallback,
-leave-one-model-out). See [the live investigation
-report](docs/STATE-OF-PLAY.md).
+Half of all replies are under 400 tokens. One in a hundred is over 6,600. That
+long tail is why a single point estimate would be useless: any number small
+enough to be a good typical guess would be overrun badly several times per
+session.
 
-The strongest unresolved regime is a long file/artifact response. Knowing the
-future `Write` state has an 11.1% oracle ceiling, but that state is not available
-before generation and a prompt-semantic detector reaches only 0.584 AUC. The
-telemetry contract therefore records caller-declared output intent before the
-call and the observed action only after it. A p90 forecast is still judged by
-one thing: do roughly 90% of eligible outputs actually fall below it?
+The model you call matters a lot, which is why it is the first input the
+predictor asks for:
 
-Responses truncated at `max_tokens` are treated as right-censored
-observations (natural length >= observed length), excluded from ordinary
-regression, and fed to a separate cap-risk classifier instead.
+![Per-model output quantiles](docs/report-assets/data-per-model.png)
 
-## Integration contract
+The workload also drifts over time. Replies got about a third shorter over
+July, which is why the profile is regenerated from a rolling window instead of
+fitted once and frozen:
 
-What a calling application passes to `historicalBaselineForecast`, and what it
-gets when it passes something the profile does not know about.
+![Median and p90 reply length shrinking fortnight over fortnight](docs/report-assets/workload-drift.png)
 
-### What to pass
+## How the forecast is made
+
+The short version: look up what happened the last few thousand times a request
+looked like this one, take the quantiles of those lengths, then let a small
+trained correction nudge them using what the current agent session already
+knows. Here is one real call walked through top to bottom:
+
+![The forecast pipeline explained step by step](docs/report-assets/architecture-eli5.png)
+
+And here is the same pipeline with the actual mechanics, including the part
+that never ships: the evaluation loop that decides whether a new predictor is
+allowed to replace the current one.
+
+![Full architecture: the shipping path and the evaluation loop](docs/report-assets/architecture.png)
+
+A few design choices worth calling out:
+
+- **A ladder, not a model soup.** The predictor walks down a ladder of
+  historical groups, from very specific (model + thinking + effort + task) to
+  very broad (all calls pooled), and uses the first rung with at least 100
+  samples. A request it has never seen still gets a sane answer.
+- **The p90 is the number that matters.** Reserving too much room wastes a
+  little context. Reserving too little cuts a reply off mid-file. The loss
+  function prices a token of shortfall nine times higher than a token of
+  slack, so the forecast leans safe on purpose.
+- **Truncated replies never poison the stats.** A reply cut off by the token
+  limit hides its true length, so it is excluded from the quantiles entirely.
+
+## Does it actually work
+
+Calibration is the honest test: a p90 forecast is only worth something if
+about 90 percent of real replies actually fit under it. On held-out calls the
+predictor never trained on, they do:
+
+![Coverage vs promise at p50, p90, and p99](docs/report-assets/accuracy-calibration.png)
+
+Each input the predictor uses had to earn its place. Starting from fixed
+numbers with no model at all, every added signal cuts the error, and the full
+shipped predictor cuts it 45 percent:
+
+![Error falling as each signal is added](docs/report-assets/accuracy-loss-ladder.png)
+
+The improvement is not a lucky split. Scored across five consecutive slices of
+held-out traffic, the shipped predictor wins in every one:
+
+![The win holds across five time slices](docs/report-assets/accuracy-rolling-folds.png)
+
+### Cold start is a first-class case
+
+A fresh install with zero local history is not a degraded mode. A caller that
+passes only the model id and the thinking flag lands within noise of the full
+predictor. Dropping the thinking flag is what actually hurts:
+
+![Cold-start tiers vs the full predictor](docs/report-assets/accuracy-cold-start.png)
+
+Even a model the profile has never seen gets a useful answer. Pooled
+thinking-conditioned groups replaced the old blended fallback after beating it
+by 43 points per call in a leave-one-model-out test:
+
+![Unknown-model forecasts before and after the pooled fallback](docs/report-assets/fallback-before-after.png)
+
+### Nothing ships without beating the champion
+
+Every candidate improvement is scored against the current predictor on the
+same held-out calls, with a session-bootstrap confidence interval. The whole
+interval has to sit below zero. Most ideas do not make it, and the rejections
+are kept on record so they are not retried by accident:
+
+![Nine candidates at the adoption gate, three passed](docs/report-assets/adoption-gate.png)
+
+Some intuitive ideas that failed this gate: input size (made the tail worse),
+tool count (no signal), the recorded effort level (its apparent 4.6x effect
+disappears once you hold date and model fixed), and prompt-mentions-a-file
+(failed its re-test on the latest corpus, re-tested automatically on every
+refresh). The details live in [docs/STATE-OF-PLAY.md](docs/STATE-OF-PLAY.md)
+and [docs/GENERATIVE-MODEL.md](docs/GENERATIVE-MODEL.md).
+
+## Using the predictor
 
 ```ts
 import {
@@ -83,12 +149,11 @@ import {
   promptMentionsPath,
 } from "@token-forecaster/predictor";
 
-const turnPrompt = "update docs/STATE-OF-PLAY.md";
 const { forecast, calibration } = historicalBaselineForecast(
   {
     model: "claude-opus-5",   // required
     maxTokens: 16_000,        // required
-    thinkingEnabled: true,    // optional, but pass it — see below
+    thinkingEnabled: true,    // optional, but always pass it when you know it
     promptMentionsPath: promptMentionsPath(turnPrompt),
     boostedContext: {
       prompt: promptForecastFeatures(turnPrompt),
@@ -107,119 +172,36 @@ const { forecast, calibration } = historicalBaselineForecast(
 );
 ```
 
-| Field | Required | What it does |
-|---|---|---|
-| `model` | yes | Canonical id (`claude-opus-5`) or a dated snapshot. Snapshots are resolved through `profile.modelAliases`, which is generated from the model registry. |
-| `maxTokens` | yes | Positive integer. Every returned quantile is clamped to it, so a forecast never promises more than the request allows. |
-| `thinkingEnabled` | no, **but pass it** | Selects the thinking-conditioned group. Worth ~10% of total pinball loss. |
-| `promptMentionsPath` | no, **but derive it when the turn prompt is available** | Selects the prompt-path dimension when the profile carries it. Use `promptMentionsPath(turnPrompt)`; raw prompt text is not stored in the profile. **The current bundled profile ships no `promptPath` groups** — the feature's own gate refused it on the 9 August afternoon corpus (it is endpoint-sensitive; see STATE-OF-PLAY §7.3) and the eval re-tests it every regeneration. Pass it anyway: it costs nothing and takes effect the moment it re-clears. |
-| `boostedContext.prompt` | no | Privacy-safe aggregates from `promptForecastFeatures(turnRootPrompt)`. No raw text enters the profile. |
-| `boostedContext.agentLoop` | no, **required for the trained correction** | Exact pre-call session position, parent depth, and completed parent-chain summaries. Every history field is known before this call. If the context is absent or incomplete, the correction is skipped and confidence is `low`. |
-| `previousOutputTokens` | no | Output tokens of the previous call in the same agent loop. The ladder rung exists and the eval re-tests it on every regeneration, but **no shipped profile currently contains these groups** — the effect failed its adoption gate on the latest corpus (see [docs/STATE-OF-PLAY.md §7.1](docs/STATE-OF-PLAY.md#-71-previousoutputtokens--implemented-gated-and-currently-refused)). Pass it anyway if you have it: it costs nothing and it takes effect automatically the moment the gate passes. |
-| `outputEffort`, `taskType` | no | Accepted, but no shipped profile contains these groups, so passing them changes nothing today. `outputEffort` **is** recorded in Claude Code transcripts (~52% of calls) — it was measured as a candidate dimension and **rejected**: the apparent 4.6× separation between levels does not survive holding date and model fixed. See [docs/GENERATIVE-MODEL.md §3](docs/GENERATIVE-MODEL.md#3-effort-is-recorded--and-it-does-not-survive-contact-with-the-confound). |
+Three rules save most integration mistakes:
 
-Nothing else is read. Input size and tool count are deliberately **not**
-parameters: both were measured, both made the p99 worse or carried no signal,
-and both were removed from the backoff ladder.
+1. **Optional flags are tri-state.** Omitting `thinkingEnabled` means unknown,
+   not false. The no-thinking groups have about a third of the p99 of the
+   thinking groups, so coercing unknown to false would under-forecast a
+   thinking request by roughly 3x at the tail. The same logic applies to
+   `promptMentionsPath` and `previousOutputTokens`: pass a value when you
+   observed one, omit the field when you did not.
+2. **There is no silent degradation.** If the profile does not know your
+   model, `calibration.usedFallback` is `true` and confidence is `low`. Treat
+   that forecast as a rough reservation hint and say so in your UI.
+3. **Unknown models never throw.** The function only throws on malformed
+   input, such as an empty model string or a non-positive `maxTokens`.
 
-> **`thinkingEnabled` is tri-state on purpose.** Omitting it means *unknown*,
-> not *disabled*. The no-thinking groups have roughly a third of the p99 of the
-> thinking groups, so defaulting an unknown request to "no" would under-forecast
-> a thinking request by about 3x at the tail. An omitted flag instead skips
-> every thinking rung and falls back to the broader model-only group: safe, but
-> you forfeit the largest single gain the predictor has. Pass `true` or `false`
-> explicitly whenever you know.
->
-> **`promptMentionsPath` is tri-state too.** Pass `true` or `false` only when
-> the human turn-root prompt was observed. Omitting it means *prompt unknown*
-> and skips both prompt-path rungs; it must not be coerced to `false`.
->
-> **`previousOutputTokens` is tri-state for the same reason.** Omitting it means
-> *no previous call / not tracked*, not *the previous call was short*. Turn-
-> opening calls have no predecessor and are the **longest** calls in the corpus,
-> so filing them under the smallest bucket would poison it in the one direction
-> that matters. A previous call that genuinely produced 0 tokens is a
-> measurement — pass `0`, and it selects the `lt200` bucket.
->
-> **Agent-loop history must be complete.** When `priorCallCount > 0`, all four
-> prior-history fields are required. Missing means unknown; the predictor never
-> converts it to `false` or zero. The correction also stays off when thinking
-> mode is unknown or the selected historical group is a pooled fallback.
+The full field-by-field contract, including exactly which groups the current
+bundled profile ships and which gated features are waiting for their re-test
+to pass, is in [docs/STATE-OF-PLAY.md](docs/STATE-OF-PLAY.md).
 
-### What you get back when the profile does not know your request
+## Privacy
 
-There is no silent degradation. `calibration.usedFallback` says the historical
-group is not conditioned on your model;
-`calibration.boostedCorrectionApplied` and `boostedCorrectionReason` separately
-say whether the trained correction had enough forecast-time context to run:
+The tool is also the instrument that collects its own training data, so
+privacy is a default, not an option:
 
-| Situation | `groupKey` | `usedFallback` | `forecast.source` | `confidence` |
-|---|---|---|---|---|
-| Known model + thinking + complete loop context | most specific populated rung | `false` | `trained` | `medium` at n >= 500 |
-| Known model, correction context incomplete | most specific populated rung | `false` | `historical` | `low` |
-| Model known, thinking omitted | `model=…` | `false` | `historical` | `low` |
-| **Model not in the profile**, thinking known | `thinking=…` | **`true`** | `historical` | `low` |
-| **Model not in the profile**, thinking omitted, prompt-path known and shipped | `promptPath=…` | **`true`** | `historical` | `low` |
-| **Model not in the profile**, nothing else known | `overall` | **`true`** | `historical` | `low` |
-| Even `overall` below `minSamples` | `null` | **`true`** | `default` | `low` |
-
-The fallback rows are the ones to handle. The pooled `thinking=…`,
-`promptPath=…` and `overall` groups all blend models the profile *was* fitted
-on — Fable 5, Opus 4.8 and Opus 5 — so they are workload-shaped priors, not
-statements about the model you asked for. The pooled thinking rung is the best
-of them (adopted 9 August 2026: −43 pinball/call vs `overall` on
-leave-one-model-out calls), which is one more reason to always pass
-`thinkingEnabled`. Treat any `usedFallback` forecast as a rough reservation
-hint and say so in your UI; do not present it as calibrated.
-
-Unknown model ids never throw. `historicalBaselineForecast` throws only on a
-malformed request: empty `model`, non-positive-integer `maxTokens`, or a
-`previousOutputTokens` that is negative or non-finite. `null` and `undefined`
-are *not* malformed on any optional field — both mean "not set" and skip their
-rung. The
-separate `requireModel()` in `@token-forecaster/model-registry` *does* throw
-`UnknownModelError`, so add a model there before relying on its context window
-or pricing.
-
-### What is not available
-
-`forecast.probabilityOfOutputCap` is always `undefined`. Our corpus contains
-zero censored calls, so cap risk cannot be fitted at all — and it cannot be
-invented from three quantiles. It stays absent until Phase 3 telemetry collects
-calls where `max_tokens` actually binds.
-
-## Anthropic first
-
-The MVP targets the Anthropic API and Claude models only. This is deliberate:
-
-- Input counting uses Anthropic's own endpoint instead of a reimplemented
-  tokenizer, so it is provider-counted and may differ only slightly from final
-  request usage.
-- Model limits and pricing live in one versioned registry
-  (`packages/model-registry`) with source and verification dates, not
-  scattered constants.
-- Output-length distributions are model-specific; one well-instrumented
-  provider beats three half-instrumented ones.
-
-The architecture keeps provider-neutral primitives only where they are
-natural (schemas, context-budget math). OpenAI, Gemini, OpenRouter, and
-open-weight models are out of scope for the MVP.
-
-## Privacy defaults
-
-The tool is also a data-collection instrument for its own research question,
-so telemetry is designed for privacy from day one:
-
-- Raw prompts are **not** stored by default. The default storage mode is
-  `hash_only`: prompt hash, derived numeric features, token counts, request
-  configuration, forecast, and actual usage.
-- Storage modes: `none`, `hash_only` (default), `redacted`, `full_opt_in`
-  (explicit local development mode only).
-- API keys stay server-side. The browser never sees them and they are never
-  logged.
-- No hosted backend. Observations are append-only local JSONL files you own;
-  [the VM collection guide](docs/TELEMETRY.md) covers encrypted deployment and
-  chronological user/session-block evaluation.
+- Raw prompt text is never stored by default. The default mode records a
+  prompt hash, derived numeric features, token counts, request configuration,
+  the forecast, and the actual usage.
+- API keys stay server-side. The browser never sees them.
+- There is no hosted backend. Observations are append-only local JSONL files
+  that you own. [docs/TELEMETRY.md](docs/TELEMETRY.md) covers encrypted
+  deployment if you want to pool data from several machines.
 
 ## Repository layout
 
@@ -231,45 +213,46 @@ token-forecaster/
 │   ├── anthropic/         Server-side adapter: count_tokens, streaming, usage
 │   ├── model-registry/    Versioned model limits and pricing with provenance
 │   ├── token-counter/     Local estimator, debounce, race-safe reconciliation
-│   ├── predictor/         Historical ladder + portable quantile correction
-│   ├── telemetry/         Schema-valid privacy-aware JSONL observation logging
+│   ├── predictor/         Historical ladder + trained quantile correction
+│   ├── telemetry/         Privacy-aware JSONL observation logging
 │   ├── react/             Hooks and components (Phase 6)
-│   └── cli/               count | forecast | run | evaluate | export (Phase 3+)
-├── experiments/           Datasets, training, evaluation (Python, later phases)
+│   └── cli/               count | forecast | run | evaluate | export
+├── experiments/           Probes, evaluation scripts, generated artifacts
 ├── research/              Competitive analysis, literature review, ADRs
 ├── fixtures/              Race-condition fixtures for count reconciliation
-└── docs/BACKLOG.md        Phased plan
+└── docs/                  Reports, state of play, backlog, chart sources
 ```
 
 ## Getting started
 
 ```sh
 pnpm install
-pnpm build          # build workspace packages (server imports built output)
+pnpm build          # build workspace packages (the server imports built output)
 pnpm test           # vitest across packages
-# Refresh report, JSON profile, and bundled profile. Needs `pnpm build` first:
-# the eval generates model aliases from the built model registry.
+
+# Regenerate the report, the JSON profile, and the bundled profile:
 pnpm evaluate:claude-history
 
-# Start both the count_tokens server and UI on http://localhost:5199.
+# Start the count_tokens server and the UI on http://localhost:5199.
 # Provider verification needs ANTHROPIC_API_KEY or an `ant auth login` profile.
 pnpm dev
 ```
 
-Type into the playground: the count updates instantly from a labelled local
-estimate, then flips to `Anthropic counted` after a debounce. Older
-verification responses can never overwrite newer counts (see
-`fixtures/count-race-conditions.json`).
+Type into the playground and the count updates instantly from a labelled local
+estimate, then flips to the provider-counted number after a debounce. Stale
+verification responses can never overwrite newer counts.
 
-For separate terminals, use `pnpm dev:server` for the API and `pnpm dev:ui` for
-Vite. The UI stops its verification indicator and keeps the local estimate if
-the API fails or takes longer than 20 seconds.
+All the charts in this README are generated from the JSON artifacts in
+`experiments/artifacts/` by the scripts in `docs/report-assets/`, so they
+regenerate together with the data.
 
-## Status
+## Where things stand
 
-Phase 1/2 foundations plus the adopted Baseline 3 predictor: schemas, model
-registry, context-budget engine, race-safe counting, hierarchical quantiles,
-portable trained corrections, chronological/rolling evaluation, privacy-safe
-JSONL telemetry, and the playground. Provider execution and multi-user data
-collection remain; see `docs/BACKLOG.md`, `docs/TELEMETRY.md`, and
-`research/decisions/`.
+Phase 1 and 2 foundations are done, plus the adopted Baseline 3 predictor:
+schemas, model registry, context-budget engine, race-safe counting, the
+hierarchical quantile ladder, the trained correction, chronological and
+rolling evaluation, privacy-safe telemetry, and the playground. Cap-risk
+estimation stays unavailable until telemetry collects calls where the token
+limit actually binds; the corpus so far contains none. The running record of
+what was tried, adopted, refused, and why is
+[docs/STATE-OF-PLAY.md](docs/STATE-OF-PLAY.md).
