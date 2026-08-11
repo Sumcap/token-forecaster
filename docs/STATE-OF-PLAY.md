@@ -1438,6 +1438,64 @@ before re-testing conditional rungs is the SESSION count, not calls or
 turns; at ~300 total this question is answered until the corpus roughly
 doubles.
 
+### ⚫ 6.27 `followupCompression` — implemented, gated, REFUSED on support
+
+*`pnpm evaluate:claude-history` (the gate now runs in `eval-winning-boost.mjs`
+on every regeneration), 11 August 2026. Motivating issue: BACKLOG "prompt-aware
+boost is flat at chat turn roots".*
+
+The issue's fix direction (1). At a chat turn root every loop-shape feature is
+zero, so opposite drafts land in the same leaves and forecast the same median
+(523 for `let's summarize it` and for a one-sentence brief). Part of the
+mechanism is a missing bit: the corpus sense of "summarize X" is *go read X,
+then write 800 tokens*, and nothing separated it from "summarize **it**",
+which means *shrink what you just said*. So: a `followupCompression` feature
+(short prompt + compression verb + anaphoric object, mirrored byte-for-byte in
+`predictor/src/boosted.ts` and `evaluation/lib/load-history.mjs`), feature
+schema `portable-precall-v3` appending it at index 37, and a retrain.
+
+**The retrain never got a chance, and the reason is the finding.** The feature
+fires on **2 of 987 distinct human turn prompts — 2 of 16,386 calls**:
+
+| population | n | median output | mean output |
+|---|---|---|---|
+| `followupCompression=yes` | **2 calls** | 337 | 235 |
+| `followupCompression=no`, `loopDepth=0` | 1,030 | 517 | 1,161 |
+
+The direction is the one the issue predicted (and the two calls are exactly the
+two live "summarize it" turns it recorded, 337 and 132 against p50 523) — but
+**n=2 is an anecdote, not a measurement**, and it is the whole corpus. Length
+is not the binding constraint: 342 of 987 turns are ≤80 characters. The
+compression verb with an anaphoric object is simply rare in a Claude Code
+transcript, because this corpus is agent work, not chat.
+
+**Why the loss gate cannot decide this.** The trainer's minimum leaf is 150
+rows, so a column that is 1 on 2 rows can never be chosen as a split. v3
+therefore trains **byte-identical trees to v2**, and the paired rolling
+comparison reads exactly **0.00/call [0.00, 0.00] with P90 coverage 92.0% in
+both arms** — a perfect "no regression" that would have adopted a schema whose
+new column is dead. The gate grades **support first** for that reason: ≥150
+training rows, *then* no provable pinball regression, *then* P90 coverage in
+88–93%. Verdict on stdout: **NOT ADOPTED, support=2 calls / 2 turns; deploying
+`portable-precall-v2`.** `bundled-profile.ts` is unchanged.
+
+Health of the shipped correction on the same run, for the record: rolling
+baseline **525.5/call → boosted 506.5, −19.0 [−28.0, −10.3]**, coverage
+53.6/92.0/98.9; single split 531.9 → 511.7, −20.2 [−30.3, −10.2].
+
+**What did ship: the runtime, so the profile can move without a code change.**
+`SUPPORTED_BOOST_FEATURE_SCHEMAS` now carries v3, the extractor emits 38
+features, and the width check is schema-dependent
+(`BOOST_FEATURE_COUNT_BY_SCHEMA`) instead of one constant — v1 and v2 profiles
+evaluate exactly as before, and the optional
+`promptForecastFeatures.followupCompression` field keeps pre-v3 telemetry rows
+valid. The day a corpus with materially more *human chat turns* exists — §7.3's
+condition, third time it has been the answer — the gate flips the schema on its
+own. This is §6.22's shape, not §6.23's: not "measured and refused", but **no
+support to measure**. Do not loosen the extractor to manufacture support; a
+looser rule would relabel corpus "summarize X" tasks as compression follow-ups
+and make the feature mean the opposite of what it is for.
+
 ---
 
 ## 7. What to do next

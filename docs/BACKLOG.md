@@ -236,9 +236,11 @@ compression follow-up (shrink the previous answer) does not exist in the
 Claude Code corpus, where "summarize X" means "read things, then write 800
 tokens"; no feature separates the two regimes.
 
-Fix directions: (1) compression-follow-up feature (short prompt + anaphor +
-compression verb), schema v3, retrain, adopt only if it clears the eval
-gates; (2) make the trainer see turn-root rows as their own regime so prompt
+Fix directions: (1) ⚫ **done, refused — see STATE-OF-PLAY §6.27.** The
+compression-follow-up feature and schema `portable-precall-v3` are implemented
+and gated; the feature fires on 2 of 987 turn prompts corpus-wide, which cannot
+train a split, so the shipped profile stays v2. The remaining directions are
+where the fix lives; (2) make the trainer see turn-root rows as their own regime so prompt
 features must carry weight there; (3) consumer-side: sheep-manager should
 stop implying the chip "reads your draft", and fit local turn rungs from its
 opt-in telemetry once sample counts clear a gate, cold-start falling back to
