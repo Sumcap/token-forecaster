@@ -1,5 +1,8 @@
 # Token Forecaster
 
+> **Note:** Token Forecaster currently works with Anthropic models only
+> (Claude). Support for all models is planned.
+
 Token Forecaster answers a simple question before you send a Claude request:
 how many output tokens is the reply likely to use? It counts your input with
 Anthropic's own counting endpoint, and it forecasts the output length from
