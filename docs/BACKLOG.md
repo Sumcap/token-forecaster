@@ -205,6 +205,45 @@ steps behind the Phase 4/5 items below.
 - [ ] Call-count and loop-count distributions, branch probabilities,
       context growth modeling
 
+## Issue, 11 August 2026: prompt-aware boost is flat at chat turn roots
+
+Live repro in sheep-manager (turn root, `sessionPosition=1`, `loopDepth=0`,
+`priorCallCount=0`, `claude-opus-4-8`, thinking on, cap 64k): opposite drafts
+forecast the same median.
+
+| draft | features fired | p50 / p90 |
+|---|---|---|
+| `let's summarize it` | analysis | 523 / 1914 |
+| `summarize this briefly in one sentence` | analysis, hasLimit | 523 / 1923 |
+| long "comprehensive report about everything, step by step" | analysis, hasExpansive | 499 / 2215 |
+| `write a new file src/foo.ts implementing the parser and tests` | artifactIntent, code | 530 / 2231 |
+
+Prompt wording moves p50 only 499-530 (±3%). The levers that do move it are
+thinking on/off (523 vs 164) and deep sessionPosition (644 at position 30),
+both constant while a user types. Actuals for two real "summarize it" turns:
+337 and 132 tokens against p50 523.
+
+Not broken: feature extraction (flags flip as designed), boost application
+(`applied`), band-level calibration (both turns graded "shorter than
+typical"). Root cause is regime collapse: the correction was trained on the
+per-call ladder, where loop-shape features dominate the residual. Split
+counts in the shipped ensembles (p50/p90/p99): `priorMaxOutputTokens`
+52/78/57, `sessionPosition` 38/41/75, `loopDepth` 36/43/46, versus `hasLimit`
+6/5/0 and `hasExpansive` 0/3/9. At a turn root the loop features are all
+zero, so every chat draft lands in the same few leaves and never reaches the
+prompt-wording splits. A second gap compounds it: "summarize it" as a
+compression follow-up (shrink the previous answer) does not exist in the
+Claude Code corpus, where "summarize X" means "read things, then write 800
+tokens"; no feature separates the two regimes.
+
+Fix directions: (1) compression-follow-up feature (short prompt + anaphor +
+compression verb), schema v3, retrain, adopt only if it clears the eval
+gates; (2) make the trainer see turn-root rows as their own regime so prompt
+features must carry weight there; (3) consumer-side: sheep-manager should
+stop implying the chip "reads your draft", and fit local turn rungs from its
+opt-in telemetry once sample counts clear a gate, cold-start falling back to
+the bundled profile.
+
 ## Status, 6 August 2026: Baseline 3 adopted; breakthrough blocked on telemetry
 
 The live corpus invalidated the stale 623.7/call headline: the current ladder
