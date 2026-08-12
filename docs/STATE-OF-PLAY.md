@@ -1438,6 +1438,135 @@ before re-testing conditional rungs is the SESSION count, not calls or
 turns; at ~300 total this question is answered until the corpus roughly
 doubles.
 
+### ⚫ 6.27 `followupCompression` — implemented, gated, REFUSED on support
+
+*`pnpm evaluate:claude-history` (the gate now runs in `eval-winning-boost.mjs`
+on every regeneration), 11 August 2026. Motivating issue: BACKLOG "prompt-aware
+boost is flat at chat turn roots".*
+
+The issue's fix direction (1). At a chat turn root every loop-shape feature is
+zero, so opposite drafts land in the same leaves and forecast the same median
+(523 for `let's summarize it` and for a one-sentence brief). Part of the
+mechanism is a missing bit: the corpus sense of "summarize X" is *go read X,
+then write 800 tokens*, and nothing separated it from "summarize **it**",
+which means *shrink what you just said*. So: a `followupCompression` feature
+(short prompt + compression verb + anaphoric object, mirrored byte-for-byte in
+`predictor/src/boosted.ts` and `evaluation/lib/load-history.mjs`), feature
+schema `portable-precall-v3` appending it at index 37, and a retrain.
+
+**The retrain never got a chance, and the reason is the finding.** The feature
+fires on **2 of 987 distinct human turn prompts — 2 of 16,386 calls**:
+
+| population | n | median output | mean output |
+|---|---|---|---|
+| `followupCompression=yes` | **2 calls** | 337 | 235 |
+| `followupCompression=no`, `loopDepth=0` | 1,030 | 517 | 1,161 |
+
+The direction is the one the issue predicted (and the two calls are exactly the
+two live "summarize it" turns it recorded, 337 and 132 against p50 523) — but
+**n=2 is an anecdote, not a measurement**, and it is the whole corpus. Length
+is not the binding constraint: 342 of 987 turns are ≤80 characters. The
+compression verb with an anaphoric object is simply rare in a Claude Code
+transcript, because this corpus is agent work, not chat.
+
+**Why the loss gate cannot decide this.** The trainer's minimum leaf is 150
+rows, so a column that is 1 on 2 rows can never be chosen as a split. v3
+therefore trains **byte-identical trees to v2**, and the paired rolling
+comparison reads exactly **0.00/call [0.00, 0.00] with P90 coverage 92.0% in
+both arms** — a perfect "no regression" that would have adopted a schema whose
+new column is dead. The gate grades **support first** for that reason: ≥150
+training rows, *then* no provable pinball regression, *then* P90 coverage in
+88–93%. Verdict on stdout: **NOT ADOPTED, support=2 calls / 2 turns; deploying
+`portable-precall-v2`.** `bundled-profile.ts` is unchanged.
+
+Health of the shipped correction on the same run, for the record: rolling
+baseline **525.5/call → boosted 506.5, −19.0 [−28.0, −10.3]**, coverage
+53.6/92.0/98.9; single split 531.9 → 511.7, −20.2 [−30.3, −10.2].
+
+**What did ship: the runtime, so the profile can move without a code change.**
+`SUPPORTED_BOOST_FEATURE_SCHEMAS` now carries v3, the extractor emits 38
+features, and the width check is schema-dependent
+(`BOOST_FEATURE_COUNT_BY_SCHEMA`) instead of one constant — v1 and v2 profiles
+evaluate exactly as before, and the optional
+`promptForecastFeatures.followupCompression` field keeps pre-v3 telemetry rows
+valid. The day a corpus with materially more *human chat turns* exists — §7.3's
+condition, third time it has been the answer — the gate flips the schema on its
+own. This is §6.22's shape, not §6.23's: not "measured and refused", but **no
+support to measure**. Do not loosen the extractor to manufacture support; a
+looser rule would relabel corpus "summarize X" tasks as compression follow-ups
+and make the feature mean the opposite of what it is for.
+
+---
+
+### 🟢 6.28 Prompt-aware TURN TOTALS — the turn-root fix lands one level up
+
+*`probe-turn-root-regime.mjs`, `probe-turn-total-boost.mjs`,
+`pnpm evaluate:claude-history`, 12 August 2026. Motivating issue: BACKLOG
+"prompt-aware boost is flat at chat turn roots", fix direction (2).*
+
+**Fix direction (2) as literally stated — retrain the per-call correction on
+turn-root rows only — was tried first and REFUSED.** A turn-root-only per-call
+correction does unlock prompt splits (characterCount 162, requirements 130 of
+its splits, versus 42+36 in the shipped ensembles), but every configuration in
+an 18-point sweep (leaf 40–80, depth 2–3, replace and stacked) graded WORSE
+than the shipped v2 on the turn-root holdout — best +14.5/call [−2.3, 29.0],
+worst +93. The corpus is telling us something real: **the opening call of a
+turn does not get longer when the prompt asks for more work.** The chip's
+premise was aimed at the wrong random variable.
+
+**The variable that does scale with typed intent is the whole turn.** An
+artifact-plus-review draft doesn't lengthen the first API response; it
+lengthens the loop (more calls, Write payloads, review output). So prompt
+conditioning shipped on the TURN TOTAL instead:
+
+1. **Pooled opener rungs** `thinking|promptPath` and `thinking|promptImage`
+   (path first — it is the stronger lever, path turns run ~2.2x the pooled
+   median, and it is the bit that can flip while a user types). Model
+   conditioning is deliberately absent: the model-conditioned turn ladder
+   graded ~+500/turn worse than pooled thinking-only, consistent with §6.25's
+   thinking-only mean advantage.
+2. **`turnTotalBoost`** — a portable quantile correction (24 depth-2 trees,
+   leaf 60, lr 0.05, `portable-precall-v2` features) trained on per-turn
+   totals over the rung ladder. At a turn opener every parent-chain feature is
+   definitionally zero, so the trees spend their splits on prompt aggregates,
+   thinking and session position — no regime collapse to fight.
+
+**Gate, stated honestly.** At 1,182 turns the session-block CI is ±400–500 per
+turn, so house rule 1's provable-improvement bound cannot close for effects of
+this size in either direction. The shipping unit (rungs+boost) is graded
+against the previously shipped thinking-only groups under the schema-gate
+family rule — adopt unless it PROVABLY regresses or P90 coverage leaves
+[0.90, 1]: **+5.2/turn [−499.6, +449.6], P90 coverage 96.7% → ADOPTED**.
+Components for the record: rungs alone +69.4 [−126.6, +288.7] vs thinking-only,
+boost −64.2 [−460.2, +269.6] vs rungs. This is a weaker gate than rule 1 and
+is recorded as such; the trade bought is that the turn forecast now responds
+to the draft, which is the product surface (the "reads your draft" chip that
+BACKLOG told consumers to stop implying — it stops being a lie this way, not
+by softening the copy). Config choice among the statistically-tied depth-2
+candidates was made on final-model smoothness over a growing draft (smallest
+mid-typing dip), because the chip is the consumer.
+
+**What the shipped profile now does on a draft typed phrase by phrase**
+(bundled profile, thinking on, `sessionPosition=1`):
+
+| draft so far | turn p50 | turn p90 |
+|---|---|---|
+| `can you write` | 3,564 | 24,884 |
+| `…a small report` | 3,390 | 23,682 |
+| `…into a file lets say ./here.txt` | 8,427 | 38,283 |
+| `…a report about predicting output tokens.` | 9,054 | 38,283 |
+| `…then review a random pr in the internet` | 9,054 | 38,283 |
+
+2.5x from first fragment to full intent, one ~5% dip (artifact-intent openers
+run slightly shorter at median than unclassified fragments — data truth, not a
+bug). The per-call forecast is untouched: same ladder, same v2 correction,
+same numbers as §6.24. API: `historicalTurnTotalForecast` now accepts optional
+`model` / `promptMentionsPath` / `promptHasImage` / `boostedContext`, returns
+`promptCorrectionApplied`, and keeps byte-identical behavior for the old
+thinking-only call shape. Profile field: `turnTotalBoost`, plus the pooled
+rung keys in `turnTotals`. Legacy profiles without them behave exactly as
+before.
+
 ---
 
 ## 7. What to do next

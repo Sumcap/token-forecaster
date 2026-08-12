@@ -236,13 +236,22 @@ compression follow-up (shrink the previous answer) does not exist in the
 Claude Code corpus, where "summarize X" means "read things, then write 800
 tokens"; no feature separates the two regimes.
 
-Fix directions: (1) compression-follow-up feature (short prompt + anaphor +
-compression verb), schema v3, retrain, adopt only if it clears the eval
-gates; (2) make the trainer see turn-root rows as their own regime so prompt
-features must carry weight there; (3) consumer-side: sheep-manager should
-stop implying the chip "reads your draft", and fit local turn rungs from its
-opt-in telemetry once sample counts clear a gate, cold-start falling back to
-the bundled profile.
+Fix directions: (1) ⚫ **done, refused — see STATE-OF-PLAY §6.27.** The
+compression-follow-up feature and schema `portable-precall-v3` are implemented
+and gated; the feature fires on 2 of 987 turn prompts corpus-wide, which cannot
+train a split, so the shipped profile stays v2. (2) 🟢 **done, landed one level
+up — see STATE-OF-PLAY §6.28.** The literal version (per-call correction
+retrained on turn-root rows) was tried and refused: every config graded worse
+than shipped v2, because the opening CALL genuinely does not lengthen with
+typed intent — the TURN does. Shipped instead: pooled `thinking|promptPath` /
+`thinking|promptImage` turn-total rungs plus a `turnTotalBoost` correction
+trained on per-turn totals, where loop features are definitionally zero and
+prompt features own the splits. The turn forecast now moves ~2.5x across a
+draft typed phrase by phrase. (3) consumer-side, remaining: sheep-manager's
+chip should surface the TURN total (the number that reads the draft,
+`promptCorrectionApplied=true`) rather than the per-call p50, and fit local
+turn rungs from its opt-in telemetry once sample counts clear a gate,
+cold-start falling back to the bundled profile.
 
 ## Status, 6 August 2026: Baseline 3 adopted; breakthrough blocked on telemetry
 

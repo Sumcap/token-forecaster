@@ -129,6 +129,45 @@ const ARTIFACT_NOUN =
 const EXPLICIT_FILE_ACTION =
   /\b(write|rewrite|re-write|redo|re-do|save|create|generate|edit|modify|update|updating|patch|replace|append)\b[^.!?\n]{0,80}\b(file|to|into|at|under)\b/;
 
+// Compression follow-up ("shrink what you just said"), as opposed to the corpus
+// sense of "summarize X" ("go read X, then write a long analysis"). Exact
+// training-side mirror of isFollowupCompression() in predictor/src/boosted.ts;
+// the two must stay identical or the v3 feature means different things either
+// side of the gate.
+const FOLLOWUP_COMPRESSION_MAX_CHARS = 80;
+const COMPRESSION_VERB =
+  /\b(summari[sz]e|summari[sz]ing|condense|shorten|compress|recap|tl;?dr)\b/;
+const MAKE_IT_SHORTER =
+  /\bmake (it|this|that) (shorter|smaller|briefer|tighter|concise|more concise|less verbose)\b/;
+const ANAPHORIC_OBJECT =
+  /^(it|that|this|these|those|them|the above|all of (it|that|the above)|the (last|previous) (message|answer|reply|response|one)|your (last )?(answer|reply|response|message))\b/;
+const COMPRESSION_MODIFIER =
+  /^(even|much|way|a|an|the|bit|lot|lots|more|further|again|please|pls|now|down|up|hard|harder|short|shorter|small|smaller|brief|briefly|concise|concisely|tight|tighter|less|half|just|really|very|super|so|and|but|then|to|into|in|for|of|as|possible|me|us|ok|okay|thanks|thank|you|one|two|three|couple|few|\d{1,3}|sentences?|lines?|words?|paragraphs?|bullets?|points?)$/;
+
+function isModifierOnly(text) {
+  const words = text.toLowerCase().match(/[a-z0-9;']+/g) ?? [];
+  return words.every((word) => COMPRESSION_MODIFIER.test(word));
+}
+
+function followupCompression(text, lower, mentionsPath) {
+  const trimmed = text.trim();
+  if (trimmed.length === 0 || trimmed.length > FOLLOWUP_COMPRESSION_MAX_CHARS) {
+    return false;
+  }
+  if (mentionsPath || ARTIFACT_NOUN.test(lower)) return false;
+  if (MAKE_IT_SHORTER.test(lower)) return true;
+  const verb = COMPRESSION_VERB.exec(lower);
+  if (verb === null) return false;
+  const tail = lower
+    .slice(verb.index + verb[0].length)
+    .replace(/^[\s,:;.!?-]+/, "")
+    .trim();
+  const anaphor = ANAPHORIC_OBJECT.exec(tail);
+  const rest = anaphor === null ? tail : tail.slice(anaphor[0].length);
+  if (anaphor === null && tail.length > 0 && !isModifierOnly(tail)) return false;
+  return isModifierOnly(rest);
+}
+
 /** Fixed-width hashing trick: useful locally, but never written to artifacts. */
 const SEMANTIC_HASH_WIDTH = 512;
 function fnv1a(value) {
@@ -320,6 +359,7 @@ export function derivePromptFeatures(rawText) {
     requestedFormat: format,
     deliverableType: deliverableType(lower, mentionsPath, format),
     artifactIntent,
+    followupCompression: followupCompression(text, lower, mentionsPath),
     // A hash-only prompt identity supports within-turn/session calibration
     // without retaining reconstructable prompt text.
     promptHash: createHash("sha256").update(text).digest("hex"),

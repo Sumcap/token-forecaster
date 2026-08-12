@@ -33,6 +33,12 @@ export interface PromptForecastFeatures {
   artifactIntent: boolean;
   requestedFormat: RequestedOutputFormat;
   deliverableType: ForecastDeliverableType;
+  /**
+   * Short compression follow-up: "shrink what you just said", not "read things
+   * and write an analysis". Optional so telemetry rows written before schema v3
+   * stay valid; absent is treated as false by the v3 feature vector.
+   */
+  followupCompression?: boolean;
 }
 
 export interface AgentLoopForecastContext {
@@ -78,18 +84,31 @@ export interface QuantileBoostProfile {
   trainingSamples: number;
 }
 
-export const QUANTILE_BOOST_FEATURE_COUNT = 37;
 /**
- * Schemas this runtime can apply. v2 appends one feature (turn-root image
- * presence, index 36); v1 trees never reference an index above 35, so a v1
- * profile evaluates identically against the v2 feature vector.
+ * Schemas this runtime can apply, each appending features to its predecessor.
+ * v2 appended turn-root image presence (index 36) and v3 appends the
+ * compression follow-up bit (index 37). A tree trained against an older schema
+ * never references an index above that schema's width, so an old profile
+ * evaluates identically against the widest feature vector.
  */
 export const SUPPORTED_BOOST_FEATURE_SCHEMAS = [
   "portable-precall-v1",
   "portable-precall-v2",
+  "portable-precall-v3",
 ] as const;
 export type PortableBoostFeatureSchema =
   (typeof SUPPORTED_BOOST_FEATURE_SCHEMAS)[number];
+/** Feature-vector width each schema was trained against. */
+export const BOOST_FEATURE_COUNT_BY_SCHEMA: Record<
+  PortableBoostFeatureSchema,
+  number
+> = {
+  "portable-precall-v1": 36,
+  "portable-precall-v2": 37,
+  "portable-precall-v3": 38,
+};
+/** Width the extractor emits today: the newest supported schema. */
+export const QUANTILE_BOOST_FEATURE_COUNT = 38;
 const META_WIDTH = 24;
 
 function fnv1a(value: string): number {
@@ -139,7 +158,7 @@ export interface PortableBoostFeatureRequest {
   boostedContext: BoostedForecastContext;
 }
 
-/** The exact 36-feature schema used by the trainer. */
+/** The exact feature vector used by the trainer, at the newest schema width. */
 export function portableQuantileBoostFeatures(
   request: PortableBoostFeatureRequest,
 ): number[] {
@@ -187,6 +206,10 @@ export function portableQuantileBoostFeatures(
   // v2: turn-root image presence, tri-state exactly like promptMentionsPath.
   features[36] =
     request.promptHasImage === undefined ? -1 : request.promptHasImage ? 1 : 0;
+  // v3: compression follow-up. Binary, not tri-state: a prompt we could read is
+  // either a compression follow-up or it is not, and no prompt at all is the
+  // same "not a compression follow-up" as a prompt that asks for an artifact.
+  features[37] = prompt?.followupCompression ? 1 : 0;
   return features;
 }
 
@@ -213,9 +236,14 @@ export function applyQuantileBoost(
   ) {
     throw new Error(`Unsupported quantile-boost feature schema: ${model.featureSchema}`);
   }
-  if (features.length !== QUANTILE_BOOST_FEATURE_COUNT) {
+  // Width is schema-dependent: a narrower vector is safe for an older profile
+  // (its trees never index past its own width), a wider one is safe for any.
+  const required =
+    BOOST_FEATURE_COUNT_BY_SCHEMA[model.featureSchema as PortableBoostFeatureSchema];
+  if (features.length < required || features.length > QUANTILE_BOOST_FEATURE_COUNT) {
     throw new Error(
-      `Expected ${QUANTILE_BOOST_FEATURE_COUNT} boost features, got ${features.length}`,
+      `Expected at least ${required} and at most ${QUANTILE_BOOST_FEATURE_COUNT} ` +
+        `boost features for ${model.featureSchema}, got ${features.length}`,
     );
   }
   const corrected = model.ensembles.map((trees, index) =>
@@ -258,6 +286,55 @@ const EXPLICIT_FILE_ACTION =
   /\b(write|rewrite|re-write|redo|re-do|save|create|generate|edit|modify|update|updating|patch|replace|append)\b[^.!?\n]{0,80}\b(file|to|into|at|under)\b/;
 const LIST_ITEM = /^\s*(?:[-*+•]|\d+[.)])\s+\S/;
 
+/**
+ * Compression follow-up: "shrink the thing you just produced". Distinct from
+ * the corpus sense of "summarize X", which means "go read X, then write a long
+ * analysis" — the two regimes have opposite output lengths and, before this
+ * feature, no bit separated them.
+ *
+ * Three conditions, all required. Short (a real compression follow-up is an
+ * aside, not a brief); a compression verb; and an object that points back at
+ * prior conversation rather than at new material.
+ */
+const FOLLOWUP_COMPRESSION_MAX_CHARS = 80;
+const COMPRESSION_VERB =
+  /\b(summari[sz]e|summari[sz]ing|condense|shorten|compress|recap|tl;?dr)\b/;
+const MAKE_IT_SHORTER =
+  /\bmake (it|this|that) (shorter|smaller|briefer|tighter|concise|more concise|less verbose)\b/;
+const ANAPHORIC_OBJECT =
+  /^(it|that|this|these|those|them|the above|all of (it|that|the above)|the (last|previous) (message|answer|reply|response|one)|your (last )?(answer|reply|response|message))\b/;
+/** Words allowed to trail the anaphor without turning it into a new subject. */
+const COMPRESSION_MODIFIER =
+  /^(even|much|way|a|an|the|bit|lot|lots|more|further|again|please|pls|now|down|up|hard|harder|short|shorter|small|smaller|brief|briefly|concise|concisely|tight|tighter|less|half|just|really|very|super|so|and|but|then|to|into|in|for|of|as|possible|me|us|ok|okay|thanks|thank|you|one|two|three|couple|few|\d{1,3}|sentences?|lines?|words?|paragraphs?|bullets?|points?)$/;
+
+function isFollowupCompression(prompt: string, lower: string, mentionsPath: boolean): boolean {
+  const trimmed = prompt.trim();
+  if (trimmed.length === 0 || trimmed.length > FOLLOWUP_COMPRESSION_MAX_CHARS) {
+    return false;
+  }
+  // Naming new material (a path, or a thing to produce) means it is not a
+  // follow-up on what was already said.
+  if (mentionsPath || ARTIFACT_NOUN.test(lower)) return false;
+  if (MAKE_IT_SHORTER.test(lower)) return true;
+  const verb = COMPRESSION_VERB.exec(lower);
+  if (verb === null) return false;
+  const tail = lower
+    .slice(verb.index + verb[0].length)
+    .replace(/^[\s,:;.!?-]+/, "")
+    .trim();
+  const anaphor = ANAPHORIC_OBJECT.exec(tail);
+  // No object at all ("tl;dr", "shorten") is anaphoric by default: there is
+  // nothing else it could refer to.
+  const rest = anaphor === null ? tail : tail.slice(anaphor[0].length);
+  if (anaphor === null && tail.length > 0 && !isModifierOnly(tail)) return false;
+  return isModifierOnly(rest);
+}
+
+function isModifierOnly(text: string): boolean {
+  const words = text.toLowerCase().match(/[a-z0-9;']+/g) ?? [];
+  return words.every((word) => COMPRESSION_MODIFIER.test(word));
+}
+
 export function promptForecastFeatures(prompt: string): PromptForecastFeatures {
   const lower = prompt.toLowerCase();
   const formats = FORMAT_PATTERNS.filter(([, pattern]) => pattern.test(lower));
@@ -294,5 +371,6 @@ export function promptForecastFeatures(prompt: string): PromptForecastFeatures {
     artifactIntent,
     requestedFormat,
     deliverableType,
+    followupCompression: isFollowupCompression(prompt, lower, pathMention),
   };
 }
