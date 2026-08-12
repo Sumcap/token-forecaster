@@ -1498,6 +1498,77 @@ and make the feature mean the opposite of what it is for.
 
 ---
 
+### 🟢 6.28 Prompt-aware TURN TOTALS — the turn-root fix lands one level up
+
+*`probe-turn-root-regime.mjs`, `probe-turn-total-boost.mjs`,
+`pnpm evaluate:claude-history`, 12 August 2026. Motivating issue: BACKLOG
+"prompt-aware boost is flat at chat turn roots", fix direction (2).*
+
+**Fix direction (2) as literally stated — retrain the per-call correction on
+turn-root rows only — was tried first and REFUSED.** A turn-root-only per-call
+correction does unlock prompt splits (characterCount 162, requirements 130 of
+its splits, versus 42+36 in the shipped ensembles), but every configuration in
+an 18-point sweep (leaf 40–80, depth 2–3, replace and stacked) graded WORSE
+than the shipped v2 on the turn-root holdout — best +14.5/call [−2.3, 29.0],
+worst +93. The corpus is telling us something real: **the opening call of a
+turn does not get longer when the prompt asks for more work.** The chip's
+premise was aimed at the wrong random variable.
+
+**The variable that does scale with typed intent is the whole turn.** An
+artifact-plus-review draft doesn't lengthen the first API response; it
+lengthens the loop (more calls, Write payloads, review output). So prompt
+conditioning shipped on the TURN TOTAL instead:
+
+1. **Pooled opener rungs** `thinking|promptPath` and `thinking|promptImage`
+   (path first — it is the stronger lever, path turns run ~2.2x the pooled
+   median, and it is the bit that can flip while a user types). Model
+   conditioning is deliberately absent: the model-conditioned turn ladder
+   graded ~+500/turn worse than pooled thinking-only, consistent with §6.25's
+   thinking-only mean advantage.
+2. **`turnTotalBoost`** — a portable quantile correction (24 depth-2 trees,
+   leaf 60, lr 0.05, `portable-precall-v2` features) trained on per-turn
+   totals over the rung ladder. At a turn opener every parent-chain feature is
+   definitionally zero, so the trees spend their splits on prompt aggregates,
+   thinking and session position — no regime collapse to fight.
+
+**Gate, stated honestly.** At 1,182 turns the session-block CI is ±400–500 per
+turn, so house rule 1's provable-improvement bound cannot close for effects of
+this size in either direction. The shipping unit (rungs+boost) is graded
+against the previously shipped thinking-only groups under the schema-gate
+family rule — adopt unless it PROVABLY regresses or P90 coverage leaves
+[0.90, 1]: **+5.2/turn [−499.6, +449.6], P90 coverage 96.7% → ADOPTED**.
+Components for the record: rungs alone +69.4 [−126.6, +288.7] vs thinking-only,
+boost −64.2 [−460.2, +269.6] vs rungs. This is a weaker gate than rule 1 and
+is recorded as such; the trade bought is that the turn forecast now responds
+to the draft, which is the product surface (the "reads your draft" chip that
+BACKLOG told consumers to stop implying — it stops being a lie this way, not
+by softening the copy). Config choice among the statistically-tied depth-2
+candidates was made on final-model smoothness over a growing draft (smallest
+mid-typing dip), because the chip is the consumer.
+
+**What the shipped profile now does on a draft typed phrase by phrase**
+(bundled profile, thinking on, `sessionPosition=1`):
+
+| draft so far | turn p50 | turn p90 |
+|---|---|---|
+| `can you write` | 3,564 | 24,884 |
+| `…a small report` | 3,390 | 23,682 |
+| `…into a file lets say ./here.txt` | 8,427 | 38,283 |
+| `…a report about predicting output tokens.` | 9,054 | 38,283 |
+| `…then review a random pr in the internet` | 9,054 | 38,283 |
+
+2.5x from first fragment to full intent, one ~5% dip (artifact-intent openers
+run slightly shorter at median than unclassified fragments — data truth, not a
+bug). The per-call forecast is untouched: same ladder, same v2 correction,
+same numbers as §6.24. API: `historicalTurnTotalForecast` now accepts optional
+`model` / `promptMentionsPath` / `promptHasImage` / `boostedContext`, returns
+`promptCorrectionApplied`, and keeps byte-identical behavior for the old
+thinking-only call shape. Profile field: `turnTotalBoost`, plus the pooled
+rung keys in `turnTotals`. Legacy profiles without them behave exactly as
+before.
+
+---
+
 ## 7. What to do next
 
 ### 🟡 7.1 `previousOutputTokens` — implemented, gated, and currently refused

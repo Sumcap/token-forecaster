@@ -76,13 +76,25 @@ export interface HistoricalForecastProfile {
   boostedCorrection?: QuantileBoostProfile;
   /**
    * Whole-turn output totals (Σ output tokens over one human turn's agent
-   * loop, subagents included), fitted per turn rather than per call. Keys are
-   * `overall` and, when the turn count supports them, `thinking=yes|no` —
-   * conditioned on the turn-OPENING call. Deliberately no finer slicing: at
-   * ~1,100 turns every conditioning candidate failed endpoint-stability
-   * (see STATE-OF-PLAY §6.25), so more rungs would be noise shipped as fact.
+   * loop, subagents included), fitted per turn rather than per call, keyed on
+   * what is knowable when the human message arrives. Keys: `overall`,
+   * `thinking=yes|no`, and — since the 12 August 2026 regeneration — the
+   * pooled turn-opener rungs `thinking=…|promptPath=…` and
+   * `thinking=…|promptImage=…` (both prompt bits cleared the paired
+   * session-block gate in probe-turn-totals.mjs; model conditioning graded
+   * worse than pooling and is deliberately absent). Missing rungs are
+   * skipped, so an older profile keeps its old behavior.
    */
   turnTotals?: Record<string, HistoricalQuantiles>;
+  /**
+   * Portable residual correction for the TURN TOTAL, trained on turn-opener
+   * state only (the agent loop has not started, so every parent-chain feature
+   * is zero and the trees split on prompt aggregates, model/thinking and
+   * session position). This is what makes the turn forecast respond to the
+   * draft a user is typing; the per-call correction cannot (regime collapse at
+   * turn roots — docs/BACKLOG.md, 11 August 2026).
+   */
+  turnTotalBoost?: QuantileBoostProfile;
   /**
    * Whole-session output totals (Σ output tokens over every turn of one
    * session), fitted per session. The only key is `overall`: at ~300 sessions
@@ -369,14 +381,34 @@ export interface TurnTotalForecast {
   p99: number;
   /** Number of turns the selected group was fitted on. */
   sampleSize: number;
-  /** `overall` or `thinking=yes|no`. */
+  /** `overall`, `thinking=yes|no`, or a turn-opener rung key. */
   groupKey: string;
   /**
    * True when the caller declared thinking but the conditioned group was
    * unavailable and the blended overall turn distribution answered instead.
    */
   usedFallback: boolean;
+  /**
+   * True when the turn-total correction ran on the caller's prompt aggregates.
+   * Only then does the number respond to the draft's wording; a caller that
+   * shows a live "as you type" estimate should surface this bit the same way
+   * per-call consumers surface boostedCorrectionApplied.
+   */
+  promptCorrectionApplied: boolean;
 }
+
+/**
+ * The subset of the forecast request a turn total can condition on. Everything
+ * beyond thinkingEnabled is optional and only deepens the rung/correction when
+ * present, so existing thinking-only callers keep their exact behavior.
+ */
+export type TurnTotalForecastRequest = Pick<
+  HistoricalForecastRequest,
+  | "thinkingEnabled"
+  | "promptMentionsPath"
+  | "promptHasImage"
+  | "boostedContext"
+> & { model?: string };
 
 /**
  * Forecast the whole turn's output-token total from what is known when the
@@ -385,10 +417,14 @@ export interface TurnTotalForecast {
  *
  * The per-call forecast and this one answer different questions: a call
  * forecast budgets the next API response; this budgets the agent loop the
- * message is about to start (median ~14 calls in the local corpus).
+ * message is about to start (median ~14 calls in the local corpus). It is also
+ * the number that scales with typed intent: an artifact-plus-review prompt
+ * does not lengthen the FIRST call, it lengthens the loop, so prompt
+ * conditioning lives here (turn-opener rungs + turnTotalBoost) rather than in
+ * the per-call correction.
  */
 export function historicalTurnTotalForecast(
-  request: Pick<HistoricalForecastRequest, "thinkingEnabled">,
+  request: TurnTotalForecastRequest,
   profile: HistoricalForecastProfile,
   options: HistoricalForecastOptions = {},
 ): TurnTotalForecast | null {
@@ -396,19 +432,104 @@ export function historicalTurnTotalForecast(
   if (groups === undefined) return null;
   const minSamples = options.minSamples ?? 60;
   const wantsThinking = request.thinkingEnabled != null;
+  const thinking = request.thinkingEnabled ? "yes" : "no";
+  const model =
+    request.model === undefined
+      ? undefined
+      : (profile.modelAliases?.[request.model] ?? request.model);
+
+  // Turn-opener ladder, most specific first. Rungs pool across models on
+  // purpose: model-conditioned turn groups graded WORSE than the pooled
+  // thinking rung (probe-turn-totals.mjs mean -672/turn for thinking-only,
+  // and the model ladder lost ~+500/turn in eval-winning-boost), so the
+  // prompt bits condition the pooled distribution instead. promptPath
+  // outranks promptImage because it is the stronger lever on this corpus
+  // (path turns run ~2x the pooled median). Every rung requires the thinking
+  // flag: an unknown flag must not be filed as "no" (the two distributions
+  // differ ~3x, same as per call).
+  const candidateKeys: string[] = [];
   if (wantsThinking) {
-    const key = `thinking=${request.thinkingEnabled ? "yes" : "no"}`;
+    if (request.promptMentionsPath != null) {
+      candidateKeys.push(
+        `thinking=${thinking}|promptPath=${request.promptMentionsPath ? "yes" : "no"}`,
+      );
+    }
+    if (request.promptHasImage != null) {
+      candidateKeys.push(
+        `thinking=${thinking}|promptImage=${request.promptHasImage ? "yes" : "no"}`,
+      );
+    }
+    candidateKeys.push(`thinking=${thinking}`);
+  }
+
+  let selected: { key: string; group: HistoricalQuantiles } | null = null;
+  for (const key of candidateKeys) {
     const group = groups[key];
     if (group !== undefined && group.sampleSize >= minSamples) {
-      return { ...pickQuantiles(group), groupKey: key, usedFallback: false };
+      selected = { key, group };
+      break;
     }
   }
-  const overall = groups[OVERALL_HISTORICAL_GROUP];
-  if (overall === undefined || overall.sampleSize < minSamples) return null;
+  let usedFallback = false;
+  if (selected === null) {
+    const overall = groups[OVERALL_HISTORICAL_GROUP];
+    if (overall === undefined || overall.sampleSize < minSamples) return null;
+    selected = { key: OVERALL_HISTORICAL_GROUP, group: overall };
+    usedFallback = wantsThinking;
+  }
+
+  let quantiles: [number, number, number] = [
+    selected.group.p50,
+    selected.group.p90,
+    selected.group.p99,
+  ];
+  // The turn-total correction needs the same completeness contract as the
+  // per-call one: known thinking, known model, and prompt aggregates. The
+  // agent-loop state is not required from the caller — at a turn start it is
+  // definitionally empty, except sessionPosition which is used when supplied.
+  const prompt = request.boostedContext?.prompt;
+  let promptCorrectionApplied = false;
+  if (
+    profile.turnTotalBoost !== undefined &&
+    wantsThinking &&
+    model !== undefined &&
+    prompt !== undefined
+  ) {
+    const sessionPosition =
+      request.boostedContext?.agentLoop?.sessionPosition ?? 0;
+    const features = portableQuantileBoostFeatures({
+      model,
+      thinkingEnabled: request.thinkingEnabled === true,
+      ...(request.promptMentionsPath === undefined
+        ? {}
+        : { promptMentionsPath: request.promptMentionsPath }),
+      ...(request.promptHasImage === undefined
+        ? {}
+        : { promptHasImage: request.promptHasImage }),
+      boostedContext: {
+        prompt,
+        agentLoop: {
+          sessionPosition:
+            Number.isInteger(sessionPosition) && sessionPosition >= 0
+              ? sessionPosition
+              : 0,
+          loopDepth: 0,
+          priorCallCount: 0,
+        },
+      },
+    });
+    quantiles = applyQuantileBoost(profile.turnTotalBoost, quantiles, features);
+    promptCorrectionApplied = true;
+  }
+
   return {
-    ...pickQuantiles(overall),
-    groupKey: OVERALL_HISTORICAL_GROUP,
-    usedFallback: wantsThinking,
+    p50: quantiles[0],
+    p90: quantiles[1],
+    p99: quantiles[2],
+    sampleSize: selected.group.sampleSize,
+    groupKey: selected.key,
+    usedFallback,
+    promptCorrectionApplied,
   };
 }
 

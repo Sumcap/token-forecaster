@@ -302,6 +302,198 @@ schemaGate.adopt =
   schemaGate.supported && schemaGate.noRegression && schemaGate.coverageInBand;
 const deployedSchema = schemaGate.adopt ? CANDIDATE_SCHEMA : SHIPPED_SCHEMA;
 
+// ---------------------------------------------------------------------------
+// Turn totals: opener rungs + prompt-aware turn-total correction.
+//
+// The per-call correction is structurally flat in prompt wording at turn
+// roots (regime collapse, docs/BACKLOG.md 11 Aug 2026): loop-shape features
+// own its splits and they are all zero while a user types. The quantity that
+// does scale with typed intent is the whole turn, so prompt conditioning is
+// trained HERE, on per-turn totals, where parent-chain features are
+// definitionally zero and prompt aggregates are the only live columns.
+// Config from experiments/evaluation/probe-turn-total-boost.mjs (12 Aug 2026).
+// ---------------------------------------------------------------------------
+const MIN_TURN_GROUP = 60;
+// Among the statistically-tied depth-2 configs (probe-turn-total-boost.mjs,
+// holdout spread < 20/turn, every CI overlapping), this one is chosen for the
+// smallest non-monotonicity of the final all-data model on a growing draft:
+// the live chip is the product surface, and a config that dips 15% mid-typing
+// reads as noise while this one moves smoothly. Recorded in the probe output.
+const TURN_BOOST_CONFIG = {
+  featureSchema: SHIPPED_SCHEMA,
+  minimumLeaf: 60,
+  iterations: 24,
+  maxDepth: 2,
+  learningRate: 0.05,
+};
+const turnAccumulator = new Map();
+for (const row of rows) {
+  if (row.turnRootId == null) continue;
+  let turn = turnAccumulator.get(row.turnRootId);
+  if (!turn) {
+    turn = {
+      sessionId: row.sessionId ?? null,
+      total: 0,
+      exact: true,
+      firstMs: Infinity,
+      opener: null,
+    };
+    turnAccumulator.set(row.turnRootId, turn);
+  }
+  turn.total += row.outputTokens;
+  if (!row.loopDepthExact) turn.exact = false;
+  if (row.timestampMs < turn.firstMs) {
+    turn.firstMs = row.timestampMs;
+    turn.opener = row;
+  }
+}
+const allTurns = [...turnAccumulator.values()]
+  .filter((turn) => turn.exact)
+  .sort((left, right) => left.firstMs - right.firstMs);
+for (const turn of allTurns) {
+  const opener = turn.opener;
+  turn.model = opener.model;
+  turn.thinking = opener.thinking;
+  turn.turnPrompt = opener.turnPrompt;
+  turn.promptPath = opener.promptPath;
+  turn.promptImage = opener.promptImage;
+  turn.sessionPosition = opener.sessionPosition;
+  turn.loopDepth = 0;
+  turn.priorCalls = 0;
+  turn.priorMaxOutput = null;
+  turn.priorArtifactCount = null;
+  turn.priorWrite = null;
+  turn.priorArtifact = null;
+  // The boost trainer reads outputTokens as its target.
+  turn.outputTokens = turn.total;
+}
+// Pooled across models on purpose: the model-conditioned turn ladder graded
+// ~+500/turn WORSE than thinking-only here, matching probe-turn-totals'
+// thinking-only mean advantage. promptPath outranks promptImage because it is
+// the stronger lever (path turns run ~2x the pooled median) and the one that
+// can flip while a user types.
+const turnKey = {
+  tPath: (turn) =>
+    turn.promptPath === null
+      ? null
+      : `thinking=${turn.thinking}|promptPath=${turn.promptPath}`,
+  tImage: (turn) =>
+    turn.promptImage === null
+      ? null
+      : `thinking=${turn.thinking}|promptImage=${turn.promptImage}`,
+  thinking: (turn) => `thinking=${turn.thinking}`,
+};
+const TURN_RUNGS = ["tPath", "tImage", "thinking"];
+function fitTurnGroups(turns, keyFn) {
+  const grouped = new Map();
+  for (const turn of turns) {
+    const key = keyFn(turn);
+    if (key === null) continue;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(turn.total);
+  }
+  return new Map(
+    [...grouped.entries()]
+      .filter(([, values]) => values.length >= MIN_TURN_GROUP)
+      .map(([key, values]) => [key, fit(values)]),
+  );
+}
+function turnLadder(turns, rungs) {
+  const fits = rungs.map((rung) => fitTurnGroups(turns, turnKey[rung]));
+  const overall = fit(turns.map((turn) => turn.total));
+  return (turn) => {
+    for (let index = 0; index < rungs.length; index++) {
+      const key = turnKey[rungs[index]](turn);
+      if (key === null) continue;
+      const found = fits[index].get(key);
+      if (found) return found.q;
+    }
+    return overall.q;
+  };
+}
+const turnLoss = (turn, forecast) =>
+  QUANTILES.reduce(
+    (sum, probability, index) => sum + pinball(turn.total, forecast[index], probability),
+    0,
+  );
+// Session-chronological 80/20 split so turns never straddle the boundary.
+const turnSessions = new Map();
+for (const turn of allTurns) {
+  const key = turn.sessionId ?? `unknown:${turn.firstMs}`;
+  if (!turnSessions.has(key)) turnSessions.set(key, []);
+  turnSessions.get(key).push(turn);
+}
+const turnSessionList = [...turnSessions.values()].sort(
+  (left, right) => left[0].firstMs - right[0].firstMs,
+);
+const turnSplit = Math.floor(turnSessionList.length * 0.8);
+const turnTrain = turnSessionList.slice(0, turnSplit).flat();
+const turnHoldout = turnSessionList.slice(turnSplit).flat();
+const thinkingLadder = turnLadder(turnTrain, ["thinking"]);
+const rungLadderFn = turnLadder(turnTrain, TURN_RUNGS);
+const turnBoostEval = trainPortableQuantileBoost(turnTrain, rungLadderFn, TURN_BOOST_CONFIG);
+const turnRecords = turnHoldout.map((turn) => ({
+  turn,
+  thinkingOnly: thinkingLadder(turn),
+  rungs: rungLadderFn(turn),
+  boosted: turnBoostEval.predict(turn),
+}));
+const turnPair = (treatment, control) =>
+  blockBootstrapDifference(
+    turnRecords.map(
+      (record) => turnLoss(record.turn, record[treatment]) - turnLoss(record.turn, record[control]),
+    ),
+    turnRecords.map((record) => record.turn.sessionId ?? null),
+  );
+const turnCoverage = (field) => {
+  const coverage = [0, 0, 0];
+  for (const record of turnRecords) {
+    QUANTILES.forEach((probability, index) => {
+      coverage[index] += record.turn.total <= record[field][index] ? 1 : 0;
+    });
+  }
+  return coverage.map((value) => value / turnRecords.length);
+};
+const rungsVsThinking = turnPair("rungs", "thinkingOnly");
+const boostVsRungs = turnPair("boosted", "rungs");
+const combinedVsThinking = turnPair("boosted", "thinkingOnly");
+const boostP90Coverage = turnCoverage("boosted")[1];
+// The shipping unit is rungs+boost TOGETHER, graded against the previously
+// shipped thinking-only turn groups. At ~1,200 turns the session-block CI is
+// roughly ±500/turn, so a provable-improvement bound (house rule 1) cannot
+// close for effects of this size in either direction. The gate is therefore
+// the schema-gate family rule: adopt unless the combined candidate PROVABLY
+// regresses (CI lower > 0) or P90 coverage leaves [0.90, 1]. Prompt-responsive
+// turn forecasts are the product requirement (the cold-start "reads your
+// draft" chip); a statistically flat trade at equal mean loss buys that
+// responsiveness. Recorded as a weaker-gate adoption on purpose.
+const turnTotalGate = {
+  turns: allTurns.length,
+  trainTurns: turnTrain.length,
+  holdoutTurns: turnHoldout.length,
+  config: TURN_BOOST_CONFIG,
+  rungsVsThinking: {
+    meanDifference: rungsVsThinking.meanDifference,
+    ciLower: rungsVsThinking.ciLower,
+    ciUpper: rungsVsThinking.ciUpper,
+  },
+  boostVsRungs: {
+    meanDifference: boostVsRungs.meanDifference,
+    ciLower: boostVsRungs.ciLower,
+    ciUpper: boostVsRungs.ciUpper,
+  },
+  combinedVsThinking: {
+    meanDifference: combinedVsThinking.meanDifference,
+    ciLower: combinedVsThinking.ciLower,
+    ciUpper: combinedVsThinking.ciUpper,
+  },
+  p90Coverage: boostP90Coverage,
+  adopt:
+    combinedVsThinking.ciLower <= 0 &&
+    boostP90Coverage >= 0.9 &&
+    boostP90Coverage <= 1,
+};
+
 let deployment = null;
 if (baseProfileFile) {
   const baseProfile = JSON.parse(await readFile(baseProfileFile, "utf8"));
@@ -317,12 +509,49 @@ if (baseProfileFile) {
     featureSchema: deployedSchema,
   });
   const profile = { ...baseProfile, boostedCorrection: trained.model };
+  // Turn totals: refit adopted rungs and correction on ALL turns for
+  // deployment, exactly like the per-call correction above.
+  let turnDeployment = null;
+  if (turnTotalGate.adopt) {
+    const finalRungFits = TURN_RUNGS.map((rung) =>
+      fitTurnGroups(allTurns, turnKey[rung]),
+    );
+    const rungGroups = {};
+    for (const fits of finalRungFits) {
+      for (const [key, value] of fits.entries()) {
+        rungGroups[key] = {
+          sampleSize: value.n,
+          p50: value.q[0],
+          p90: value.q[1],
+          p99: value.q[2],
+        };
+      }
+    }
+    profile.turnTotals = { ...(baseProfile.turnTotals ?? {}), ...rungGroups };
+    const finalLadder = turnLadder(allTurns, TURN_RUNGS);
+    const finalTurnBoost = trainPortableQuantileBoost(
+      allTurns,
+      finalLadder,
+      TURN_BOOST_CONFIG,
+    );
+    profile.turnTotalBoost = finalTurnBoost.model;
+    turnDeployment = {
+      rungGroups: Object.keys(rungGroups).length,
+      turnTotalBoost: {
+        trainingSamples: finalTurnBoost.model.trainingSamples,
+        featureSchema: finalTurnBoost.model.featureSchema,
+        treesPerQuantile: finalTurnBoost.model.ensembles.map((trees) => trees.length),
+      },
+    };
+  }
   deployment = {
     profileId: profile.id,
     trainingSamples: trained.model.trainingSamples,
     featureSchema: trained.model.featureSchema,
     treesPerQuantile: trained.model.ensembles.map((trees) => trees.length),
     schemaGate,
+    turnTotalGate,
+    turnDeployment,
   };
   if (profileOut) {
     await mkdir(path.dirname(profileOut), { recursive: true });
@@ -380,6 +609,7 @@ const report = {
     ),
   },
   schemaGate,
+  turnTotalGate,
   deployment,
 };
 await mkdir(path.dirname(jsonOut), { recursive: true });
@@ -422,4 +652,14 @@ if (compressionSegment) {
       `${compressionSegment.schemaComparison.ciUpper.toFixed(2)}]`,
   );
 }
+const gateLine = (label, pair) =>
+  `${label}: ${pair.meanDifference.toFixed(1)}/turn ` +
+  `[${pair.ciLower.toFixed(1)}, ${pair.ciUpper.toFixed(1)}]`;
+console.log(gateLine("Turn rungs vs thinking-only", turnTotalGate.rungsVsThinking));
+console.log(gateLine("Turn boost vs rungs        ", turnTotalGate.boostVsRungs));
+console.log(
+  `${gateLine("Turn rungs+boost vs shipped", turnTotalGate.combinedVsThinking)} ` +
+    `p90cov=${(turnTotalGate.p90Coverage * 100).toFixed(1)}% -> ` +
+    `${turnTotalGate.adopt ? "ADOPTED (no-provable-regression rule)" : "NOT ADOPTED"}`,
+);
 console.log(`Wrote ${jsonOut}`);

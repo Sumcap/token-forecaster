@@ -11,6 +11,7 @@ import {
   historicalSessionTotalForecast,
   historicalTurnTotalForecast,
   previousOutputBucket,
+  promptForecastFeatures,
   promptMentionsPath,
 } from "./index.js";
 
@@ -416,8 +417,10 @@ describe("historicalBaselineForecast", () => {
     expect(withThinking.forecast.p50).toBe(thinking?.p50);
     expect(withoutThinking.forecast.p50).toBe(notThinking?.p50);
     // The whole point of the dimension: it must actually move the forecast.
+    // 1.5x, not 2x: the ratio is a property of the regenerated corpus, and the
+    // 12 Aug 2026 regeneration measured 1.9x at p99 (2.2x at p50).
     expect(withThinking.forecast.p99).toBeGreaterThan(
-      withoutThinking.forecast.p99 * 2,
+      withoutThinking.forecast.p99 * 1.5,
     );
   });
 
@@ -740,6 +743,84 @@ describe("historicalTurnTotalForecast", () => {
     );
     expect(forecast).not.toBeNull();
     expect(forecast!.p99).toBeGreaterThan(forecast!.p50);
+    expect(forecast!.promptCorrectionApplied).toBe(false);
+  });
+
+  it("selects the pooled promptPath rung above the thinking rung", () => {
+    const withRungs = {
+      ...profile,
+      turnTotals: {
+        ...profile.turnTotals,
+        "thinking=yes|promptPath=yes": {
+          sampleSize: 200,
+          p50: 11_000,
+          p90: 50_000,
+          p99: 150_000,
+        },
+      },
+    };
+    const forecast = historicalTurnTotalForecast(
+      { thinkingEnabled: true, promptMentionsPath: true },
+      withRungs,
+    );
+    expect(forecast).toMatchObject({
+      groupKey: "thinking=yes|promptPath=yes",
+      p50: 11_000,
+      usedFallback: false,
+      promptCorrectionApplied: false,
+    });
+    // An unknown path bit must skip the rung, never be filed as "no".
+    const unknownPath = historicalTurnTotalForecast(
+      { thinkingEnabled: true },
+      withRungs,
+    );
+    expect(unknownPath).toMatchObject({ groupKey: "thinking=yes" });
+  });
+
+  it("applies the turn-total correction to a prompt-bearing request and responds to the draft", () => {
+    const request = (prompt: string) => ({
+      model: "claude-opus-4-8",
+      thinkingEnabled: true,
+      promptMentionsPath: promptMentionsPath(prompt),
+      promptHasImage: false,
+      boostedContext: {
+        prompt: promptForecastFeatures(prompt),
+        agentLoop: { sessionPosition: 1, loopDepth: 0, priorCallCount: 0 },
+      },
+    });
+    const short = historicalTurnTotalForecast(
+      request("can you write"),
+      BUNDLED_CLAUDE_CODE_PROFILE,
+    );
+    const full = historicalTurnTotalForecast(
+      request(
+        "can you write a small report into a file lets say ./here.txt a report about predicting output tokens. then review a random pr in the internet",
+      ),
+      BUNDLED_CLAUDE_CODE_PROFILE,
+    );
+    expect(short!.promptCorrectionApplied).toBe(true);
+    expect(full!.promptCorrectionApplied).toBe(true);
+    // The point of the turn-total regime: typed intent must move the number.
+    // The full artifact-plus-review draft forecasts a materially longer turn.
+    expect(full!.p50).toBeGreaterThan(short!.p50 * 1.5);
+    expect(full!.p90).toBeGreaterThanOrEqual(full!.p50);
+    expect(full!.p99).toBeGreaterThanOrEqual(full!.p90);
+  });
+
+  it("skips the turn-total correction without prompt features or thinking", () => {
+    const noPrompt = historicalTurnTotalForecast(
+      { model: "claude-opus-4-8", thinkingEnabled: true },
+      BUNDLED_CLAUDE_CODE_PROFILE,
+    );
+    expect(noPrompt!.promptCorrectionApplied).toBe(false);
+    const noThinking = historicalTurnTotalForecast(
+      {
+        model: "claude-opus-4-8",
+        boostedContext: { prompt: promptForecastFeatures("write a report") },
+      },
+      BUNDLED_CLAUDE_CODE_PROFILE,
+    );
+    expect(noThinking!.promptCorrectionApplied).toBe(false);
   });
 });
 
