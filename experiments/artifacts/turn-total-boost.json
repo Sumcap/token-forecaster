@@ -1,0 +1,279 @@
+{
+  "generatedAt": "2026-08-12T01:45:54.570Z",
+  "dataset": {
+    "turns": 1182,
+    "trainTurns": 910,
+    "holdoutTurns": 272,
+    "holdoutSessions": 70,
+    "demoModel": "claude-fable-5"
+  },
+  "mt": {
+    "holdout": {
+      "loss": 7913.168566176472,
+      "coverage": [
+        0.5661764705882353,
+        0.9485294117647058,
+        0.9963235294117647
+      ]
+    },
+    "typing": {
+      "p50s": [
+        5844,
+        5844,
+        5844,
+        5844,
+        5844,
+        5844,
+        5844
+      ],
+      "growth": 0,
+      "drops": 0
+    }
+  },
+  "rungs": {
+    "holdout": {
+      "loss": 7982.604816176471,
+      "coverage": [
+        0.5772058823529411,
+        0.9448529411764706,
+        0.9963235294117647
+      ]
+    },
+    "vsMt": {
+      "n": 272,
+      "meanDifference": 69.43624999999993,
+      "ciLower": -126.55646766169171,
+      "ciUpper": 288.70686746987883,
+      "blocks": 70,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "typing": {
+      "p50s": [
+        5818,
+        5818,
+        5818,
+        12620,
+        12620,
+        12620,
+        12620
+      ],
+      "growth": 6802,
+      "drops": 0
+    }
+  },
+  "candidates": [
+    {
+      "minimumLeaf": 60,
+      "iterations": 24,
+      "maxDepth": 2,
+      "holdout": {
+        "loss": 7910.338161764711,
+        "coverage": [
+          0.6654411764705882,
+          0.9632352941176471,
+          1
+        ]
+      },
+      "vsRungs": {
+        "n": 272,
+        "meanDifference": -72.26665441176458,
+        "ciLower": -539.9792537313429,
+        "ciUpper": 320.5267307692307,
+        "blocks": 70,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "typing": {
+        "p50s": [
+          4529,
+          4529,
+          4529,
+          11331,
+          11931,
+          11931,
+          12331
+        ],
+        "growth": 7802,
+        "drops": 0
+      }
+    },
+    {
+      "minimumLeaf": 60,
+      "iterations": 24,
+      "maxDepth": 2,
+      "learningRate": 0.05,
+      "holdout": {
+        "loss": 7918.405147058824,
+        "coverage": [
+          0.6654411764705882,
+          0.9669117647058824,
+          1
+        ]
+      },
+      "vsRungs": {
+        "n": 272,
+        "meanDifference": -64.19966911764705,
+        "ciLower": -460.21273584905714,
+        "ciUpper": 269.64245508982043,
+        "blocks": 70,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "typing": {
+        "p50s": [
+          4833,
+          4833,
+          4833,
+          11635,
+          12133,
+          12133,
+          12133
+        ],
+        "growth": 7300,
+        "drops": 0
+      }
+    },
+    {
+      "minimumLeaf": 60,
+      "iterations": 32,
+      "maxDepth": 3,
+      "holdout": {
+        "loss": 8114.750367647059,
+        "coverage": [
+          0.7389705882352942,
+          0.9705882352941176,
+          1
+        ]
+      },
+      "vsRungs": {
+        "n": 272,
+        "meanDifference": 132.14555147058786,
+        "ciLower": -646.545604026845,
+        "ciUpper": 864.9751652892555,
+        "blocks": 70,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "typing": {
+        "p50s": [
+          4673,
+          4903,
+          4903,
+          11705,
+          12404,
+          12404,
+          12404
+        ],
+        "growth": 7731,
+        "drops": 0
+      }
+    },
+    {
+      "minimumLeaf": 60,
+      "iterations": 32,
+      "maxDepth": 3,
+      "learningRate": 0.05,
+      "holdout": {
+        "loss": 8033.082830882356,
+        "coverage": [
+          0.7242647058823529,
+          0.9632352941176471,
+          1
+        ]
+      },
+      "vsRungs": {
+        "n": 272,
+        "meanDifference": 50.47801470588253,
+        "ciLower": -594.7838732394366,
+        "ciUpper": 639.5358260869551,
+        "blocks": 70,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "typing": {
+        "p50s": [
+          4879,
+          5087,
+          5087,
+          11889,
+          12368,
+          12368,
+          12368
+        ],
+        "growth": 7489,
+        "drops": 0
+      }
+    },
+    {
+      "minimumLeaf": 90,
+      "iterations": 32,
+      "maxDepth": 3,
+      "holdout": {
+        "loss": 8148.196507352942,
+        "coverage": [
+          0.7389705882352942,
+          0.9632352941176471,
+          1
+        ]
+      },
+      "vsRungs": {
+        "n": 272,
+        "meanDifference": 165.59169117647022,
+        "ciLower": -501.61958549222805,
+        "ciUpper": 737.8685597826078,
+        "blocks": 70,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "typing": {
+        "p50s": [
+          4799,
+          4843,
+          4843,
+          11645,
+          12123,
+          12123,
+          12105
+        ],
+        "growth": 7306,
+        "drops": 1
+      }
+    },
+    {
+      "minimumLeaf": 120,
+      "iterations": 24,
+      "maxDepth": 2,
+      "holdout": {
+        "loss": 7901.984816176468,
+        "coverage": [
+          0.6580882352941176,
+          0.9595588235294118,
+          1
+        ]
+      },
+      "vsRungs": {
+        "n": 272,
+        "meanDifference": -80.62000000000005,
+        "ciLower": -366.20098684210524,
+        "ciUpper": 217.24765432098744,
+        "blocks": 70,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "typing": {
+        "p50s": [
+          4672,
+          4762,
+          4762,
+          11564,
+          12141,
+          12141,
+          14225
+        ],
+        "growth": 9553,
+        "drops": 0
+      }
+    }
+  ]
+}
