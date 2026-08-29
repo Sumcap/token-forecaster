@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .wrap { width: 1046px; }
+  .card { padding: 26px 32px 28px; }
+  .cols { display: flex; align-items: center; gap: 18px; }
+  .col-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .req {
+    width: 218px; background: var(--surface-2); border: 1px solid var(--line-2);
+    border-radius: var(--radius-m); padding: 12px 14px;
+  }
+  .req b { color: var(--ink-strong); }
+  .arrow { color: var(--muted); font-size: 20px; flex: none; }
+  .ladder { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .rung {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    border: 1px solid var(--line-2); border-radius: var(--radius-s);
+    background: var(--surface-2); padding: 9px 13px; color: var(--muted);
+  }
+  .rung .n { font-size: 12px; }
+  .rung.skip .why { font-size: 12px; }
+  .rung.hit {
+    background: #eef4ec; border-color: #2e8e5240; color: var(--ink);
+  }
+  .rung.hit .name { font-weight: 700; color: var(--ink-strong); }
+  .rung.hit .why { color: var(--accent); font-weight: 600; font-size: 12px; }
+  .rung .name, .rung .n { white-space: nowrap; }
+  .fc {
+    width: 226px; background: #eef1fe; border: 1px solid #2563eb33;
+    border-left: 3px solid var(--need); border-radius: var(--radius-m);
+    padding: 13px 15px;
+  }
+  .fc .t { font-weight: 700; margin-bottom: 7px; }
+  .fc .q { display: flex; justify-content: space-between; padding: 2px 0; }
+  .fc .q .v { font-weight: 600; color: var(--need); }
+  .fc .q.p90 .v { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap card">
+  <div class="cols">
+    <div>
+      <div class="col-label">This request</div>
+      <div class="req">
+        <b>model + reasoning on</b><br>
+        <span class="dim">plus the task shape read<br>from the prompt</span>
+      </div>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div style="flex:1">
+      <div class="col-label">Find the most specific group with enough history</div>
+      <div class="ladder">
+        <div class="rung skip"><span class="name">model + reasoning + task shape</span><span class="why">too few, skip</span><span class="n num">n = 62</span></div>
+        <div class="rung hit"><span class="name">model + reasoning</span><span class="why">100+ samples &#8594; this rung answers</span><span class="n num">n = 2,340</span></div>
+        <div class="rung"><span class="name">model only</span><span class="n num">n = 5,872</span></div>
+        <div class="rung"><span class="name">all 16,011 calls pooled</span><span class="n num">n = 16,011</span></div>
+      </div>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div>
+      <div class="col-label">Forecast</div>
+      <div class="fc">
+        <div class="t">Quantiles of that group</div>
+        <div class="q num"><span class="dim">p50 typical</span><span class="v">~500</span></div>
+        <div class="q num p90"><span class="dim">p90 reserve this</span><span class="v">~1.9k</span></div>
+        <div class="q num"><span class="dim">p99 extreme</span><span class="v">~6.5k</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+/* Ideal-projection mockups for the token-forecaster surfaces in sheep-manager.
+   Tokens copied from sheep-manager web/styles.css so the mock reads as the app. */
+:root {
+  --bg: #f4f6f2;
+  --surface: #ffffff;
+  --surface-2: #fbfaf7;
+  --ink: #2b2e29;
+  --ink-strong: #2f3b22;
+  --muted: #6b7066;
+  --line-2: #00000022;
+  --card-line: #0000002b;
+  --chip-bg: #00000008;
+  --accent: #2e8e52;   /* landed / good */
+  --need: #2563eb;     /* live forecast */
+  --warn: #b45309;     /* outside band */
+  --radius-s: 7px; --radius-m: 9px; --radius-l: 13px;
+  --shadow-1: 0 1px 2px #0000000d;
+  --shadow-2: 0 4px 14px #00000018;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 18px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--card-line);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-2);
+  padding: 12px 14px;
+}
+.num { font-variant-numeric: tabular-nums; }
+.dim { color: var(--muted); }
+.hairline { border: 0; border-top: 1px solid var(--line-2); margin: 10px -14px; }

@@ -45,7 +45,12 @@ them differently:
 
 The whole predictor is built from real usage: 471 Claude Code transcript
 files, 16,011 unique API calls after deduplication, zero calls cut off by the
-token limit. This is what those replies actually look like:
+token limit. Those files come from one person's `~/.claude`: the corpus
+contains many calls, but only one identifiable user. Read every number below
+as a prior for this kind of work, not as a calibration of how you write. What
+that costs, and the plan to retire it, is in
+[docs/MULTI-USER-PLAN.md](docs/MULTI-USER-PLAN.md). This is what those replies
+actually look like:
 
 ![Distribution of output lengths across 16,011 calls](docs/report-assets/data-distribution.png)
 
@@ -188,6 +193,13 @@ Three rules save most integration mistakes:
    that forecast as a rough reservation hint and say so in your UI.
 3. **Unknown models never throw.** The function only throws on malformed
    input, such as an empty model string or a non-positive `maxTokens`.
+4. **The profile is a single-user prior, and it says so.**
+   `calibration.profileId` and `calibration.profileScope` name a corpus fitted
+   on one person's history. Do not read the id to work that out: the profile
+   carries an optional `provenance` field, and the bundled profile sets it to
+   `"single-user-corpus"`. Surface that wherever you surface the numbers. An
+   absent `provenance` means the profile predates the field, so treat it as
+   unknown rather than as a multi-user claim.
 
 The full field-by-field contract, including exactly which groups the current
 bundled profile ships and which gated features are waiting for their re-test
@@ -202,9 +214,12 @@ privacy is a default, not an option:
   prompt hash, derived numeric features, token counts, request configuration,
   the forecast, and the actual usage.
 - API keys stay server-side. The browser never sees them.
-- There is no hosted backend. Observations are append-only local JSONL files
-  that you own. [docs/TELEMETRY.md](docs/TELEMETRY.md) covers encrypted
-  deployment if you want to pool data from several machines.
+- This repository does not deploy a hosted backend. Direct-API observations are
+  append-only local JSONL files that you own. The Chrome extension now has two
+  separate, off-by-default contribution choices and a build-configurable
+  anonymous collector with schema-only batching and deletion; browser outcomes
+  are explicitly marked as DOM estimates. [docs/TELEMETRY.md](docs/TELEMETRY.md)
+  covers encrypted deployment and the exact separation rules.
 
 ## Repository layout
 

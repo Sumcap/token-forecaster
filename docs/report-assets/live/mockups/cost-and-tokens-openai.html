@@ -1,0 +1,53 @@
+<meta charset="utf-8">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .card { width: 620px; }
+  .head { display: flex; align-items: baseline; gap: 8px; }
+  .head b { color: var(--ink-strong); font-size: 14px; }
+  .tiles { display: flex; gap: 10px; margin-top: 10px; }
+  .tile {
+    flex: 1; background: var(--surface-2); border: 1px solid var(--line-2);
+    border-radius: var(--radius-m); padding: 8px 10px;
+  }
+  .tile .v { font-size: 17px; font-weight: 650; color: var(--ink-strong); }
+  .tile .k { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 12px; }
+  th { text-align: right; font-weight: 500; color: var(--muted); font-size: 10.5px;
+       padding: 6px 8px; border-bottom: 1px solid var(--line-2); }
+  th:first-child, td:first-child { text-align: left; }
+  td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line-2); }
+  tr:last-child td { border-bottom: 0; }
+  .model { color: var(--ink); font-weight: 550; }
+  .obar { display: inline-block; height: 5px; border-radius: 3px; background: var(--accent); vertical-align: middle; margin-right: 7px; }
+</style>
+
+<div class="card">
+  <div class="head"><b>Tokens &amp; cost</b> <span class="dim">· all sessions · from transcripts</span></div>
+
+  <div class="tiles num">
+    <div class="tile"><div class="v">184</div><div class="k">turns</div></div>
+    <div class="tile"><div class="v">2.31M</div><div class="k">input tokens</div></div>
+    <div class="tile"><div class="v">412k</div><div class="k">output tokens</div></div>
+    <div class="tile"><div class="v">9.8M</div><div class="k">cache read</div></div>
+    <div class="tile"><div class="v">€ ··,··</div><div class="k">cost (masked)</div></div>
+  </div>
+
+  <table class="num">
+    <tr><th>model</th><th>turns</th><th>input</th><th style="text-align:left; padding-left:8px">output</th><th>cache read</th><th>cost</th></tr>
+    <tr>
+      <td class="model">gpt-5.1</td><td>61</td><td>1.42M</td>
+      <td style="text-align:left"><span class="obar" style="width:110px"></span>296k</td>
+      <td>6.1M</td><td class="dim">€ ··</td>
+    </tr>
+    <tr>
+      <td class="model">gpt-5.1-codex</td><td>48</td><td>612k</td>
+      <td style="text-align:left"><span class="obar" style="width:34px"></span>89k</td>
+      <td>2.4M</td><td class="dim">€ ··</td>
+    </tr>
+    <tr>
+      <td class="model">gpt-5.1-mini</td><td>75</td><td>276k</td>
+      <td style="text-align:left"><span class="obar" style="width:11px"></span>27k</td>
+      <td>1.3M</td><td class="dim">€ ··</td>
+    </tr>
+  </table>
+</div>

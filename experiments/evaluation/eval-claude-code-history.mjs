@@ -1271,6 +1271,11 @@ const deploymentProfile = {
   id: `claude-code-local-${generatedAt.slice(0, 10)}`,
   generatedAt,
   scope: "Local Claude Code output tokens per API call",
+  // One person's ~/.claude is the whole corpus, so every quantile and every
+  // trained tree below is a prior for this kind of work, not a calibration of
+  // whoever consumes it. Consumers render the caveat off this field instead of
+  // matching on a profile id (docs/MULTI-USER-PLAN.md).
+  provenance: "single-user-corpus",
   eligibleObservations: deploymentRows.length,
   windowDays: selectedWindowDays,
   modelAliases,

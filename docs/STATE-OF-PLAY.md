@@ -1569,6 +1569,227 @@ before.
 
 ---
 
+### 🟡 6.29 One person's corpus, shipped to strangers: the honesty release
+
+*Copy, a profile field and a display cap, 26 August 2026. Plan:
+[docs/MULTI-USER-PLAN.md](MULTI-USER-PLAN.md). No number in this section is a
+measurement; the measurement is Phase 1 and had not run when this shipped.*
+
+**The problem, stated plainly.** `packages/predictor/src/bundled-profile.ts`
+(`claude-code-local-2026-08-12`, 16,687 calls) was fitted on one person's
+`~/.claude`. `docs/TELEMETRY.md` has always said so: "many calls, but only one
+identifiable user". Every quantile, every conditioned rung, `turnTotals`,
+`sessionTotals` and all three trained ensembles inherit that. Those numbers now
+reach people who are not that person, compiled into the Chrome extension's
+content script and documented as an integration contract in the README. The
+evidence cannot change in a week, so this release changes what the numbers
+**claim**, not the numbers.
+
+**Shipped, in order of how load-bearing it is.**
+
+1. **Display confidence capped at `low`, both surfaces**
+   (`apps/extension/src/lib/engine.ts`). The library rule at
+   `packages/predictor/src/historical.ts` grants `"medium"` when the selected
+   rung holds 500 or more samples and the boost applied. Those 500 samples are
+   one person's, so `"medium"` is a claim about a stranger that nobody can
+   defend. The chat surface already forced `"low"`; the code surface now uses
+   the same line. **The library rule is deliberately untouched**: it is the
+   number that should move, and it should move with the leave-one-project-out
+   figure in hand, not before.
+2. **`provenance` on `HistoricalForecastProfile`**, optional, emitted by
+   `eval-claude-code-history.mjs` and present in the bundled profile as
+   `"single-user-corpus"`. A headless consumer can now render the caveat
+   without pattern-matching a profile id. `undefined` means "not recorded",
+   never "multi-user": an older profile predates the field.
+3. **Copy.** `apps/extension/src/lib/format.ts` `caveatCode` named the workload
+   and hid the user; it now says both, and agrees with the sentence
+   `apps/extension/src/lib/profile-info.ts` already carried. README "The data"
+   states the single user and links the plan. README "Using the predictor"
+   gains a fourth integration rule pointing at `provenance`. Extension README,
+   options page and welcome page follow.
+
+**Deliberately NOT done, with reasons.**
+
+- **No hand-widening of the quantiles.** A typed widening constant is a number
+  with no measurement behind it, which is the one thing this repo does not do.
+  The honest factor is unknown until the transfer probe reports the
+  between-project scale spread.
+- **`calibration.usedFallback` semantics untouched.** It means "group selection
+  fell off the model-conditioned ladder", and callers branch on it. Overloading
+  it with "cross-user prior" would break the one contract that works. The
+  cross-user fact lives in `provenance` and in the confidence level.
+- **The turn and session total lines stay for now**, with the provenance
+  qualifier. `sessionTotals` rests on 311 sessions from one user and loop
+  length is a property of one harness, so this is the surface most likely to be
+  withdrawn. The trigger is measured, not stylistic: per-project turn-total
+  coverage collapsing under leave-one-project-out.
+
+**What reopens each item. It has now run, and it refused.** See
+[6.30](#-630-leave-one-project-out-the-fit-does-not-transfer-and-the-gate-says-so):
+`probe-workload-transfer.mjs` graded `MOSTLY_PERSONAL`, so the confidence cap
+above stays and the restore condition is not met. The rest of this section
+stands as written. Original framing kept for the record:
+`probe-workload-transfer.mjs` (leave-one-project-out over the pseudo-users the
+corpus's `workloadId` already provides) and `probe-user-variance.mjs`.
+Thresholds were fixed before running and are in the plan. **The asymmetry is the whole point of reading that artifact**: every
+project shares one person, one toolchain, one machine, one era, one account, so
+a pass is a lower bound on the trouble and never a clearance, while a fail is
+conclusive. A fit that cannot survive the same person changing project will not
+survive the person changing. Only a real multi-user corpus (plan Phase 5)
+retires this entry; everything before it bounds and discloses it.
+
+---
+
+### 🔴 6.30 Leave-one-project-out: the fit does NOT transfer, and the gate says so
+
+*`probe-workload-transfer.mjs`, `probe-user-variance.mjs`, 26 August 2026.
+Artifacts `experiments/artifacts/workload-transfer.json` and
+`user-variance.json`. Thresholds were fixed in
+[docs/MULTI-USER-PLAN.md](MULTI-USER-PLAN.md) section 1 before either probe ran,
+and both files carry them.*
+
+**Read the asymmetry first, because it is the only reason these numbers mean
+anything.** `workloadId` makes every project directory a pseudo-user, but the
+PERSON IS HELD FIXED: one prompting style, one toolchain, one machine, one
+Claude Code version, one model mix, one era, one account. A pass would have been
+a lower bound on the trouble and never a clearance. **A fail is conclusive in
+the other direction**, and that is the side the corpus landed on.
+
+**Corpus at run time**: 23,368 calls, 434 sessions, 1,660 exact turns, 682
+files, 20 projects. This is the LIVE tree, not the frozen 21,160-call reviewer
+run, and the two are not interchangeable. The plan expected 6 to 8 pseudo-users
+at its stated rule (15 or more sessions AND 300 or more calls); the live tree
+holds **4**. A secondary tier (8 or more sessions, 300 or more calls) adds 4
+more, is printed, and never moves the verdict.
+
+**Verdict: `MOSTLY_PERSONAL`.** Two of the three declared fail conditions fired.
+
+| project (salted) | holdout | transfer P90 coverage | restore x at P50 / P90 / P99 |
+| --- | --- | --- | --- |
+| `0c5debe7…` | 2,328 calls / 30 sessions | 95.4% [93.6, 96.7] | 0.68 / **0.67** / 0.79 |
+| `fdc8547d…` | 1,115 calls / 16 sessions | **80.9%** [77.4, 87.5] | 1.16 / **1.73** / 1.59 |
+| `5aa86f58…` | 746 calls / 11 sessions | 88.1% [82.4, 92.3] | 1.02 / 1.11 / 1.16 |
+| `c798f46f…` | 186 calls / 16 sessions | 88.2% [87.0, 100.0] | 1.23 / 1.08 / 0.80 |
+
+Failing lines: `fdc8547d…` needs **x1.73** to restore 90% coverage, past the
+x1.5 fail line, and covers 80.9% at P90, under the 85% pass line. `0c5debe7…`
+fails the pass range in the opposite direction at x0.67, so its band is not
+merely miscalibrated but too WIDE by a third. **The single scale factor that
+would fix one project makes the other worse**: the spread across four projects
+of the same person is 0.67 to 1.73, a factor of 2.6.
+
+**The floor this has to be read against.** Section 6.19 measured this same user
+drifting against himself: full-history fits overshot their own group holdout by
+1.245x at P50, 1.333x at P90, 1.374x at P99. The between-project P90 spread
+measured here is wider than that. Between-USER variation is not plausibly
+smaller than either, so any widening factor a later phase proposes must clear
+both, and no such factor is proposed here.
+
+**The plan's boost prediction was WRONG, in the good direction.** It expected the
+trained trees to be more personal than the rungs, because the shipped ensembles
+spend most of their splits on `priorMaxOutputTokens` and `sessionPosition`.
+Measured on transfer, paired on the same held-out rows, boost minus bare ladder
+is negative in every project: −18.0 [−27.7, −5.2], −44.9 [−69.7, +9.1], −34.2
+[−59.8, −14.9], −10.8 [−74.4, +3.9]. **Loop shape travels.** The trees are not
+the personal part, and no case exists for stripping them.
+
+**Loss transfers; CALIBRATION does not.** Against a within-project fit scored on
+the same rows, the transfer fit is provably worse on only one project
+(`0c5debe7…`, +60.0 [+18.7, +92.5]) and is provably BETTER on two
+(`5aa86f58…` −63.1 [−128.1, −24.7], `c798f46f…` −22.7 [−146.9, −10.1]), where
+more data beats a matched workload. So the damage is not that the forecast is
+worse on a new workload. **The damage is that the coverage number stops being
+true**, which is the entire product promise.
+
+**Turn and session totals fail harder, as expected.** Turn-total transfer P50
+coverage runs 29.4% / 53.6% / 51.0% / 79.3% against a nominal 50%, and
+turn-total restore factors span x0.61 to x1.71 across primaries (x1.71 on the
+one secondary project with enough turns). Session totals are worse still and
+rest on 3 to 30 held-out sessions per project, too thin to grade. `sessionTotals`
+is the surface with the least evidence behind it and the widest observed spread.
+
+**Variance decomposition** (`probe-user-variance.mjs`, log output tokens, three
+level unbalanced nested method of moments, project > session > call). Inside the
+six eligible (model, thinking) cells:
+
+- project ICC **0.9% to 5.3%**; session-within-project ICC **3.5% to 29.0%**.
+  The session term is larger than the project term in every cell.
+- per-project median spread **x1.36 to x2.00**, against a p50-to-p99 band that
+  spans x14 to x18. Two of six cells reach the plan's "the P50 is personal"
+  line of 2x; none reaches its "the shape travels" line of 1.3x.
+- whole-corpus variance explained: model 2.0%, thinking 15.2%, model+thinking
+  16.8%, project alone 2.7%. Project adds **+2.1 points on top of
+  model+thinking**. So the project term is small next to what the ladder already
+  conditions on, but it is not zero, and it is the same order as `model` itself,
+  which the ladder does condition on.
+- controlling drift, (model, thinking, fortnight) over 13 eligible cells, does
+  not remove it: project ICC 0.0% to 9.6%, median spread x1.34 to x2.48.
+
+**The two probes disagree in a way that is itself the finding.** The variance
+decomposition says the workload moves the MEDIAN by well under 2x, which is
+small against a band spanning 14x. The transfer probe says the same fit
+nonetheless lands anywhere from 80.9% to 95.4% P90 coverage. Both are true: a
+band this wide is insensitive to a moderate location shift and very sensitive at
+the tail, where the quantiles are estimated from few points. **The personal part
+is concentrated where the corpus is thinnest.** That is a constraint on any
+later personalization layer, not a proposal for one.
+
+**What this settles, and what it does not.** It settles that the extension's
+confidence cap from 6.29 stays: the condition for restoring `"medium"` was every
+project inside 85 to 93% P90 coverage, and two of four are outside it. It does
+NOT license widening a single quantile: the honest factor is not a number, it is
+a spread of 0.67 to 1.73, and there is no scalar that covers it. The
+`historical.ts` confidence rule is still untouched and any change to it is a
+separate, gated decision.
+
+### 🟢 6.31 The extension checks its own forecast: live turn tracking, verdicts, ledger
+
+**Status: SHIPPED in `apps/extension`, on by default, no measurement claim
+attached.** This is a product surface, not a predictor change. Nothing in
+`packages/predictor` moved and no number in §6 is affected.
+
+**What it does.** On send, the chip freezes the forecast it was showing
+(`ChipViewModel.snapshot`) and switches from describing the draft to describing
+the reply arriving: written-so-far as a marker on the same square-root band the
+panel already teaches, a verdict word from the band it sits in, and a pill that
+escalates its border as the turn passes p50, p90 and p99. When the turn settles
+the score stays pinned to the reply that earned it, and the panel gains a
+running total for the conversation (written against summed p50, plus how many
+turns landed inside the usual range). Ported in shape from sheep-manager's
+`LiveForecastBar` / `ForecastCard` / `ForecastLedger`.
+
+**The three honesty constraints, which is the part worth recording.**
+
+1. **Frozen at send, never revised.** `TurnTracker.arm()` captures the snapshot
+   before the reply exists and `buildLive()` recomputes nothing. A prediction
+   that drifts towards the outcome cannot be checked against it, so the whole
+   surface would be decoration.
+2. **The written figure is an estimate off the rendered DOM**, using the same
+   character heuristic as the draft count, and every surface says so. The
+   extension has no authoritative count of a reply and refuses to imply one:
+   counting it would mean sending the reply to `count_tokens`, which breaks the
+   "the conversation is never sent" line the README makes.
+3. **Scale follows the surface, not the reply's shape.** `/code` scores against
+   the turn-total quantiles (§6.28), because what appears after a send there is
+   an agent loop; chat scores against the per-call quantiles. It never switches
+   mid-turn. A turn-scale band also ignores the per-call output cap when picking
+   its domain, because a loop of calls routinely totals more than one call may.
+
+**What it is NOT.** It does not feed anything back into the profile, it does not
+telemeter, and one conversation's ledger is not evidence about calibration: the
+written figure is an estimate, the sample is tiny, and the read-out is worded so
+that "over 100% of expected" says "longer-than-typical turns", never "the
+forecaster failed". If per-user calibration is ever wanted, it needs the
+measurement path of [[MULTI-USER-PLAN]], not this display.
+
+**Where.** `src/lib/turn.ts` (pure scoring, ledger maths), `src/content/turn-tracker.ts`
+(the send-to-settled state machine), `src/content/verdicts.ts` (the overlay
+badges), plus the live half of `src/lib/engine.ts` and `src/content/chip.ts`.
+209 tests pass. Two new settings, `liveTrackingEnabled` and `verdictsEnabled`,
+both default on.
+
+---
+
 ## 7. What to do next
 
 ### 🟡 7.1 `previousOutputTokens` — implemented, gated, and currently refused

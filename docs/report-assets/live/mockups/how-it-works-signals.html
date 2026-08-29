@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .wrap { width: 1046px; }
+  .card { padding: 26px 32px 28px; }
+  .cols { display: flex; align-items: center; gap: 18px; }
+  .col-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .arrow { color: var(--muted); font-size: 20px; flex: none; }
+  .inputs { width: 234px; display: flex; flex-direction: column; gap: 10px; }
+  .inp {
+    background: var(--surface-2); border: 1px solid var(--line-2);
+    border-radius: var(--radius-m); padding: 11px 14px;
+  }
+  .inp b { color: var(--ink-strong); }
+  .signals { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .sig {
+    border: 1px solid #2e8e5230; border-radius: var(--radius-s);
+    background: #eef4ec; padding: 9px 13px; color: var(--ink-strong);
+  }
+  .sig b { font-weight: 700; }
+  .fc {
+    width: 250px; background: #eef1fe; border: 1px solid #2563eb33;
+    border-left: 3px solid var(--need); border-radius: var(--radius-m);
+    padding: 13px 15px;
+  }
+  .fc .t { font-weight: 700; margin-bottom: 2px; }
+  .fc .t .v { color: var(--need); }
+  .fc .sub { color: var(--muted); margin-bottom: 10px; }
+  .track { position: relative; height: 8px; border-radius: 4px; background: #e2e6f5; }
+  .band { position: absolute; left: 22%; right: 18%; top: 0; bottom: 0; border-radius: 4px; background: #a9c4f5; }
+  .dot { position: absolute; left: 52%; top: -3px; width: 14px; height: 14px; border-radius: 50%; background: #2563eb; }
+  .ends { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-top: 7px; }
+</style>
+</head>
+<body>
+<div class="wrap card">
+  <div class="cols">
+    <div>
+      <div class="col-label">Input</div>
+      <div class="inputs">
+        <div class="inp"><b>The prompt</b><br><span class="dim">what you are about to send</span></div>
+        <div class="inp"><b>Conversation state</b><br><span class="dim">turn depth, files touched, context size</span></div>
+      </div>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div style="flex:1">
+      <div class="col-label">Signals</div>
+      <div class="signals">
+        <div class="sig">plan <b>vs</b> execution order</div>
+        <div class="sig">multi-file change implied?</div>
+        <div class="sig">artifact / diff expected?</div>
+        <div class="sig">likely agentic loop depth</div>
+      </div>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div>
+      <div class="col-label">Forecast</div>
+      <div class="fc">
+        <div class="t">Next turn forecast <span class="v num">~2.1k</span></div>
+        <div class="sub">output tokens</div>
+        <div class="track"><div class="band"></div><div class="dot"></div></div>
+        <div class="ends num"><span>1.4k</span><span>3.0k</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

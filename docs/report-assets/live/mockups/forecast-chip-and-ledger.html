@@ -1,0 +1,89 @@
+<meta charset="utf-8">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .card { width: 660px; }
+  .ledger { display: flex; align-items: baseline; gap: 8px; }
+  .ledger b { color: var(--ink-strong); font-size: 14px; }
+  .ledger .pct {
+    margin-left: auto; font-weight: 600; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border-radius: 999px; padding: 1px 9px; font-size: 12px;
+  }
+  .ticks { display: flex; gap: 4px; margin-top: 8px; align-items: flex-end; height: 18px; }
+  .tick { width: 14px; border-radius: 3px 3px 0 0; background: color-mix(in srgb, var(--accent) 55%, #fff); }
+  .tick.out { background: color-mix(in srgb, var(--warn) 60%, #fff); }
+  .ticklab { font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+
+  .chip {
+    margin-top: 4px; padding: 6px 10px 9px; font-size: 11.5px;
+    border: 1px solid color-mix(in srgb, var(--fc) 35%, transparent);
+    border-left: 3px solid var(--fc);
+    border-radius: var(--radius-s);
+    background: color-mix(in srgb, var(--fc) 6%, var(--surface));
+  }
+  .chip + .chip { margin-top: 8px; }
+  .chip.live    { --fc: var(--need); }
+  .chip.settled { --fc: var(--accent); }
+  .chip-head { display: flex; align-items: baseline; gap: 7px; white-space: nowrap; }
+  .chip-head b { color: var(--ink); }
+  .state { margin-left: auto; color: var(--fc); font-weight: 600; }
+  .bar { position: relative; height: 6px; margin-top: 7px; border-radius: 3px; background: var(--chip-bg); }
+  .band { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: color-mix(in srgb, var(--fc) 22%, transparent); }
+  .fill { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: var(--fc); }
+  .mark { position: absolute; top: -2px; height: 10px; width: 2px; border-radius: 1px; background: var(--ink); opacity: .55; }
+  .barlab { position: relative; height: 14px; font-size: 10.5px; color: var(--muted); margin-top: 4px; }
+  .barlab span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .barlab .l0 { left: 0; transform: none; }
+  .barlab .lend { right: 0; left: auto; transform: none; }
+</style>
+
+<div class="card">
+  <div class="ledger">
+    <b>Session</b>
+    <span class="dim">·</span>
+    <span class="num"><b>12.4k</b> written · <span class="dim">14.1k expected</span></span>
+    <span class="pct num">88% of expected</span>
+  </div>
+  <div class="ticks">
+    <div class="tick" style="height:8px"></div>
+    <div class="tick" style="height:12px"></div>
+    <div class="tick" style="height:6px"></div>
+    <div class="tick out" style="height:18px"></div>
+    <div class="tick" style="height:9px"></div>
+    <div class="tick" style="height:14px"></div>
+    <div class="tick" style="height:7px"></div>
+    <div class="tick" style="height:10px"></div>
+  </div>
+  <div class="ticklab num">7 of 8 turns landed inside the usual range</div>
+
+  <hr class="hairline">
+
+  <div class="chip settled">
+    <div class="chip-head num">
+      <b>claude-haiku-4-5</b>
+      <span class="dim">forecast p50 589 · p90 2.4k</span>
+      <span class="state">actual 400 · inside band · 41.3s</span>
+    </div>
+    <div class="bar">
+      <div class="band" style="width: 100%"></div>
+      <div class="fill" style="width: 17%"></div>
+      <div class="mark" style="left: 24%"></div>
+      <div class="mark" style="left: 99%; opacity:.3"></div>
+    </div>
+    <div class="barlab num"><span class="l0">0</span><span style="left:24%">p50 589</span><span class="lend">p90 2.4k</span></div>
+  </div>
+
+  <div class="chip live">
+    <div class="chip-head num">
+      <b>claude-opus-4-8</b>
+      <span class="dim">forecast p50 1.8k · p90 6.2k · cap 32k</span>
+      <span class="state">running · 1.1k so far</span>
+    </div>
+    <div class="bar">
+      <div class="band" style="width: 100%"></div>
+      <div class="fill" style="width: 18%"></div>
+      <div class="mark" style="left: 29%"></div>
+    </div>
+    <div class="barlab num"><span class="l0">0</span><span style="left:29%">p50 1.8k</span><span class="lend">p90 6.2k</span></div>
+  </div>
+</div>
