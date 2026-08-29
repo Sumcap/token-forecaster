@@ -126,7 +126,21 @@ who trust you enough to bypass Gatekeeper deliberately.
   automatically; an nvm install is found through a login shell. If it cannot
   find Node at all, the menu says **"Node.js not found — click to choose…"** and
   clicking opens a file picker for the `node` binary; the choice is remembered.
-- Nothing else. No pnpm, no repo checkout, no Xcode.
+- **`python3`.** The `claude` launcher that drives the live draft forecast is a
+  Python script. macOS ships `python3` as a stub that installs Xcode Command
+  Line Tools on first use, so if the launcher prompts, run
+  `xcode-select --install` once.
+- Nothing else. No pnpm, no repo checkout, no Xcode project.
+
+The zip contains everything else it needs: the daemon, the `tf-claude` launcher
+at `Contents/Resources/bin/tf-claude`, and the terminal status line at
+`Contents/Resources/companion/statusline.js`. `build-dist.sh` fails the build if
+any of the three is missing, because a bundle without the launcher writes a
+`claude()` block into the recipient's shell that silently points at nothing.
+
+Note that **Launch at Login may not register on an ad-hoc-signed build** —
+`SMAppService` wants a stable code identity. Starting the app by hand works
+regardless; a Developer ID signature fixes the toggle.
 
 On first launch the daemon **backfills their own history** from
 `~/.codex/sessions` and `~/.claude/projects`, then trains a personal profile

@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import { accessSync, constants, copyFileSync, existsSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
@@ -103,6 +103,11 @@ export function ensureAliasOnFirstRun(options: {
   markDecided: () => void;
 }): AliasResult | null {
   if (options.alreadyDecided) return null;
+  // A build that shipped without the launcher must not burn the one shot: the
+  // block would point at a path that will never exist, the `[ -x ]` guard would
+  // swallow it, and a later fixed build would never rewrite it because the flag
+  // was already set. No launcher means no decision yet.
+  if (!isExecutableFile(options.target)) return null;
   options.markDecided();
   if (!options.rcPath) return null;
   try {
@@ -110,6 +115,17 @@ export function ensureAliasOnFirstRun(options: {
   } catch {
     // A read-only or exotic home directory is not a reason to fail to start.
     return null;
+  }
+}
+
+/** True when `path` is a regular file the current user can execute. */
+function isExecutableFile(path: string): boolean {
+  try {
+    if (!statSync(path).isFile()) return false;
+    accessSync(path, constants.X_OK);
+    return true;
+  } catch {
+    return false;
   }
 }
 

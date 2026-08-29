@@ -3,11 +3,11 @@ import { basename } from "node:path";
 import {
   countSkip,
   emptyImportStats,
-  extractPromptFeatures,
   type ImportStats,
   type PromptFeatures,
   type UsageObservation,
 } from "@token-forecaster/core";
+import { extractPromptFeatures } from "@token-forecaster/core/prompt-features";
 
 /**
  * Codex rollout transcripts are an internal, versioned CLI artifact, not a

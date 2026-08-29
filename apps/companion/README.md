@@ -255,6 +255,13 @@ for one project):
 }
 ```
 
+Installing from the `.app` rather than a checkout? The status line ships inside
+the bundle, so point at that copy instead:
+
+```text
+node --no-warnings /Applications/TokenForecaster.app/Contents/Resources/companion/statusline.js
+```
+
 Remove the `statusLine` key to turn it off.
 
 ### Where each number comes from

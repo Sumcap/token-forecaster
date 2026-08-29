@@ -29,7 +29,19 @@ function rcFile(content: string | null): string {
   return path;
 }
 
-const TARGET = "/opt/token-forecaster/bin/tf-claude";
+/** A path that looks like a launcher but was never shipped. */
+const MISSING_TARGET = "/opt/token-forecaster/bin/tf-claude";
+
+/** A real executable, because ensureAliasOnFirstRun refuses to alias a ghost. */
+function launcherFile(): string {
+  const dir = mkdtempSync(join(tmpdir(), "tf-bin-"));
+  dirs.push(dir);
+  const path = join(dir, "tf-claude");
+  writeFileSync(path, "#!/bin/sh\nexec claude \"$@\"\n", { mode: 0o755 });
+  return path;
+}
+
+const TARGET = MISSING_TARGET;
 const ORIGINAL = 'export PATH="$HOME/bin:$PATH"\nalias ll="ls -la"\n';
 
 describe("rcPathFor", () => {
@@ -158,10 +170,51 @@ describe("ensureAliasOnFirstRun", () => {
     const result = ensureAliasOnFirstRun({
       alreadyDecided: false,
       rcPath: rc,
-      target: TARGET,
+      target: launcherFile(),
       markDecided: () => {
         decided = true;
       },
+    });
+    expect(result?.changed).toBe(true);
+    expect(decided).toBe(true);
+    expect(aliasInstalled(rc)).toBe(true);
+  });
+
+  it("writes nothing, and decides nothing, when the launcher was not shipped", () => {
+    // A bundle built without bin/tf-claude used to write a block pointing at a
+    // path that will never exist. The `[ -x ]` guard in the block swallowed it,
+    // so `claude` kept working and the draft forecast silently never fired --
+    // and because the one shot had been spent, a fixed build could not repair
+    // it. Refusing to decide is what lets the next launch fix itself.
+    const rc = rcFile(ORIGINAL);
+    const result = ensureAliasOnFirstRun({
+      alreadyDecided: false,
+      rcPath: rc,
+      target: MISSING_TARGET,
+      markDecided: () => {
+        throw new Error("must not spend the one shot on a missing launcher");
+      },
+    });
+    expect(result).toBeNull();
+    expect(aliasInstalled(rc)).toBe(false);
+    expect(readFileSync(rc, "utf8")).toBe(ORIGINAL);
+  });
+
+  it("installs on a later start once the launcher is actually there", () => {
+    const rc = rcFile(ORIGINAL);
+    let decided = false;
+    const markDecided = (): void => {
+      decided = true;
+    };
+    // First start: broken bundle, nothing decided.
+    ensureAliasOnFirstRun({ alreadyDecided: false, rcPath: rc, target: MISSING_TARGET, markDecided });
+    expect(decided).toBe(false);
+    // Second start: fixed bundle, and the install still happens.
+    const result = ensureAliasOnFirstRun({
+      alreadyDecided: decided,
+      rcPath: rc,
+      target: launcherFile(),
+      markDecided,
     });
     expect(result?.changed).toBe(true);
     expect(decided).toBe(true);
@@ -187,7 +240,7 @@ describe("ensureAliasOnFirstRun", () => {
     const result = ensureAliasOnFirstRun({
       alreadyDecided: false,
       rcPath: null,
-      target: TARGET,
+      target: launcherFile(),
       markDecided: () => {
         decided = true;
       },

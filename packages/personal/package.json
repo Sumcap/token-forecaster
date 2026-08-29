@@ -2,6 +2,9 @@
   "name": "@token-forecaster/personal",
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "description": "Local SQLite store, hierarchical personal quantile trainer, and chronological holdout evaluation for one user's own history",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

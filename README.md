@@ -225,7 +225,11 @@ privacy is a default, not an option:
 
 ```text
 token-forecaster/
-├── apps/playground/       Vite + React playground; Express count_tokens server
+├── apps/
+│   ├── menubar/           macOS menu bar app (Swift); bundles the companion
+│   ├── companion/         Local daemon, status line, and `tf-claude` launcher
+│   ├── extension/         Chrome extension for claude.ai
+│   └── playground/        Vite + React playground; Express count_tokens server
 ├── packages/
 │   ├── core/              Zod schemas, context-budget math, warning logic
 │   ├── anthropic/         Server-side adapter: count_tokens, streaming, usage
@@ -234,12 +238,46 @@ token-forecaster/
 │   ├── predictor/         Historical ladder + trained quantile correction
 │   ├── telemetry/         Privacy-aware JSONL observation logging
 │   ├── react/             Hooks and components (Phase 6)
-│   └── cli/               count | forecast | run | evaluate | export
+│   ├── personal/          Local training: fit, evaluate, and gate your profile
+│   ├── ingest-claude/     Read ~/.claude/projects transcripts
+│   ├── ingest-codex/      Read ~/.codex/sessions transcripts
+│   └── cli/               Planned; not implemented yet
 ├── experiments/           Probes, evaluation scripts, generated artifacts
 ├── research/              Competitive analysis, literature review, ADRs
 ├── fixtures/              Race-condition fixtures for count reconciliation
 └── docs/                  Reports, state of play, backlog, chart sources
 ```
+
+## Install on macOS
+
+The menu bar app is the thing to install. It runs a local daemon that reads your
+own Claude Code and Codex transcripts, trains a forecaster on them, and puts a
+live estimate in your terminal status line. Nothing leaves the machine.
+
+**Requirements:** macOS 14+, Apple silicon, Node.js 22+ (`brew install node`),
+and `python3` — the `claude` launcher is a Python script, and Xcode Command Line
+Tools provide it (`xcode-select --install`).
+
+```sh
+git clone https://github.com/polpedu-crypto/token-forecaster.git
+cd token-forecaster
+pnpm install
+cd apps/menubar && make dist
+open .build/TokenForecaster.app
+```
+
+`make dist` also writes `.build/TokenForecaster.zip`, which is what you send to
+someone else. It is ad-hoc signed rather than notarized, so on the receiving
+machine Gatekeeper needs one of:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/TokenForecaster.app
+```
+
+or a right-click → **Open** the first time. Full walkthrough, including the
+terminal status line and the `claude` launcher, is in
+[apps/menubar/README.md](apps/menubar/README.md); the daemon and its API are
+documented in [apps/companion/README.md](apps/companion/README.md).
 
 ## Getting started
 

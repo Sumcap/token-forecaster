@@ -5,7 +5,7 @@
   "description": "Real-time LLM token usage monitoring and probabilistic output-length forecasting for the Anthropic API",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "packageManager": "pnpm@10.33.2",
   "scripts": {

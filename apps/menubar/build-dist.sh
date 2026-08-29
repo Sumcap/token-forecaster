@@ -15,6 +15,10 @@ cd "${HERE}"
 APP_NAME="TokenForecaster"
 APP_DIR="${HERE}/.build/${APP_NAME}.app"
 COMPANION_DIR="${APP_DIR}/Contents/Resources/companion"
+# The daemon resolves the launcher as ../bin/tf-claude relative to itself, so
+# this path is not a preference -- it is what Resources/companion/cli.js will
+# look for at runtime.
+LAUNCHER_DIR="${APP_DIR}/Contents/Resources/bin"
 ZIP_PATH="${HERE}/.build/${APP_NAME}.zip"
 
 # ---------------------------------------------------------------- node side --
@@ -29,9 +33,24 @@ if [[ ! -f "${CLI_ENTRY}" ]]; then
   exit 1
 fi
 
+STATUSLINE_ENTRY="${ROOT}/apps/companion/dist/statusline.js"
+if [[ ! -f "${STATUSLINE_ENTRY}" ]]; then
+  echo "error: ${STATUSLINE_ENTRY} missing after build" >&2
+  exit 1
+fi
+
+LAUNCHER_SRC="${ROOT}/apps/companion/bin"
+for f in tf-claude tf_draft.py; do
+  if [[ ! -f "${LAUNCHER_SRC}/${f}" ]]; then
+    echo "error: ${LAUNCHER_SRC}/${f} missing; the shipped app would write a dead claude() into every recipient's shell" >&2
+    exit 1
+  fi
+done
+
 find_esbuild() {
+  # pnpm hoists nothing to the workspace root, so the extension's copy is the
+  # one that actually exists; the .pnpm store is the fallback.
   local candidates=(
-    "${ROOT}/node_modules/.bin/esbuild"
     "${ROOT}/apps/extension/node_modules/.bin/esbuild"
   )
   local c
@@ -65,6 +84,24 @@ mkdir -p "${COMPANION_DIR}"
   --log-level=warning \
   --outfile="${COMPANION_DIR}/cli.js"
 
+echo "==> bundling the status line into Resources/companion"
+"${ESBUILD}" "${STATUSLINE_ENTRY}" \
+  --bundle \
+  --platform=node \
+  --target=node22 \
+  --format=esm \
+  --external:node:\* \
+  --log-level=warning \
+  --outfile="${COMPANION_DIR}/statusline.js"
+
+# The launcher is a Python script that Claude Code is started through; without
+# it the draft forecast -- the whole point of the app -- silently never fires.
+echo "==> copying the launcher into Resources/bin"
+rm -rf "${LAUNCHER_DIR}"
+mkdir -p "${LAUNCHER_DIR}"
+cp "${LAUNCHER_SRC}/tf-claude" "${LAUNCHER_SRC}/tf_draft.py" "${LAUNCHER_DIR}/"
+chmod +x "${LAUNCHER_DIR}/tf-claude"
+
 # Node infers module type from the nearest package.json; be explicit.
 cat > "${COMPANION_DIR}/package.json" <<'JSON'
 {
@@ -77,11 +114,23 @@ JSON
 
 # --------------------------------------------------------------- proof --
 echo "==> verifying the bundle runs outside the repo"
-NODE_BIN="$(command -v node)"
+NODE_BIN="$(command -v node || true)"
+if [[ -z "${NODE_BIN}" ]]; then
+  echo "error: node not found on PATH. Install Node 22+ and re-run." >&2
+  exit 1
+fi
 PROOF_DIR="$(mktemp -d /tmp/tf-dist-test.XXXXXX)"
 ( cd /tmp && "${NODE_BIN}" --no-warnings "${COMPANION_DIR}/cli.js" status --data-dir "${PROOF_DIR}" ) \
   || { echo "error: bundled daemon failed to run from /tmp" >&2; exit 1; }
 rm -rf "${PROOF_DIR}"
+
+# The launcher path the daemon computes at runtime, asserted here rather than
+# discovered by a colleague whose draft forecast quietly does nothing.
+RESOLVED_LAUNCHER="${COMPANION_DIR}/../bin/tf-claude"
+[[ -x "${RESOLVED_LAUNCHER}" ]] \
+  || { echo "error: ${RESOLVED_LAUNCHER} is not executable; the daemon would write a dead alias" >&2; exit 1; }
+[[ -f "${COMPANION_DIR}/statusline.js" ]] \
+  || { echo "error: statusline.js missing from the bundle" >&2; exit 1; }
 echo "==> bundle OK"
 
 # ------------------------------------------------------------ sign + zip --

@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { extractPromptFeatures } from "@token-forecaster/core";
+import { extractPromptFeatures } from "@token-forecaster/core/prompt-features";
 import { estimateTokensFromText } from "@token-forecaster/token-counter";
 import { afterEach, describe, expect, it } from "vitest";
 

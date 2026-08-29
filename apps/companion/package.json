@@ -2,6 +2,9 @@
   "name": "@token-forecaster/companion",
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "private": true,
   "description": "Local background companion: indexes Codex and Claude Code history, trains a personal profile, and serves an authenticated loopback API",
   "main": "./dist/index.js",

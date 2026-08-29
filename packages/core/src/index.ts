@@ -66,4 +66,7 @@ export type {
   UsageScale,
   UsageSource,
 } from "./observations.js";
-export { emptyPromptFeatures, extractPromptFeatures } from "./prompt-features.js";
+// Deliberately NOT re-exported from this barrel: prompt-features imports
+// node:crypto, and pulling it in here drags that into every browser bundle that
+// touches @token-forecaster/core. Import it from the "./prompt-features" export
+// subpath instead, which exists for exactly this reason.
