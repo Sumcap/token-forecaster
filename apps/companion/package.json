@@ -1,0 +1,24 @@
+{
+  "name": "@token-forecaster/companion",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Local background companion: indexes Codex and Claude Code history, trains a personal profile, and serves an authenticated loopback API",
+  "main": "./dist/index.js",
+  "bin": {
+    "tf-claude": "./bin/tf-claude"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "start": "node dist/cli.js start"
+  },
+  "dependencies": {
+    "@token-forecaster/core": "workspace:*",
+    "@token-forecaster/ingest-claude": "workspace:*",
+    "@token-forecaster/ingest-codex": "workspace:*",
+    "@token-forecaster/personal": "workspace:*",
+    "@token-forecaster/token-counter": "workspace:*"
+  }
+}

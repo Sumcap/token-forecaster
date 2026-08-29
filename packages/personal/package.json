@@ -1,0 +1,24 @@
+{
+  "name": "@token-forecaster/personal",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Local SQLite store, hierarchical personal quantile trainer, and chronological holdout evaluation for one user's own history",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@token-forecaster/core": "workspace:*",
+    "@token-forecaster/predictor": "workspace:*"
+  }
+}

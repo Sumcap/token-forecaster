@@ -9,6 +9,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./prompt-features": {
+      "types": "./dist/prompt-features.d.ts",
+      "default": "./dist/prompt-features.js"
     }
   },
   "files": ["dist"],

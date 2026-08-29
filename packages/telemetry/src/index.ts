@@ -21,6 +21,18 @@ export {
 export type { ForecastObservation, PromptStorageMode };
 export { createTelemetryIngestHandler } from "./http-ingest.js";
 export type { TelemetryIngestOptions } from "./http-ingest.js";
+export {
+  JsonlExtensionTelemetryWriter,
+  JsonlInstallationRegistry,
+  createExtensionTelemetryIngestHandler,
+  readExtensionTelemetryJsonl,
+  telemetryTokensEqual,
+} from "./extension-ingest.js";
+export type {
+  AnonymousInstallationCredentials,
+  ExtensionTelemetryIngestOptions,
+  StoredExtensionTelemetryEvent,
+} from "./extension-ingest.js";
 
 export function hashTelemetryIdentifier(value: string, salt: string): string {
   if (!salt) throw new Error("telemetry hash salt must not be empty");

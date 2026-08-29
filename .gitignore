@@ -20,3 +20,11 @@ experiments/artifacts/local/
 
 # logs
 *.log
+
+# swift menu bar app
+apps/menubar/.build/
+apps/menubar/*.app
+
+# python bytecode
+__pycache__/
+*.pyc

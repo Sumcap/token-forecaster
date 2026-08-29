@@ -198,12 +198,18 @@ export const forecastObservationSchema = z.object({
     currentUserTokens: z.number().int().nonnegative().optional(),
     toolTokens: z.number().int().nonnegative().optional(),
 
-    messageCount: z.number().int().nonnegative(),
-    toolCount: z.number().int().nonnegative(),
+    /**
+     * Optional because browser surfaces cannot see the provider's complete
+     * request. Exact API callers should continue to provide both fields;
+     * visible-page observers must omit rather than invent zeroes.
+     */
+    messageCount: z.number().int().nonnegative().optional(),
+    toolCount: z.number().int().nonnegative().optional(),
 
     temperature: z.number().optional(),
     topP: z.number().optional(),
-    maxTokens: z.number().int().positive(),
+    /** Omit when the surface does not expose the request's max_tokens value. */
+    maxTokens: z.number().int().positive().optional(),
     thinkingConfiguration: z.unknown().optional(),
     outputEffort: z
       .enum(["low", "medium", "high", "xhigh", "max"])
@@ -281,7 +287,20 @@ export const forecastObservationSchema = z.object({
        * median regression; kept for cap-risk classification and survival
        * analysis.
        */
-      isCensored: z.boolean(),
+      /**
+       * Omitted means the observing surface cannot distinguish a natural stop
+       * from a provider cap. Browser-derived rows deliberately leave it out.
+       */
+      isCensored: z.boolean().optional(),
+      /**
+       * Whether outputTokens came from provider usage or an estimate of the
+       * rendered text. Training code must never mix these without an explicit
+       * measurement-error decision.
+       */
+      outputTokenQuality: z
+        .enum(["provider_exact", "dom_estimate"])
+        .optional(),
+      inputTokenQuality: countQualitySchema.optional(),
 
       timeToFirstTokenMs: z.number().nonnegative().optional(),
       totalLatencyMs: z.number().nonnegative().optional(),
@@ -301,7 +320,68 @@ export const forecastObservationSchema = z.object({
       /** Stable salted hashes; raw user/workload identifiers are not required. */
       userIdHash: z.string().optional(),
       workloadIdHash: z.string().optional(),
+      /** Browser-only provenance. Omitted on direct API observations. */
+      surface: z.enum(["claude_code", "claude_chat"]).optional(),
+      extensionVersion: z.string().optional(),
+      consentVersion: z.number().int().positive().optional(),
+      forecastScale: z.enum(["call", "turn"]).optional(),
     })
     .optional(),
 });
 export type ForecastObservation = z.infer<typeof forecastObservationSchema>;
+
+export const EXTENSION_TELEMETRY_SCHEMA_VERSION = 1 as const;
+
+const extensionTelemetryBaseSchema = z.object({
+  schemaVersion: z.literal(EXTENSION_TELEMETRY_SCHEMA_VERSION),
+  id: z.string().min(16).max(128),
+  timestamp: z.string().datetime(),
+  extensionVersion: z.string().min(1).max(64),
+  consentVersion: z.number().int().positive(),
+});
+
+/**
+ * Small, enumerated operational events. There is deliberately no arbitrary
+ * properties bag: page text, URLs, stack traces, and selector contents have
+ * nowhere to enter the contract.
+ */
+export const extensionDiagnosticEventSchema = extensionTelemetryBaseSchema.extend({
+  kind: z.literal("diagnostic"),
+  name: z.enum([
+    "extension_ready",
+    "forecast_rendered",
+    "turn_scored",
+    "collector_unavailable",
+  ]),
+  surface: z.enum(["claude_code", "claude_chat"]).optional(),
+  outcome: z.enum(["success", "degraded", "failure"]),
+  code: z
+    .enum([
+      "ok",
+      "model_assumed",
+      "thinking_assumed",
+      "pooled_forecast",
+      "abandoned",
+      "network_error",
+      "permission_missing",
+      "collector_not_configured",
+    ])
+    .optional(),
+  /** Coarse timing only; never an exact interaction trace. */
+  durationBucketMs: z.enum(["lt_250", "250_999", "1s_4s", "5s_plus"]).optional(),
+});
+export type ExtensionDiagnosticEvent = z.infer<typeof extensionDiagnosticEventSchema>;
+
+export const extensionResearchEventSchema = extensionTelemetryBaseSchema.extend({
+  kind: z.literal("research"),
+  observation: forecastObservationSchema,
+});
+export type ExtensionResearchEvent = z.infer<typeof extensionResearchEventSchema>;
+
+export const extensionTelemetryClientEventSchema = z.discriminatedUnion("kind", [
+  extensionDiagnosticEventSchema,
+  extensionResearchEventSchema,
+]);
+export type ExtensionTelemetryClientEvent = z.infer<
+  typeof extensionTelemetryClientEventSchema
+>;

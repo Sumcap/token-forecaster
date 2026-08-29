@@ -1,0 +1,25 @@
+{
+  "name": "@token-forecaster/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome extension: live input count and output forecast in the claude.ai composer",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:e2e": "node e2e/fresh-install.mjs"
+  },
+  "dependencies": {
+    "@token-forecaster/core": "workspace:*",
+    "@token-forecaster/model-registry": "workspace:*",
+    "@token-forecaster/predictor": "workspace:*",
+    "@token-forecaster/token-counter": "workspace:*"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.5",
+    "happy-dom": "^15.11.7",
+    "puppeteer-core": "^24.31.0"
+  }
+}

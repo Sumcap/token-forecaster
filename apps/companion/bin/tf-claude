@@ -1,0 +1,293 @@
+#!/usr/bin/env python3
+"""
+Launch Claude Code with a live draft forecast.
+
+    tf-claude [any claude arguments]
+
+Claude Code's status line is handed session data on stdin, and that data has no
+field for the prompt you are still typing — the docs list every field, and none
+of them is the composer. Typing is not even an update trigger. So the only way
+for a forecast to react to a draft is for something to sit between the keyboard
+and Claude Code.
+
+That is all this does. It allocates a pty, runs Claude Code inside it, and
+passes your keystrokes straight through while keeping a model of the line you
+are currently editing. Every time that line changes it writes the *counts* —
+length, words, code fences, urls, paths, question or imperative — to a private
+file, and points Claude Code at that file through an environment variable the
+status line reads. The status line sends those counts as the forecast's prompt
+features, so the number on the bar is a forecast for the prompt you are actually
+writing.
+
+What it never does: write down, log, transmit or otherwise keep the text. The
+buffer lives in memory, is reduced to numbers, and is dropped the moment you
+press enter. It sees only what you type into this one Claude Code session — it
+is a wrapper around one process, not a system-wide input tap.
+"""
+
+import atexit
+import errno
+import fcntl
+import json
+import os
+import pty
+import select
+import shutil
+import signal
+import struct
+import sys
+import tempfile
+import termios
+import time
+import tty
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from tf_draft import estimate_tokens, features  # noqa: E402
+
+CHILD = os.environ.get("TOKEN_FORECASTER_CLAUDE_BIN", "claude")
+
+
+def draft_dir() -> str:
+    """Same application-support directory the daemon uses, plus `drafts/`."""
+    base = os.path.join(
+        os.path.expanduser("~"), "Library", "Application Support", "TokenForecaster"
+    )
+    if not sys.platform.startswith("darwin"):
+        base = os.path.join(
+            os.environ.get("XDG_STATE_HOME", os.path.join(os.path.expanduser("~"), ".local", "state")),
+            "token-forecaster",
+        )
+    path = os.path.join(base, "drafts")
+    os.makedirs(path, mode=0o700, exist_ok=True)
+    return path
+
+
+class Draft:
+    """
+    The line being edited, as a model good enough to count.
+
+    It is not a reimplementation of Claude Code's editor and does not need to
+    be: the numbers it feeds are buckets (under 80 characters, under 300, a
+    code fence present or not), so being a character or two off never changes
+    the forecast, and enter resets everything anyway.
+    """
+
+    def __init__(self, path: str):
+        self.path = path
+        self.buffer: list[str] = []
+        self.pending_escape = False
+        self.in_paste = False
+        self.written = ""
+
+    # -- the keystroke state machine ------------------------------------
+    def feed(self, data: bytes) -> None:
+        text = data.decode("utf8", "replace")
+        i = 0
+        while i < len(text):
+            ch = text[i]
+            rest = text[i:]
+            # Bracketed paste: Claude Code turns large pastes into attachments,
+            # but the characters are still part of the prompt's size.
+            if rest.startswith("\x1b[200~"):
+                self.in_paste = True
+                i += 6
+                continue
+            if rest.startswith("\x1b[201~"):
+                self.in_paste = False
+                i += 6
+                continue
+            if ch == "\x1b" and not self.in_paste:
+                # Escape sequence — arrow keys, meta-enter, mouse reports.
+                # Meta-enter inserts a newline rather than submitting.
+                if rest.startswith("\x1b\r") or rest.startswith("\x1b\n"):
+                    self.buffer.append("\n")
+                    i += 2
+                    continue
+                i += self._skip_escape(rest)
+                continue
+            if ch in ("\r", "\n") and not self.in_paste:
+                # Submitted (or cancelled into nothing): the draft is over.
+                self.buffer.clear()
+                i += 1
+                continue
+            if ch in ("\x7f", "\x08"):
+                if self.buffer:
+                    self.buffer.pop()
+                i += 1
+                continue
+            if ch == "\x03" or ch == "\x15":  # ctrl-c, ctrl-u
+                self.buffer.clear()
+                i += 1
+                continue
+            if ch == "\x17":  # ctrl-w
+                while self.buffer and self.buffer[-1].isspace():
+                    self.buffer.pop()
+                while self.buffer and not self.buffer[-1].isspace():
+                    self.buffer.pop()
+                i += 1
+                continue
+            if ch == "\t" or ch >= " " or ch == "\n":
+                self.buffer.append(ch)
+            i += 1
+
+    @staticmethod
+    def _skip_escape(rest: str) -> int:
+        """Length of the escape sequence at the head of `rest`."""
+        if len(rest) < 2:
+            return 1
+        if rest[1] == "[":
+            j = 2
+            while j < len(rest) and not ("@" <= rest[j] <= "~"):
+                j += 1
+            return min(j + 1, len(rest))
+        return 2
+
+    # -- publishing ------------------------------------------------------
+    def publish(self) -> None:
+        """Write the counts, atomically, and only when they changed."""
+        text = "".join(self.buffer)
+        shape = features(text)
+        tokens = estimate_tokens(text.strip())
+        encoded = json.dumps([shape, tokens], sort_keys=True)
+        if encoded == self.written:
+            return
+        self.written = encoded
+        payload = json.dumps(
+            {"updatedAt": int(time.time() * 1000), "features": shape, "tokens": tokens}
+        )
+        try:
+            fd, tmp = tempfile.mkstemp(dir=os.path.dirname(self.path))
+            with os.fdopen(fd, "w") as handle:
+                handle.write(payload)
+            os.chmod(tmp, 0o600)
+            os.replace(tmp, self.path)
+        except OSError:
+            # A status line that cannot read a draft simply forecasts without
+            # one. Never let bookkeeping take the session down.
+            pass
+
+
+def sweep_dead_drafts() -> None:
+    """Drop drafts belonging to launchers that are no longer running."""
+    directory = draft_dir()
+    try:
+        names = os.listdir(directory)
+    except OSError:
+        return
+    for name in names:
+        if not name.endswith(".json"):
+            continue
+        try:
+            pid = int(name[: -len(".json")])
+        except ValueError:
+            continue
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            try:
+                os.unlink(os.path.join(directory, name))
+            except OSError:
+                pass
+        except OSError:
+            pass
+
+
+def set_winsize(fd: int) -> None:
+    try:
+        size = fcntl.ioctl(sys.stdin.fileno(), termios.TIOCGWINSZ, b"\0" * 8)
+        fcntl.ioctl(fd, termios.TIOCSWINSZ, size)
+    except OSError:
+        pass
+
+
+def main() -> int:
+    argv = [CHILD] + sys.argv[1:]
+    if shutil.which(CHILD) is None:
+        print(f"tf-claude: cannot find '{CHILD}' on PATH", file=sys.stderr)
+        return 127
+
+    sweep_dead_drafts()
+    path = os.path.join(draft_dir(), f"{os.getpid()}.json")
+    os.environ["TOKEN_FORECASTER_DRAFT"] = path
+    draft = Draft(path)
+
+    def cleanup() -> None:
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
+
+    atexit.register(cleanup)
+
+    # A terminal closing sends SIGHUP, which would otherwise leave a draft file
+    # behind. (The status line ignores stale ones anyway, but a file with your
+    # last draft's dimensions has no business outliving the session.)
+    def hang_up(signum, _frame):
+        cleanup()
+        signal.signal(signum, signal.SIG_DFL)
+        os.kill(os.getpid(), signum)
+
+    for sig in (signal.SIGHUP, signal.SIGTERM):
+        signal.signal(sig, hang_up)
+
+    # Nothing to watch when the input is not a terminal: `claude -p …`, a
+    # heredoc, a pipeline. Hand the process straight over rather than putting a
+    # pty in the middle of someone's script, where it would change how stdin
+    # ends and what the exit code means.
+    if not sys.stdin.isatty():
+        cleanup()
+        os.execvp(argv[0], argv)
+
+    pid, master = pty.fork()
+    if pid == 0:
+        os.execvp(argv[0], argv)
+        os._exit(127)  # unreachable unless exec fails
+
+    set_winsize(master)
+    signal.signal(signal.SIGWINCH, lambda *_: set_winsize(master))
+
+    restore = None
+    if sys.stdin.isatty():
+        restore = termios.tcgetattr(sys.stdin.fileno())
+        tty.setraw(sys.stdin.fileno())
+
+    stdin_open = True
+    watched = [master, sys.stdin.fileno()]
+    try:
+        while True:
+            try:
+                readable, _, _ = select.select(watched, [], [], 0.2)
+            except OSError as error:
+                if error.errno == errno.EINTR:
+                    continue  # a window resize interrupted the wait
+                raise
+            if master in readable:
+                try:
+                    data = os.read(master, 65536)
+                except OSError:
+                    break
+                if not data:
+                    break
+                os.write(sys.stdout.fileno(), data)
+            if stdin_open and sys.stdin.fileno() in readable:
+                data = os.read(sys.stdin.fileno(), 65536)
+                if not data:
+                    # Our input ended, but the child has not: stop watching and
+                    # keep pumping its output until it is done.
+                    stdin_open = False
+                    watched = [master]
+                    continue
+                draft.feed(data)
+                draft.publish()
+                os.write(master, data)
+    finally:
+        if restore is not None:
+            termios.tcsetattr(sys.stdin.fileno(), termios.TCSAFLUSH, restore)
+        cleanup()
+
+    _, status = os.waitpid(pid, 0)
+    return os.waitstatus_to_exitcode(status) if hasattr(os, "waitstatus_to_exitcode") else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
