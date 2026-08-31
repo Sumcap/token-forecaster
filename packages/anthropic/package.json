@@ -1,6 +1,8 @@
 {
   "name": "@token-forecaster/anthropic",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "type": "module",
   "description": "Server-side Anthropic adapter: token counting, streaming, usage normalization. Never ship to a browser.",
   "main": "./dist/index.js",

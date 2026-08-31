@@ -2,6 +2,8 @@
   "name": "token-forecaster",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "description": "Real-time LLM token usage monitoring and probabilistic output-length forecasting for the Anthropic API",
   "type": "module",
   "engines": {
