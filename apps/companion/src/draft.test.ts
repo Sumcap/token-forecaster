@@ -8,9 +8,18 @@ import { extractPromptFeatures } from "@token-forecaster/core/prompt-features";
 import { estimateTokensFromText } from "@token-forecaster/token-counter";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { findPython } from "./python.js";
 import { readDraft } from "./statusline.js";
 
 const BIN = join(dirname(fileURLToPath(import.meta.url)), "..", "bin");
+
+/**
+ * How to run the launcher's own modules.
+ *
+ * `python3` is not a name that exists on Windows, where the interpreter is
+ * reached through `py` — the same search `bin/tf-claude.cmd` does.
+ */
+const [PYTHON, ...PYTHON_ARGS] = (findPython() ?? ["python3"]) as [string, ...string[]];
 
 const dirs: string[] = [];
 afterEach(() => {
@@ -45,8 +54,9 @@ const PROMPTS = [
 describe("draft feature parity", () => {
   it("the Python launcher and the TypeScript trainer extract the same features", () => {
     const out = execFileSync(
-      "python3",
+      PYTHON,
       [
+        ...PYTHON_ARGS,
         "-c",
         [
           "import json,sys",
@@ -67,8 +77,9 @@ describe("draft feature parity", () => {
 describe("draft token parity", () => {
   it("counts the typed tokens the same way the token counter does", () => {
     const out = execFileSync(
-      "python3",
+      PYTHON,
       [
+        ...PYTHON_ARGS,
         "-c",
         [
           "import json,sys",
@@ -124,5 +135,79 @@ describe("readDraft", () => {
     const path = draftFile({});
     writeFileSync(path, "{ truncated");
     expect(readDraft()).toBeNull();
+  });
+});
+
+/**
+ * The same keystrokes, delivered differently.
+ *
+ * On macOS the launcher reads up to 64KB at a time and an escape sequence
+ * almost always arrives whole. Windows has no such read: the console is drained
+ * a byte at a time, so a sequence that used to be parsed in one pass now spans
+ * several. Half an escape sequence counted as text is an ANSI code inside the
+ * prompt features, and nothing downstream would ever say so.
+ */
+describe("draft buffer, however the bytes arrive", () => {
+  const STREAMS = [
+    "fix the parser",
+    "hello \u001b[Dworld",
+    "\u001b[200~a pasted block\u001b[201~ and more",
+    "typo\u007f\u007f fixed",
+    "abandoned\u0015restarted",
+    "submitted\rand then the next one",
+    "two\u001b\rlines",
+    "arrows \u001b[A\u001b[B\u001b[C\u001b[D done",
+    "mouse \u001b[<0;12;34M report",
+  ];
+
+  it("counts the same line whether it is read in one chunk or one byte at a time", () => {
+    const out = execFileSync(
+      PYTHON,
+      [
+        ...PYTHON_ARGS,
+        "-c",
+        [
+          "import importlib.util, json, os, sys",
+          "from importlib.machinery import SourceFileLoader",
+          // The launcher is `tf-claude`, with no extension and a hyphen: it is
+          // a program, not a module, so it needs a loader named for it.
+          `path = os.path.join(${JSON.stringify(BIN)}, "tf-claude")`,
+          'loader = SourceFileLoader("tf_claude", path)',
+          'spec = importlib.util.spec_from_loader("tf_claude", loader)',
+          "module = importlib.util.module_from_spec(spec)",
+          "loader.exec_module(module)",
+          "def run(text, chunk):",
+          "    draft = module.Draft(os.devnull)",
+          "    data = text.encode('utf8')",
+          "    for i in range(0, len(data), chunk):",
+          "        draft.feed(data[i:i + chunk])",
+          "    return ''.join(draft.buffer)",
+          "streams = json.loads(sys.argv[1])",
+          "print(json.dumps([[run(s, 4096), run(s, 1)] for s in streams]))",
+        ].join("\n"),
+        JSON.stringify(STREAMS),
+      ],
+      { encoding: "utf8" },
+    );
+    const results = JSON.parse(out) as [string, string][];
+    for (const [whole, byteAtATime] of results) {
+      expect(byteAtATime).toBe(whole);
+      // Nothing that came in as an escape sequence may end up counted as text.
+      expect(whole).not.toContain("\u001b");
+      expect(whole).not.toContain("[");
+    }
+    // And the parsing is the parsing that was asked for, not an empty buffer
+    // every time.
+    expect(results.map(([whole]) => whole)).toEqual([
+      "fix the parser",
+      "hello world",
+      "a pasted block and more",
+      "ty fixed",
+      "restarted",
+      "and then the next one",
+      "two\nlines",
+      "arrows  done",
+      "mouse  report",
+    ]);
   });
 });

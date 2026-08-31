@@ -40,7 +40,9 @@ if [[ ! -f "${STATUSLINE_ENTRY}" ]]; then
 fi
 
 LAUNCHER_SRC="${ROOT}/apps/companion/bin"
-for f in tf-claude tf_draft.py; do
+# tf_paths.py is imported by tf-claude at startup: a bundle without it has a
+# launcher that exits before it ever reaches Claude Code.
+for f in tf-claude tf_draft.py tf_paths.py; do
   if [[ ! -f "${LAUNCHER_SRC}/${f}" ]]; then
     echo "error: ${LAUNCHER_SRC}/${f} missing; the shipped app would write a dead claude() into every recipient's shell" >&2
     exit 1
@@ -99,7 +101,7 @@ echo "==> bundling the status line into Resources/companion"
 echo "==> copying the launcher into Resources/bin"
 rm -rf "${LAUNCHER_DIR}"
 mkdir -p "${LAUNCHER_DIR}"
-cp "${LAUNCHER_SRC}/tf-claude" "${LAUNCHER_SRC}/tf_draft.py" "${LAUNCHER_DIR}/"
+cp "${LAUNCHER_SRC}/tf-claude" "${LAUNCHER_SRC}/tf_draft.py" "${LAUNCHER_SRC}/tf_paths.py" "${LAUNCHER_DIR}/"
 chmod +x "${LAUNCHER_DIR}/tf-claude"
 
 # Node infers module type from the nearest package.json; be explicit.
@@ -129,6 +131,10 @@ rm -rf "${PROOF_DIR}"
 RESOLVED_LAUNCHER="${COMPANION_DIR}/../bin/tf-claude"
 [[ -x "${RESOLVED_LAUNCHER}" ]] \
   || { echo "error: ${RESOLVED_LAUNCHER} is not executable; the daemon would write a dead alias" >&2; exit 1; }
+# Imports, not just presence: the launcher pulls in two modules beside it, and a
+# missing one fails at the moment someone types `claude`, not here.
+"${PYTHON_BIN:-python3}" -c "import sys; sys.path.insert(0, '${LAUNCHER_DIR}'); import tf_draft, tf_paths" \
+  || { echo "error: the bundled launcher cannot import its own modules" >&2; exit 1; }
 [[ -f "${COMPANION_DIR}/statusline.js" ]] \
   || { echo "error: statusline.js missing from the bundle" >&2; exit 1; }
 echo "==> bundle OK"

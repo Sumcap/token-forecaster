@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { openSync, readSync, closeSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
 import { join } from "node:path";
+
+import { defaultDataDir } from "@token-forecaster/personal/data-dir";
 
 import { meterFill } from "./meter.js";
 
@@ -13,14 +14,17 @@ import { meterFill } from "./meter.js";
  * is configured, on a timer — so it must be fast and must never fail: a
  * non-zero exit or empty output blanks the status line.
  *
- * This file deliberately imports **only Node builtins**. Pulling in the store
- * or the trainer would add SQLite and a hundred milliseconds to something that
- * runs every second. All it does is read a little state and talk to the
- * already-running daemon over loopback.
+ * This file deliberately imports **only Node builtins**, plus the one leaf
+ * module that says where the daemon keeps its state — which imports only
+ * builtins itself, and is shared rather than copied because a status line
+ * looking in a different directory from the daemon is a bar that silently
+ * never finds a forecast. Pulling in the store or the trainer would add SQLite
+ * and a hundred milliseconds to something that runs every second. All it does
+ * is read a little state and talk to the already-running daemon over loopback.
  */
 
 /** Shape of the fields we use from Claude Code's stdin payload. */
-interface StatusLineInput {
+export interface StatusLineInput {
   session_id?: string;
   transcript_path?: string;
   model?: { id?: string; display_name?: string };
@@ -353,13 +357,7 @@ export function readDraft(
 /** Where the daemon publishes its port and per-install token. */
 function readRuntime(): { port: number; token: string } | null {
   try {
-    const runtimePath = join(
-      homedir(),
-      "Library",
-      "Application Support",
-      "TokenForecaster",
-      "runtime.json",
-    );
+    const runtimePath = join(defaultDataDir(), "runtime.json");
     const info = JSON.parse(readFileSync(runtimePath, "utf8")) as {
       port?: number;
       token?: string;
@@ -435,13 +433,7 @@ async function fetchForecast(
 
 /** Where the last good forecast is parked, next to the daemon's own state. */
 function lastForecastPath(): string {
-  return join(
-    homedir(),
-    "Library",
-    "Application Support",
-    "TokenForecaster",
-    "last-forecast.json",
-  );
+  return join(defaultDataDir(), "last-forecast.json");
 }
 
 function rememberForecast(value: {
@@ -517,12 +509,15 @@ async function reportTurn(
  * The name of the directory this session is working in, or null.
  *
  * Only the last path component: enough to tell two chats apart in the menu,
- * and not the full path, which is nobody's business but this machine's.
+ * and not the full path, which is nobody's business but this machine's. Both
+ * separators, because the payload is whatever the host wrote — and a Windows
+ * path split on `/` alone comes back as the whole path, which is exactly the
+ * thing this is here not to print.
  */
-function workspaceLabel(input: StatusLineInput): string | null {
+export function workspaceLabel(input: StatusLineInput): string | null {
   const dir = input.workspace?.project_dir ?? input.workspace?.current_dir ?? input.cwd ?? null;
   if (!dir) return null;
-  const name = dir.replace(/\/+$/, "").split("/").pop();
+  const name = dir.replace(/[\\/]+$/, "").split(/[\\/]/).pop();
   return name && name.length > 0 ? name : null;
 }
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import { fileURLToPath } from "node:url";
-
 import { PersonalStore, defaultDataDir } from "@token-forecaster/personal";
 
 import { startDaemon } from "./daemon.js";
-import { installAlias, rcPathFor, uninstallAlias } from "./shell-alias.js";
+import { launcherPath } from "./launcher.js";
+import { findPython } from "./python.js";
+import { installAlias, shellTargetFor, syntaxFor, uninstallAlias } from "./shell-alias.js";
 import { CompanionService } from "./service.js";
 
 /**
@@ -57,11 +57,6 @@ function parseArgs(argv: string[]): { command: string; flags: Map<string, string
   return { command, flags };
 }
 
-/** Absolute path of the launcher that ships beside this CLI. */
-function launcherPath(): string {
-  return fileURLToPath(new URL("../bin/tf-claude", import.meta.url));
-}
-
 const out = (text: string): void => {
   process.stdout.write(`${text}\n`);
 };
@@ -88,8 +83,11 @@ async function main(): Promise<number> {
   }
 
   if (command === "install-shell" || command === "uninstall-shell") {
-    const rcPath = flags.get("rc") ?? rcPathFor(process.env["SHELL"] ?? "");
-    if (!rcPath) {
+    // An explicit --rc wins, and its own extension says which language it is
+    // written in: a .ps1 is PowerShell, anything else is an rc file.
+    const explicit = flags.get("rc");
+    const target = explicit ? { rcPath: explicit, syntax: syntaxFor(explicit) } : shellTargetFor();
+    if (!target) {
       out(
         `unsupported shell: ${process.env["SHELL"] ?? "(unset)"}. Pass --rc <path>, or add this line yourself:`,
       );
@@ -97,10 +95,24 @@ async function main(): Promise<number> {
       return 2;
     }
     const result =
-      command === "install-shell" ? installAlias(rcPath, launcherPath()) : uninstallAlias(rcPath);
+      command === "install-shell"
+        ? installAlias(target.rcPath, launcherPath(), target.syntax)
+        : uninstallAlias(target.rcPath);
     out(`${result.message}: ${result.rcPath}`);
     if (result.backupPath) out(`original kept at ${result.backupPath}`);
-    if (result.changed) out(`open a new terminal, or run: source ${result.rcPath}`);
+    if (result.changed) {
+      out(
+        target.syntax === "powershell"
+          ? `open a new PowerShell, or run: . $PROFILE`
+          : `open a new terminal, or run: source ${result.rcPath}`,
+      );
+    }
+    // The block is in place and `claude` still works either way, so this is a
+    // warning rather than a failure — but the draft forecast it was written
+    // for cannot run without an interpreter, and nothing else would say so.
+    if (command === "install-shell" && findPython() === null) {
+      out("warning: no Python 3 on PATH, so the draft forecast will stay off until there is one");
+    }
     return 0;
   }
 

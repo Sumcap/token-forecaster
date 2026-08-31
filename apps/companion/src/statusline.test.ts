@@ -11,6 +11,7 @@ import {
   money,
   parseStyle,
   renderLine,
+  workspaceLabel,
 } from "./statusline.js";
 
 const dirs: string[] = [];
@@ -365,5 +366,28 @@ describe("parseStyle", () => {
     expect(parseStyle("detailed")).toBe("detailed");
     expect(parseStyle("SIMPLE")).toBeNull();
     expect(parseStyle(undefined)).toBeNull();
+  });
+});
+
+describe("workspaceLabel", () => {
+  it("names the directory, not the path, on either kind of path", () => {
+    expect(workspaceLabel({ cwd: "/Users/ada/Projects/token-forecaster" })).toBe("token-forecaster");
+    expect(workspaceLabel({ cwd: "C:\\Users\\ada\\Projects\\token-forecaster" })).toBe(
+      "token-forecaster",
+    );
+    // Trailing separators, and a drive root, which has no last component to
+    // name -- printing "C:" would be worse than printing nothing.
+    expect(workspaceLabel({ cwd: "/Users/ada/Projects///" })).toBe("Projects");
+    expect(workspaceLabel({ cwd: "C:\\Users\\ada\\Projects\\\\" })).toBe("Projects");
+    expect(workspaceLabel({ cwd: "" })).toBeNull();
+  });
+
+  it("prefers the project directory over the working one", () => {
+    expect(
+      workspaceLabel({
+        cwd: "C:\\Users\\ada\\Projects\\thing\\src",
+        workspace: { project_dir: "C:\\Users\\ada\\Projects\\thing" },
+      }),
+    ).toBe("thing");
   });
 });

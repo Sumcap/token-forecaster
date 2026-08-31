@@ -1,12 +1,12 @@
 import { watch, type FSWatcher } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { existsSync, rmSync } from "node:fs";
 
 import { PersonalStore, defaultDataDir } from "@token-forecaster/personal";
 
 import { CompanionService } from "./service.js";
+import { launcherPath } from "./launcher.js";
 import { runtimeFilePath, startServer, type RunningServer } from "./server.js";
-import { ensureAliasOnFirstRun, rcPathFor } from "./shell-alias.js";
+import { ensureAliasOnFirstRun, shellTargetFor } from "./shell-alias.js";
 
 /**
  * The long-running background process.
@@ -59,8 +59,8 @@ export async function startDaemon(options: DaemonOptions = {}): Promise<RunningD
   // forecasts what is being typed.
   const aliasResult = ensureAliasOnFirstRun({
     alreadyDecided: service.shellAliasOffered,
-    rcPath: rcPathFor(process.env["SHELL"] ?? ""),
-    target: fileURLToPath(new URL("../bin/tf-claude", import.meta.url)),
+    rcPath: shellTargetFor()?.rcPath ?? null,
+    target: launcherPath(),
     markDecided: () => service.markShellAliasOffered(),
   });
   if (aliasResult?.changed) {

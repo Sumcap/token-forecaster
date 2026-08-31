@@ -23,43 +23,34 @@ What it never does: write down, log, transmit or otherwise keep the text. The
 buffer lives in memory, is reduced to numbers, and is dropped the moment you
 press enter. It sees only what you type into this one Claude Code session — it
 is a wrapper around one process, not a system-wide input tap.
+
+Windows has no pty to allocate, so there the same job is done through a pseudo
+console (ConPTY), which Python reaches through `pywinpty`. Everything above the
+transport — the buffer, the counts, the file — is the same code. Without
+pywinpty installed the launcher steps aside and starts Claude Code directly:
+the session is exactly as it would have been, minus the draft forecast, which
+is the one failure this program is allowed to have.
 """
 
 import atexit
-import errno
-import fcntl
 import json
 import os
-import pty
-import select
 import shutil
 import signal
-import struct
 import sys
 import tempfile
-import termios
 import time
-import tty
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from tf_draft import estimate_tokens, features  # noqa: E402
+from tf_paths import ensure_draft_dir, process_alive  # noqa: E402
 
 CHILD = os.environ.get("TOKEN_FORECASTER_CLAUDE_BIN", "claude")
+WINDOWS = os.name == "nt"
 
-
-def draft_dir() -> str:
-    """Same application-support directory the daemon uses, plus `drafts/`."""
-    base = os.path.join(
-        os.path.expanduser("~"), "Library", "Application Support", "TokenForecaster"
-    )
-    if not sys.platform.startswith("darwin"):
-        base = os.path.join(
-            os.environ.get("XDG_STATE_HOME", os.path.join(os.path.expanduser("~"), ".local", "state")),
-            "token-forecaster",
-        )
-    path = os.path.join(base, "drafts")
-    os.makedirs(path, mode=0o700, exist_ok=True)
-    return path
+#: Bracketed paste, which the terminal wraps around anything not typed by hand.
+PASTE_START = "\x1b[200~"
+PASTE_END = "\x1b[201~"
 
 
 class Draft:
@@ -72,27 +63,45 @@ class Draft:
     the forecast, and enter resets everything anyway.
     """
 
+    #: Longest partial escape sequence worth holding on to. Nothing real is
+    #: anywhere near this; a stream that is not escape sequences at all must
+    #: not be able to grow the buffer without bound.
+    MAX_PENDING = 128
+
     def __init__(self, path: str):
         self.path = path
         self.buffer: list[str] = []
-        self.pending_escape = False
+        self.pending = ""
         self.in_paste = False
         self.written = ""
 
     # -- the keystroke state machine ------------------------------------
-    def feed(self, data: bytes) -> None:
-        text = data.decode("utf8", "replace")
+    def feed(self, data) -> None:
+        text = data if isinstance(data, str) else data.decode("utf8", "replace")
+        # A read can end in the middle of an escape sequence — one byte at a
+        # time is the normal case on Windows — and half a sequence parsed as
+        # text would put an ANSI code into the count.
+        text = self.pending + text
+        self.pending = ""
         i = 0
         while i < len(text):
             ch = text[i]
             rest = text[i:]
+            # Half a paste marker, waiting on the rest of itself. Inside a
+            # paste the escape branch below is skipped, so without this the
+            # tail of `\x1b[201~` would be counted as five typed characters.
+            if ch == "\x1b" and len(rest) < 6 and (
+                PASTE_START.startswith(rest) or PASTE_END.startswith(rest)
+            ):
+                self.pending = rest
+                return
             # Bracketed paste: Claude Code turns large pastes into attachments,
             # but the characters are still part of the prompt's size.
-            if rest.startswith("\x1b[200~"):
+            if rest.startswith(PASTE_START):
                 self.in_paste = True
                 i += 6
                 continue
-            if rest.startswith("\x1b[201~"):
+            if rest.startswith(PASTE_END):
                 self.in_paste = False
                 i += 6
                 continue
@@ -103,7 +112,13 @@ class Draft:
                     self.buffer.append("\n")
                     i += 2
                     continue
-                i += self._skip_escape(rest)
+                length = self._skip_escape(rest)
+                if length is None:
+                    # Not all here yet. Wait for the rest of it, unless waiting
+                    # has stopped being plausible.
+                    self.pending = rest if len(rest) <= self.MAX_PENDING else ""
+                    return
+                i += length
                 continue
             if ch in ("\r", "\n") and not self.in_paste:
                 # Submitted (or cancelled into nothing): the draft is over.
@@ -131,15 +146,22 @@ class Draft:
             i += 1
 
     @staticmethod
-    def _skip_escape(rest: str) -> int:
-        """Length of the escape sequence at the head of `rest`."""
+    def _skip_escape(rest: str):
+        """
+        Length of the escape sequence at the head of `rest`.
+
+        None when the sequence has not arrived in full, which is the caller's
+        cue to hold what it has and wait for more.
+        """
         if len(rest) < 2:
-            return 1
+            return None
         if rest[1] == "[":
             j = 2
             while j < len(rest) and not ("@" <= rest[j] <= "~"):
                 j += 1
-            return min(j + 1, len(rest))
+            if j >= len(rest):
+                return None
+            return j + 1
         return 2
 
     # -- publishing ------------------------------------------------------
@@ -169,7 +191,7 @@ class Draft:
 
 def sweep_dead_drafts() -> None:
     """Drop drafts belonging to launchers that are no longer running."""
-    directory = draft_dir()
+    directory = ensure_draft_dir()
     try:
         names = os.listdir(directory)
     except OSError:
@@ -181,62 +203,47 @@ def sweep_dead_drafts() -> None:
             pid = int(name[: -len(".json")])
         except ValueError:
             continue
+        if process_alive(pid):
+            continue
         try:
-            os.kill(pid, 0)
-        except ProcessLookupError:
-            try:
-                os.unlink(os.path.join(directory, name))
-            except OSError:
-                pass
+            os.unlink(os.path.join(directory, name))
         except OSError:
             pass
 
 
-def set_winsize(fd: int) -> None:
-    try:
-        size = fcntl.ioctl(sys.stdin.fileno(), termios.TIOCGWINSZ, b"\0" * 8)
-        fcntl.ioctl(fd, termios.TIOCSWINSZ, size)
-    except OSError:
-        pass
+def passthrough(argv) -> int:
+    """
+    Hand the session over unchanged.
+
+    Used when there is nothing to watch (`claude -p …`, a heredoc, a pipeline)
+    and when the pseudo console is unavailable. On POSIX this replaces the
+    process, so the exit code and the signals are Claude Code's own; Windows
+    has no exec that a shell will wait for, so the child is run in the console
+    it already has and its exit code is passed back up.
+    """
+    if WINDOWS:
+        import subprocess
+
+        return subprocess.run(argv).returncode
+    os.execvp(argv[0], argv)
+    return 127  # unreachable unless exec fails
 
 
-def main() -> int:
-    argv = [CHILD] + sys.argv[1:]
-    if shutil.which(CHILD) is None:
-        print(f"tf-claude: cannot find '{CHILD}' on PATH", file=sys.stderr)
-        return 127
+# ---------------------------------------------------------------- POSIX --
+def run_posix(argv, draft: Draft) -> int:
+    import errno
+    import fcntl
+    import pty
+    import select
+    import termios
+    import tty
 
-    sweep_dead_drafts()
-    path = os.path.join(draft_dir(), f"{os.getpid()}.json")
-    os.environ["TOKEN_FORECASTER_DRAFT"] = path
-    draft = Draft(path)
-
-    def cleanup() -> None:
+    def set_winsize(fd: int) -> None:
         try:
-            os.unlink(path)
+            size = fcntl.ioctl(sys.stdin.fileno(), termios.TIOCGWINSZ, b"\0" * 8)
+            fcntl.ioctl(fd, termios.TIOCSWINSZ, size)
         except OSError:
             pass
-
-    atexit.register(cleanup)
-
-    # A terminal closing sends SIGHUP, which would otherwise leave a draft file
-    # behind. (The status line ignores stale ones anyway, but a file with your
-    # last draft's dimensions has no business outliving the session.)
-    def hang_up(signum, _frame):
-        cleanup()
-        signal.signal(signum, signal.SIG_DFL)
-        os.kill(os.getpid(), signum)
-
-    for sig in (signal.SIGHUP, signal.SIGTERM):
-        signal.signal(sig, hang_up)
-
-    # Nothing to watch when the input is not a terminal: `claude -p …`, a
-    # heredoc, a pipeline. Hand the process straight over rather than putting a
-    # pty in the middle of someone's script, where it would change how stdin
-    # ends and what the exit code means.
-    if not sys.stdin.isatty():
-        cleanup()
-        os.execvp(argv[0], argv)
 
     pid, master = pty.fork()
     if pid == 0:
@@ -283,10 +290,226 @@ def main() -> int:
     finally:
         if restore is not None:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSAFLUSH, restore)
-        cleanup()
 
     _, status = os.waitpid(pid, 0)
     return os.waitstatus_to_exitcode(status) if hasattr(os, "waitstatus_to_exitcode") else 0
+
+
+# -------------------------------------------------------------- Windows --
+STD_INPUT_HANDLE = -10
+STD_OUTPUT_HANDLE = -11
+ENABLE_PROCESSED_INPUT = 0x0001
+ENABLE_LINE_INPUT = 0x0002
+ENABLE_ECHO_INPUT = 0x0004
+ENABLE_VIRTUAL_TERMINAL_INPUT = 0x0200
+ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
+
+
+class ConsoleRawMode:
+    """
+    The console in the state a full-screen program expects, and back again.
+
+    Windows consoles arrive cooked: they echo, they buffer whole lines, and
+    they turn ctrl-c into an event of their own. Virtual terminal input makes
+    the arrow keys arrive as the same escape sequences every other platform
+    sends, which is what both Claude Code and the buffer above are written for.
+    """
+
+    def __init__(self):
+        import ctypes
+        from ctypes import wintypes
+
+        self.ctypes = ctypes
+        self.wintypes = wintypes
+        self.kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        # Every signature is declared: ctypes assumes a 32-bit return value,
+        # and a console handle is 64 bits. Left to infer, GetStdHandle would
+        # hand back a truncated handle that GetConsoleMode simply rejects, and
+        # the console would stay in line mode with no error to explain it.
+        self.kernel32.GetStdHandle.restype = wintypes.HANDLE
+        self.kernel32.GetStdHandle.argtypes = (wintypes.DWORD,)
+        self.kernel32.GetConsoleMode.restype = wintypes.BOOL
+        self.kernel32.GetConsoleMode.argtypes = (wintypes.HANDLE, wintypes.LPDWORD)
+        self.kernel32.SetConsoleMode.restype = wintypes.BOOL
+        self.kernel32.SetConsoleMode.argtypes = (wintypes.HANDLE, wintypes.DWORD)
+        self.saved = {}
+
+    def _handle(self, which):
+        # GetStdHandle takes an unsigned DWORD; the constants are written the
+        # way the SDK writes them, as small negative numbers.
+        return self.kernel32.GetStdHandle(which & 0xFFFFFFFF)
+
+    def _mode(self, handle):
+        mode = self.wintypes.DWORD()
+        if not self.kernel32.GetConsoleMode(handle, self.ctypes.byref(mode)):
+            return None
+        return mode.value
+
+    def __enter__(self):
+        for which, clear, add in (
+            (
+                STD_INPUT_HANDLE,
+                ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT,
+                ENABLE_VIRTUAL_TERMINAL_INPUT,
+            ),
+            (STD_OUTPUT_HANDLE, 0, ENABLE_VIRTUAL_TERMINAL_PROCESSING),
+        ):
+            handle = self._handle(which)
+            current = self._mode(handle)
+            if current is None:
+                continue  # redirected, not a console: nothing to put back
+            self.saved[which] = (handle, current)
+            self.kernel32.SetConsoleMode(handle, (current & ~clear) | add)
+        return self
+
+    def __exit__(self, *_):
+        for handle, mode in self.saved.values():
+            self.kernel32.SetConsoleMode(handle, mode)
+        return False
+
+
+def run_windows(argv, draft: Draft) -> int:
+    try:
+        from winpty import PtyProcess  # type: ignore[import-not-found]
+    except Exception:
+        sys.stderr.write(
+            "tf-claude: pywinpty is not installed, so this session has no draft "
+            "forecast. Starting Claude Code unchanged.\n"
+            "           Fix it with:  pip install pywinpty\n"
+        )
+        return passthrough(argv)
+
+    size = shutil.get_terminal_size((80, 24))
+    with ConsoleRawMode():
+        try:
+            process = PtyProcess.spawn(argv, dimensions=(size.lines, size.columns))
+        except Exception as error:
+            # Before anything has started is the one point where falling back
+            # is still free. The console is restored on the way out of the
+            # `with`, so Claude Code gets it in the state it expects.
+            spawn_error = error
+            process = None
+        if process is not None:
+            return _pump_windows(process, draft, size)
+
+    sys.stderr.write(
+        f"tf-claude: could not open a pseudo console ({spawn_error}), so this session "
+        "has no draft forecast. Starting Claude Code unchanged.\n"
+    )
+    return passthrough(argv)
+
+
+def _pump_windows(process, draft: Draft, size) -> int:
+    """Keystrokes in, output out, until the child is done."""
+    import threading
+
+    def pump_input():
+        stream = sys.stdin.buffer
+        while True:
+            try:
+                data = stream.read(1)
+            except (OSError, ValueError):
+                return
+            if not data:
+                return
+            draft.feed(data)
+            draft.publish()
+            try:
+                process.write(data.decode("utf8", "replace"))
+            except Exception:
+                return
+
+    def pump_resize():
+        last = size
+        while True:
+            time.sleep(0.5)
+            current = shutil.get_terminal_size((80, 24))
+            if current == last:
+                continue
+            last = current
+            try:
+                process.setwinsize(current.lines, current.columns)
+            except Exception:
+                return
+
+    # Both are daemons: the child's output is what decides when this program
+    # is over, and a thread blocked on a keystroke must not hold that up.
+    for pump in (pump_input, pump_resize):
+        threading.Thread(target=pump, daemon=True).start()
+
+    while True:
+        try:
+            chunk = process.read(65536)
+        except EOFError:
+            break
+        except Exception:
+            break
+        if chunk:
+            sys.stdout.write(chunk)
+            sys.stdout.flush()
+            continue
+        if not process.isalive():
+            break
+        # The read does not block, so without this the wait for the next byte
+        # of output would be a spin at one whole core.
+        time.sleep(0.005)
+
+    try:
+        process.wait()
+    except Exception:
+        pass
+    return process.exitstatus or 0
+
+
+def main() -> int:
+    resolved = shutil.which(CHILD)
+    if resolved is None:
+        print(f"tf-claude: cannot find '{CHILD}' on PATH", file=sys.stderr)
+        return 127
+    # POSIX hands the name to execvp and lets it search; Windows has to be told
+    # the file, since CreateProcess does no PATH lookup of its own.
+    argv = [resolved if WINDOWS else CHILD] + sys.argv[1:]
+
+    sweep_dead_drafts()
+    path = os.path.join(ensure_draft_dir(), f"{os.getpid()}.json")
+    os.environ["TOKEN_FORECASTER_DRAFT"] = path
+    draft = Draft(path)
+
+    def cleanup() -> None:
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
+
+    atexit.register(cleanup)
+
+    # A terminal closing sends SIGHUP, which would otherwise leave a draft file
+    # behind. (The status line ignores stale ones anyway, but a file with your
+    # last draft's dimensions has no business outliving the session.) Windows
+    # has neither SIGHUP nor a handler that survives the console going away, so
+    # there the sweep at the next start is what cleans up.
+    def hang_up(signum, _frame):
+        cleanup()
+        signal.signal(signum, signal.SIG_DFL)
+        os.kill(os.getpid(), signum)
+
+    for name in ("SIGHUP", "SIGTERM"):
+        sig = getattr(signal, name, None)
+        if sig is not None and not WINDOWS:
+            signal.signal(sig, hang_up)
+
+    # Nothing to watch when the input is not a terminal: `claude -p …`, a
+    # heredoc, a pipeline. Hand the process straight over rather than putting a
+    # pty in the middle of someone's script, where it would change how stdin
+    # ends and what the exit code means.
+    if not sys.stdin.isatty():
+        cleanup()
+        return passthrough(argv)
+
+    try:
+        return run_windows(argv, draft) if WINDOWS else run_posix(argv, draft)
+    finally:
+        cleanup()
 
 
 if __name__ == "__main__":

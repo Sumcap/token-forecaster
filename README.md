@@ -279,6 +279,36 @@ terminal status line and the `claude` launcher, is in
 [apps/menubar/README.md](apps/menubar/README.md); the daemon and its API are
 documented in [apps/companion/README.md](apps/companion/README.md).
 
+## Install on Windows
+
+There is no menu bar app — that one is Swift and stays on macOS. Everything that
+produces a forecast runs on Windows: the daemon, the terminal status line, and
+the draft-aware `claude` launcher, which opens a pseudo console (ConPTY) where
+the Mac opens a pty. The dashboard the daemon serves on loopback is the UI in
+the menu bar's place.
+
+**Requirements:** Windows 10 1809+ (ConPTY), Node.js 22+, Python 3, and
+`pip install pywinpty`. Without pywinpty the draft forecast is the only thing
+that stops working, and it says so once rather than failing quietly.
+
+```powershell
+git clone https://github.com/polpedu-crypto/token-forecaster.git
+cd token-forecaster
+pnpm install
+pnpm build
+pnpm --filter @token-forecaster/companion build
+
+node --no-warnings apps\companion\dist\cli.js index
+node --no-warnings apps\companion\dist\cli.js install-shell   # then: . $PROFILE
+node --no-warnings apps\companion\dist\cli.js start
+```
+
+`install-shell` writes a `claude` function into your PowerShell profile, backing
+the profile up first and restoring it byte for byte on `uninstall-shell`. The
+status line, the Startup-folder recipe for running the daemon after a reboot,
+and where state is kept (`%LOCALAPPDATA%\TokenForecaster`) are all in
+[apps/companion/README.md](apps/companion/README.md).
+
 ## Getting started
 
 ```sh

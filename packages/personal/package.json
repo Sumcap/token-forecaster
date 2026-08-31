@@ -12,6 +12,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./data-dir": {
+      "types": "./dist/data-dir.d.ts",
+      "default": "./dist/data-dir.js"
     }
   },
   "files": ["dist"],

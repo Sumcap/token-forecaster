@@ -8,9 +8,13 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   BACKUP_SUFFIX,
   aliasInstalled,
+  block,
   ensureAliasOnFirstRun,
   installAlias,
+  powerShellProfilePath,
   rcPathFor,
+  shellTargetFor,
+  syntaxFor,
   uninstallAlias,
   withBlock,
   withoutBlock,
@@ -50,6 +54,199 @@ describe("rcPathFor", () => {
     expect(rcPathFor("/bin/bash", "/home/x")).toBe("/home/x/.bashrc");
     expect(rcPathFor("/usr/local/bin/fish", "/home/x")).toBeNull();
     expect(rcPathFor("", "/home/x")).toBeNull();
+  });
+});
+
+/** A Windows machine, described entirely by what the resolver is allowed to see. */
+const WINDOWS = {
+  platform: "win32" as const,
+  home: "C:\\Users\\ada",
+  env: { USERPROFILE: "C:\\Users\\ada" } as Record<string, string | undefined>,
+};
+const DOCS = "C:\\Users\\ada\\Documents";
+const PWSH7 = `${DOCS}\\PowerShell\\Microsoft.PowerShell_profile.ps1`;
+const PWSH5 = `${DOCS}\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1`;
+
+/** Pretend exactly these paths exist. */
+const only = (...paths: string[]) => (path: string) => paths.includes(path);
+
+describe("shellTargetFor on Windows", () => {
+  it("writes a PowerShell profile, whatever SHELL happens to say", () => {
+    // Git Bash sets SHELL on Windows, but the launcher it would point at is a
+    // .cmd and the shell Claude Code is started from is almost never that one.
+    const target = shellTargetFor({
+      ...WINDOWS,
+      env: { ...WINDOWS.env, SHELL: "/usr/bin/bash" },
+      exists: only(),
+    });
+    expect(target).toEqual({ rcPath: PWSH5, syntax: "powershell" });
+  });
+
+  it("prefers the PowerShell it is running under", () => {
+    // pwsh sets this on every session it starts, including the one that
+    // started the daemon. A profile written to the other PowerShell is valid
+    // and simply never loaded, which is the failure this avoids.
+    expect(
+      powerShellProfilePath({
+        ...WINDOWS,
+        env: { ...WINDOWS.env, POWERSHELL_DISTRIBUTION_CHANNEL: "MSI:Windows 11 Pro" },
+        exists: only(),
+      }),
+    ).toBe(PWSH7);
+  });
+
+  it("otherwise writes to the profile that already exists", () => {
+    expect(powerShellProfilePath({ ...WINDOWS, exists: only(PWSH5) })).toBe(PWSH5);
+    expect(powerShellProfilePath({ ...WINDOWS, exists: only(PWSH7) })).toBe(PWSH7);
+  });
+
+  it("takes an installed PowerShell 7 over the 5.1 that is always there", () => {
+    expect(
+      powerShellProfilePath({ ...WINDOWS, exists: only(`${DOCS}\\PowerShell`) }),
+    ).toBe(PWSH7);
+  });
+
+  it("follows Documents into OneDrive when it has been redirected there", () => {
+    // Known Folder Move is on by default on a lot of machines. A profile
+    // written to the un-redirected path is a file PowerShell never reads.
+    const oneDrive = "C:\\Users\\ada\\OneDrive";
+    expect(
+      powerShellProfilePath({
+        ...WINDOWS,
+        env: { ...WINDOWS.env, OneDrive: oneDrive },
+        exists: only(`${oneDrive}\\Documents`),
+      }),
+    ).toBe(`${oneDrive}\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1`);
+  });
+
+  it("still refuses to guess at an unknown POSIX shell", () => {
+    expect(shellTargetFor({ platform: "linux", home: "/home/x", env: { SHELL: "/bin/fish" } })).toBeNull();
+    expect(shellTargetFor({ platform: "darwin", home: "/home/x", env: { SHELL: "/bin/zsh" } })).toEqual({
+      rcPath: "/home/x/.zshrc",
+      syntax: "posix",
+    });
+  });
+});
+
+describe("syntaxFor", () => {
+  it("reads the language off the file name, so --rc needs no second flag", () => {
+    expect(syntaxFor("C:\\Users\\ada\\Microsoft.PowerShell_profile.ps1")).toBe("powershell");
+    expect(syntaxFor("/home/x/.zshrc")).toBe("posix");
+    expect(syntaxFor("/home/x/.bash_profile")).toBe("posix");
+  });
+});
+
+describe("the PowerShell block", () => {
+  const PS_TARGET = "C:\\Program Files\\TokenForecaster\\bin\\tf-claude.cmd";
+
+  it("round-trips a profile back to exactly what it was", () => {
+    const before = "Set-Alias ll Get-ChildItem\n";
+    expect(withoutBlock(withBlock(before, PS_TARGET, "powershell"))).toBe(before);
+  });
+
+  it("leaves no blank line behind in a CRLF profile", () => {
+    // PowerShell profiles are usually CRLF, so the blank line this adds ahead
+    // of its block is four characters, not two.
+    const before = "Set-Alias ll Get-ChildItem\r\n";
+    expect(withoutBlock(withBlock(before, PS_TARGET, "powershell"))).toBe(before);
+  });
+
+  it("quotes a path PowerShell would otherwise interpret", () => {
+    // Backslashes are not escapes in PowerShell and a single-quoted string
+    // expands nothing, so `$` in a user name is inert -- but a quote in the
+    // path would end the string, and that has one escape: doubling it.
+    const awkward = "C:\\Users\\o'brien\\$env\\tf-claude.cmd";
+    const rendered = block(awkward, "powershell");
+    expect(rendered).toContain("'C:\\Users\\o''brien\\$env\\tf-claude.cmd'");
+  });
+
+  it("cannot recurse into itself when the launcher is missing", () => {
+    // `Get-Command -CommandType Application` never resolves to a function, so
+    // the fallback reaches the real claude rather than this block again.
+    const rendered = block(PS_TARGET, "powershell");
+    expect(rendered).toContain("-CommandType Application");
+    expect(rendered).toContain("Test-Path -LiteralPath $tf -PathType Leaf");
+  });
+});
+
+/** `pwsh` (or Windows PowerShell), when this machine has one. */
+function findPowerShell(): string | null {
+  for (const candidate of ["pwsh", "powershell"]) {
+    try {
+      execFileSync(candidate, ["-NoProfile", "-Command", "exit 0"], { stdio: "ignore" });
+      return candidate;
+    } catch {
+      // Not installed, or not this one.
+    }
+  }
+  return null;
+}
+
+const POWERSHELL = findPowerShell();
+
+/**
+ * The block, actually executed.
+ *
+ * Skipped on a machine with no PowerShell, which is most Macs — it exists to
+ * run on Windows, where every one of these branches is the only thing standing
+ * between a deleted app and a `claude` that no longer starts.
+ */
+describe.skipIf(POWERSHELL === null)("the PowerShell block, run by PowerShell", () => {
+  const shell = POWERSHELL ?? "pwsh";
+  const windows = process.platform === "win32";
+
+  /** An executable that echoes its name and arguments, in this OS's dialect. */
+  function fakeProgram(dir: string, name: string): string {
+    const path = join(dir, windows ? `${name}.cmd` : name);
+    if (windows) writeFileSync(path, `@echo off\r\necho ${name} %*\r\n`);
+    else writeFileSync(path, `#!/bin/sh\necho ${name} "$@"\n`, { mode: 0o755 });
+    return path;
+  }
+
+  function runWithProfile(profile: string, command: string, pathDir: string): string {
+    return execFileSync(shell, ["-NoProfile", "-Command", `. '${profile}'; ${command}`], {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        PATH: `${pathDir}${windows ? ";" : ":"}${process.env["PATH"] ?? ""}`,
+      },
+    });
+  }
+
+  it("runs the launcher when it is there", () => {
+    const dir = mkdtempSync(join(tmpdir(), "tf-ps-run-"));
+    dirs.push(dir);
+    const launcher = fakeProgram(dir, "tf-claude");
+    const profile = join(dir, "profile.ps1");
+    installAlias(profile, launcher);
+    expect(runWithProfile(profile, "claude --resume", dir).trim()).toBe("tf-claude --resume");
+  });
+
+  it("falls back to the real claude when the launcher is gone", () => {
+    const dir = mkdtempSync(join(tmpdir(), "tf-ps-gone-"));
+    dirs.push(dir);
+    fakeProgram(dir, "claude");
+    const profile = join(dir, "profile.ps1");
+    installAlias(profile, join(dir, "missing", "tf-claude.cmd"));
+    expect(runWithProfile(profile, "claude --version", dir).trim()).toBe("claude --version");
+  });
+});
+
+describe("installing into a PowerShell profile", () => {
+  it("infers the syntax from the file name and creates the missing directory", () => {
+    // A machine that has never run PowerShell 7 has the profile directory
+    // missing, not just the profile.
+    const dir = mkdtempSync(join(tmpdir(), "tf-ps-"));
+    dirs.push(dir);
+    const profile = join(dir, "PowerShell", "Microsoft.PowerShell_profile.ps1");
+    const installed = installAlias(profile, "C:\\tf\\tf-claude.cmd");
+    expect(installed.changed).toBe(true);
+    const written = readFileSync(profile, "utf8");
+    expect(written).toContain("function claude {");
+    expect(written).not.toContain("claude() {");
+    expect(aliasInstalled(profile)).toBe(true);
+    expect(uninstallAlias(profile).changed).toBe(true);
+    expect(readFileSync(profile, "utf8")).toBe("");
   });
 });
 

@@ -34,18 +34,71 @@ cd apps/menubar && make release
 open .build/TokenForecaster.app
 ```
 
+## Running on Windows
+
+Everything above the menu bar runs on Windows: the daemon, the status line and
+the draft-aware launcher. The menu bar app itself is Swift and macOS-only, so
+the dashboard at `http://127.0.0.1:<port>/dashboard?token=<token>` (port and
+token are in `runtime.json`) is the UI, and the settings it exposes are set
+through the API rather than a menu.
+
+**Needs:** Node 22+, Python 3, and `pip install pywinpty` for the draft
+forecast. Without pywinpty everything else still works; without Python the
+launcher steps aside and `claude` runs unchanged.
+
+```powershell
+git clone https://github.com/polpedu-crypto/token-forecaster.git
+cd token-forecaster
+pnpm install
+pnpm build
+pnpm --filter @token-forecaster/companion build   # the root build covers packages/ only
+
+node --no-warnings apps\companion\dist\cli.js index         # import history, train, report
+node --no-warnings apps\companion\dist\cli.js install-shell # wrap `claude`, then: . $PROFILE
+node --no-warnings apps\companion\dist\cli.js start         # the daemon
+```
+
+`install-shell` says so if it cannot find a Python to run the launcher with,
+rather than leaving you to notice that the forecast never mentions a draft.
+
+There is no service wrapper — `start` is a foreground process. To have it
+running after a reboot, put a launcher in the Startup folder:
+
+```powershell
+$startup = [Environment]::GetFolderPath('Startup')
+$repo    = (Get-Location).Path
+@"
+@echo off
+start "" /min node --no-warnings "$repo\apps\companion\dist\cli.js" start
+"@ | Set-Content -Encoding ASCII "$startup\token-forecaster.cmd"
+```
+
+Delete that file to stop it starting. Then add the status line to
+`~/.claude/settings.json` as described below, with the backslashes doubled.
+
 ## Data location
 
-Everything derived lives in
-`~/Library/Application Support/TokenForecaster/`:
+Everything derived lives in one directory, named by the platform's own
+convention:
+
+| Platform | Directory |
+| --- | --- |
+| macOS | `~/Library/Application Support/TokenForecaster/` |
+| Windows | `%LOCALAPPDATA%\TokenForecaster\` |
+| Linux, BSD | `$XDG_STATE_HOME/token-forecaster/`, or `~/.local/state/token-forecaster/` |
 
 | File | What it is |
 | --- | --- |
 | `forecaster.db` | SQLite store: observations, file cursors, profiles, evaluations |
 | `runtime.json` | `{ port, token, pid, startedAt }`, mode `0600` — how clients find the daemon |
+| `drafts/<pid>.json` | Counts for the line being typed, one per live launcher |
 
 `--data-dir <path>` overrides it, which is how you try this without touching
-your real store.
+your real store. The status line is a separate process and takes no flags, so
+it follows `TOKEN_FORECASTER_DATA_DIR` instead — set that and every part agrees
+on where to look. Four programs compute this path (daemon, CLI, status line,
+launcher) from two implementations, one of them Python;
+`src/launcher.test.ts` runs both and fails if they ever disagree.
 
 ## Commands
 
@@ -150,7 +203,9 @@ node apps/companion/dist/cli.js uninstall-shell   # puts the file back
 ```
 
 `install-shell` finds your startup file from `$SHELL` (zsh and bash; pass
-`--rc <path>` for anything else), copies it to `<rc>.token-forecaster-backup`
+`--rc <path>` for anything else) or, on Windows, your PowerShell profile — a
+`--rc` ending in `.ps1` is written as PowerShell, anything else as shell, so
+there is no second flag to remember. It copies it to `<rc>.token-forecaster-backup`
 before its first edit, and writes an `alias claude=…` between two markers.
 Running it twice updates the block rather than stacking another.
 `uninstall-shell` removes exactly that block, leaves every later edit of yours
@@ -170,6 +225,50 @@ first. An alias to a deleted file would break `claude` outright; this falls back
 to the real one, so the worst case of a missing app is a status line that stops
 forecasting drafts. (`command` bypasses the function, so the fallback cannot
 recurse.)
+
+### On Windows
+
+Same job, two differences. The block goes into a PowerShell profile rather than
+an rc file, and it names `bin\tf-claude.cmd` — Windows does not read `#!` lines,
+so the `.cmd` finds a Python 3 (`py -3`, then `python`, or
+`TOKEN_FORECASTER_PYTHON`) and hands it the launcher:
+
+```powershell
+function claude {
+  $tf = 'C:\Users\you\token-forecaster\apps\companion\bin\tf-claude.cmd'
+  if (Test-Path -LiteralPath $tf -PathType Leaf) { & $tf @args }
+  else { … Get-Command claude -CommandType Application … }
+}
+```
+
+`Get-Command -CommandType Application` cannot resolve to a function, so the
+fallback reaches the real `claude` and not this block again — the same
+no-recursion property `command` gives the POSIX version.
+
+Which profile: `install-shell` writes to the PowerShell it is running under
+(PowerShell 7 sets `POWERSHELL_DISTRIBUTION_CHANNEL`), else to whichever
+profile already exists, else to PowerShell 7 if it is installed, else to
+Windows PowerShell 5.1. It follows Documents into OneDrive when Known Folder
+Move has redirected it, and creates the profile directory if PowerShell has
+never made one. A profile written to the *other* PowerShell is not an error —
+it is simply never loaded — which is why the choice is made this carefully.
+
+The transport differs too: Windows has no pty, so the launcher opens a pseudo
+console (ConPTY), which Python reaches through
+[pywinpty](https://pypi.org/project/pywinpty/):
+
+```powershell
+pip install pywinpty
+```
+
+Without it the launcher prints one line and starts Claude Code unchanged — the
+session is exactly what it would have been, minus the draft forecast. That is
+the only failure this program is allowed to have. The console is also read a
+byte at a time rather than in 64KB chunks, so the keystroke parser holds a
+partial escape sequence until the rest of it arrives; `src/draft.test.ts` feeds
+the same streams both ways and fails if the two disagree.
+
+### What it does with the keystrokes
 
 It allocates a pty, runs Claude Code inside it, forwards your keystrokes, and
 keeps a model of the line you are editing — backspace, ctrl-u, ctrl-w, bracketed
@@ -260,6 +359,20 @@ the bundle, so point at that copy instead:
 
 ```text
 node --no-warnings /Applications/TokenForecaster.app/Contents/Resources/companion/statusline.js
+```
+
+On Windows the same key takes a Windows path, and `settings.json` is JSON:
+every backslash has to be doubled, or the setting silently does nothing.
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "node --no-warnings C:\\Users\\you\\token-forecaster\\apps\\companion\\dist\\statusline.js",
+    "refreshInterval": 2,
+    "padding": 0
+  }
+}
 ```
 
 Remove the `statusLine` key to turn it off.
