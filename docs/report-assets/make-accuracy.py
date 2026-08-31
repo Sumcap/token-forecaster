@@ -147,11 +147,12 @@ def loss_ladder():
     frame(ax)
 
     cut = (1 - best / worst) * 100
-    titles(fig, "Every signal it uses earns its place",
+    titles(fig, "Each signal had to earn its place",
            "Error per call as the predictor is given more to work with. Each rung "
            "adds one input.\nThe shipped predictor is the blue bar.",
            f"Same held-out calls for every rung. Total cut against fixed numbers: "
-           f"{cut:.0f}%.")
+           f"{cut:.0f}%. On this split the last rung is a wash; "
+           f"its win is on the rolling comparison, not here.")
     save(fig, "accuracy-loss-ladder.png")
 
 

@@ -105,8 +105,13 @@ predictor never trained on, they do:
 ![Coverage vs promise at p50, p90, and p99](docs/report-assets/accuracy-calibration.png)
 
 Each input the predictor uses had to earn its place. Starting from fixed
-numbers with no model at all, every added signal cuts the error, and the full
-shipped predictor cuts it 41 percent:
+numbers with no model at all, learning from history, then the model id, then
+the thinking flag each cut the error, and the shipped predictor lands 41 percent
+below where it started. The last rung is the honest part: on this single
+chronological split the trained correction is a wash against the rung below it
+(522 against 520). Its win is real but small, and it shows up on the rolling
+comparison rather than here: -17.4 per call, CI [-26.5, -8.4], which is what
+the adoption gate actually scored.
 
 ![Error falling as each signal is added](docs/report-assets/accuracy-loss-ladder.png)
 
