@@ -31,6 +31,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import { fmt, median, pct, pinball, quantile } from "./lib/stats.mjs";
 
@@ -59,7 +60,7 @@ const { rows: allRows, filesScanned } = await loadRequests(projectsDir, {
 const rows = allRows
   .filter((row) => Number.isFinite(row.timestampMs) && row.outputTokens > 0)
   .sort((a, b) => a.timestampMs - b.timestampMs);
-const report = { generatedAt: new Date().toISOString(), source: projectsDir };
+const report = { generatedAt: new Date().toISOString(), source: redactHome(projectsDir) };
 
 console.log(
   `Scanned ${filesScanned} transcripts -> ${fmt(rows.length)} usable API calls\n`,

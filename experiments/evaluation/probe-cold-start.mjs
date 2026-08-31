@@ -44,6 +44,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import {
   blockBootstrapDifference,
@@ -248,7 +249,7 @@ for (const fold of folds) {
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   calls: rows.length,
   holdoutCalls: records.length,
   minGroup: MIN_GROUP,

@@ -390,6 +390,26 @@ function userText(entry) {
 export const defaultProjectsDir = () =>
   path.join(homedir(), ".claude", "projects");
 
+// Artifacts are committed to a public repo, so a path that starts inside the
+// operator's home directory is rewritten to `~` before it is serialized. The
+// read path is untouched: only what we PUBLISH is redacted.
+export const redactHome = (p) => {
+  const home = homedir();
+  return typeof p === "string" && p.startsWith(home) ? `~${p.slice(home.length)}` : p;
+};
+
+// Required before any workload id is computed. Keep it out of the repo (.env),
+// and keep it stable across regenerations or group keys will not line up.
+const studySalt = () => {
+  const salt = process.env.TOKEN_FORECASTER_STUDY_SALT;
+  if (!salt)
+    throw new Error(
+      "set TOKEN_FORECASTER_STUDY_SALT before mining history: workload ids are published, " +
+        "and an unsalted digest leaks local project paths. See docs/TELEMETRY.md.",
+    );
+  return salt;
+};
+
 async function* jsonlFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   for (const entry of entries) {
@@ -450,8 +470,12 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
     filesScanned++;
     const relative = path.relative(projectsDir, file);
     const workloadRoot = relative.split(path.sep)[0] || "(root)";
+    // The published artifacts group per workload. Without a secret salt the
+    // digest is a dictionary attack over a short list of plausible directory
+    // names, so a published id leaks the operator's project paths. Same rule
+    // the shipped telemetry package already enforces: no salt, no hash.
     const workloadId = createHash("sha256")
-      .update(`token-forecaster-workload\0${workloadRoot}`)
+      .update(`token-forecaster-workload\0${studySalt()}\0${workloadRoot}`)
       .digest("hex")
       .slice(0, 16);
     const lines = createInterface({

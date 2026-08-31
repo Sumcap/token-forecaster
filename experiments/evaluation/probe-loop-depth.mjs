@@ -55,6 +55,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import {
   blockBootstrapDifference,
@@ -116,7 +117,7 @@ const rows = allRows
   .sort((a, b) => a.timestampMs - b.timestampMs);
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   minGroup: MIN_GROUP,
   classMin: CLASS_MIN,
   asOf,

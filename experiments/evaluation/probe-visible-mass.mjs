@@ -41,6 +41,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import { fmt, median, ols, pct, quantile } from "./lib/stats.mjs";
 
@@ -53,7 +54,7 @@ const projectsDir = argValue("--projects-dir", defaultProjectsDir());
 const jsonOut = argValue("--json", null);
 
 const { rows, filesScanned } = await loadRequests(projectsDir);
-const report = { generatedAt: new Date().toISOString(), source: projectsDir };
+const report = { generatedAt: new Date().toISOString(), source: redactHome(projectsDir) };
 
 console.log(
   `Scanned ${filesScanned} transcripts -> ${fmt(rows.length)} unique API calls\n`,

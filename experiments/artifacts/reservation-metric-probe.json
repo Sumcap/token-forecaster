@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-08-09T11:12:25.998Z",
-  "source": "/Users/polpedu/.claude/projects",
+  "source": "~/.claude/projects",
   "calls": 14978,
   "holdoutCalls": 2996,
   "lomoCalls": 2996,

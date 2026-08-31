@@ -36,6 +36,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import {
   blockBootstrapDifference,
@@ -278,7 +279,7 @@ function metrics(field) {
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   calls: rows.length,
   holdoutCalls: records.length,
   actionAlphabet: CLASSES,
