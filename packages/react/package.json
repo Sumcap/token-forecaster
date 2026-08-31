@@ -1,6 +1,8 @@
 {
   "name": "@token-forecaster/react",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "type": "module",
   "description": "React hooks and components: useTokenCount, useTokenForecast, useContextBudget, meters and warnings (Phase 6)",
   "main": "./dist/index.js",

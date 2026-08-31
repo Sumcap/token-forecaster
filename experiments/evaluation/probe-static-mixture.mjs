@@ -16,7 +16,7 @@
  * and the group only contributes its (well-estimated) action MIX. Same reason
  * the pooled action rung fixed the oracle in §4.2a.
  *
- * The narrow question (from NEXT-PROMPT task 5): does the blend buy a narrower
+ * The narrow question (task 5 of the measurement brief): does the blend buy a narrower
  * P99-P50 band at equal coverage vs the pooled empirical tail? If not, §6.12
  * closes permanently with this number.
  *
@@ -36,6 +36,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import {
   blockBootstrapDifference,
@@ -278,7 +279,7 @@ function metrics(field) {
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   calls: rows.length,
   holdoutCalls: records.length,
   actionAlphabet: CLASSES,

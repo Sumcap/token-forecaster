@@ -20,3 +20,9 @@ experiments/artifacts/local/
 
 # logs
 *.log
+
+# local agent config (this repo is worked on with Claude Code)
+.claude/
+
+# generated python caches
+__pycache__/

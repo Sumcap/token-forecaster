@@ -1,6 +1,8 @@
 {
   "name": "@token-forecaster/model-registry",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "type": "module",
   "description": "Versioned Anthropic model identifiers, context limits, output limits, and pricing metadata",
   "main": "./dist/index.js",

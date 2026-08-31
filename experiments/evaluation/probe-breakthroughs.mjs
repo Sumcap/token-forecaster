@@ -17,6 +17,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import {
   blockBootstrapDifference,
@@ -1389,7 +1390,7 @@ for (const recall of [0.5, 0.7, 0.9]) {
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   methodology: {
     split: `${CV_FOLDS}-fold rolling origin after ${TRAIN_FRACTION} seed`,
     minGroup: MIN_GROUP,

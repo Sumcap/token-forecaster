@@ -35,7 +35,7 @@
 
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { defaultProjectsDir, loadRequests } from "./lib/load-history.mjs";
+import { defaultProjectsDir, loadRequests, redactHome } from "./lib/load-history.mjs";
 import {
   bootstrapLogRatioSe,
   fmt,
@@ -68,7 +68,7 @@ const { rows: allRows, filesScanned } = await loadRequests(projectsDir);
 const rows = allRows
   .filter((row) => Number.isFinite(row.timestampMs) && row.outputTokens > 0)
   .sort((a, b) => a.timestampMs - b.timestampMs);
-const report = { generatedAt: new Date().toISOString(), source: projectsDir };
+const report = { generatedAt: new Date().toISOString(), source: redactHome(projectsDir) };
 
 console.log(
   `Scanned ${filesScanned} transcripts -> ${fmt(rows.length)} usable API calls\n`,

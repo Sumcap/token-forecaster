@@ -42,13 +42,13 @@ steps behind the Phase 4/5 items below.
 ## Phase 3: execution and telemetry
 
 > **⚠️ PORT NOTE (decided 9 August 2026): live telemetry wiring happens at the
-> sheep-manager import, not before.** For now the model is developed and tested
+> the first consumer integration, not before.** For now the model is developed and tested
 > locally against the mined Claude Code history corpus
 > (`pnpm evaluate:claude-history`). When this repo is finally ported into
-> **sheep-manager**, that integration must wire up the already-built collection
+> **the consumer app**, that integration must wire up the already-built collection
 > pipeline as part of the import: call `JsonlTelemetryWriter` (or POST to the
 > ingest server in `examples/telemetry-server.mjs`) around every provider call,
-> and — critically — have sheep-manager declare `expectedOutputKind` +
+> and — critically — have the consumer declare `expectedOutputKind` +
 > `expectedOutputKindSource` *before* each call, per `docs/TELEMETRY.md`. That
 > caller-declared intent signal is the one thing the local corpus cannot
 > provide and the prerequisite for every "blocked on Phase 3 telemetry" item
@@ -62,21 +62,16 @@ steps behind the Phase 4/5 items below.
 > shipped, the eval now grades the zero-context path on every regeneration,
 > and the fallback contract in README reflects it.
 >
-> **Update, 10 August 2026: the port landed.** sheep-manager (branch
-> `token-forecaster-port`) consumes `core`/`predictor`/`telemetry` as vendored
-> `pnpm pack` tarballs under its `vendor/`. `server/forecast.js` wraps the
-> predictor (turn + session totals, per-call boosted vs the turn-root prompt);
-> both SDK entry points in `server/console.js` (`runOnce`, `startConsole`) take
-> a pre-call forecast and, behind the opt-in `forecastTelemetry` setting
-> (default OFF), write turn-granularity observations to
-> `data/telemetry/observations.jsonl` with caller-declared `expectedOutputKind`
-> + `expectedOutputKindSource: "orchestrator_declared"` at every orchestrated
-> call site (loops stages/watcher/triage/judge, farmer, digest, brain, etc.).
-> Turn-granularity rows are tagged `metadata.workflowId = "sheep-manager-turn"`
-> — they pair with `turnTotals`, NOT the per-call ladder; do not feed them to
-> `buildHistoricalProfile` as per-call rows. The Agent SDK exposes no
-> `max_tokens`/`thinking`, so requests record the Claude Code default cap (32k)
-> and tri-state unknown thinking.
+> **Update, 10 August 2026: the port landed.** The predictor has its first real
+> consumer: an agent orchestrator that vendors `core`/`predictor`/`telemetry` and
+> takes a pre-call forecast on both of its SDK entry points. Behind an opt-in
+> setting (default OFF) it writes turn-granularity observations with a
+> caller-declared `expectedOutputKind` +
+> `expectedOutputKindSource: "orchestrator_declared"`. Those rows are tagged
+> `metadata.workflowId = "orchestrator-turn"` — they pair with `turnTotals`, NOT
+> the per-call ladder; do not feed them to `buildHistoricalProfile` as per-call
+> rows. The Agent SDK exposes no `max_tokens`/`thinking`, so requests record the
+> Claude Code default cap (32k) and tri-state unknown thinking.
 
 - [ ] Server-side Messages API execution route with SSE streaming to the UI
 - [ ] Streaming usage updates (message_start / message_delta usage events)
@@ -193,7 +188,7 @@ steps behind the Phase 4/5 items below.
 - [ ] packages/react: useTokenCount, useTokenForecast, useContextBudget,
       meter and warning components extracted from the playground
 - [ ] Headless TypeScript API + middleware interface for the agent
-      orchestration app (the sheep-manager connection). The forecast half of
+      orchestration app (the consumer connection). The forecast half of
       this contract is already stable and documented in the README
       ("Integration contract"): pass model id, maxTokens and thinkingEnabled;
       branch on `calibration.usedFallback`.
@@ -207,7 +202,7 @@ steps behind the Phase 4/5 items below.
 
 ## Issue, 11 August 2026: prompt-aware boost is flat at chat turn roots
 
-Live repro in sheep-manager (turn root, `sessionPosition=1`, `loopDepth=0`,
+Live repro in the consumer app (turn root, `sessionPosition=1`, `loopDepth=0`,
 `priorCallCount=0`, `claude-opus-4-8`, thinking on, cap 64k): opposite drafts
 forecast the same median.
 
@@ -247,7 +242,7 @@ typed intent — the TURN does. Shipped instead: pooled `thinking|promptPath` /
 `thinking|promptImage` turn-total rungs plus a `turnTotalBoost` correction
 trained on per-turn totals, where loop features are definitionally zero and
 prompt features own the splits. The turn forecast now moves ~2.5x across a
-draft typed phrase by phrase. (3) consumer-side, remaining: sheep-manager's
+draft typed phrase by phrase. (3) consumer-side, remaining: the orchestrator's
 chip should surface the TURN total (the number that reads the draft,
 `promptCorrectionApplied=true`) rather than the per-call p50, and fit local
 turn rungs from its opt-in telemetry once sample counts clear a gate,

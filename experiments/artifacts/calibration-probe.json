@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-08-09T11:10:42.764Z",
-  "source": "/Users/polpedu/.claude/projects",
+  "source": "~/.claude/projects",
   "calls": 14978,
   "minGroup": 100,
   "calibrationFraction": 0.25,

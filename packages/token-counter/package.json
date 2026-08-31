@@ -1,6 +1,8 @@
 {
   "name": "@token-forecaster/token-counter",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "type": "module",
   "description": "Local token estimation, debounce logic, and race-safe reconciliation of local vs Anthropic-verified counts",
   "main": "./dist/index.js",

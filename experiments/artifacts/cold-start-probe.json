@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-08-09T11:16:21.733Z",
-  "source": "/Users/polpedu/.claude/projects",
+  "source": "~/.claude/projects",
   "calls": 14978,
   "holdoutCalls": 2996,
   "minGroup": 100,

@@ -8,7 +8,7 @@
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { defaultProjectsDir, hasThinkingBlock, loadRequests } from "./lib/load-history.mjs";
+import { defaultProjectsDir, hasThinkingBlock, loadRequests, redactHome } from "./lib/load-history.mjs";
 import { trainPortableQuantileBoost } from "./lib/quantile-boost.mjs";
 import { blockBootstrapDifference, pinball, quantile } from "./lib/stats.mjs";
 
@@ -568,7 +568,7 @@ if (baseProfileFile) {
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   predictorVersion: "baseline-3-boosted/0.3.0",
   dataset: {
     filesScanned,
