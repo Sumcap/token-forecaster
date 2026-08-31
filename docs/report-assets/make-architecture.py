@@ -9,6 +9,9 @@ green/red = the verdict.
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import pathlib
+
+OUT = pathlib.Path(__file__).resolve().parent
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
 
 plt.rcParams["font.family"] = "Helvetica"
@@ -99,7 +102,7 @@ section(155, 152.5, "BEFORE THE CALL   ·   THIS IS THE PART THAT SHIPS")
 known = box(6, 46, 141, 1, "Known up front",
             ["model  ·  thinkingEnabled", "effort  ·  taskType",
              "promptMentionsPath", "maxTokens"])
-note(26, 103, "sheep-manager composes the call itself,\nso it holds every one of these up front",
+note(26, 103, "the caller composes the request itself,\nso it holds every one of these up front",
      size=10.5)
 
 # ladder
@@ -260,7 +263,7 @@ note(16, 70, "the only way the\nprofile ever changes", ha="left",
      color=GREEN, size=10.6)
 
 fig.savefig(
-    "/Users/polpedu/Projects/token-forecaster/docs/report-assets/architecture.png",
+    OUT / "architecture.png",
     bbox_inches="tight", pad_inches=0.4, facecolor="white",
 )
 print("ok")

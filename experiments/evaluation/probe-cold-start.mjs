@@ -3,7 +3,7 @@
  * Grade the COLD-START path of the shipped ladder as a first-class citizen.
  *
  * The 9 August 2026 decision reframed the product: the predictor ships inside
- * sheep-manager and runs on machines with no telemetry, no history corpus and
+ * a consumer app and runs on machines with no telemetry, no history corpus and
  * often no agent-loop context. The zero-context path is the product; every
  * context-hungry rung is a bonus. This probe answers, in the same
  * rolling-origin harness as the eval, questions no report has answered:

@@ -17,6 +17,9 @@ Two house rules for this asset:
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import pathlib
+
+OUT = pathlib.Path(__file__).resolve().parent
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
 
 plt.rcParams["font.family"] = "Helvetica"
@@ -232,8 +235,7 @@ ax.text(89, py1 - 45.5,
         zorder=4, linespacing=1.6)
 
 fig.savefig(
-    "/Users/polpedu/Projects/token-forecaster/docs/report-assets/"
-    "architecture-eli5.png",
+    OUT / "architecture-eli5.png",
     bbox_inches="tight", pad_inches=0.4, facecolor="white",
 )
 print("ok")
