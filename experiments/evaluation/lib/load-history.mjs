@@ -20,7 +20,7 @@
  */
 
 import { createReadStream } from "node:fs";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { readdir } from "node:fs/promises";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
@@ -398,16 +398,25 @@ export const redactHome = (p) => {
   return typeof p === "string" && p.startsWith(home) ? `~${p.slice(home.length)}` : p;
 };
 
-// Required before any workload id is computed. Keep it out of the repo (.env),
-// and keep it stable across regenerations or group keys will not line up.
+// Workload ids end up in committed artifacts, and the directory names they are
+// derived from are short and guessable, so an unsalted digest is a dictionary
+// attack that discloses local project paths. Default to a salt that is random
+// per run: ids stay comparable inside one report, which is all any consumer of
+// them needs, and mean nothing outside it. Set TOKEN_FORECASTER_STUDY_SALT to a
+// value you keep out of the repo when you want ids that line up ACROSS
+// regenerations, e.g. to track one workload over several corpus endpoints.
+let runSalt = null;
 const studySalt = () => {
-  const salt = process.env.TOKEN_FORECASTER_STUDY_SALT;
-  if (!salt)
-    throw new Error(
-      "set TOKEN_FORECASTER_STUDY_SALT before mining history: workload ids are published, " +
-        "and an unsalted digest leaks local project paths. See docs/TELEMETRY.md.",
+  const configured = process.env.TOKEN_FORECASTER_STUDY_SALT;
+  if (configured) return configured;
+  if (runSalt === null) {
+    runSalt = randomUUID();
+    console.warn(
+      "[load-history] TOKEN_FORECASTER_STUDY_SALT is not set: workload ids are " +
+        "random for this run and will not match previous artifacts.",
     );
-  return salt;
+  }
+  return runSalt;
 };
 
 async function* jsonlFiles(dir) {
