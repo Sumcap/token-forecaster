@@ -1,7 +1,7 @@
 /**
  * probe-session-totals.mjs
  *
- * The whole-SESSION question (NEXT-PROMPT after §6.25): given a session so
+ * The whole-SESSION question (raised after §6.25): given a session so
  * far — k turns finished, their totals observed — forecast the TOTAL
  * remaining output tokens, with the number of remaining turns itself random.
  * This is the number a context-budget UI wants.

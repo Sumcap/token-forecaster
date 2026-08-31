@@ -107,11 +107,27 @@ predictor never trained on, they do:
 Each input the predictor uses had to earn its place. Starting from fixed
 numbers with no model at all, learning from history, then the model id, then
 the thinking flag each cut the error, and the shipped predictor lands 41 percent
-below where it started. The last rung is the honest part: on this single
-chronological split the trained correction is a wash against the rung below it
-(522 against 520). Its win is real but small, and it shows up on the rolling
-comparison rather than here: -17.4 per call, CI [-26.5, -8.4], which is what
-the adoption gate actually scored.
+below where it started.
+
+One rung breaks the pattern, and the chart shows it rather than hiding it. The
+prompt-path rung is what the trained correction is fitted on top of, and on this
+split it is worse than the thinking rung it extends: 538 against 520, a cost of
+18 per call. The correction then wins 16 of that back (538 to 522), so its
+headline gain -- -17.4 per call, CI [-26.5, -8.4], the number the adoption gate
+scored -- is measured against a base that the plainer ladder already beat.
+
+That is the shape of a correction spending its capacity undoing a base-rung
+mistake, so the obvious fix was tested: refit the same correction on a base with
+the prompt-path rungs removed (`probe-base-ladder.mjs`). On a single split that
+does win, by 15.8 per call, CI [-28.4, -3.8]. On the rolling comparison the gate
+actually uses it does not: -4.8 per call, CI [-12.2, +2.9], an interval through
+zero. By the pre-committed rule the change is not adopted and the ladder stays
+as shipped -- but the honest summary is that the prompt-path rung is not paying
+for itself, it is being carried by the correction above it. (That probe was run
+against the archived transcript snapshot, which reconstructs 16,839 calls rather
+than the 16,687 the committed artifacts were generated from, so its absolute
+losses sit a few points off the ladder above. The paired comparisons inside it
+are unaffected.)
 
 ![Error falling as each signal is added](docs/report-assets/accuracy-loss-ladder.png)
 
@@ -133,7 +149,10 @@ predictor. Dropping the thinking flag is what actually hurts:
 
 Even a model the profile has never seen gets a useful answer. Pooled
 thinking-conditioned groups replaced the old blended fallback after beating it
-by 55 points per call in a leave-one-model-out test (CI [-68.2, -39.9]):
+by 55 points per call in a leave-one-model-out test (CI [-68.2, -39.9]). This
+section and the two charts around it are measured on the earlier 14,978-call
+snapshot of the same history, not the 16,687-call corpus quoted above; the
+fallback has not been re-scored since:
 
 ![Unknown-model forecasts before and after the pooled fallback](docs/report-assets/fallback-before-after.png)
 
@@ -257,8 +276,8 @@ estimate, then flips to the provider-counted number after a debounce. Stale
 verification responses can never overwrite newer counts.
 
 Most of the charts in this README are generated from the JSON artifacts in
-`experiments/artifacts/` by the scripts in `docs/report-assets/`. The committed
-images lag the committed artifacts by one regeneration, and a few (the adoption
+`experiments/artifacts/` by the scripts in `docs/report-assets/`; regenerate
+them with `python3 docs/report-assets/make-accuracy.py`. A few (the adoption
 gate, the fallback comparison, the workload drift) are still drawn by hand.
 
 ## Where things stand

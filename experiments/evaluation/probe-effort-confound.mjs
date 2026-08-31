@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * STEP 0 of docs/NEXT-PROMPT.md: is the `effort` signal real, or is it date?
+ * STEP 0 of the measurement brief: is the `effort` signal real, or is it date?
  *
  * docs/GENERATIVE-MODEL.md §3 reports a monotone 4.6x median separation from
  * effort=low to effort=max and proposes promoting `effort` to a shipped

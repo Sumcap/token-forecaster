@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * STEP 1 of docs/NEXT-PROMPT.md, done locally and for free.
+ * STEP 1 of the measurement brief, done locally and for free.
  *
  * The brief called for ~13.7k `POST /v1/messages/count_tokens` calls to measure
  * V (the token count of stored content) so that H = Y - V could be recovered.

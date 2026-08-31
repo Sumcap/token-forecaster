@@ -115,18 +115,30 @@ def loss_ladder():
     ev = load("claude-code-history-eval")["chronologicalHoldout"]["evaluation"]
     boost = load("winning-boost-eval")["singleSplit"]
 
+    # The prompt-path rung is the base the correction is actually fitted on
+    # (winning-boost-eval `method.base`), and it is the one rung that LOSES:
+    # 520 -> 538. Leaving it out would make the last bar differ from its
+    # neighbour by two changes at once, so it is drawn, in orange, as the
+    # non-monotone step it is.
     rows = [
         ("Fixed numbers (no model)", ev["static"]["totalPinballLoss"], GRAY),
         ("+ own history", ev["historicalGlobal"]["totalPinballLoss"], GRAY),
         ("+ which model", ev["historicalModel"]["totalPinballLoss"], GRAY),
         ("+ thinking on/off", ev["historicalModelThinking"]["totalPinballLoss"], GRAY),
+        ("+ prompt path  (base of the correction)",
+         ev["historicalModelThinkingPromptPath"]["totalPinballLoss"], ORANGE),
         ("+ boosted correction  (shipped)", boost["boosted"]["loss"], BLUE),
     ]
-    best = rows[-1][1]
+    assert abs(rows[-2][1] - boost["baseline"]["loss"]) < 0.01, (
+        "the prompt-path rung must be the boost's own baseline, or this ladder "
+        "is comparing bars that were never measured against each other"
+    )
     worst = rows[0][1]
+    path_cost = rows[-2][1] - rows[-3][1]
+    boost_gain = rows[-2][1] - rows[-1][1]
 
-    fig, ax = plt.subplots(figsize=(11.0, 6.6), dpi=150)
-    fig.subplots_adjust(left=0.30, right=0.95, top=0.72, bottom=0.14)
+    fig, ax = plt.subplots(figsize=(11.0, 6.9), dpi=150)
+    fig.subplots_adjust(left=0.34, right=0.95, top=0.72, bottom=0.21)
     fig.patch.set_facecolor("white")
     ax.set_facecolor("white")
 
@@ -146,13 +158,14 @@ def loss_ladder():
     ax.set_axisbelow(True)
     frame(ax)
 
-    cut = (1 - best / worst) * 100
+    cut = (1 - rows[-1][1] / worst) * 100
     titles(fig, "Each signal had to earn its place",
            "Error per call as the predictor is given more to work with. Each rung "
            "adds one input.\nThe shipped predictor is the blue bar.",
            f"Same held-out calls for every rung. Total cut against fixed numbers: "
-           f"{cut:.0f}%. On this split the last rung is a wash; "
-           f"its win is on the rolling comparison, not here.")
+           f"{cut:.0f}%. The prompt-path rung costs {path_cost:.0f} per call\n"
+           f"here; the correction wins {boost_gain:.0f} back. Dropping it was "
+           f"tested and did not clear the adoption gate.")
     save(fig, "accuracy-loss-ladder.png")
 
 

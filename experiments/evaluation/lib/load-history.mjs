@@ -393,9 +393,18 @@ export const defaultProjectsDir = () =>
 // Artifacts are committed to a public repo, so a path that starts inside the
 // operator's home directory is rewritten to `~` before it is serialized. The
 // read path is untouched: only what we PUBLISH is redacted.
+//
+// The match is on a path BOUNDARY, not a raw prefix: with home = /Users/alice,
+// /Users/alice-backup is a different user's directory, not a subpath, and
+// rewriting it to `~-backup` would publish a corrupted path. A path rooted
+// outside home cannot be redacted into `~` at all, so it is dropped rather
+// than published verbatim -- an absolute corpus path can name a client.
 export const redactHome = (p) => {
+  if (typeof p !== "string") return p;
   const home = homedir();
-  return typeof p === "string" && p.startsWith(home) ? `~${p.slice(home.length)}` : p;
+  if (p === home) return "~";
+  if (p.startsWith(home + path.sep)) return `~${p.slice(home.length)}`;
+  return path.isAbsolute(p) ? "<redacted-path>" : p;
 };
 
 // Workload ids end up in committed artifacts, and the directory names they are

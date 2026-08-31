@@ -809,6 +809,7 @@ described once; rejections keep their reasoning so nobody re-runs them.
 | 6.24 | Boost capacity sweep | ✅ **Adopted.** depth 3 / 48 iters / lr 0.08; rolling boosted −23.8 [−32.4, −15.9] vs base. Capacity exhausted at this corpus size. [§6.24](#-624-boost-capacity-sweep--adopted) |
 | 6.25 | Whole-turn totals | ✅ **Shipped, coarse on purpose.** `turnTotals` profile field + `historicalTurnTotalForecast()`; every finer rung failed endpoint stability. [§6.25](#-625-whole-turn-totals--shipped-coarse-on-purpose) |
 | 6.26 | **Whole-session totals** | ✅ **Shipped unconditional — the kill condition fired.** No conditional forecast (k buckets, spent buckets, turns×median) separates from the unconditional distribution at any of 4 endpoints; `sessionTotals` + `historicalSessionTotalForecast()` ship the quantiles only. Consumers must NOT subtract spent-so-far — measured worse. [§6.26](#-626-whole-session-totals--shipped-unconditional-the-kill-condition-fired) |
+| 6.27 | **The prompt-path rung inside the boost's own base** | 🟡 **Not adopted, but the ladder is not monotone and the README now says so.** §6.16 refused `promptPath` as a shipped *dimension*, yet it is still the top rung of the base the correction is fitted on (`method.base`), and it is the one rung that loses: 538.5 vs 520.3 for plain `model+thinking` on the 7 Aug split, a cost of 18.2/call that the correction then wins 16.2 of back. Refitting the same correction on a promptPath-free base wins the single split (−15.8, CI [−28.4, −3.8]) but NOT the rolling gate (−4.8, CI [−12.2, +2.9]), so the pre-committed rule keeps the ladder as shipped. The correction is worth more on the worse base (−17.0 vs −10.8), which is what a correction undoing a base-rung mistake looks like. Re-test at the next corpus endpoint. `probe-base-ladder.mjs`, `base-ladder-probe.json` |
 
 ### 6.5 `tools` — deleted
 
@@ -2035,6 +2036,7 @@ node experiments/evaluation/probe-action-type.mjs         # §6.12 confirmed act
 node experiments/evaluation/probe-loop-depth.mjs          # §6.9  loop depth & re-forecasting
 node experiments/evaluation/probe-tail-fit.mjs            # §6.10 GPD tail, p99 with an SE
 node experiments/evaluation/probe-loss-decomposition.mjs  # §5    where the loss actually is
+node experiments/evaluation/probe-base-ladder.mjs         # §6.27 does promptPath earn its base rung
 ```
 
 They are seeded, so bootstrap and placebo figures reproduce exactly over the same
