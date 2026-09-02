@@ -167,17 +167,14 @@ describe("draft buffer, however the bytes arrive", () => {
         ...PYTHON_ARGS,
         "-c",
         [
-          "import importlib.util, json, os, sys",
-          "from importlib.machinery import SourceFileLoader",
-          // The launcher is `tf-claude`, with no extension and a hyphen: it is
-          // a program, not a module, so it needs a loader named for it.
-          `path = os.path.join(${JSON.stringify(BIN)}, "tf-claude")`,
-          'loader = SourceFileLoader("tf_claude", path)',
-          'spec = importlib.util.spec_from_loader("tf_claude", loader)',
-          "module = importlib.util.module_from_spec(spec)",
-          "loader.exec_module(module)",
+          "import json, os, sys",
+          `sys.path.insert(0, ${JSON.stringify(BIN)})`,
+          // The buffer lives in `tf_wrap`, which both launchers are: `tf-claude`
+          // and `tf-codex` are front ends over the same keystroke model, and a
+          // test that read only one of them would prove nothing about the other.
+          "from tf_wrap import Draft",
           "def run(text, chunk):",
-          "    draft = module.Draft(os.devnull)",
+          "    draft = Draft(os.devnull)",
           "    data = text.encode('utf8')",
           "    for i in range(0, len(data), chunk):",
           "        draft.feed(data[i:i + chunk])",

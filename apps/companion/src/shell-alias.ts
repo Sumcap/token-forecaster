@@ -128,9 +128,22 @@ export function syntaxFor(rcPath: string): ShellSyntax {
 }
 
 const HEADING = [
-  "# Runs Claude Code through the draft-aware launcher, so the status line can",
-  "# forecast the prompt being typed. Remove with: token-forecaster uninstall-shell",
+  "# Runs Claude Code and Codex through the draft-aware launcher, so the status",
+  "# line can forecast the prompt being typed.",
+  "# Remove with: token-forecaster uninstall-shell",
 ];
+
+/**
+ * The launchers to write functions for, by the command each one stands in for.
+ *
+ * A value may be null — an older bundle ships only `tf-claude` — and a command
+ * with no launcher simply gets no function, rather than one pointing at a file
+ * that will never exist.
+ */
+export type LauncherTargets = Partial<Record<"claude" | "codex", string | null>>;
+
+/** The commands wrapped, in the order they are written. */
+const WRAPPED = ["claude", "codex"] as const;
 
 /** `text` as a PowerShell single-quoted string, which has exactly one escape. */
 function psQuote(text: string): string {
@@ -138,7 +151,7 @@ function psQuote(text: string): string {
 }
 
 /**
- * The block this tool owns, for `target`.
+ * One shell function, wrapping `command` with the launcher at `target`.
  *
  * A function rather than an alias, because the app can be dragged to the Trash
  * without anyone remembering to run the uninstall first: a bare
@@ -147,46 +160,56 @@ function psQuote(text: string): string {
  * a deleted app is a status line that stops forecasting drafts. `command`
  * bypasses this function, so the fallback cannot recurse.
  */
-export function block(target: string, syntax: ShellSyntax = "posix"): string {
+function wrapper(command: string, target: string, syntax: ShellSyntax): string[] {
   if (syntax === "powershell") {
     return [
-      BEGIN_MARKER,
-      ...HEADING,
-      "function claude {",
+      `function ${command} {`,
       `  $tf = ${psQuote(target)}`,
       "  if (Test-Path -LiteralPath $tf -PathType Leaf) {",
       "    & $tf @args",
       "  } else {",
       // -CommandType Application cannot resolve to this function, so the
       // fallback cannot recurse -- the PowerShell equivalent of `command`.
-      "    $real = Get-Command claude -CommandType Application -ErrorAction SilentlyContinue |",
+      `    $real = Get-Command ${command} -CommandType Application -ErrorAction SilentlyContinue |`,
       "      Select-Object -First 1",
       "    if ($real) { & $real.Source @args }",
-      "    else { Write-Error 'claude was not found on PATH' }",
+      `    else { Write-Error '${command} was not found on PATH' }`,
       "  }",
       "}",
-      END_MARKER,
-    ].join("\n");
+    ];
   }
   return [
-    BEGIN_MARKER,
-    ...HEADING,
-    "claude() {",
+    `${command}() {`,
     `  if [ -x ${JSON.stringify(target)} ]; then`,
     `    command ${JSON.stringify(target)} "$@"`,
     "  else",
-    '    command claude "$@"',
+    `    command ${command} "$@"`,
     "  fi",
     "}",
-    END_MARKER,
-  ].join("\n");
+  ];
+}
+
+/** The block this tool owns, for every launcher in `targets`. */
+export function block(targets: LauncherTargets, syntax: ShellSyntax = "posix"): string {
+  const body: string[] = [];
+  for (const command of WRAPPED) {
+    const target = targets[command];
+    if (!target) continue;
+    if (body.length > 0) body.push("");
+    body.push(...wrapper(command, target, syntax));
+  }
+  return [BEGIN_MARKER, ...HEADING, ...body, END_MARKER].join("\n");
 }
 
 /** `content` with our block added or updated, leaving everything else alone. */
-export function withBlock(content: string, target: string, syntax: ShellSyntax = "posix"): string {
+export function withBlock(
+  content: string,
+  targets: LauncherTargets,
+  syntax: ShellSyntax = "posix",
+): string {
   const without = withoutBlock(content);
   const body = without.length === 0 || /\n$/.test(without) ? without : `${without}\n`;
-  return `${body}${body.length === 0 ? "" : "\n"}${block(target, syntax)}\n`;
+  return `${body}${body.length === 0 ? "" : "\n"}${block(targets, syntax)}\n`;
 }
 
 /** `content` with our block removed, and no trace of the gap it left. */
@@ -226,7 +249,7 @@ export function aliasInstalled(rcPath: string): boolean {
 export function ensureAliasOnFirstRun(options: {
   alreadyDecided: boolean;
   rcPath: string | null;
-  target: string;
+  targets: LauncherTargets;
   markDecided: () => void;
   platform?: NodeJS.Platform;
 }): AliasResult | null {
@@ -235,15 +258,36 @@ export function ensureAliasOnFirstRun(options: {
   // block would point at a path that will never exist, the `[ -x ]` guard would
   // swallow it, and a later fixed build would never rewrite it because the flag
   // was already set. No launcher means no decision yet.
-  if (!isExecutableFile(options.target, options.platform ?? process.platform)) return null;
+  const shipped = shippedTargets(options.targets, options.platform ?? process.platform);
+  if (!shipped.claude && !shipped.codex) return null;
   options.markDecided();
   if (!options.rcPath) return null;
   try {
-    return installAlias(options.rcPath, options.target);
+    return installAlias(options.rcPath, shipped);
   } catch {
     // A read-only or exotic home directory is not a reason to fail to start.
     return null;
   }
+}
+
+/**
+ * `targets` with everything this build did not actually ship dropped.
+ *
+ * A bundle built before `tf-codex` existed still installs a working `claude`
+ * wrapper; what it must not do is write a `codex` function around a file that
+ * is not there, since the guard inside it would then shell out to `codex` on
+ * every single invocation for no reason.
+ */
+export function shippedTargets(
+  targets: LauncherTargets,
+  platform: NodeJS.Platform = process.platform,
+): LauncherTargets {
+  const out: LauncherTargets = {};
+  for (const command of WRAPPED) {
+    const target = targets[command];
+    if (target && isExecutableFile(target, platform)) out[command] = target;
+  }
+  return out;
 }
 
 /** Extensions Windows will run without being told how. */
@@ -279,11 +323,11 @@ export interface AliasResult {
  */
 export function installAlias(
   rcPath: string,
-  target: string,
+  targets: LauncherTargets,
   syntax: ShellSyntax = syntaxFor(rcPath),
 ): AliasResult {
   const existing = existsSync(rcPath) ? readFileSync(rcPath, "utf8") : "";
-  const updated = withBlock(existing, target, syntax);
+  const updated = withBlock(existing, targets, syntax);
   if (updated === existing) {
     return { rcPath, backupPath: null, changed: false, message: "already installed" };
   }

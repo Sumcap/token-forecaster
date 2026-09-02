@@ -227,7 +227,7 @@ privacy is a default, not an option:
 token-forecaster/
 ├── apps/
 │   ├── menubar/           macOS menu bar app (Swift); bundles the companion
-│   ├── companion/         Local daemon, status line, and `tf-claude` launcher
+│   ├── companion/         Local daemon, status line, `tf-claude`/`tf-codex`
 │   ├── extension/         Chrome extension for claude.ai
 │   └── playground/        Vite + React playground; Express count_tokens server
 ├── packages/
@@ -252,11 +252,13 @@ token-forecaster/
 
 The menu bar app is the thing to install. It runs a local daemon that reads your
 own Claude Code and Codex transcripts, trains a forecaster on them, and puts a
-live estimate in your terminal status line. Nothing leaves the machine.
+live estimate in your terminal status line — in Claude Code, which runs it as
+its status line, and in Codex, which has no such hook, so the launcher reserves
+the bottom row of the terminal and paints it there. Nothing leaves the machine.
 
 **Requirements:** macOS 14+, Apple silicon, Node.js 22+ (`brew install node`),
-and `python3` — the `claude` launcher is a Python script, and Xcode Command Line
-Tools provide it (`xcode-select --install`).
+and `python3` — the `claude` and `codex` launchers are Python scripts, and Xcode
+Command Line Tools provide it (`xcode-select --install`).
 
 ```sh
 git clone https://github.com/polpedu-crypto/token-forecaster.git
@@ -275,7 +277,7 @@ xattr -dr com.apple.quarantine /Applications/TokenForecaster.app
 ```
 
 or a right-click → **Open** the first time. Full walkthrough, including the
-terminal status line and the `claude` launcher, is in
+terminal status line and the `claude` and `codex` launchers, is in
 [apps/menubar/README.md](apps/menubar/README.md); the daemon and its API are
 documented in [apps/companion/README.md](apps/companion/README.md).
 
@@ -283,8 +285,8 @@ documented in [apps/companion/README.md](apps/companion/README.md).
 
 There is no menu bar app — that one is Swift and stays on macOS. Everything that
 produces a forecast runs on Windows: the daemon, the terminal status line, and
-the draft-aware `claude` launcher, which opens a pseudo console (ConPTY) where
-the Mac opens a pty. The dashboard the daemon serves on loopback is the UI in
+the draft-aware `claude` and `codex` launchers, which open a pseudo console
+(ConPTY) where the Mac opens a pty. The dashboard the daemon serves on loopback is the UI in
 the menu bar's place.
 
 **Requirements:** Windows 10 1809+ (ConPTY), Node.js 22+, Python 3, and
@@ -303,8 +305,9 @@ node --no-warnings apps\companion\dist\cli.js install-shell   # then: . $PROFILE
 node --no-warnings apps\companion\dist\cli.js start
 ```
 
-`install-shell` writes a `claude` function into your PowerShell profile, backing
-the profile up first and restoring it byte for byte on `uninstall-shell`. The
+`install-shell` writes a `claude` and a `codex` function into your PowerShell
+profile, backing the profile up first and restoring it byte for byte on
+`uninstall-shell`. The
 status line, the Startup-folder recipe for running the daemon after a reboot,
 and where state is kept (`%LOCALAPPDATA%\TokenForecaster`) are all in
 [apps/companion/README.md](apps/companion/README.md).
