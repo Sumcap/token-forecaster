@@ -1,0 +1,51 @@
+<meta charset="utf-8">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .card { width: 500px; }
+  .head { display: flex; align-items: baseline; gap: 8px; }
+  .head b { color: var(--ink-strong); font-size: 14px; }
+  .meter { margin-top: 12px; }
+  .mrow { display: flex; align-items: baseline; gap: 8px; font-size: 12px; }
+  .mrow b { color: var(--ink); }
+  .mrow .right { margin-left: auto; color: var(--muted); font-size: 11px; }
+  .track { position: relative; height: 8px; margin-top: 5px; border-radius: 4px; background: var(--chip-bg); }
+  .used { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--accent); }
+  .next { position: absolute; top: 0; bottom: 0; background: color-mix(in srgb, var(--need) 45%, transparent); }
+  .cap  { position: absolute; top: -2px; height: 12px; width: 2px; background: var(--ink); opacity: .35; border-radius: 1px; }
+  .fits {
+    margin-top: 14px; padding: 6px 10px; font-size: 11.5px;
+    border: 1px solid color-mix(in srgb, var(--need) 30%, transparent);
+    border-left: 3px solid var(--need);
+    border-radius: var(--radius-s);
+    background: color-mix(in srgb, var(--need) 6%, var(--surface-2));
+    display: flex; gap: 7px; align-items: baseline; white-space: nowrap;
+  }
+  .fits b { color: var(--ink); }
+  .ok { margin-left: auto; color: var(--accent); font-weight: 600; }
+</style>
+
+<div class="card">
+  <div class="head"><b>Plan usage</b> <span class="dim">· forecast-aware</span></div>
+
+  <div class="meter">
+    <div class="mrow num"><b>5-hour window</b> <span class="dim">62% used</span> <span class="right">resets in 2 h 10 m</span></div>
+    <div class="track">
+      <div class="used" style="width: 62%"></div>
+      <div class="next" style="left: 62%; width: 4%"></div>
+    </div>
+  </div>
+
+  <div class="meter">
+    <div class="mrow num"><b>7-day window</b> <span class="dim">41% used</span> <span class="right">resets Friday</span></div>
+    <div class="track">
+      <div class="used" style="width: 41%"></div>
+      <div class="next" style="left: 41%; width: 1.5%"></div>
+    </div>
+  </div>
+
+  <div class="fits num">
+    <b>Next turn forecast</b>
+    <span class="dim">~2.1k output · the blue sliver above</span>
+    <span class="ok">fits both windows</span>
+  </div>
+</div>

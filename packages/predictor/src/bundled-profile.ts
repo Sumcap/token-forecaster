@@ -8,6 +8,7 @@ export const BUNDLED_CLAUDE_CODE_PROFILE: HistoricalForecastProfile = {
   "id": "claude-code-local-2026-08-12",
   "generatedAt": "2026-08-12T01:46:27.410Z",
   "scope": "Local Claude Code output tokens per API call",
+  "provenance": "single-user-corpus",
   "eligibleObservations": 16687,
   "windowDays": null,
   "modelAliases": {},

@@ -7,21 +7,25 @@
   "description": "Real-time LLM token usage monitoring and probabilistic output-length forecasting for the Anthropic API",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "build": "pnpm -r --filter './packages/*' build",
     "test": "pnpm -r test && pnpm test:evaluation",
     "test:evaluation": "vitest run experiments/evaluation/lib/load-history.test.mjs",
+    "test:extension:e2e": "pnpm build && pnpm --filter @token-forecaster/extension test:e2e",
     "typecheck": "pnpm -r typecheck",
     "evaluate:claude-history:base": "node experiments/evaluation/eval-claude-code-history.mjs",
     "evaluate:claude-history": "pnpm evaluate:claude-history:base && node experiments/evaluation/eval-winning-boost.mjs --base-profile experiments/artifacts/claude-code-history-profile.json --json experiments/artifacts/winning-boost-eval.json --profile-out experiments/artifacts/claude-code-history-profile.json --bundled-profile-out packages/predictor/src/bundled-profile.ts",
     "evaluate:breakthroughs": "node experiments/evaluation/probe-breakthroughs.mjs --json experiments/artifacts/breakthrough-probe.json",
     "telemetry:serve": "pnpm build && node examples/telemetry-server.mjs",
+    "telemetry:report:extension": "pnpm build && node examples/extension-telemetry-report.mjs",
     "dev": "pnpm build && pnpm --parallel --filter @token-forecaster/playground run \"/^dev(:server)?$/\"",
     "dev:ui": "pnpm --filter @token-forecaster/playground run dev",
-    "dev:server": "pnpm --filter @token-forecaster/playground run dev:server"
+    "dev:server": "pnpm --filter @token-forecaster/playground run dev:server",
+    "build:extension": "pnpm build && pnpm --filter @token-forecaster/extension build",
+    "dev:extension": "pnpm --filter @token-forecaster/extension dev"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",

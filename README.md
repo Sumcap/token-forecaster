@@ -47,7 +47,11 @@ The whole predictor is built from real usage: 517 Claude Code transcript
 files, 16,687 unique API calls after deduplication, zero calls cut off by the
 token limit. One caveat worth stating plainly, because the artifacts record it
 and a reader will find it: this is **one operator's history**, 348 sessions on a
-single machine. It is a real workload, not a population. This is what those replies actually look like:
+single machine. It is a real workload, not a population. Read every number below
+as a prior for this kind of work, not as a calibration of how you write. What
+that costs, and the plan to retire it, is in
+[docs/MULTI-USER-PLAN.md](docs/MULTI-USER-PLAN.md). This is what those replies
+actually look like:
 
 ![Distribution of output lengths across 16,687 calls](docs/report-assets/data-distribution.png)
 
@@ -218,6 +222,13 @@ Three rules save most integration mistakes:
    that forecast as a rough reservation hint and say so in your UI.
 3. **Unknown models never throw.** The function only throws on malformed
    input, such as an empty model string or a non-positive `maxTokens`.
+4. **The profile is a single-user prior, and it says so.**
+   `calibration.profileId` and `calibration.profileScope` name a corpus fitted
+   on one person's history. Do not read the id to work that out: the profile
+   carries an optional `provenance` field, and the bundled profile sets it to
+   `"single-user-corpus"`. Surface that wherever you surface the numbers. An
+   absent `provenance` means the profile predates the field, so treat it as
+   unknown rather than as a multi-user claim.
 
 The full field-by-field contract, including exactly which groups the current
 bundled profile ships and which gated features are waiting for their re-test
@@ -232,15 +243,22 @@ privacy is a default, not an option:
   prompt hash, derived numeric features, token counts, request configuration,
   the forecast, and the actual usage.
 - API keys stay server-side. The browser never sees them.
-- There is no hosted backend. Observations are append-only local JSONL files
-  that you own. [docs/TELEMETRY.md](docs/TELEMETRY.md) covers encrypted
-  deployment if you want to pool data from several machines.
+- This repository does not deploy a hosted backend. Direct-API observations are
+  append-only local JSONL files that you own. The Chrome extension now has two
+  separate, off-by-default contribution choices and a build-configurable
+  anonymous collector with schema-only batching and deletion; browser outcomes
+  are explicitly marked as DOM estimates. [docs/TELEMETRY.md](docs/TELEMETRY.md)
+  covers encrypted deployment and the exact separation rules.
 
 ## Repository layout
 
 ```text
 token-forecaster/
-├── apps/playground/       Vite + React playground; Express count_tokens server
+├── apps/
+│   ├── menubar/           macOS menu bar app (Swift); bundles the companion
+│   ├── companion/         Local daemon, status line, `tf-claude`/`tf-codex`
+│   ├── extension/         Chrome extension for claude.ai
+│   └── playground/        Vite + React playground; Express count_tokens server
 ├── packages/
 │   ├── core/              Zod schemas, context-budget math, warning logic
 │   ├── anthropic/         Server-side adapter: count_tokens, streaming, usage
@@ -249,12 +267,79 @@ token-forecaster/
 │   ├── predictor/         Historical ladder + trained quantile correction
 │   ├── telemetry/         Privacy-aware JSONL observation logging
 │   ├── react/             Hooks and components (Phase 6)
+│   ├── personal/          Local training: fit, evaluate, and gate your profile
+│   ├── ingest-claude/     Read ~/.claude/projects transcripts
+│   ├── ingest-codex/      Read ~/.codex/sessions transcripts
 │   └── cli/               planned: count | forecast | run | evaluate | export
 ├── experiments/           Probes, evaluation scripts, generated artifacts
 ├── research/              Competitive analysis, literature review, ADRs
 ├── fixtures/              Race-condition fixtures for count reconciliation
 └── docs/                  Reports, state of play, backlog, chart sources
 ```
+
+## Install on macOS
+
+The menu bar app is the thing to install. It runs a local daemon that reads your
+own Claude Code and Codex transcripts, trains a forecaster on them, and puts a
+live estimate in your terminal status line — in Claude Code, which runs it as
+its status line, and in Codex, which has no such hook, so the launcher reserves
+the bottom row of the terminal and paints it there. Nothing leaves the machine.
+
+**Requirements:** macOS 14+, Apple silicon, Node.js 22+ (`brew install node`),
+and `python3` — the `claude` and `codex` launchers are Python scripts, and Xcode
+Command Line Tools provide it (`xcode-select --install`).
+
+```sh
+git clone https://github.com/polpedu-crypto/token-forecaster.git
+cd token-forecaster
+pnpm install
+cd apps/menubar && make dist
+open .build/TokenForecaster.app
+```
+
+`make dist` also writes `.build/TokenForecaster.zip`, which is what you send to
+someone else. It is ad-hoc signed rather than notarized, so on the receiving
+machine Gatekeeper needs one of:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/TokenForecaster.app
+```
+
+or a right-click → **Open** the first time. Full walkthrough, including the
+terminal status line and the `claude` and `codex` launchers, is in
+[apps/menubar/README.md](apps/menubar/README.md); the daemon and its API are
+documented in [apps/companion/README.md](apps/companion/README.md).
+
+## Install on Windows
+
+There is no menu bar app — that one is Swift and stays on macOS. Everything that
+produces a forecast runs on Windows: the daemon, the terminal status line, and
+the draft-aware `claude` and `codex` launchers, which open a pseudo console
+(ConPTY) where the Mac opens a pty. The dashboard the daemon serves on loopback is the UI in
+the menu bar's place.
+
+**Requirements:** Windows 10 1809+ (ConPTY), Node.js 22+, Python 3, and
+`pip install pywinpty`. Without pywinpty the draft forecast is the only thing
+that stops working, and it says so once rather than failing quietly.
+
+```powershell
+git clone https://github.com/polpedu-crypto/token-forecaster.git
+cd token-forecaster
+pnpm install
+pnpm build
+pnpm --filter @token-forecaster/companion build
+
+node --no-warnings apps\companion\dist\cli.js index
+node --no-warnings apps\companion\dist\cli.js install-shell   # then: . $PROFILE
+node --no-warnings apps\companion\dist\cli.js start
+```
+
+`install-shell` writes a `claude` and a `codex` function into your PowerShell
+profile, backing the profile up first and restoring it byte for byte on
+`uninstall-shell`. The
+status line, the Startup-folder recipe for running the daemon after a reboot,
+and where state is kept (`%LOCALAPPDATA%\TokenForecaster`) are all in
+[apps/companion/README.md](apps/companion/README.md).
 
 ## Getting started
 

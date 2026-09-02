@@ -1,0 +1,56 @@
+:root { color-scheme: light dark; }
+body {
+  margin: 0;
+  padding: 32px 24px;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #faf9f6;
+  color: #2c2b28;
+}
+main { max-width: 640px; margin: 0 auto; }
+h1 { font-size: 20px; margin: 0 0 4px; }
+h2 { font-size: 14px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.04em; color: #6b6a66; }
+.lede, .note { color: #6b6a66; }
+section {
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.row { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0; }
+.row.stacked { flex-direction: column; gap: 4px; }
+em { display: block; font-style: normal; font-size: 12px; color: #8a8983; }
+input[type="password"], select { font: inherit; padding: 6px 8px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.2); background: #fff; color: inherit; min-width: 260px; }
+button { font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.2); background: #fff; color: inherit; cursor: pointer; }
+button.danger { color: #b3261e; border-color: rgba(179, 38, 30, 0.35); }
+.consent-row { padding: 8px; border-radius: 8px; background: rgba(54, 92, 199, 0.05); }
+.actions-inline { flex-wrap: wrap; }
+.status:empty { display: none; }
+.status { font-size: 12px; align-self: center; }
+.status.ok { color: #2f7d4f; }
+.status.bad { color: #b3261e; }
+.saved { font-size: 12px; color: #2f7d4f; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+
+/* Welcome page only. It shares this sheet so both pages age together. */
+.kicker { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8983; margin: 0 0 6px; }
+.sample { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.35; color: #6b6a66; overflow-x: auto; margin: 16px 0 0; }
+ul.plain { margin: 0; padding-left: 18px; }
+ul.plain li { margin: 8px 0; color: #6b6a66; }
+ul.plain strong { color: #2c2b28; font-weight: 600; }
+.actions { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
+.button { display: inline-block; font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.2); background: #fff; color: inherit; text-decoration: none; cursor: pointer; }
+.button.primary { background: #2c2b28; border-color: #2c2b28; color: #faf9f6; }
+.meta { font-size: 12px; color: #8a8983; }
+
+@media (prefers-color-scheme: dark) {
+  body { background: #1e1e1c; color: #ececec; }
+  section { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.14); }
+  .lede, .note, h2, em { color: #a3a29c; }
+  input[type="password"], select, button, .button { background: #262624; border-color: rgba(255, 255, 255, 0.18); color: inherit; }
+  .kicker, .meta, ul.plain li, .sample { color: #a3a29c; }
+  ul.plain strong { color: #ececec; }
+  .button.primary { background: #ececec; border-color: #ececec; color: #1e1e1c; }
+}

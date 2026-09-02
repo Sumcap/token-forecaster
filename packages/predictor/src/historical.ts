@@ -51,11 +51,29 @@ export interface HistoricalQuantiles {
   p99: number;
 }
 
+/**
+ * Where a profile's numbers come from. Open-ended on purpose: the union grows
+ * when a corpus stops being one person's.
+ */
+export type ProfileProvenance = "single-user-corpus" | "multi-user-corpus";
+
 export interface HistoricalForecastProfile {
   id: string;
   generatedAt: string;
   /** Human-readable description of the workload represented by this profile. */
   scope: string;
+  /**
+   * Who the corpus came from, so a headless consumer can render the honest
+   * caveat without hardcoding a profile id.
+   *
+   * `"single-user-corpus"` means every quantile, every conditioned rung and
+   * every trained tree in this profile was fitted on one person's history: it
+   * is a population prior for that kind of work, not a calibration of the
+   * caller. Omitting the field means "not recorded", NOT "multi-user" — an
+   * older profile predates the field, so treat `undefined` as unknown and say
+   * so rather than claiming a provenance it never declared.
+   */
+  provenance?: ProfileProvenance;
   eligibleObservations: number;
   /**
    * Recency window the profile was fitted on, in days, or null when it was

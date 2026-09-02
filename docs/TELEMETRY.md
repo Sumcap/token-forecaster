@@ -91,6 +91,64 @@ server caps rows at 256 KiB, returns generic validation errors, never logs
 bodies, and strips schema-unknown fields before writing. Bind to loopback and
 let Caddy, nginx, or your cloud load balancer handle TLS and rate limiting.
 
+## Chrome extension collector
+
+The public extension must not contain the shared bearer token above. Its
+collector mode instead exposes anonymous per-install registration, idempotent
+batched events, and deletion:
+
+```sh
+export TOKEN_FORECASTER_TELEMETRY_FILE=/var/lib/token-forecaster/extension-events.jsonl
+export TOKEN_FORECASTER_INSTALL_REGISTRY_FILE=/var/lib/token-forecaster/installations.jsonl
+export TOKEN_FORECASTER_INSTALL_TOKEN_SECRET='at-least-32-random-characters-from-a-secret-manager'
+export TOKEN_FORECASTER_HOST=127.0.0.1
+export TOKEN_FORECASTER_PORT=8787
+pnpm telemetry:serve
+```
+
+Build the extension against the public TLS origin, never the loopback binding:
+
+```sh
+TF_TELEMETRY_ORIGIN=https://telemetry.example.com pnpm build:extension
+```
+
+The built manifest declares that one origin under
+`optional_host_permissions`. No request is made and the permission is not
+requested until the user explicitly grants diagnostics or research consent.
+
+- `POST /v1/installations` returns random access and deletion credentials. The
+  registry persists only keyed token hashes and a random installation hash;
+  there is no account identifier or shared credential in the extension.
+- `POST /v1/events` accepts at most 25 schema-validated events per batch. Event
+  ids are idempotent across retries and restarts. Operational diagnostics are
+  enumerated rather than an arbitrary properties bag.
+- `DELETE /v1/installations/current` revokes the installation and physically
+  compacts its rows out of the event JSONL.
+- Browser research outcomes carry
+  `actual.outputTokenQuality: "dom_estimate"`, a surface, and a call/turn scale.
+  Exclude them from provider-exact fits by default. Use them for a separately
+  named visible-surface model only after its own user-blocked gate passes.
+
+The handler includes modest in-memory registration and per-install event limits
+as a last line of defence. Enforce durable quotas, request-size limits, and
+abuse controls at the TLS edge as well. Do not log request bodies or
+authorization headers. The packaged `privacy.html` is not a substitute for the
+operator-specific public privacy page required by the store listing.
+
+Generate the privacy-safe readiness/accuracy report without emitting user
+hashes:
+
+```sh
+pnpm telemetry:report:extension /var/lib/token-forecaster/extension-events.jsonl
+```
+
+The report keeps call and whole-turn scales separate, counts independent
+installations and sessions, requires 15 installations with at least 20 sessions
+before recommending a user-blocked evaluation, and marks segments publishable
+only at eight or more users. Passing that data-volume gate does not promote a
+model; it opens the frozen leave-one-user-out evaluation described in
+`docs/MULTI-USER-PLAN.md`.
+
 ## Small VM deployment
 
 A single modest VM is enough for collection; model training stays offline.
@@ -105,8 +163,9 @@ A single modest VM is enough for collection; model training stays offline.
    storage, verify checksums, then retain the VM copy according to a written
    deletion policy. Do not log request bodies at the proxy.
 4. Monitor schema-rejection counts, missing pre-call fields, censoring, rows per
-   user/session, and delayed or duplicate completion events. Deduplicate on
-   observation id during evaluation rather than mutating the append log.
+   user/session, and delayed completion events. The extension ingest is
+   idempotent on event id; direct API observations should still be deduplicated
+   during evaluation.
 5. Evaluate chronologically. Bootstrap whole sessions and then whole users;
    publish coverage for every sufficiently populated user and major segment.
 

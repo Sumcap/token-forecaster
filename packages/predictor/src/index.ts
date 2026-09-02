@@ -50,6 +50,7 @@ export type {
   HistoricalForecastRequest,
   HistoricalForecastResult,
   HistoricalQuantiles,
+  ProfileProvenance,
   SessionTotalForecast,
   TurnTotalForecast,
 } from "./historical.js";

@@ -193,6 +193,39 @@ steps behind the Phase 4/5 items below.
       ("Integration contract"): pass model id, maxTokens and thinkingEnabled;
       branch on `calibration.usedFallback`.
 - [ ] packages/cli: count, forecast, evaluate
+- [x] apps/extension: a Chrome MV3 extension that puts the live count and the
+      forecast in the claude.ai composer (26 August 2026). It is a pure
+      cold-start consumer: the bundled profile ships inside the content script,
+      nothing leaves the browser by default, and the panel states that the
+      profile is Claude Code traffic while the surface is chat, so the
+      confidence is capped at `low`. The optional Anthropic `count_tokens` path
+      is off until the user supplies a key. See `apps/extension/README.md`.
+- [x] apps/extension: install-time onboarding (26 August 2026). `onInstalled`
+      opens a welcome page on a fresh install only, never on an update. The
+      page states what the three numbers are, that nothing leaves the browser
+      by default, and the provenance of the profile: fitted on one corpus, so a
+      prior for this kind of work rather than a calibration of the installing
+      user. `onboardingSeenVersion` records what was shown.
+- [ ] **Single-corpus provenance is the top priority.** The shipped profile was
+      fitted on one user. The measurement, the statistics, the release copy, and
+      the validation protocol that retires it are planned in
+      `docs/MULTI-USER-PLAN.md`. Phase 1 there (`probe-workload-transfer.mjs`,
+      `probe-user-variance.mjs`) is pure engineering and gates the rest.
+- [ ] apps/extension: per-user pre-training. The extension cannot read
+      `~/.claude`, so a local trainer has to run outside the browser and reach
+      it over a native messaging host (chosen over a localhost server: the
+      browser starts the host on demand, so there is no always-on daemon, no
+      open port for other local processes, and the extension-to-binary binding
+      is enforced by the browser rather than by an auth token we invent).
+      Blocked on three things: (a) the fitting pipeline still lives in
+      `experiments/evaluation/*.mjs`, and `buildHistoricalProfile` alone
+      produces only the quantile groups, not the boost trees, `turnTotals`, or
+      `sessionTotals`, so it has to move into a shipped package; (b) the engine
+      imports `BUNDLED_CLAUDE_CODE_PROFILE` directly and has to take the
+      profile as data; (c) adoption has to stay gated per rung on sample count
+      and on the chronological holdout, with the bundled profile as the
+      fallback, and the installer has to raise `cleanupPeriodDays` or a fresh
+      user's corpus is deleted at 30 days before it can ever clear a gate.
 
 ## Phase 7: workflow forecasts (out of MVP)
 
