@@ -26,7 +26,7 @@
  *   2. R^2 on log(output tokens), so the result extends the ceiling table in
  *      §4.2 rather than floating free of it.
  *
- * KILL CONDITION, pre-committed in docs/NEXT-PROMPT.md: if prompt features do
+ * KILL CONDITION, pre-committed before the run: if prompt features do
  * not beat model+thinking with a 95% CI entirely below zero AND do not lift R^2
  * above ~0.25, then output length is not predictable from anything this project
  * can see, and the honest move is to stop and salvage (TASK 4).
@@ -52,6 +52,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import {
   blockBootstrapDifference,
@@ -109,7 +110,7 @@ const rows = allRows
   .sort((a, b) => a.timestampMs - b.timestampMs);
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   minGroup: MIN_GROUP,
   asOf,
 };

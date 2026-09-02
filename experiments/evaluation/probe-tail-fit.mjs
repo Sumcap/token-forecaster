@@ -37,6 +37,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import { fmt, mulberry32, pct, pinball, quantile } from "./lib/stats.mjs";
 
@@ -66,7 +67,7 @@ const rows = allRows
   .filter((row) => Number.isFinite(row.timestampMs) && row.outputTokens > 0)
   .sort((a, b) => a.timestampMs - b.timestampMs);
 for (const row of rows) row.thinking = hasThinkingBlock(row) ? "yes" : "no";
-const report = { generatedAt: new Date().toISOString(), source: projectsDir };
+const report = { generatedAt: new Date().toISOString(), source: redactHome(projectsDir) };
 const values = rows.map((r) => r.outputTokens);
 
 console.log(

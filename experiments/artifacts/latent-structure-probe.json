@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-08-03T15:18:58.852Z",
-  "source": "/Users/polpedu/.claude/projects",
+  "source": "~/.claude/projects",
   "uniqueApiCalls": 13969,
   "charsPerOutputToken": {
     "text only, no thinking blk": {

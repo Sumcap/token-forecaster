@@ -1,8 +1,8 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { derivePromptFeatures, loadRequests } from "./load-history.mjs";
+import { derivePromptFeatures, loadRequests, redactHome } from "./load-history.mjs";
 import { portableBoostFeatures } from "./quantile-boost.mjs";
 import {
   portableQuantileBoostFeatures,
@@ -230,5 +230,39 @@ describe("loadRequests prompt ancestry", () => {
     expect(next.resultPathHashes).toHaveLength(1);
     expect(JSON.stringify(rows)).not.toContain("/repo");
     expect(JSON.stringify(rows)).not.toContain("auth.test.ts");
+  });
+});
+
+describe("redactHome", () => {
+  // These strings are what gets COMMITTED to a public repo, so the boundary
+  // cases matter more than the happy path.
+  it("rewrites the home directory and paths beneath it", () => {
+    const home = homedir();
+    expect(redactHome(home)).toBe("~");
+    expect(redactHome(path.join(home, ".claude", "projects"))).toBe(
+      `~${path.sep}.claude${path.sep}projects`,
+    );
+  });
+
+  it("does not treat a sibling directory as a subpath of home", () => {
+    // /Users/alice-backup belongs to nobody in particular, but it is NOT
+    // inside /Users/alice -- a raw prefix match would publish `~-backup`.
+    const sibling = `${homedir()}-backup${path.sep}projects`;
+    expect(redactHome(sibling)).not.toContain("~-backup");
+    expect(redactHome(sibling)).toBe("<redacted-path>");
+  });
+
+  it("drops an absolute path rooted outside home rather than publishing it", () => {
+    // An external corpus path can name a client; it cannot be expressed
+    // relative to `~`, so there is nothing safe to publish.
+    expect(redactHome(path.resolve(path.sep, "mnt", "corpora", "acme", "projects"))).toBe(
+      "<redacted-path>",
+    );
+  });
+
+  it("passes through relative paths and non-strings untouched", () => {
+    expect(redactHome("experiments/artifacts")).toBe("experiments/artifacts");
+    expect(redactHome(null)).toBe(null);
+    expect(redactHome(undefined)).toBe(undefined);
   });
 });

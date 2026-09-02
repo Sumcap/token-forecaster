@@ -21,6 +21,9 @@ experiments/artifacts/local/
 # logs
 *.log
 
+# local agent config (this repo is worked on with Claude Code)
+.claude/
+
 # swift menu bar app
 apps/menubar/.build/
 apps/menubar/*.app

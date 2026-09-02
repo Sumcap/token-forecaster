@@ -1,6 +1,8 @@
 {
   "name": "@token-forecaster/cli",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "type": "module",
   "description": "CLI: token-forecaster count | forecast | run | evaluate | export (Phase 3+)",
   "main": "./dist/index.js",

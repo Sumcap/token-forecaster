@@ -44,7 +44,7 @@ import path from "node:path";
 // published findings came from a second, subtly different loader. So the parent
 // link is imported from the shared module and joined on requestId, at the cost
 // of one extra pass over the transcripts.
-import { loadRequests } from "./lib/load-history.mjs";
+import { loadRequests, redactHome } from "./lib/load-history.mjs";
 // The adoption statistic itself is shared, for the same reason. A probe grading
 // with the 5-fold t while this script grades with a block bootstrap is how the
 // same stable effect got adopted and refused twenty minutes apart (§7.1).
@@ -1286,7 +1286,7 @@ const deploymentProfile = {
 
 const report = {
   generatedAt,
-  source: projectsDir,
+  source: redactHome(projectsDir),
   filesScanned,
   badLines,
   baseline: STATIC_BASELINE,

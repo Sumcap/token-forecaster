@@ -104,6 +104,9 @@ export declare function derivePromptFeatures(rawText: unknown): PromptFeaturesRa
 
 export declare function defaultProjectsDir(): string;
 
+/** A path inside the operator's home rewritten to `~`; any other absolute path dropped. */
+export declare function redactHome<T>(value: T): T | string;
+
 export declare function loadRequests(
   projectsDir?: string,
   options?: LoadRequestsOptions,

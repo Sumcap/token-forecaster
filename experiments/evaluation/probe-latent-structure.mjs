@@ -37,6 +37,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 
 const args = process.argv.slice(2);
@@ -86,7 +87,7 @@ function groupBy(source, key) {
   return [...groups.entries()].sort((a, b) => b[1].length - a[1].length);
 }
 
-const report = { generatedAt: new Date().toISOString(), source: projectsDir };
+const report = { generatedAt: new Date().toISOString(), source: redactHome(projectsDir) };
 
 console.log(`Scanned ${filesScanned} transcripts -> ${fmt(rows.length)} unique API calls\n`);
 report.uniqueApiCalls = rows.length;

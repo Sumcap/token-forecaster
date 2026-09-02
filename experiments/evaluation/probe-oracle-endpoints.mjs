@@ -26,7 +26,7 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
-import { defaultProjectsDir, loadRequests } from "./lib/load-history.mjs";
+import { defaultProjectsDir, loadRequests, redactHome } from "./lib/load-history.mjs";
 import { fmt, median, pct, quantile } from "./lib/stats.mjs";
 
 const run = promisify(execFile);
@@ -177,7 +177,7 @@ console.log(
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   minGroup: Number(minGroup),
   endpoints: results,
   summary: {

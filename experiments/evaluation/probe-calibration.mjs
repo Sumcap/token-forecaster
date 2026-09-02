@@ -38,6 +38,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import {
   blockBootstrapDifference,
@@ -154,7 +155,7 @@ for (let fold = 0; fold < 5; fold++) {
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   calls: rows.length,
   minGroup: MIN_GROUP,
   calibrationFraction: CALIBRATION_FRACTION,

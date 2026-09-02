@@ -1,6 +1,8 @@
 {
   "name": "@token-forecaster/playground",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "private": true,
   "type": "module",
   "scripts": {

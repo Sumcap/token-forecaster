@@ -1,6 +1,8 @@
 {
   "name": "@token-forecaster/predictor",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
   "type": "module",
   "description": "Output-length forecasting with hierarchical quantiles, portable trained corrections, and explicit cold-start fallback",
   "main": "./dist/index.js",

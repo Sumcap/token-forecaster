@@ -20,7 +20,7 @@
  */
 
 import { createReadStream } from "node:fs";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { readdir } from "node:fs/promises";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
@@ -390,6 +390,44 @@ function userText(entry) {
 export const defaultProjectsDir = () =>
   path.join(homedir(), ".claude", "projects");
 
+// Artifacts are committed to a public repo, so a path that starts inside the
+// operator's home directory is rewritten to `~` before it is serialized. The
+// read path is untouched: only what we PUBLISH is redacted.
+//
+// The match is on a path BOUNDARY, not a raw prefix: with home = /Users/alice,
+// /Users/alice-backup is a different user's directory, not a subpath, and
+// rewriting it to `~-backup` would publish a corrupted path. A path rooted
+// outside home cannot be redacted into `~` at all, so it is dropped rather
+// than published verbatim -- an absolute corpus path can name a client.
+export const redactHome = (p) => {
+  if (typeof p !== "string") return p;
+  const home = homedir();
+  if (p === home) return "~";
+  if (p.startsWith(home + path.sep)) return `~${p.slice(home.length)}`;
+  return path.isAbsolute(p) ? "<redacted-path>" : p;
+};
+
+// Workload ids end up in committed artifacts, and the directory names they are
+// derived from are short and guessable, so an unsalted digest is a dictionary
+// attack that discloses local project paths. Default to a salt that is random
+// per run: ids stay comparable inside one report, which is all any consumer of
+// them needs, and mean nothing outside it. Set TOKEN_FORECASTER_STUDY_SALT to a
+// value you keep out of the repo when you want ids that line up ACROSS
+// regenerations, e.g. to track one workload over several corpus endpoints.
+let runSalt = null;
+const studySalt = () => {
+  const configured = process.env.TOKEN_FORECASTER_STUDY_SALT;
+  if (configured) return configured;
+  if (runSalt === null) {
+    runSalt = randomUUID();
+    console.warn(
+      "[load-history] TOKEN_FORECASTER_STUDY_SALT is not set: workload ids are " +
+        "random for this run and will not match previous artifacts.",
+    );
+  }
+  return runSalt;
+};
+
 async function* jsonlFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   for (const entry of entries) {
@@ -451,7 +489,7 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
     const relative = path.relative(projectsDir, file);
     const workloadRoot = relative.split(path.sep)[0] || "(root)";
     const workloadId = createHash("sha256")
-      .update(`token-forecaster-workload\0${workloadRoot}`)
+      .update(`token-forecaster-workload\0${studySalt()}\0${workloadRoot}`)
       .digest("hex")
       .slice(0, 16);
     const lines = createInterface({

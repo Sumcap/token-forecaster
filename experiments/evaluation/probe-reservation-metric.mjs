@@ -41,6 +41,7 @@ import {
   defaultProjectsDir,
   hasThinkingBlock,
   loadRequests,
+  redactHome,
 } from "./lib/load-history.mjs";
 import { trainPortableQuantileBoost } from "./lib/quantile-boost.mjs";
 import {
@@ -327,7 +328,7 @@ const COMPARISONS = [
 
 const report = {
   generatedAt: new Date().toISOString(),
-  source: projectsDir,
+  source: redactHome(projectsDir),
   calls: rows.length,
   holdoutCalls: records.length,
   lomoCalls: lomoRecords.length,

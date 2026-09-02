@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-08-12T01:47:01.773Z",
-  "source": "/Users/polpedu/.claude/projects",
+  "source": "~/.claude/projects",
   "predictorVersion": "baseline-3-boosted/0.3.0",
   "dataset": {
     "filesScanned": 517,
@@ -445,7 +445,7 @@
   },
   "segments": {
     "byWorkload": {
-      "5aa86f5894fb06c9": {
+      "workload-01": {
         "n": 1446,
         "baseline": {
           "n": 1446,
@@ -506,7 +506,7 @@
         },
         "writeRate": 0.03734439834024896
       },
-      "0c5debe71f4a713d": {
+      "workload-02": {
         "n": 1284,
         "baseline": {
           "n": 1284,
@@ -567,7 +567,7 @@
         },
         "writeRate": 0.010903426791277258
       },
-      "c798f46f3ee652a0": {
+      "workload-04": {
         "n": 602,
         "baseline": {
           "n": 602,

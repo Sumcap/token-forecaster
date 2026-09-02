@@ -23,7 +23,7 @@ Model                 Claude Opus 5        extended thinking: on
 Input                 18,420 tokens        Anthropic counted
 Context usage         18,420 / 1,000,000   1.84%
 Reserved output       16,000 tokens
-Forecast output       p50: ~500 · p90: ~1,870 · p99: ~6,510
+Forecast output       p50: ~500 · p90: ~1,830 · p99: ~6,500
 Projected total       p50: ~18,920 · p90: ~20,290
 Context after p90     ~979,710 tokens
 Estimated cost        $0.0617 to $0.0843
@@ -43,18 +43,19 @@ them differently:
 
 ## The data
 
-The whole predictor is built from real usage: 471 Claude Code transcript
-files, 16,011 unique API calls after deduplication, zero calls cut off by the
-token limit. Those files come from one person's `~/.claude`: the corpus
-contains many calls, but only one identifiable user. Read every number below
+The whole predictor is built from real usage: 517 Claude Code transcript
+files, 16,687 unique API calls after deduplication, zero calls cut off by the
+token limit. One caveat worth stating plainly, because the artifacts record it
+and a reader will find it: this is **one operator's history**, 348 sessions on a
+single machine. It is a real workload, not a population. Read every number below
 as a prior for this kind of work, not as a calibration of how you write. What
 that costs, and the plan to retire it, is in
 [docs/MULTI-USER-PLAN.md](docs/MULTI-USER-PLAN.md). This is what those replies
 actually look like:
 
-![Distribution of output lengths across 16,011 calls](docs/report-assets/data-distribution.png)
+![Distribution of output lengths across 16,687 calls](docs/report-assets/data-distribution.png)
 
-Half of all replies are under 400 tokens. One in a hundred is over 6,600. That
+Half of all replies are under 400 tokens. One in a hundred is over 6,480. That
 long tail is why a single point estimate would be useless: any number small
 enough to be a good typical guess would be overrun badly several times per
 session.
@@ -88,9 +89,10 @@ allowed to replace the current one.
 A few design choices worth calling out:
 
 - **A ladder, not a model soup.** The predictor walks down a ladder of
-  historical groups, from very specific (model + thinking + effort + task) to
-  very broad (all calls pooled), and uses the first rung with at least 100
-  samples. A request it has never seen still gets a sane answer.
+  historical groups, from more specific (model + thinking) to very broad (all
+  calls pooled), and uses the first rung with at least 100 samples. More
+  specific rungs exist in the code (effort, task) but stay empty until a corpus
+  populates them; the bundled profile ships twelve groups. A request it has never seen still gets a sane answer.
 - **The p90 is the number that matters.** Reserving too much room wastes a
   little context. Reserving too little cuts a reply off mid-file. The loss
   function prices a token of shortfall nine times higher than a token of
@@ -107,13 +109,37 @@ predictor never trained on, they do:
 ![Coverage vs promise at p50, p90, and p99](docs/report-assets/accuracy-calibration.png)
 
 Each input the predictor uses had to earn its place. Starting from fixed
-numbers with no model at all, every added signal cuts the error, and the full
-shipped predictor cuts it 45 percent:
+numbers with no model at all, learning from history, then the model id, then
+the thinking flag each cut the error, and the shipped predictor lands 41 percent
+below where it started.
+
+One rung breaks the pattern, and the chart shows it rather than hiding it. The
+prompt-path rung is what the trained correction is fitted on top of, and on this
+split it is worse than the thinking rung it extends: 538 against 520, a cost of
+18 per call. The correction then wins 16 of that back (538 to 522), so its
+headline gain -- -17.4 per call, CI [-26.5, -8.4], the number the adoption gate
+scored -- is measured against a base that the plainer ladder already beat.
+
+That is the shape of a correction spending its capacity undoing a base-rung
+mistake, so the obvious fix was tested: refit the same correction on a base with
+the prompt-path rungs removed (`probe-base-ladder.mjs`). On a single split that
+does win, by 15.8 per call, CI [-28.4, -3.8]. On the rolling comparison the gate
+actually uses it does not: -4.8 per call, CI [-12.2, +2.9], an interval through
+zero. By the pre-committed rule the change is not adopted and the ladder stays
+as shipped -- but the honest summary is that the prompt-path rung is not paying
+for itself, it is being carried by the correction above it. (That probe was run
+against the archived transcript snapshot, which reconstructs 16,839 calls rather
+than the 16,687 the committed artifacts were generated from, so its absolute
+losses sit a few points off the ladder above. The paired comparisons inside it
+are unaffected.)
 
 ![Error falling as each signal is added](docs/report-assets/accuracy-loss-ladder.png)
 
 The improvement is not a lucky split. Scored across five consecutive slices of
-held-out traffic, the shipped predictor wins in every one:
+held-out traffic, the shipped predictor has the lower loss in all five. Two of
+the five clear the adoption gate on their own; the other three are directionally
+right with intervals that still cross zero at that sample size, which is why the
+decision rests on the pooled comparison (-17.4 per call, CI [-26.5, -8.4]):
 
 ![The win holds across five time slices](docs/report-assets/accuracy-rolling-folds.png)
 
@@ -127,7 +153,10 @@ predictor. Dropping the thinking flag is what actually hurts:
 
 Even a model the profile has never seen gets a useful answer. Pooled
 thinking-conditioned groups replaced the old blended fallback after beating it
-by 43 points per call in a leave-one-model-out test:
+by 55 points per call in a leave-one-model-out test (CI [-68.2, -39.9]). This
+section and the two charts around it are measured on the earlier 14,978-call
+snapshot of the same history, not the 16,687-call corpus quoted above; the
+fallback has not been re-scored since:
 
 ![Unknown-model forecasts before and after the pooled fallback](docs/report-assets/fallback-before-after.png)
 
@@ -183,9 +212,9 @@ const { forecast, calibration } = historicalBaselineForecast(
 Three rules save most integration mistakes:
 
 1. **Optional flags are tri-state.** Omitting `thinkingEnabled` means unknown,
-   not false. The no-thinking groups have about a third of the p99 of the
+   not false. The no-thinking groups have about 40 percent of the p99 of the
    thinking groups, so coercing unknown to false would under-forecast a
-   thinking request by roughly 3x at the tail. The same logic applies to
+   thinking request by roughly 2.5x at the tail. The same logic applies to
    `promptMentionsPath` and `previousOutputTokens`: pass a value when you
    observed one, omit the field when you did not.
 2. **There is no silent degradation.** If the profile does not know your
@@ -241,7 +270,7 @@ token-forecaster/
 │   ├── personal/          Local training: fit, evaluate, and gate your profile
 │   ├── ingest-claude/     Read ~/.claude/projects transcripts
 │   ├── ingest-codex/      Read ~/.codex/sessions transcripts
-│   └── cli/               Planned; not implemented yet
+│   └── cli/               planned: count | forecast | run | evaluate | export
 ├── experiments/           Probes, evaluation scripts, generated artifacts
 ├── research/              Competitive analysis, literature review, ADRs
 ├── fixtures/              Race-condition fixtures for count reconciliation
@@ -331,9 +360,10 @@ Type into the playground and the count updates instantly from a labelled local
 estimate, then flips to the provider-counted number after a debounce. Stale
 verification responses can never overwrite newer counts.
 
-All the charts in this README are generated from the JSON artifacts in
-`experiments/artifacts/` by the scripts in `docs/report-assets/`, so they
-regenerate together with the data.
+Most of the charts in this README are generated from the JSON artifacts in
+`experiments/artifacts/` by the scripts in `docs/report-assets/`; regenerate
+them with `python3 docs/report-assets/make-accuracy.py`. A few (the adoption
+gate, the fallback comparison, the workload drift) are still drawn by hand.
 
 ## Where things stand
 
