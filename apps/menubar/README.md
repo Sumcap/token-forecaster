@@ -132,8 +132,8 @@ who trust you enough to bypass Gatekeeper deliberately.
   `xcode-select --install` once.
 - Nothing else. No pnpm, no repo checkout, no Xcode project.
 
-The zip contains everything else it needs: the daemon, the `tf-claude` launcher
-at `Contents/Resources/bin/tf-claude`, and the terminal status line at
+The zip contains everything else it needs: the daemon, the `tf-claude` and
+`tf-codex` launchers at `Contents/Resources/bin/`, and the terminal status line at
 `Contents/Resources/companion/statusline.js`. `build-dist.sh` fails the build if
 any of the three is missing, because a bundle without the launcher writes a
 `claude()` block into the recipient's shell that silently points at nothing.
@@ -296,9 +296,10 @@ which has room to lay them out.
 5. **Settings** submenu — Show number in menu bar, Detailed terminal status
    line (adds P50/P90 and the session total to the bar in the terminal),
    Forecast from your draft (conditions the forecast on the prompt being typed
-   when Claude Code was launched with `tf-claude`; rebuilds the profile),
-   Wrap `claude` in new terminals (on from the first run; switching it off is
-   remembered), Launch at login,
+   when the CLI was launched with `tf-claude` or `tf-codex`; rebuilds the
+   profile),
+   Wrap `claude` and `codex` in new terminals (on from the first run; switching
+   it off is remembered), Launch at login,
    Pause/Resume watching, Choose history directories…, Restart daemon,
    Open log, Delete all derived data…,
    Uninstall Token Forecaster…

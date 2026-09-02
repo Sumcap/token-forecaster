@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { defaultDataDir, draftDir } from "@token-forecaster/personal/data-dir";
 import { describe, expect, it } from "vitest";
 
-import { launcherPath } from "./launcher.js";
+import { launcherPath, launcherTargets } from "./launcher.js";
 import { findPython, pythonCandidates } from "./python.js";
 
 const BIN = join(dirname(fileURLToPath(import.meta.url)), "..", "bin");
@@ -27,15 +27,44 @@ describe("launcherPath", () => {
     }
   });
 
-  it("keeps the Windows shim runnable by cmd.exe", () => {
-    const shim = readFileSync(launcherPath("win32"), "utf8");
-    // `goto` is unreliable in a batch file with bare newlines, and this one
-    // branches four ways before it starts anything.
-    expect(shim.includes("\r\n")).toBe(true);
-    expect(shim.split("\n").every((line) => line === "" || line.endsWith("\r"))).toBe(true);
-    // Whatever else happens, the session still starts.
-    expect(shim).toContain(":fallback");
-    expect(shim).toContain("claude %*");
+  it("keeps the Windows shims runnable by cmd.exe", () => {
+    for (const program of ["claude", "codex"] as const) {
+      const shim = readFileSync(launcherPath("win32", program), "utf8");
+      // `goto` is unreliable in a batch file with bare newlines, and this one
+      // branches four ways before it starts anything.
+      expect(shim.includes("\r\n")).toBe(true);
+      expect(shim.split("\n").every((line) => line === "" || line.endsWith("\r"))).toBe(true);
+      // Whatever else happens, the session still starts.
+      expect(shim).toContain(":fallback");
+      expect(shim).toContain(`${program} %*`);
+    }
+  });
+
+  it("ships a launcher for both CLIs", () => {
+    // Codex has no status-line hook of any kind, so `tf-codex` is the only
+    // thing that can put a forecast under its composer. A build that shipped
+    // without it would leave `codex` wrapped by a file that is not there.
+    for (const platform of ["darwin", "win32"] as const) {
+      const targets = launcherTargets(platform);
+      expect(statSync(targets.claude).isFile()).toBe(true);
+      expect(statSync(targets.codex).isFile()).toBe(true);
+      expect(targets.claude).not.toBe(targets.codex);
+    }
+  });
+
+  it("gives the launchers everything they import", () => {
+    // Both are front ends over the same modules, and a missing one fails at
+    // the moment someone types `codex`, not at build time.
+    const python = findPython();
+    expect(python).not.toBeNull();
+    const [command, ...args] = python as [string, ...string[]];
+    expect(() =>
+      execFileSync(command, [
+        ...args,
+        "-c",
+        `import sys; sys.path.insert(0, ${JSON.stringify(BIN)}); import tf_wrap, tf_reserve, tf_bar, tf_draft, tf_paths`,
+      ]),
+    ).not.toThrow();
   });
 });
 

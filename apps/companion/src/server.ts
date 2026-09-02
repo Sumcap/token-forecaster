@@ -4,8 +4,14 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import { join } from "node:path";
 
 import { dashboardHtml, isPageSlug } from "./dashboard.js";
-import { launcherPath } from "./launcher.js";
-import { aliasInstalled, installAlias, shellTargetFor, uninstallAlias } from "./shell-alias.js";
+import { launcherTargets } from "./launcher.js";
+import {
+  aliasInstalled,
+  installAlias,
+  shellTargetFor,
+  shippedTargets,
+  uninstallAlias,
+} from "./shell-alias.js";
 import type { CompanionService } from "./service.js";
 
 /**
@@ -178,9 +184,10 @@ export async function startServer(options: StartServerOptions): Promise<RunningS
       return;
     }
     if (request.method === "POST" && path === "/turn") {
-      // Reported by whatever can see the turn as it happens — today the Claude
-      // Code status line. Numbers only; the body carries no prompt text and the
-      // session id is hashed before it is served back out again.
+      // Reported by whatever can see the turn as it happens: the status line
+      // in Claude Code, and `bin/tf-codex` through the same renderer, since
+      // Codex will not run one. Numbers only; the body carries no prompt text
+      // and the session id is hashed before it is served back out again.
       const body = await readJson(request);
       const provider = body["provider"];
       if (provider !== "openai" && provider !== "anthropic") {
@@ -247,7 +254,7 @@ export async function startServer(options: StartServerOptions): Promise<RunningS
       if (typeof body["shellAlias"] === "boolean") {
         const rcPath = shellRc();
         if (rcPath) {
-          if (body["shellAlias"]) installAlias(rcPath, launcherPath());
+          if (body["shellAlias"]) installAlias(rcPath, shippedTargets(launcherTargets()));
           else uninstallAlias(rcPath);
         }
         // Asked and answered, either way: never offer again.

@@ -2,9 +2,15 @@
 import { PersonalStore, defaultDataDir } from "@token-forecaster/personal";
 
 import { startDaemon } from "./daemon.js";
-import { launcherPath } from "./launcher.js";
+import { launcherPath, launcherTargets } from "./launcher.js";
 import { findPython } from "./python.js";
-import { installAlias, shellTargetFor, syntaxFor, uninstallAlias } from "./shell-alias.js";
+import {
+  installAlias,
+  shellTargetFor,
+  shippedTargets,
+  syntaxFor,
+  uninstallAlias,
+} from "./shell-alias.js";
 import { CompanionService } from "./service.js";
 
 /**
@@ -89,14 +95,15 @@ async function main(): Promise<number> {
     const target = explicit ? { rcPath: explicit, syntax: syntaxFor(explicit) } : shellTargetFor();
     if (!target) {
       out(
-        `unsupported shell: ${process.env["SHELL"] ?? "(unset)"}. Pass --rc <path>, or add this line yourself:`,
+        `unsupported shell: ${process.env["SHELL"] ?? "(unset)"}. Pass --rc <path>, or add these lines yourself:`,
       );
-      out(`  alias claude="${launcherPath()}"`);
+      out(`  alias claude="${launcherPath(process.platform, "claude")}"`);
+      out(`  alias codex="${launcherPath(process.platform, "codex")}"`);
       return 2;
     }
     const result =
       command === "install-shell"
-        ? installAlias(target.rcPath, launcherPath(), target.syntax)
+        ? installAlias(target.rcPath, shippedTargets(launcherTargets()), target.syntax)
         : uninstallAlias(target.rcPath);
     out(`${result.message}: ${result.rcPath}`);
     if (result.backupPath) out(`original kept at ${result.backupPath}`);
@@ -107,7 +114,7 @@ async function main(): Promise<number> {
           : `open a new terminal, or run: source ${result.rcPath}`,
       );
     }
-    // The block is in place and `claude` still works either way, so this is a
+    // The block is in place and both CLIs still work either way, so this is a
     // warning rather than a failure — but the draft forecast it was written
     // for cannot run without an interpreter, and nothing else would say so.
     if (command === "install-shell" && findPython() === null) {

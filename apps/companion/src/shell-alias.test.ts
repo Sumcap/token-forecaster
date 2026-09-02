@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import {
   BACKUP_SUFFIX,
+  BEGIN_MARKER,
   aliasInstalled,
   block,
   ensureAliasOnFirstRun,
@@ -14,6 +15,7 @@ import {
   powerShellProfilePath,
   rcPathFor,
   shellTargetFor,
+  shippedTargets,
   syntaxFor,
   uninstallAlias,
   withBlock,
@@ -46,6 +48,16 @@ function launcherFile(): string {
 }
 
 const TARGET = MISSING_TARGET;
+
+/**
+ * One launcher, in the shape the writer takes them.
+ *
+ * The block wraps every CLI it has a launcher for, so the argument is a map;
+ * most of what is asserted below is about one wrapper at a time.
+ */
+function wrapping(target: string) {
+  return { claude: target };
+}
 const ORIGINAL = 'export PATH="$HOME/bin:$PATH"\nalias ll="ls -la"\n';
 
 describe("rcPathFor", () => {
@@ -141,14 +153,14 @@ describe("the PowerShell block", () => {
 
   it("round-trips a profile back to exactly what it was", () => {
     const before = "Set-Alias ll Get-ChildItem\n";
-    expect(withoutBlock(withBlock(before, PS_TARGET, "powershell"))).toBe(before);
+    expect(withoutBlock(withBlock(before, wrapping(PS_TARGET), "powershell"))).toBe(before);
   });
 
   it("leaves no blank line behind in a CRLF profile", () => {
     // PowerShell profiles are usually CRLF, so the blank line this adds ahead
     // of its block is four characters, not two.
     const before = "Set-Alias ll Get-ChildItem\r\n";
-    expect(withoutBlock(withBlock(before, PS_TARGET, "powershell"))).toBe(before);
+    expect(withoutBlock(withBlock(before, wrapping(PS_TARGET), "powershell"))).toBe(before);
   });
 
   it("quotes a path PowerShell would otherwise interpret", () => {
@@ -156,14 +168,14 @@ describe("the PowerShell block", () => {
     // expands nothing, so `$` in a user name is inert -- but a quote in the
     // path would end the string, and that has one escape: doubling it.
     const awkward = "C:\\Users\\o'brien\\$env\\tf-claude.cmd";
-    const rendered = block(awkward, "powershell");
+    const rendered = block(wrapping(awkward), "powershell");
     expect(rendered).toContain("'C:\\Users\\o''brien\\$env\\tf-claude.cmd'");
   });
 
   it("cannot recurse into itself when the launcher is missing", () => {
     // `Get-Command -CommandType Application` never resolves to a function, so
     // the fallback reaches the real claude rather than this block again.
-    const rendered = block(PS_TARGET, "powershell");
+    const rendered = block(wrapping(PS_TARGET), "powershell");
     expect(rendered).toContain("-CommandType Application");
     expect(rendered).toContain("Test-Path -LiteralPath $tf -PathType Leaf");
   });
@@ -218,7 +230,7 @@ describe.skipIf(POWERSHELL === null)("the PowerShell block, run by PowerShell", 
     dirs.push(dir);
     const launcher = fakeProgram(dir, "tf-claude");
     const profile = join(dir, "profile.ps1");
-    installAlias(profile, launcher);
+    installAlias(profile, wrapping(launcher));
     expect(runWithProfile(profile, "claude --resume", dir).trim()).toBe("tf-claude --resume");
   });
 
@@ -227,7 +239,7 @@ describe.skipIf(POWERSHELL === null)("the PowerShell block, run by PowerShell", 
     dirs.push(dir);
     fakeProgram(dir, "claude");
     const profile = join(dir, "profile.ps1");
-    installAlias(profile, join(dir, "missing", "tf-claude.cmd"));
+    installAlias(profile, wrapping(join(dir, "missing", "tf-claude.cmd")));
     expect(runWithProfile(profile, "claude --version", dir).trim()).toBe("claude --version");
   });
 });
@@ -239,7 +251,7 @@ describe("installing into a PowerShell profile", () => {
     const dir = mkdtempSync(join(tmpdir(), "tf-ps-"));
     dirs.push(dir);
     const profile = join(dir, "PowerShell", "Microsoft.PowerShell_profile.ps1");
-    const installed = installAlias(profile, "C:\\tf\\tf-claude.cmd");
+    const installed = installAlias(profile, wrapping("C:\\tf\\tf-claude.cmd"));
     expect(installed.changed).toBe(true);
     const written = readFileSync(profile, "utf8");
     expect(written).toContain("function claude {");
@@ -250,18 +262,54 @@ describe("installing into a PowerShell profile", () => {
   });
 });
 
+describe("wrapping both CLIs", () => {
+  it("writes one function per launcher, in one block", () => {
+    // One block, not two: install, update and uninstall all find their work by
+    // the same pair of markers, and a second block would be a second thing to
+    // remove from someone's shell config.
+    const rendered = block({ claude: "/tf/tf-claude", codex: "/tf/tf-codex" });
+    expect(rendered).toContain("claude() {");
+    expect(rendered).toContain("codex() {");
+    expect(rendered.indexOf(BEGIN_MARKER)).toBe(0);
+    expect(rendered.split(BEGIN_MARKER)).toHaveLength(2);
+  });
+
+  it("falls back to the real command per CLI, without recursing", () => {
+    const rendered = block({ claude: "/tf/tf-claude", codex: "/tf/tf-codex" });
+    expect(rendered).toContain('command codex "$@"');
+    expect(rendered).toContain('command claude "$@"');
+  });
+
+  it("writes no wrapper for a CLI this build has no launcher for", () => {
+    // A bundle built before tf-codex existed still installs a working `claude`.
+    // What it must not write is a `codex` function around a file that is not
+    // there, which would shell out through the guard on every invocation.
+    const rendered = block({ claude: "/tf/tf-claude", codex: null });
+    expect(rendered).toContain("claude() {");
+    expect(rendered).not.toContain("codex() {");
+  });
+
+  it("keeps only the launchers that were actually shipped", () => {
+    const dir = mkdtempSync(join(tmpdir(), "tf-shipped-"));
+    dirs.push(dir);
+    const claude = join(dir, "tf-claude");
+    writeFileSync(claude, "#!/bin/sh\n", { mode: 0o755 });
+    expect(shippedTargets({ claude, codex: join(dir, "tf-codex") }, "darwin")).toEqual({ claude });
+  });
+});
+
 describe("withBlock / withoutBlock", () => {
   it("round-trips a file back to exactly what it was", () => {
-    expect(withoutBlock(withBlock(ORIGINAL, TARGET))).toBe(ORIGINAL);
+    expect(withoutBlock(withBlock(ORIGINAL, wrapping(TARGET)))).toBe(ORIGINAL);
   });
 
   it("round-trips an empty file too", () => {
-    expect(withoutBlock(withBlock("", TARGET))).toBe("");
+    expect(withoutBlock(withBlock("", wrapping(TARGET)))).toBe("");
   });
 
   it("updates the existing block rather than stacking another", () => {
-    const once = withBlock(ORIGINAL, TARGET);
-    const twice = withBlock(once, "/elsewhere/tf-claude");
+    const once = withBlock(ORIGINAL, wrapping(TARGET));
+    const twice = withBlock(once, wrapping("/elsewhere/tf-claude"));
     expect(twice.match(/>>> token-forecaster >>>/g)).toHaveLength(1);
     expect(twice).toContain("/elsewhere/tf-claude");
     expect(withoutBlock(twice)).toBe(ORIGINAL);
@@ -286,7 +334,7 @@ describe("surviving a deleted app", () => {
     writeFileSync(fake, "#!/bin/sh\necho real-claude \"$@\"\n", { mode: 0o755 });
     const rc = join(dir, ".zshrc");
     writeFileSync(rc, "");
-    installAlias(rc, join(dir, "missing", "tf-claude"));
+    installAlias(rc, wrapping(join(dir, "missing", "tf-claude")));
     const output = execFileSync(
       "sh",
       ["-c", `. ${JSON.stringify(rc)}; claude --version`],
@@ -302,7 +350,7 @@ describe("surviving a deleted app", () => {
     writeFileSync(launcher, "#!/bin/sh\necho launcher \"$@\"\n", { mode: 0o755 });
     const rc = join(dir, ".zshrc");
     writeFileSync(rc, "");
-    installAlias(rc, launcher);
+    installAlias(rc, wrapping(launcher));
     const output = execFileSync("sh", ["-c", `. ${JSON.stringify(rc)}; claude --resume`], {
       encoding: "utf8",
     });
@@ -313,7 +361,7 @@ describe("surviving a deleted app", () => {
 describe("installAlias / uninstallAlias", () => {
   it("installs, keeps the original, and restores it on the way out", () => {
     const rc = rcFile(ORIGINAL);
-    const installed = installAlias(rc, TARGET);
+    const installed = installAlias(rc, wrapping(TARGET));
     expect(installed.changed).toBe(true);
     expect(readFileSync(rc, "utf8")).toContain(TARGET);
     expect(aliasInstalled(rc)).toBe(true);
@@ -328,15 +376,15 @@ describe("installAlias / uninstallAlias", () => {
 
   it("is a no-op when run twice", () => {
     const rc = rcFile(ORIGINAL);
-    installAlias(rc, TARGET);
-    const again = installAlias(rc, TARGET);
+    installAlias(rc, wrapping(TARGET));
+    const again = installAlias(rc, wrapping(TARGET));
     expect(again.changed).toBe(false);
     expect(again.message).toBe("already installed");
   });
 
   it("keeps edits made after the install", () => {
     const rc = rcFile(ORIGINAL);
-    installAlias(rc, TARGET);
+    installAlias(rc, wrapping(TARGET));
     writeFileSync(rc, `${readFileSync(rc, "utf8")}export LATER=1\n`);
     uninstallAlias(rc);
     const after = readFileSync(rc, "utf8");
@@ -347,7 +395,7 @@ describe("installAlias / uninstallAlias", () => {
 
   it("creates a startup file when the shell has none", () => {
     const rc = rcFile(null);
-    expect(installAlias(rc, TARGET).changed).toBe(true);
+    expect(installAlias(rc, wrapping(TARGET)).changed).toBe(true);
     expect(readFileSync(rc, "utf8")).toContain(TARGET);
     uninstallAlias(rc);
     expect(readFileSync(rc, "utf8")).toBe("");
@@ -367,7 +415,7 @@ describe("ensureAliasOnFirstRun", () => {
     const result = ensureAliasOnFirstRun({
       alreadyDecided: false,
       rcPath: rc,
-      target: launcherFile(),
+      targets: wrapping(launcherFile()),
       markDecided: () => {
         decided = true;
       },
@@ -387,7 +435,7 @@ describe("ensureAliasOnFirstRun", () => {
     const result = ensureAliasOnFirstRun({
       alreadyDecided: false,
       rcPath: rc,
-      target: MISSING_TARGET,
+      targets: wrapping(MISSING_TARGET),
       markDecided: () => {
         throw new Error("must not spend the one shot on a missing launcher");
       },
@@ -404,13 +452,13 @@ describe("ensureAliasOnFirstRun", () => {
       decided = true;
     };
     // First start: broken bundle, nothing decided.
-    ensureAliasOnFirstRun({ alreadyDecided: false, rcPath: rc, target: MISSING_TARGET, markDecided });
+    ensureAliasOnFirstRun({ alreadyDecided: false, rcPath: rc, targets: wrapping(MISSING_TARGET), markDecided });
     expect(decided).toBe(false);
     // Second start: fixed bundle, and the install still happens.
     const result = ensureAliasOnFirstRun({
       alreadyDecided: decided,
       rcPath: rc,
-      target: launcherFile(),
+      targets: wrapping(launcherFile()),
       markDecided,
     });
     expect(result?.changed).toBe(true);
@@ -423,7 +471,7 @@ describe("ensureAliasOnFirstRun", () => {
     const result = ensureAliasOnFirstRun({
       alreadyDecided: true,
       rcPath: rc,
-      target: TARGET,
+      targets: wrapping(TARGET),
       markDecided: () => {
         throw new Error("must not re-decide");
       },
@@ -437,7 +485,7 @@ describe("ensureAliasOnFirstRun", () => {
     const result = ensureAliasOnFirstRun({
       alreadyDecided: false,
       rcPath: null,
-      target: launcherFile(),
+      targets: wrapping(launcherFile()),
       markDecided: () => {
         decided = true;
       },

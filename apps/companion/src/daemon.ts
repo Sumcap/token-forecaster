@@ -4,7 +4,7 @@ import { existsSync, rmSync } from "node:fs";
 import { PersonalStore, defaultDataDir } from "@token-forecaster/personal";
 
 import { CompanionService } from "./service.js";
-import { launcherPath } from "./launcher.js";
+import { launcherTargets } from "./launcher.js";
 import { runtimeFilePath, startServer, type RunningServer } from "./server.js";
 import { ensureAliasOnFirstRun, shellTargetFor } from "./shell-alias.js";
 
@@ -55,16 +55,16 @@ export async function startDaemon(options: DaemonOptions = {}): Promise<RunningD
   const store = PersonalStore.open(dataDir);
   const service = new CompanionService(store);
 
-  // First run: wire `claude` to the launcher, so the very first session already
-  // forecasts what is being typed.
+  // First run: wire `claude` and `codex` to their launchers, so the very first
+  // session already forecasts what is being typed.
   const aliasResult = ensureAliasOnFirstRun({
     alreadyDecided: service.shellAliasOffered,
     rcPath: shellTargetFor()?.rcPath ?? null,
-    target: launcherPath(),
+    targets: launcherTargets(),
     markDecided: () => service.markShellAliasOffered(),
   });
   if (aliasResult?.changed) {
-    log(`[setup] wrote the claude launcher block to ${aliasResult.rcPath}`);
+    log(`[setup] wrote the launcher block to ${aliasResult.rcPath}`);
     if (aliasResult.backupPath) log(`[setup] original kept at ${aliasResult.backupPath}`);
   }
 
