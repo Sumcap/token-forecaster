@@ -1,16 +1,22 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
+import { parseCodexRollout } from "@token-forecaster/ingest-codex";
+
 import {
+  codexRolloutPath,
+  codexSession,
   compact,
   currentTurnOutput,
   meter,
   money,
+  parseCodexTail,
   parseStyle,
   renderLine,
+  workspaceLabel,
 } from "./statusline.js";
 
 const dirs: string[] = [];
@@ -365,5 +371,289 @@ describe("parseStyle", () => {
     expect(parseStyle("detailed")).toBe("detailed");
     expect(parseStyle("SIMPLE")).toBeNull();
     expect(parseStyle(undefined)).toBeNull();
+  });
+});
+
+describe("workspaceLabel", () => {
+  it("names the directory, not the path, on either kind of path", () => {
+    expect(workspaceLabel({ cwd: "/Users/ada/Projects/token-forecaster" })).toBe("token-forecaster");
+    expect(workspaceLabel({ cwd: "C:\\Users\\ada\\Projects\\token-forecaster" })).toBe(
+      "token-forecaster",
+    );
+    // Trailing separators, and a drive root, which has no last component to
+    // name -- printing "C:" would be worse than printing nothing.
+    expect(workspaceLabel({ cwd: "/Users/ada/Projects///" })).toBe("Projects");
+    expect(workspaceLabel({ cwd: "C:\\Users\\ada\\Projects\\\\" })).toBe("Projects");
+    expect(workspaceLabel({ cwd: "" })).toBeNull();
+  });
+
+  it("prefers the project directory over the working one", () => {
+    expect(
+      workspaceLabel({
+        cwd: "C:\\Users\\ada\\Projects\\thing\\src",
+        workspace: { project_dir: "C:\\Users\\ada\\Projects\\thing" },
+      }),
+    ).toBe("thing");
+  });
+});
+
+/* ------------------------------------------------------------------ Codex --
+ *
+ * Codex writes the same kind of file Claude Code does, under different names,
+ * and the bar reads it the same way: what this turn has produced so far, and
+ * the prompt that opened it. The rows below are the shapes
+ * `@token-forecaster/ingest-codex` trains from.
+ */
+
+const taskStarted = () => ({ type: "event_msg", payload: { type: "task_started" } });
+const taskComplete = () => ({ type: "event_msg", payload: { type: "task_complete" } });
+const turnContext = (model: string, effort: string) => ({
+  type: "turn_context",
+  payload: { model, effort },
+});
+const codexUser = (text: string) => ({
+  type: "response_item",
+  payload: { type: "message", role: "user", content: [{ type: "input_text", text }] },
+});
+const codexAssistant = (text: string) => ({
+  type: "response_item",
+  payload: { type: "message", role: "assistant", content: [{ type: "output_text", text }] },
+});
+/** A `token_count`, with the running total that makes each call identifiable. */
+const tokenCount = (
+  output: number,
+  total: number,
+  extra: { input?: number; window?: number } = {},
+) => ({
+  type: "event_msg",
+  payload: {
+    type: "token_count",
+    info: {
+      total_token_usage: { output_tokens: total, total_tokens: total * 10 },
+      last_token_usage: {
+        input_tokens: extra.input ?? 1_000,
+        output_tokens: output,
+        reasoning_output_tokens: 0,
+        total_tokens: (extra.input ?? 1_000) + output,
+      },
+      model_context_window: extra.window ?? 258_400,
+    },
+  },
+});
+
+const codexRows = (rows: unknown[]): string[] => rows.map((r) => JSON.stringify(r));
+
+describe("reading a Codex session", () => {
+  it("sums the turn in flight and says it is still running", () => {
+    const session = parseCodexTail(
+      codexRows([
+        turnContext("gpt-5.6-sol", "xhigh"),
+        taskStarted(),
+        codexUser("fix the scroll region clamp"),
+        tokenCount(400, 400),
+        tokenCount(600, 1_000),
+      ]),
+    );
+    expect(session.turn.tokens).toBe(1_000);
+    expect(session.turn.calls).toBe(2);
+    expect(session.turn.complete).toBe(false);
+    expect(session.turn.promptText).toBe("fix the scroll region clamp");
+    expect(session.model).toBe("gpt-5.6-sol");
+    expect(session.reasoning).toBe("xhigh");
+  });
+
+  it("counts a redraw as a redraw, not as another call", () => {
+    // Codex re-emits token_count to refresh its own UI. Counted naively, a turn
+    // that sat on screen would climb for as long as it was looked at.
+    const session = parseCodexTail(
+      codexRows([taskStarted(), tokenCount(400, 400), tokenCount(400, 400), tokenCount(600, 1_000)]),
+    );
+    expect(session.turn.tokens).toBe(1_000);
+    expect(session.turn.calls).toBe(2);
+  });
+
+  it("goes idle when the turn finishes, and still reports what it cost", () => {
+    // Between turns the bar says what the last turn cost next to what the next
+    // one is expected to cost — the same thing it says in Claude Code.
+    const session = parseCodexTail(
+      codexRows([taskStarted(), codexUser("hello"), tokenCount(400, 400), taskComplete()]),
+    );
+    expect(session.turn.complete).toBe(true);
+    expect(session.turn.tokens).toBe(400);
+  });
+
+  it("counts only the turn in flight, not the one before it", () => {
+    const session = parseCodexTail(
+      codexRows([
+        taskStarted(),
+        codexUser("the previous turn"),
+        tokenCount(5_000, 5_000),
+        taskComplete(),
+        taskStarted(),
+        codexUser("the one running now"),
+        tokenCount(200, 5_200),
+      ]),
+    );
+    expect(session.turn.tokens).toBe(200);
+    expect(session.turn.promptText).toBe("the one running now");
+  });
+
+  it("takes the prompt a person typed, not the preamble Codex writes first", () => {
+    // Codex opens a turn with developer and environment rows of its own, some
+    // of them role "user". Conditioning the forecast on one of those would
+    // forecast Codex's boilerplate rather than the request.
+    const session = parseCodexTail(
+      codexRows([
+        taskStarted(),
+        codexUser("<environment_context>cwd=/x</environment_context>"),
+        codexUser("port the launcher to Windows"),
+        codexAssistant("Sure."),
+        codexUser("this row belongs to the next turn's preamble"),
+        tokenCount(300, 300),
+      ]),
+    );
+    expect(session.turn.promptText).toBe("port the launcher to Windows");
+  });
+
+  it("prefers the user_message event when the rollout has one", () => {
+    const session = parseCodexTail(
+      codexRows([
+        taskStarted(),
+        codexUser("<environment_context/>"),
+        { type: "event_msg", payload: { type: "user_message", message: "add a test", images: ["a"] } },
+        tokenCount(300, 300),
+      ]),
+    );
+    expect(session.turn.promptText).toBe("add a test");
+    expect(session.turn.images).toBe(1);
+  });
+
+  it("reports how much of the context window the last call used", () => {
+    const session = parseCodexTail(
+      codexRows([taskStarted(), tokenCount(1_000, 1_000, { input: 128_200, window: 258_400 })]),
+    );
+    expect(Math.round(session.contextPercent ?? 0)).toBe(50);
+  });
+
+  it("reads a markerless window as a turn too long to have fit in it", () => {
+    // Half a megabyte back is wherever it lands, and a Codex rollout reaches
+    // tens of megabytes for a single turn. An idle session has stopped
+    // appending, so its `task_complete` is the last row in the file and is
+    // always in reach — only a running turn can leave the window with no
+    // marker at all, and calling that "idle" would park the bar on "next turn"
+    // for as long as the longest turns run.
+    const session = parseCodexTail(codexRows([tokenCount(400, 400), tokenCount(600, 1_000)]));
+    expect(session.turn.complete).toBe(false);
+    // Under-reporting a long turn beats reporting nothing about it.
+    expect(session.turn.tokens).toBe(1_000);
+  });
+
+  it("never throws on a truncated or unrecognised row", () => {
+    expect(() =>
+      parseCodexTail(['{"type":"event_msg","pay', "", "not json at all", "{}", '{"payload":null}']),
+    ).not.toThrow();
+  });
+
+  it("finds no session before Codex has written one", () => {
+    const dir = mkdtempSync(join(tmpdir(), "tf-codex-"));
+    dirs.push(dir);
+    // Codex only creates the rollout once a turn starts, which is exactly when
+    // the bar is forecasting a draft and has nothing to measure yet.
+    expect(codexRolloutPath(dir, Date.now())).toBeNull();
+    expect(codexSession(dir, Date.now()).turn.tokens).toBe(0);
+  });
+
+  it("takes the newest session started after the launcher, not the archive", () => {
+    const home = mkdtempSync(join(tmpdir(), "tf-codex-"));
+    dirs.push(home);
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const day = join(
+      home,
+      "sessions",
+      String(now.getFullYear()),
+      pad(now.getMonth() + 1),
+      pad(now.getDate()),
+    );
+    mkdirSync(day, { recursive: true });
+    const old = join(day, "rollout-old-1.jsonl");
+    const mine = join(day, "rollout-new-2.jsonl");
+    writeFileSync(old, `${codexRows([taskStarted(), tokenCount(9_999, 9_999)]).join("\n")}\n`);
+    writeFileSync(mine, `${codexRows([taskStarted(), tokenCount(42, 42)]).join("\n")}\n`);
+    // The archive goes back as far as the reader has used Codex; only a file
+    // that appeared after this launcher started can be this launcher's session.
+    const since = Date.now();
+    utimesSync(old, new Date(since - 3_600_000), new Date(since - 3_600_000));
+    utimesSync(mine, new Date(since + 1_000), new Date(since + 1_000));
+    expect(codexRolloutPath(home, since)).toBe(mine);
+    expect(codexSession(home, since).turn.tokens).toBe(42);
+  });
+
+  it("keeps to its own session when a second Codex is open", () => {
+    // Codex passes nothing down to a process that wrapped it — not the rollout
+    // path, not the session id — so the file is a guess, and "the newest one"
+    // alone would hand the first window's bar to the second window's turn.
+    // A session opened somewhere else is ruled out by its own `cwd`.
+    const home = mkdtempSync(join(tmpdir(), "tf-codex-"));
+    dirs.push(home);
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const day = join(
+      home,
+      "sessions",
+      String(now.getFullYear()),
+      pad(now.getMonth() + 1),
+      pad(now.getDate()),
+    );
+    mkdirSync(day, { recursive: true });
+    const meta = (cwd: string) => ({
+      type: "session_meta",
+      payload: { id: cwd, cwd, cli_version: "0.150.1", base_instructions: { text: "x".repeat(20_000) } },
+    });
+    const mine = join(day, "rollout-mine.jsonl");
+    const theirs = join(day, "rollout-theirs.jsonl");
+    writeFileSync(mine, `${codexRows([meta("/w/mine"), taskStarted(), tokenCount(11, 11)]).join("\n")}\n`);
+    writeFileSync(
+      theirs,
+      `${codexRows([meta("/w/theirs"), taskStarted(), tokenCount(999, 999)]).join("\n")}\n`,
+    );
+    const since = Date.now();
+    utimesSync(mine, new Date(since + 1_000), new Date(since + 1_000));
+    // The other window started later, so it is the newest file by some margin.
+    utimesSync(theirs, new Date(since + 9_000), new Date(since + 9_000));
+    expect(codexRolloutPath(home, since, "/w/mine")).toBe(mine);
+    expect(codexSession(home, since, "/w/mine").turn.tokens).toBe(11);
+  });
+});
+
+/**
+ * The bar and the trainer read the same file.
+ *
+ * The status line counts a turn as it happens; the importer counts the same
+ * turn afterwards and it becomes a row the forecast is fitted on. If the two
+ * ever disagree, the bar grades a live turn against a distribution built by
+ * counting differently — and nothing anywhere would say so.
+ */
+describe("live turn agrees with the trainer", () => {
+  it("counts a turn's output the way the importer counts it", () => {
+    const rows = codexRows([
+      { type: "session_meta", payload: { id: "abc", cli_version: "0.150.1" } },
+      turnContext("gpt-5.6-sol", "xhigh"),
+      taskStarted(),
+      { type: "event_msg", payload: { type: "user_message", message: "write the docs", images: [] } },
+      tokenCount(400, 400),
+      tokenCount(400, 400),
+      tokenCount(650, 1_050),
+      tokenCount(120, 1_170),
+    ]);
+    const live = parseCodexTail(rows);
+    const imported = parseCodexRollout(`${rows.join("\n")}\n`, {
+      sourceFile: "rollout-test.jsonl",
+      salt: "",
+    });
+    const turn = imported.observations.find((o) => o.scale === "turn");
+    expect(turn?.outputTokens).toBe(live.turn.tokens);
+    expect(turn?.model).toBe(live.model);
+    expect(turn?.reasoning).toBe(live.reasoning);
   });
 });

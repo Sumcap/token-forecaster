@@ -1,12 +1,12 @@
 import { watch, type FSWatcher } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { existsSync, rmSync } from "node:fs";
 
 import { PersonalStore, defaultDataDir } from "@token-forecaster/personal";
 
 import { CompanionService } from "./service.js";
+import { launcherTargets } from "./launcher.js";
 import { runtimeFilePath, startServer, type RunningServer } from "./server.js";
-import { ensureAliasOnFirstRun, rcPathFor } from "./shell-alias.js";
+import { ensureAliasOnFirstRun, shellTargetFor } from "./shell-alias.js";
 
 /**
  * The long-running background process.
@@ -55,16 +55,16 @@ export async function startDaemon(options: DaemonOptions = {}): Promise<RunningD
   const store = PersonalStore.open(dataDir);
   const service = new CompanionService(store);
 
-  // First run: wire `claude` to the launcher, so the very first session already
-  // forecasts what is being typed.
+  // First run: wire `claude` and `codex` to their launchers, so the very first
+  // session already forecasts what is being typed.
   const aliasResult = ensureAliasOnFirstRun({
     alreadyDecided: service.shellAliasOffered,
-    rcPath: rcPathFor(process.env["SHELL"] ?? ""),
-    target: fileURLToPath(new URL("../bin/tf-claude", import.meta.url)),
+    rcPath: shellTargetFor()?.rcPath ?? null,
+    targets: launcherTargets(),
     markDecided: () => service.markShellAliasOffered(),
   });
   if (aliasResult?.changed) {
-    log(`[setup] wrote the claude launcher block to ${aliasResult.rcPath}`);
+    log(`[setup] wrote the launcher block to ${aliasResult.rcPath}`);
     if (aliasResult.backupPath) log(`[setup] original kept at ${aliasResult.backupPath}`);
   }
 

@@ -2,10 +2,16 @@ import { randomBytes, timingSafeEqual } from "node:crypto";
 import { chmodSync, mkdirSync, writeFileSync } from "node:fs";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { dashboardHtml, isPageSlug } from "./dashboard.js";
-import { aliasInstalled, installAlias, rcPathFor, uninstallAlias } from "./shell-alias.js";
+import { launcherTargets } from "./launcher.js";
+import {
+  aliasInstalled,
+  installAlias,
+  shellTargetFor,
+  shippedTargets,
+  uninstallAlias,
+} from "./shell-alias.js";
 import type { CompanionService } from "./service.js";
 
 /**
@@ -36,12 +42,7 @@ export function runtimeFilePath(dataDir: string): string {
 
 /** The current shell's startup file, or null when its syntax is not ours. */
 function shellRc(): string | null {
-  return rcPathFor(process.env["SHELL"] ?? "");
-}
-
-/** Absolute path of the launcher shipped beside this daemon. */
-function launcherPath(): string {
-  return fileURLToPath(new URL("../bin/tf-claude", import.meta.url));
+  return shellTargetFor()?.rcPath ?? null;
 }
 
 /** Generate or reuse the per-install API token. */
@@ -183,9 +184,10 @@ export async function startServer(options: StartServerOptions): Promise<RunningS
       return;
     }
     if (request.method === "POST" && path === "/turn") {
-      // Reported by whatever can see the turn as it happens — today the Claude
-      // Code status line. Numbers only; the body carries no prompt text and the
-      // session id is hashed before it is served back out again.
+      // Reported by whatever can see the turn as it happens: the status line
+      // in Claude Code, and `bin/tf-codex` through the same renderer, since
+      // Codex will not run one. Numbers only; the body carries no prompt text
+      // and the session id is hashed before it is served back out again.
       const body = await readJson(request);
       const provider = body["provider"];
       if (provider !== "openai" && provider !== "anthropic") {
@@ -252,7 +254,7 @@ export async function startServer(options: StartServerOptions): Promise<RunningS
       if (typeof body["shellAlias"] === "boolean") {
         const rcPath = shellRc();
         if (rcPath) {
-          if (body["shellAlias"]) installAlias(rcPath, launcherPath());
+          if (body["shellAlias"]) installAlias(rcPath, shippedTargets(launcherTargets()));
           else uninstallAlias(rcPath);
         }
         // Asked and answered, either way: never offer again.
@@ -331,6 +333,10 @@ export async function startServer(options: StartServerOptions): Promise<RunningS
     pid: process.pid,
     startedAt: new Date().toISOString(),
   };
+  // 0600 because this file is the API token. On Windows the mode is close to
+  // meaningless -- NTFS has an ACL, not permission bits -- but the directory it
+  // sits in is per-user Local AppData, which is not readable by other accounts,
+  // and the server binds loopback and checks the token on every request.
   writeFileSync(runtimePath, `${JSON.stringify(info, null, 2)}\n`, { mode: 0o600 });
   chmodSync(runtimePath, 0o600);
 

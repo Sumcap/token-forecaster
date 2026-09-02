@@ -34,8 +34,11 @@ export type {
   SliceEvaluation,
 } from "./evaluate.js";
 
-export { PersonalStore, defaultDataDir } from "./store.js";
+export { PersonalStore } from "./store.js";
 export type { FileCursor, StoreSummary, TurnOutcome } from "./store.js";
+
+export { defaultDataDir, draftDir } from "./data-dir.js";
+export type { DataDirEnvironment } from "./data-dir.js";
 
 export { measureSufficiency } from "./sufficiency.js";
 export type {

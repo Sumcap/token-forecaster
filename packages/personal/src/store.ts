@@ -1,6 +1,5 @@
 import { randomBytes } from "node:crypto";
 import { mkdirSync, rmSync } from "node:fs";
-import { homedir } from "node:os";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import type { DatabaseSync as DatabaseSyncInstance } from "node:sqlite";
@@ -14,6 +13,7 @@ type DatabaseSync = DatabaseSyncInstance;
 
 import type { ImportStats, UsageObservation, UsageProvider, UsageScale } from "@token-forecaster/core";
 
+import { defaultDataDir } from "./data-dir.js";
 import type { PersonalEvaluation } from "./evaluate.js";
 import type { PersonalProfile } from "./profile.js";
 import type { SufficiencyReport } from "./sufficiency.js";
@@ -26,10 +26,13 @@ import type { SufficiencyReport } from "./sufficiency.js";
  * `PromptFeatures`. If a future migration adds a text column, that is a bug.
  */
 
-/** Default application-support directory, outside the repository. */
-export function defaultDataDir(): string {
-  return join(homedir(), "Library", "Application Support", "TokenForecaster");
-}
+// The application-support directory is per-platform and shared with three
+// other processes, so it lives on its own in a module with no dependencies —
+// the status line imports it without pulling SQLite in behind it. Re-exported
+// here because `defaultDataDir` has been part of this module's surface since
+// before it moved.
+export { defaultDataDir, draftDir } from "./data-dir.js";
+export type { DataDirEnvironment } from "./data-dir.js";
 
 const SCHEMA_VERSION = 3;
 

@@ -74,7 +74,7 @@ final class StatusItemController: NSObject, NSMenuDelegate {
     /// Install the `claude` shell block that routes new sessions through the
     /// draft-aware launcher.
     private lazy var aliasItem: NSMenuItem = {
-        let item = action("Wrap `claude` in new terminals", #selector(toggleShellAlias))
+        let item = action("Wrap `claude` and `codex` in new terminals", #selector(toggleShellAlias))
         item.toolTip =
             "Adds a claude function to your shell startup file that runs Claude Code through "
             + "tf-claude, so the status line can forecast the prompt you are typing. "
