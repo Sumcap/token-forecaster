@@ -304,13 +304,22 @@ const requirementBucket = (count) =>
  * human text at all once harness wrappers are removed -- callers must treat
  * that as "no prompt observed" and SKIP the rung, never as a level.
  */
-export function derivePromptFeatures(rawText) {
+/**
+ * The human text with harness wrappers removed, or null when nothing human is
+ * left. Exported for the opt-in `withPromptText` loader path only.
+ */
+export function cleanPromptText(rawText) {
   if (typeof rawText !== "string") return null;
   const text = rawText
     .replace(HARNESS_BLOCK, " ")
     .replace(HARNESS_STRAY, " ")
     .trim();
-  if (text.length === 0) return null;
+  return text.length === 0 ? null : text;
+}
+
+export function derivePromptFeatures(rawText) {
+  const text = cleanPromptText(rawText);
+  if (text === null) return null;
   const lower = text.toLowerCase();
 
   let verbClass = "other";
@@ -472,9 +481,20 @@ async function* jsonlFiles(dir) {
 export async function loadRequests(projectsDir = defaultProjectsDir(), options = {}) {
   // Prompt features need the ancestry walk to reach the turn root, so asking
   // for them implies loop context rather than silently returning nulls.
-  const { withPromptFeatures = false, withResolvedFileContext = false } = options;
+  const {
+    withPromptFeatures = false,
+    withResolvedFileContext = false,
+    // Opt-in, LOCAL PROBES ONLY: keep the cleaned turn-root text on the record
+    // as `turnPromptText`. This deliberately breaks the "text never leaves this
+    // module" contract for in-memory semantic experiments; nothing that reads
+    // it may write text to a committed artifact (house rule 9).
+    withPromptText = false,
+  } = options;
   const withLoopContext =
-    options.withLoopContext || withPromptFeatures || withResolvedFileContext;
+    options.withLoopContext ||
+    withPromptFeatures ||
+    withResolvedFileContext ||
+    withPromptText;
   const requests = new Map();
   // uuid -> { parentUuid, kind, chars, isError, timestampMs } for every non-call
   // row on the conversation chain, and uuid -> requestId for every assistant row.
@@ -517,6 +537,7 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
         let chars = 0;
         let isError = false;
         let prompt = null;
+        let promptText = null;
         const resolvedPathHashes = new Set();
         const resolvedSemanticHash = new Map();
         if (entry.type === "user") {
@@ -562,6 +583,9 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
           } else if (kind === "userMessage" && withPromptFeatures) {
             prompt = derivePromptFeatures(userText(entry));
           }
+          if (kind === "userMessage" && withPromptText) {
+            promptText = cleanPromptText(userText(entry));
+          }
         }
         // Two turn-root observations invisible to derivePromptFeatures: the
         // slash-command name (stripped as a harness wrapper before featurising,
@@ -586,6 +610,7 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
           chars,
           isError,
           prompt,
+          promptText,
           commandName,
           hasImage,
           resolvedPathHashes: [...resolvedPathHashes],
@@ -798,6 +823,7 @@ function resolveLoopContext(requests, chainRows, uuidToRequest) {
     // depthOf() below. See the note there for why that propagation is the whole
     // point of joining prompts at all.
     record.turnPrompt = null;
+    record.turnPromptText = null;
     record.turnRootId = null;
     record.turnCommand = null;
     record.turnHasImage = null;
@@ -826,6 +852,7 @@ function resolveLoopContext(requests, chainRows, uuidToRequest) {
       if (row.kind === "userMessage") {
         record.afterUserMessage = true;
         record.turnPrompt = row.prompt ?? null;
+        record.turnPromptText = row.promptText ?? null;
         record.turnRootId = uuid;
         record.turnCommand = row.commandName ?? null;
         record.turnHasImage = row.hasImage ?? null;
@@ -906,6 +933,7 @@ function resolveLoopContext(requests, chainRows, uuidToRequest) {
       // inherits its ancestor's. Null stays null -- a truncated chain means the
       // turn root is UNKNOWN, and unknown must skip the rung.
       if (record.turnPrompt === null) record.turnPrompt = resolved.turnPrompt;
+      if (record.turnPromptText === null) record.turnPromptText = resolved.turnPromptText;
       if (record.turnRootId === null) record.turnRootId = resolved.turnRootId;
       if (record.turnCommand === null) record.turnCommand = resolved.turnCommand;
       if (record.turnHasImage === null) record.turnHasImage = resolved.turnHasImage;
