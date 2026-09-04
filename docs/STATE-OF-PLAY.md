@@ -810,6 +810,7 @@ described once; rejections keep their reasoning so nobody re-runs them.
 | 6.25 | Whole-turn totals | ✅ **Shipped, coarse on purpose.** `turnTotals` profile field + `historicalTurnTotalForecast()`; every finer rung failed endpoint stability. [§6.25](#-625-whole-turn-totals--shipped-coarse-on-purpose) |
 | 6.26 | **Whole-session totals** | ✅ **Shipped unconditional — the kill condition fired.** No conditional forecast (k buckets, spent buckets, turns×median) separates from the unconditional distribution at any of 4 endpoints; `sessionTotals` + `historicalSessionTotalForecast()` ship the quantiles only. Consumers must NOT subtract spent-so-far — measured worse. [§6.26](#-626-whole-session-totals--shipped-unconditional-the-kill-condition-fired) |
 | 6.27 | **The prompt-path rung inside the boost's own base** | 🟡 **Not adopted, but the ladder is not monotone and the README now says so.** §6.16 refused `promptPath` as a shipped *dimension*, yet it is still the top rung of the base the correction is fitted on (`method.base`), and it is the one rung that loses: 538.5 vs 520.3 for plain `model+thinking` on the 7 Aug split, a cost of 18.2/call that the correction then wins 16.2 of back. Refitting the same correction on a promptPath-free base wins the single split (−15.8, CI [−28.4, −3.8]) but NOT the rolling gate (−4.8, CI [−12.2, +2.9]), so the pre-committed rule keeps the ladder as shipped. The correction is worth more on the worse base (−17.0 vs −10.8), which is what a correction undoing a base-rung mistake looks like. Re-test at the next corpus endpoint. `probe-base-ladder.mjs`, `base-ladder-probe.json` |
+| 6.32 | **Prompt TEXT on turn totals** (TF-IDF / MiniLM / kNN, local-only) | 🟡 **Adoptable only as a shrunk second opinion.** Single split −10.6% [whole CI < 0]; five session folds pooled +0.8% [−2.3%, +4.3%] (per fold −10.5% … +28.8%); λ=0.35 blend −2.0% [−3.1%, −0.7%]. Text HURTS the opener call (+5.0% [+2.2%, +8.1%]). Plan: `docs/SEMANTIC-PLAN.md`. [§6.32](#-632-prompt-text-on-turn-totals--adoptable-only-shrunk) |
 
 ### 6.5 `tools` — deleted
 
@@ -1790,6 +1791,158 @@ badges), plus the live half of `src/lib/engine.ts` and `src/content/chip.ts`.
 both default on.
 
 ---
+
+### 🟡 6.32 Prompt TEXT on turn totals — adoptable only shrunk
+
+*`export-turn-text.mjs` + `experiments/evaluation/semantic/`, 2 September
+2026. Full tables and the forward plan in `docs/SEMANTIC-PLAN.md`.*
+
+The first time any probe here read the words of a prompt rather than
+buckets derived from them. Local only: the loader grew an opt-in
+`withPromptText` flag, the exporter refuses to write inside the repo, and no
+artifact carries text.
+
+**Setup.** 2,132 exact turns, 1,777 with human text. Control is a quantile
+GBM on the shipped 38-feature vector, same learner and rows as every text
+model. Text models: TF-IDF word 1-2 grams → 48 SVD dims; MiniLM-L6-v2 → 32
+PCA dims; kNN-40 empirical quantiles in embedding space; each alone and
+stacked on the metadata vector.
+
+**Result.** On the single chronological 80/20 split, metadata+TF-IDF+MiniLM
+beats the metadata GBM by −1,145 pinball/turn [−2,028, −313], a 10.6% loss
+reduction. On five chronological session folds × 3 seeds pooled (n=5,331),
+the same model is +0.8% [−2.3%, +4.3%], with per-fold swings of −10.5%,
+−4.5%, −1.8%, +7.2%, +28.8%. The single-split win was the last fold. Ten
+cheap structural bits (line count, ack opener, conjunctions, Portuguese
+words, code fences…) do not help either: +1.7% [−1.1%, +4.5%].
+
+**What does clear the gate** is shrinking the text model toward the metadata
+model in log space: λ=0.35 gives −2.0% [−3.1%, −0.7%], whole CI below zero,
+worst fold +4.4%. An ensemble effect, not a semantic one.
+
+**Opener call, same folds:** TF-IDF +13.1% worse, metadata+TF-IDF +5.0%
+[+2.2%, +8.1%] worse. §7.3 stands: the prompt predicts the turn, never the
+call.
+
+**What the text reads.** Ridge terms: short ← `ok`, `hi`, `reply with`,
+`summarize`, `concise`; long ← `let`, `and`, `also`, `as well`,
+`afterwards`, `fix these`, `merge`. Length, conjunction count and
+acknowledgement-versus-instruction. The shipped features already hold length
+and requirement count, which is why the pooled gain is small; the topical
+content is not separable from noise at ~1,400 training turns per fold.
+
+**Verdict.** 🟡 Adoptable as a λ≈0.35 client-side blend on turn totals, not
+a breakthrough. The binding constraint is turns, again. The plan to grow
+them (public trajectories, multi-user, a synthetic developer) is in
+`docs/SEMANTIC-PLAN.md`.
+
+**Same day, Step B on 35,006 public turns** (developer prompts harvested
+from chat histories committed to GitHub, 1,277 repo sessions; results in
+`docs/SEMANTIC-PLAN.md` "Results, 2 September 2026: Step B"). Hashed
+n-grams → SVD-256 stacked on the metadata GBM: **−0.9% [−1.6%, −0.2%]**,
+every fold negative, adopt gate met, breakthrough bar not approached.
+Learning curve crosses zero between 10k and 20k turns and is flat after.
+Transfer to the local corpus: the public base head's three log-quantiles as
+extra features into the local metadata GBM give **−2.6% [−4.4%, −0.9%]**,
+worst fold −0.8%, beating the local-only text blend; as a blended
+prediction it fails (+82%), because committed histories under-record output
+by ~10× (median local/base ratio 9.75). **Shipped shape therefore changes:
+base head as features, not as a prediction.** Semantics at this feature
+form are worth 1–3% on coding prompts.
+
+**The WildChat control turns that into a finding.** Same pipeline, same
+size (28k rows each): on GENERAL chat the hashed head clears the
+breakthrough bar, **−5.5% [−6.5%, −4.6%]**, every fold negative, best at
+λ=1 with no shrinkage; on the CODING slice it fails the adopt gate,
++4.9% [−0.7%, +10.4%]. The feature form is not the limit. What is exhausted
+is the text signal left in how developers write to a coding agent once
+length and requirement count are already features. Headroom, if any, is
+Stage 3's encoder, and it must be tested on coding prompts specifically.
+
+**3 September 2026, Stage 3 measured** (`probe_encoder.py`, tables in
+`docs/SEMANTIC-PLAN.md` "Results, 3 September 2026"). `all-MiniLM-L6-v2`
+fine-tuned as a quantile head on the 35k public coding turns, five folds × two
+seeds: **−0.9% [−3.0%, +1.3%]** with meta, −1.4% [−3.4%, +0.4%] text-only,
+fold 0 at +13% / +7%; the FROZEN embedding as GBM features does better,
+−1.6% [−2.4%, −0.9%], all folds negative. Same size as hashed n-grams. The
+ceiling on coding prompts is the domain, not bag-of-words. Transfer as
+features into the local GBM: encoder+meta **−3.9% [−6.1%, −1.6%]**, every
+fold negative (hashed head on the same rows −2.0% [−4.6%, +0.3%]).
+"Global ranks, local rescales" (base head primary, scale-only local
+recalibration, no trees) is refused: the base heads rank local turns no
+better than the local GBM (Spearman 0.42/0.46 vs 0.45) and every rescale
+arm loses one fold by 16–52%. WildChat-coding control: the encoder reads a lot there (Spearman 0.74
+vs 0.46, four folds −6% to −45%) and loses the last fold by +96%, pooled
+−9.3% [−31%, +12%]; the signal it finds in a stand-alone coding question
+does not exist in a prompt to a coding agent. Review note: the public
+corpora carry no timestamps, so their five "chronological" folds are
+harvest-order blocks (github fold 0 = the aider/cline block; wildchat fold 4
+= a gpt-4-0125 era block); session-grouped and paired, so the hashed-versus-
+encoder comparison stands, the interpretation of single folds does not. **Decision: the
+encoder does not replace the hashed head; prompt text is closed as a line of
+work at this turn count; effort moves to context and repository signals.**
+
+### 🔴 6.33 Context and repository signals on turn totals — refused, one narrow follow-up
+
+*`export-turn-context.mjs` + `probe_context.py`, 3 September 2026. Plan,
+gates and tables in `docs/CONTEXT-SIGNALS-PLAN.md`.*
+
+After prompt text closed at ~1% (§6.32), the next candidate was what the
+agent is about to touch. Three families on all 2,225 exact turns, five
+chronological session folds × three seeds against the 38-column control:
+
+- **Oracle** (the turn's own calls, files read/mutated, largest tool input):
+  **−62.9%** [−70.8%, −55.5%]. But permutation puts it on calls-in-turn
+  (+205%) and largest tool input (+157%); files mutated is +4.8%. A duration
+  ceiling, not a context one.
+- **Session-so-far** (turn index, previous turn's output, files touched so
+  far): **−1.6%** [−3.0%, −0.05%], passes by 0.05 points; the work is the
+  turn index (+5.9% when shuffled) and the previous turn's size (+1.9%),
+  file counts are noise.
+- **Repository state** at the nearest commit (size, language shares, tests,
+  commit cadence, draft-named paths): **+3.3%** [+0.9%, +5.7%], and
+  leave-one-project-out shows it memorising projects (two provably worse,
+  one better), the §6.30 mechanism made visible. S+R +2.3%.
+
+**Verdict.** 🔴 Repository state refused. Session-so-far went through the
+real trainer gate as two `portable-precall-v5` columns (42–44) and was
+**refused: +0.28% [−0.39%, +0.96%]** vs v3 on five session blocks, worst
+fold +0.94%, clean typing trajectory, 51 splits that do not generalise.
+Deployed turn schema stays v2. The sklearn −1.6% shrank on the rung ladder
+exactly as the text head's −3.06% did. Pre-call turn-total forecasting is close to
+measured out on this corpus; the remaining two thirds of the loss is the
+loop's duration, observable only after the turn starts.
+
+### 🔴 6.34 Re-forecast-as-you-go on turn totals — real, small, below the margin
+
+*`export-turn-reforecast.mjs` + `probe_reforecast.py`, 3 September 2026.
+Plan, gates and tables in `docs/REFORECAST-PLAN.md`.*
+
+After context signals closed (§6.33) the remaining lever was the loop's own
+duration, observable only once calls complete. Graded the TURN TOTAL (not the
+per-call quantity §6.9 graded) at k = 1, 2, 3, 5 completed calls on all
+2,245 exact turns, five session folds × three seeds, against a dip-free
+`clamp` control (the pre-call quantiles raised to what the turn has already
+spent). Turns still running at k = 1 hold 92% of the pre-call loss.
+
+| k | `remaining` vs clamp | 95% CI | worst fold | oracle vs clamp |
+|---|---|---|---|---|
+| 1 | −4.7% | [−7.6%, −1.9%] | +6.8% | −62.7% |
+| 2 | −6.2% | [−10.2%, −2.0%] | +3.3% | −62.6% |
+| 3 | −6.3% | [−9.7%, −3.0%] | +4.1% | −62.0% |
+| 5 | −10.2% | [−13.9%, −7.0%] | −2.5% | −62.6% |
+
+**Verdict.** 🔴 Not adopted: the pre-registered margin (−10% at k = 1, −15%
+at k ≥ 3, set for the two-to-three-point sklearn→ladder shrink seen twice)
+is missed at every k. The win is "a large Write/Edit has already happened"
+(largest tool input so far +3.3%, any mutation +0.7–1.8% on permutation);
+previous output and call count carry nothing. The oracle is −62% at every k:
+the ceiling is how the loop ends, which the first five calls do not reveal.
+The raw moving estimate dips on 28–32% of p50 steps (median 12–15%); a
+ratchet removes the dips at a cost of 0–1 point. Turn schema stays v2.
+Headline for the multi-user corpus ask: this is the one post-text signal
+whose direction is unambiguous and whose fold spread (−22.8% … −2.5%) is
+sample size.
 
 ## 7. What to do next
 
