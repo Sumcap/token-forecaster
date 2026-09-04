@@ -1,0 +1,468 @@
+{
+  "generated_by": "experiments/evaluation/semantic/census.py",
+  "purpose": "docs/PLAN-OF-ATTACK.md Track 2: census before modelling",
+  "fold_rules": {
+    "public": [
+      "leave-user-out (repository)",
+      "leave-source-out"
+    ],
+    "forbidden": [
+      "chronological folds on public data: the rows carry no wall clock and harvest order is not time order"
+    ],
+    "local": [
+      "chronological session folds"
+    ]
+  },
+  "sources": [
+    {
+      "source": "github-agent-chats",
+      "turns": 35006,
+      "sessions": 4356,
+      "users": 1277,
+      "calls": 90694,
+      "calls_per_turn_median": 1,
+      "calls_per_turn_p90": 3,
+      "turn_total_median": 675,
+      "turn_total_p90": 4337,
+      "turn_total_sum": 69015299,
+      "turns_per_session_median": 3,
+      "native_usage_fraction": 0.0,
+      "usage_sources": {
+        "estimated": 90694
+      },
+      "prompt_chars_median": 72,
+      "prompt_chars_p90": 718,
+      "prompt_present_fraction": 1.0,
+      "licenses": {
+        "None": 27586,
+        "MIT": 5509,
+        "NOASSERTION": 845,
+        "Apache-2.0": 565,
+        "GPL-3.0": 267,
+        "BSD-2-Clause": 67,
+        "MPL-2.0": 26,
+        "LGPL-3.0": 24,
+        "AGPL-3.0": 23,
+        "BSD-3-Clause": 20,
+        "LGPL-2.1": 16,
+        "BSL-1.0": 13,
+        "CC-BY-SA-4.0": 11,
+        "Unlicense": 9,
+        "ISC": 8,
+        "CC-BY-4.0": 7,
+        "CC0-1.0": 6,
+        "GPL-2.0": 4
+      },
+      "loop": false,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "rendered markdown flattened to prompt->reply; `calls` is a rendering artifact for aider and Cursor exports",
+      "per_tool_turns": {
+        "specstory": 31990,
+        "aider": 2426,
+        "cline": 590
+      }
+    },
+    {
+      "source": "aider",
+      "turns": 2437,
+      "sessions": 730,
+      "users": 243,
+      "calls": 3382,
+      "calls_per_turn_median": 1,
+      "calls_per_turn_p90": 2,
+      "turn_total_median": 445,
+      "turn_total_p90": 2600,
+      "turn_total_sum": 2826582,
+      "turns_per_session_median": 2,
+      "native_usage_fraction": 0.4284,
+      "usage_sources": {
+        "estimated": 1933,
+        "native:aider": 1449
+      },
+      "prompt_chars_median": 76,
+      "prompt_chars_p90": 1355,
+      "prompt_present_fraction": 1.0,
+      "licenses": {
+        "None": 1864,
+        "MIT": 232,
+        "NOASSERTION": 183,
+        "Apache-2.0": 106,
+        "BSD-3-Clause": 14,
+        "AGPL-3.0": 13,
+        "BSL-1.0": 13,
+        "GPL-3.0": 10,
+        "CC0-1.0": 1,
+        "Unlicense": 1
+      },
+      "loop": false,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "one model response per turn; native tokens from aider's own `Tokens: ... received` line where present",
+      "top_tools": null
+    },
+    {
+      "source": "claude-code",
+      "turns": 2706,
+      "sessions": 1619,
+      "users": 351,
+      "calls": 16133,
+      "calls_per_turn_median": 3,
+      "calls_per_turn_p90": 16,
+      "turn_total_median": 273,
+      "turn_total_p90": 6080,
+      "turn_total_sum": 6388143,
+      "turns_per_session_median": 1,
+      "native_usage_fraction": 1.0,
+      "usage_sources": {
+        "native:claude-code": 16133
+      },
+      "prompt_chars_median": 105,
+      "prompt_chars_p90": 1615,
+      "prompt_present_fraction": 0.969,
+      "licenses": {
+        "None": 1928,
+        "MIT": 414,
+        "Apache-2.0": 150,
+        "AGPL-3.0": 101,
+        "NOASSERTION": 34,
+        "GPL-2.0": 27,
+        "Unlicense": 25,
+        "LGPL-3.0": 17,
+        "GPL-3.0": 3,
+        "BSD-2-Clause": 3,
+        "MIT-0": 3,
+        "MPL-2.0": 1
+      },
+      "loop": true,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "cut by the shipped loader; native per-call usage",
+      "top_tools": {
+        "Bash": 7366,
+        "Read": 4892,
+        "Edit": 1211,
+        "TodoWrite": 999,
+        "Grep": 848,
+        "Write": 813,
+        "Glob": 681,
+        "WebFetch": 277,
+        "WebSearch": 219,
+        "ToolSearch": 134
+      }
+    },
+    {
+      "source": "cline",
+      "turns": 595,
+      "sessions": 190,
+      "users": 66,
+      "calls": 4175,
+      "calls_per_turn_median": 4,
+      "calls_per_turn_p90": 17,
+      "turn_total_median": 1209,
+      "turn_total_p90": 6000,
+      "turn_total_sum": 1555834,
+      "turns_per_session_median": 2,
+      "native_usage_fraction": 0.0,
+      "usage_sources": {
+        "estimated": 4175
+      },
+      "prompt_chars_median": 97,
+      "prompt_chars_p90": 691,
+      "prompt_present_fraction": 1.0,
+      "licenses": {
+        "None": 268,
+        "MIT": 259,
+        "Apache-2.0": 50,
+        "Unlicense": 8,
+        "CC0-1.0": 5,
+        "GPL-3.0": 5
+      },
+      "loop": true,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "rendered markdown export of a Cline task; estimated labels",
+      "top_tools": {
+        "execute_command": 861,
+        "write_to_file": 751,
+        "read_file": 706,
+        "attempt_completion": 412,
+        "apply_diff": 385,
+        "replace_in_file": 305,
+        "use_mcp_tool": 173,
+        "update_todo_list": 126,
+        "ask_followup_question": 90,
+        "list_files": 76
+      }
+    },
+    {
+      "source": "cline-task",
+      "turns": 210,
+      "sessions": 133,
+      "users": 43,
+      "calls": 1384,
+      "calls_per_turn_median": 3,
+      "calls_per_turn_p90": 19,
+      "turn_total_median": 843,
+      "turn_total_p90": 8416,
+      "turn_total_sum": 622931,
+      "turns_per_session_median": 1,
+      "native_usage_fraction": 0.8396,
+      "usage_sources": {
+        "native:cline": 1162,
+        "estimated": 222
+      },
+      "prompt_chars_median": 181,
+      "prompt_chars_p90": 2054,
+      "prompt_present_fraction": 0.8429,
+      "licenses": {
+        "None": 99,
+        "MIT": 59,
+        "Apache-2.0": 32,
+        "NOASSERTION": 17,
+        "WTFPL": 3
+      },
+      "loop": true,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "native tokensOut per request where ui_messages.json aligns",
+      "top_tools": {
+        "write_to_file": 418,
+        "read_file": 293,
+        "execute_command": 193,
+        "attempt_completion": 111,
+        "list_files": 79,
+        "update_todo_list": 64,
+        "new_task": 30,
+        "search_and_replace": 29,
+        "ask_followup_question": 24,
+        "replace_in_file": 22
+      }
+    },
+    {
+      "source": "codex",
+      "turns": 349,
+      "sessions": 122,
+      "users": 28,
+      "calls": 2120,
+      "calls_per_turn_median": 3,
+      "calls_per_turn_p90": 15,
+      "turn_total_median": 923,
+      "turn_total_p90": 6757,
+      "turn_total_sum": 783944,
+      "turns_per_session_median": 2,
+      "native_usage_fraction": 1.0,
+      "usage_sources": {
+        "native:codex": 2120
+      },
+      "prompt_chars_median": 155,
+      "prompt_chars_p90": 10978,
+      "prompt_present_fraction": 1.0,
+      "licenses": {
+        "None": 339,
+        "MIT": 7,
+        "NOASSERTION": 2,
+        "Apache-2.0": 1
+      },
+      "loop": true,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "native output and reasoning tokens per call",
+      "top_tools": {
+        "shell_command": 619,
+        "shell": 589,
+        "exec_command": 563,
+        "update_plan": 72,
+        "write_stdin": 5,
+        "list_mcp_resources": 3,
+        "list_mcp_resource_templates": 3
+      }
+    },
+    {
+      "source": "specstory",
+      "turns": 32843,
+      "sessions": 3918,
+      "users": 970,
+      "calls": 84697,
+      "calls_per_turn_median": 1,
+      "calls_per_turn_p90": 3,
+      "turn_total_median": 679,
+      "turn_total_p90": 4378,
+      "turn_total_sum": 65483286,
+      "turns_per_session_median": 3,
+      "native_usage_fraction": 0.0,
+      "usage_sources": {
+        "estimated": 84697
+      },
+      "prompt_chars_median": 71,
+      "prompt_chars_p90": 682,
+      "prompt_present_fraction": 1.0,
+      "licenses": {
+        "None": 26129,
+        "MIT": 5078,
+        "NOASSERTION": 789,
+        "Apache-2.0": 409,
+        "GPL-3.0": 258,
+        "BSD-2-Clause": 67,
+        "MPL-2.0": 26,
+        "LGPL-3.0": 24,
+        "LGPL-2.1": 16,
+        "CC-BY-SA-4.0": 12,
+        "AGPL-3.0": 10,
+        "ISC": 8,
+        "CC-BY-4.0": 7,
+        "BSD-3-Clause": 6,
+        "GPL-2.0": 4
+      },
+      "loop": false,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "rendered markdown; estimated labels only",
+      "top_tools": {
+        "Bash": 3,
+        "Read": 2,
+        "read_file": 1,
+        "grep_search": 1,
+        "Write": 1,
+        "run_terminal_command_v2": 1,
+        "([^": 1
+      }
+    },
+    {
+      "source": "agent-sessions",
+      "turns": 39140,
+      "sessions": 6712,
+      "users": 1693,
+      "calls": 111891,
+      "calls_per_turn_median": 1,
+      "calls_per_turn_p90": 5,
+      "turn_total_median": 652,
+      "turn_total_p90": 4459,
+      "turn_total_sum": 77660720,
+      "turns_per_session_median": 2,
+      "native_usage_fraction": 0.1865,
+      "usage_sources": {
+        "estimated": 91027,
+        "native:claude-code": 16133,
+        "native:codex": 2120,
+        "native:aider": 1449,
+        "native:cline": 1162
+      },
+      "prompt_chars_median": 73,
+      "prompt_chars_p90": 853,
+      "prompt_present_fraction": 0.997,
+      "licenses": {
+        "None": 30627,
+        "MIT": 6049,
+        "NOASSERTION": 1025,
+        "Apache-2.0": 748,
+        "GPL-3.0": 276,
+        "AGPL-3.0": 124,
+        "BSD-2-Clause": 70,
+        "LGPL-3.0": 41,
+        "Unlicense": 34,
+        "GPL-2.0": 31,
+        "MPL-2.0": 27,
+        "BSD-3-Clause": 20,
+        "LGPL-2.1": 16,
+        "BSL-1.0": 13,
+        "CC-BY-SA-4.0": 12,
+        "ISC": 8,
+        "CC-BY-4.0": 7,
+        "CC0-1.0": 6,
+        "MIT-0": 3,
+        "WTFPL": 3
+      },
+      "loop": true,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "all Tier A sources pooled"
+    },
+    {
+      "source": "swebench-trajs",
+      "turns": 120,
+      "sessions": 120,
+      "users": 2,
+      "calls": 3239,
+      "calls_per_turn_median": 23,
+      "calls_per_turn_p90": 49,
+      "turn_total_median": 4088,
+      "turn_total_p90": 19617,
+      "turn_total_sum": 929316,
+      "turns_per_session_median": 1,
+      "native_usage_fraction": 0.599,
+      "usage_sources": {
+        "native:openai-responses": 1940,
+        "estimated": 1299
+      },
+      "prompt_chars_median": null,
+      "prompt_chars_p90": null,
+      "prompt_present_fraction": 0.0,
+      "licenses": {
+        "MIT": 120
+      },
+      "loop": true,
+      "cycle": false,
+      "row_timestamps": false,
+      "note": "Tier B. One task per session, no per-step usage in the file"
+    },
+    {
+      "source": "wildchat",
+      "turns": 56318,
+      "sessions": 56318,
+      "users": 19273,
+      "calls": 56318,
+      "calls_per_turn_median": 1,
+      "calls_per_turn_p90": 1,
+      "turn_total_median": 331,
+      "turn_total_p90": 745,
+      "turn_total_sum": 20686908,
+      "turns_per_session_median": 1,
+      "native_usage_fraction": 0.0,
+      "usage_sources": {
+        "estimated": 56318
+      },
+      "prompt_chars_median": 412,
+      "prompt_chars_p90": 3993,
+      "prompt_present_fraction": 1.0,
+      "licenses": {
+        "None": 56318
+      },
+      "loop": false,
+      "cycle": true,
+      "row_timestamps": false,
+      "note": "Tier C. The source conversations are multi-turn, but the built slice keeps only the first turn of each, so turns per session is 1 until the multi-turn extraction of PLAN-OF-ATTACK Tier C is done",
+      "slices": {
+        "wildchat-coding": 28148,
+        "wildchat-general": 28170
+      }
+    },
+    {
+      "source": "local",
+      "turns": 2283,
+      "sessions": 694,
+      "users": 1,
+      "calls": 33336,
+      "calls_per_turn_median": 7,
+      "calls_per_turn_p90": 37,
+      "turn_total_median": 5221,
+      "turn_total_p90": 35152,
+      "turn_total_sum": 29759363,
+      "turns_per_session_median": 1,
+      "native_usage_fraction": 1.0,
+      "usage_sources": {
+        "native:claude-code": 33336
+      },
+      "prompt_chars_median": 153,
+      "prompt_chars_p90": 3444,
+      "prompt_present_fraction": 0.8261,
+      "licenses": {
+        "private": 2283
+      },
+      "loop": true,
+      "cycle": true,
+      "row_timestamps": true,
+      "note": "the owner's own Claude Code corpus; native usage, real timestamps, the only chronological folds in the project"
+    }
+  ]
+}

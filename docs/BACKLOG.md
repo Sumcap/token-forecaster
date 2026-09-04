@@ -233,6 +233,57 @@ steps behind the Phase 4/5 items below.
 - [ ] Call-count and loop-count distributions, branch probabilities,
       context growth modeling
 
+## Status, 4 September 2026: the corpus census, and what week 2 owes it
+
+`docs/PLAN-OF-ATTACK.md` Track 2 week 1 is done: the Tier A harvester was
+rewritten to keep session structure and read native usage, the Tier B key
+builder and a one-submission smoke pull landed, and every source is counted in
+`experiments/artifacts/census.json`. `docs/CORPUS.md` carries the table, the
+fold rules and the Tier B access status; the per-dataset manifests carry the
+detail. Three findings change what week 2 should do.
+
+**Users, not turns, are the constraint now.** Tier A holds 39,140 turns and
+111,891 calls over 1,693 repositories, but only 93 repositories have 20 or more
+sessions and only 30 of those are Claude Code. The stranger gate of Track 3 is
+defined on users with 20 or more sessions, so it currently has 93 subjects
+pooled and 30 on the one source with a real agent loop and a native label.
+
+**Native labels are 19% of calls.** Claude Code `.jsonl`, Codex rollouts, Cline
+task folders and aider's own `Tokens: ... received` line give 20,864 calls with
+a provider-written output count. The other 91,027 are tiktoken counts of visible
+text, flagged `visible_text_only`, and are a floor rather than a label.
+
+**Tier B does not carry the per-step tokens the plan assumed.** Of the 62
+mini-SWE-agent submissions, only 3 record `usage.output_tokens` and
+`reasoning_tokens` per step; 18 more are readable but count nothing, 16 declare
+trajectories that are not in the bucket at all. The bucket needs no credentials
+but refuses a root listing, so keys must be built from each submission's
+`metadata.yaml`. Loop dynamics are answerable from Tier B; the
+re-forecast-at-k and thinking-ratio questions are answerable from three
+submissions.
+
+Week 2, in the order the census argues for:
+
+- Finish the claude-code search. Four of the seven `"parentUuid" "requestId"
+  extension:jsonl` byte ranges were never paged; the two that were took the
+  source from 54 repositories to 531. Then raise `--max-files-per-repo` on the
+  native sources only — the 25-file cap protects the fold structure of a
+  35,000-turn markdown corpus and is now the binding constraint on the one
+  source that matters most.
+- Pull the three usage-bearing Tier B submissions in full (500 tasks each) and
+  build the thinking-ratio and calls-per-turn tables from them. Fit the
+  loop-length prior as a survival curve: mini-SWE-agent caps its own step count.
+- Fit the visible-text-to-output-tokens correction against Tier A's native rows
+  and GRADE it. The public native rows sit at a median 2.24 visible characters
+  per output token against the local corpus's 1.45; whatever the correction is,
+  it is not one constant.
+- Extract WildChat's later turns. The built slice keeps only the first turn of
+  each conversation, so Tier C currently has no turn-index structure at all,
+  which is the one thing it was for.
+- Widen Cline/Roo. 271 `api_conversation_history.json` plus 301
+  `ui_messages.json` search hits is the whole public population reachable by
+  filename; a content query on the `api_req_started` string is the only way up.
+
 ## Issue, 2 September 2026: does the prompt TEXT beat prompt FEATURES?
 
 Measured (STATE-OF-PLAY §6.32, plan in `docs/SEMANTIC-PLAN.md`). On turn

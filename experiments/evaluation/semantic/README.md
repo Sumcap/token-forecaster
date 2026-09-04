@@ -57,6 +57,46 @@ control on a public corpus is the same 38 numbers as locally. Public prompt
 text is research input only: it is never committed, printed, or redistributed,
 and each source repository's license is recorded per row.
 
+## The corpus (`docs/PLAN-OF-ATTACK.md` Track 2)
+
+`harvest_github_chats.py` above flattens a session to prompt->reply pairs. The
+base model needs the agent loop and a real label, so a second harvester writes
+PER-CALL rows with session structure and native usage where the format records
+it. Both stand: the flat corpus is what the semantic probes were graded on and
+its numbers must stay reproducible.
+
+| script | what it is |
+|---|---|
+| `harvest_common.py` | search / fetch / license / markdown-parser stages, shared by both harvesters so they see the same files |
+| `harvest_github_chats.py` | Tier A flat: prompt -> reply, tiktoken labels (unchanged; now imports the shared stages) |
+| `harvest_sessions.py` | Tier A per-call: sessions, turns, calls, native usage from Claude Code, Cline/Roo, aider and Codex |
+| `claude_calls.mjs` | drives the SHIPPED loader (`packages/ingest-claude/load-history.mjs`) over harvested Claude Code transcripts, so public turns are cut exactly like local ones |
+| `swebench_trajs.py` | Tier B: mini-SWE-agent trajectory keys, an anonymous S3 pull, per-step rows |
+| `build_wildchat_slice.py` | Tier C: the WildChat coding / non-coding slices |
+| `census.py` | the artifact every source is counted into, `experiments/artifacts/census.json` |
+| `test_harvest_sessions.py` | pytest over synthetic fixtures, one per format |
+
+```sh
+# Tier A: search + fetch + parse. Reparses the flat harvester's markdown cache
+# in place and never refetches it.
+python3 experiments/evaluation/semantic/harvest_sessions.py
+# Tier B: keys for every mini-SWE-agent submission, then one submission's trajs
+python3 experiments/evaluation/semantic/swebench_trajs.py keys
+python3 experiments/evaluation/semantic/swebench_trajs.py pull \
+    --submission 20250726_mini-v1.0.0_o3-2025-04-16 --limit 60
+python3 experiments/evaluation/semantic/swebench_trajs.py parse
+# the census (the local row needs the scratchpad export first)
+node experiments/evaluation/export-turn-text.mjs --out "$SCRATCH/turns.jsonl"
+python3 experiments/evaluation/semantic/census.py --local "$SCRATCH/turns.jsonl"
+# the format tests
+python3 -m pytest experiments/evaluation/semantic/
+```
+
+`docs/CORPUS.md` carries the census table, the fold rules and the Tier B access
+status. Folds on public data are leave-user-out (repository) and
+leave-source-out, NEVER chronological: the public rows carry no wall clock and
+harvest order is not time order.
+
 ## The shipped base text head (`docs/SEMANTIC-PLAN.md` Stage 1)
 
 `text_hash.py` is the single definition of the hashed feature form — FNV-1a
