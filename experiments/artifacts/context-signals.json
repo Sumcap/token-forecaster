@@ -1,0 +1,722 @@
+{
+  "context": {
+    "population": {
+      "columns": {
+        "o": [
+          "o_calls",
+          "o_filesRead",
+          "o_filesSearched",
+          "o_filesMutated",
+          "o_anyWrite",
+          "o_maxToolInput"
+        ],
+        "r": [
+          "r_fileCount",
+          "r_bytes",
+          "r_shareCode",
+          "r_shareConfig",
+          "r_shareDocs",
+          "r_shareTests",
+          "r_hasTests",
+          "r_hasAgentDoc",
+          "r_commitCount",
+          "r_daysSincePrevCommit",
+          "r_branchIsDefault",
+          "r_draftPaths",
+          "r_draftPathsExist",
+          "r_draftLargestBytes",
+          "r_reconstructed",
+          "r_present"
+        ],
+        "s": [
+          "s_turnsSoFar",
+          "s_readSoFar",
+          "s_mutatedSoFar",
+          "s_searchedSoFar",
+          "s_prevTurnMutated",
+          "s_prevTurnOutput",
+          "s_minutesSincePrevTurn",
+          "s_prevTurnPresent",
+          "s_present"
+        ]
+      },
+      "dropped_duplicate_S_columns": [
+        "callsSoFar (duplicates v3 feature 7, log1p(sessionPosition)/6)"
+      ],
+      "not_reconstructible": {
+        "draft_paths": "PATH_RE only matches paths starting with /, ./, ../ or ~/, matching the companion exactly; 21% of turns name such a path and 3% name one that exists in the tree at that commit",
+        "files_searched": "the loader only fingerprints Glob/Grep inputs that carry an explicit path/directory key, which almost none do; s_searchedSoFar is non-zero on 0.0% of turns and o_filesSearched on 0.3%",
+        "working_tree_diff": "uncommitted state at the time of a past turn is not reconstructible (plan constraint 4)"
+      },
+      "reconstruction": {
+        "branchUnknown": 0,
+        "cwdMissingOnDisk": 117,
+        "defaultBranchUnknown": 0,
+        "detachedHead": 18,
+        "gitNoCommits": 0,
+        "noCwdRecorded": 0,
+        "noPromptText": 330,
+        "notAGitRepo": 470,
+        "presentDay": 470,
+        "rAbsent": 117,
+        "reconstructed": 1638,
+        "treeListFailed": 0,
+        "turnBeforeFirstCommit": 88,
+        "turns": 2225
+      }
+    },
+    "sanity": {
+      "all_exact_turns": 2225,
+      "control_loss_per_turn_all_exact_turns": 10090,
+      "control_loss_per_turn_text_only_subset": 10738,
+      "note": "the full population's control is 6.2% cheaper per turn than the text-only reference because the 376 text-less exact turns (slash commands, image-only or wrapper-only roots) are shorter; on the SAME rows the harness reproduces the reference control to within 0.2%",
+      "reference_local_control": {
+        "encoder_b3_d1": 10756,
+        "encoder_b3_rescale": 10756,
+        "note": "prior local controls were graded on the TEXT-ONLY population (1,831 / 1,805 turns)",
+        "semantic_b3_local_transfer": 10798
+      },
+      "text_only_gap_pct": -0.17,
+      "text_only_sessions": 684,
+      "text_only_turns": 1849
+    },
+    "step2:local": {
+      "columns": {
+        "o": [
+          "o_calls",
+          "o_filesRead",
+          "o_filesSearched",
+          "o_filesMutated",
+          "o_anyWrite",
+          "o_maxToolInput"
+        ],
+        "r": [
+          "r_fileCount",
+          "r_bytes",
+          "r_shareCode",
+          "r_shareConfig",
+          "r_shareDocs",
+          "r_shareTests",
+          "r_hasTests",
+          "r_hasAgentDoc",
+          "r_commitCount",
+          "r_daysSincePrevCommit",
+          "r_branchIsDefault",
+          "r_draftPaths",
+          "r_draftPathsExist",
+          "r_draftLargestBytes",
+          "r_reconstructed",
+          "r_present"
+        ],
+        "s": [
+          "s_turnsSoFar",
+          "s_readSoFar",
+          "s_mutatedSoFar",
+          "s_searchedSoFar",
+          "s_prevTurnMutated",
+          "s_prevTurnOutput",
+          "s_minutesSincePrevTurn",
+          "s_prevTurnPresent",
+          "s_present"
+        ]
+      },
+      "control_loss_per_turn": 10090.477527886098,
+      "fold_sizes": [
+        {
+          "sessions": 138,
+          "test": 552,
+          "train": 1673
+        },
+        {
+          "sessions": 138,
+          "test": 356,
+          "train": 1869
+        },
+        {
+          "sessions": 138,
+          "test": 697,
+          "train": 1528
+        },
+        {
+          "sessions": 138,
+          "test": 222,
+          "train": 2003
+        },
+        {
+          "sessions": 137,
+          "test": 398,
+          "train": 1827
+        }
+      ],
+      "folds": 5,
+      "gates": {
+        "R": {
+          "ci_below_zero": false,
+          "no_fold_worse_than_5pct": false,
+          "pass_": false,
+          "worst_fold_pct": 5.791499744091655
+        },
+        "S": {
+          "ci_below_zero": true,
+          "no_fold_worse_than_5pct": true,
+          "pass_": true,
+          "worst_fold_pct": 1.6776964729557475
+        },
+        "S+R": {
+          "ci_below_zero": false,
+          "no_fold_worse_than_5pct": false,
+          "pass_": false,
+          "worst_fold_pct": 11.640227352725741
+        },
+        "S+R+oracle": {
+          "ci_below_zero": true,
+          "no_fold_worse_than_5pct": true,
+          "pass_": true,
+          "worst_fold_pct": -33.91109234234487
+        },
+        "oracle": {
+          "ci_below_zero": true,
+          "no_fold_worse_than_5pct": true,
+          "pass_": true,
+          "worst_fold_pct": -43.12460044003071
+        }
+      },
+      "label": "local",
+      "leave_one_project_out_R": {
+        "0c5debe71f4a713d": {
+          "ci": [
+            -1776.345909469684,
+            719.1190270579511
+          ],
+          "control_loss": 11584.759624510583,
+          "delta": -349.45614833546165,
+          "pct": -3.016516178687868,
+          "pct_ci": [
+            -15.333472312290025,
+            6.207457473148318
+          ],
+          "r_loss": 11235.30347617512,
+          "rows": 484,
+          "sessions": 151
+        },
+        "5aa86f5894fb06c9": {
+          "ci": [
+            -228.6646576886848,
+            961.8079192896129
+          ],
+          "control_loss": 11135.239680358523,
+          "delta": 344.2116631802113,
+          "pct": 3.09119222451374,
+          "pct_ci": [
+            -2.05352254870658,
+            8.637514296042934
+          ],
+          "r_loss": 11479.451343538736,
+          "rows": 370,
+          "sessions": 77
+        },
+        "5cc01c7929303d8e": {
+          "ci": [
+            3064.3343861809662,
+            6760.117872079669
+          ],
+          "control_loss": 9449.139448994092,
+          "delta": 4939.240566557444,
+          "pct": 52.271856005715435,
+          "pct_ci": [
+            32.42977207312968,
+            71.5421537439509
+          ],
+          "r_loss": 14388.380015551535,
+          "rows": 64,
+          "sessions": 64
+        },
+        "6c5f3a32e14abb41": {
+          "ci": [
+            -52.418028072761004,
+            2255.874360937965
+          ],
+          "control_loss": 9039.557752243203,
+          "delta": 990.407092469919,
+          "pct": 10.956366667651915,
+          "pct_ci": [
+            -0.5798738114124362,
+            24.95558325713623
+          ],
+          "r_loss": 10029.964844713124,
+          "rows": 94,
+          "sessions": 73
+        },
+        "9782f4b19f0d079f": {
+          "ci": [
+            -573.3889996124016,
+            900.7746387919983
+          ],
+          "control_loss": 13713.451901220093,
+          "delta": -33.08111321590266,
+          "pct": -0.2412311171118004,
+          "pct_ci": [
+            -4.181215668692336,
+            6.568547768136015
+          ],
+          "r_loss": 13680.370788004191,
+          "rows": 53,
+          "sessions": 9
+        },
+        "b3b23c713cfe17d3": {
+          "ci": [
+            -2348.9192383008412,
+            23.85829111689682
+          ],
+          "control_loss": 12512.770896660646,
+          "delta": -1317.107111793242,
+          "pct": -10.526102672788053,
+          "pct_ci": [
+            -18.77217490594118,
+            0.1906715252275898
+          ],
+          "r_loss": 11195.663784867402,
+          "rows": 220,
+          "sessions": 15
+        },
+        "c798f46f3ee652a0": {
+          "ci": [
+            -287.0116237429179,
+            612.8339455800781
+          ],
+          "control_loss": 8190.801516407415,
+          "delta": 115.32397445552357,
+          "pct": 1.40796934493544,
+          "pct_ci": [
+            -3.504072503380654,
+            7.481977732612357
+          ],
+          "r_loss": 8306.125490862936,
+          "rows": 169,
+          "sessions": 81
+        },
+        "eeb9170fe0b39cb9": {
+          "ci": [
+            335.0317428052882,
+            2129.7140920844713
+          ],
+          "control_loss": 9696.191511997848,
+          "delta": 1005.1471583325031,
+          "pct": 10.366411978236576,
+          "pct_ci": [
+            3.4552921359971855,
+            21.964439228012477
+          ],
+          "r_loss": 10701.338670330353,
+          "rows": 164,
+          "sessions": 78
+        },
+        "fccf4acb7d2c72f7": {
+          "ci": [
+            -1265.3246916727942,
+            -43.51381303092576
+          ],
+          "control_loss": 4921.41528857452,
+          "delta": -641.3755760458042,
+          "pct": -13.032340057438592,
+          "pct_ci": [
+            -25.710585623821505,
+            -0.8841727527434383
+          ],
+          "r_loss": 4280.039712528716,
+          "rows": 99,
+          "sessions": 19
+        },
+        "fdc8547dbc3865f8": {
+          "ci": [
+            -838.1362124638129,
+            437.8522843863281
+          ],
+          "control_loss": 10142.413246888924,
+          "delta": -107.06578313299813,
+          "pct": -1.0556243423214826,
+          "pct_ci": [
+            -8.263676425538096,
+            4.317042440768567
+          ],
+          "r_loss": 10035.347463755925,
+          "rows": 427,
+          "sessions": 79
+        }
+      },
+      "models": {
+        "R": {
+          "ci": [
+            92.33947671312707,
+            571.8462328934247
+          ],
+          "delta": 329.3230794644816,
+          "loss": 10419.80060735058,
+          "pct": 3.263701629128677,
+          "pct_ci": [
+            0.915115032543675,
+            5.667187021754594
+          ],
+          "per_fold_pct": [
+            0.4736890755134171,
+            2.415618754102522,
+            4.586615981417896,
+            5.791499744091655,
+            4.462680627318694
+          ]
+        },
+        "S": {
+          "ci": [
+            -302.2955298989665,
+            -5.158631581445589
+          ],
+          "delta": -157.43157043924833,
+          "loss": 9933.045957446851,
+          "pct": -1.5601994058672606,
+          "pct_ci": [
+            -2.995849592485003,
+            -0.05112376066632295
+          ],
+          "per_fold_pct": [
+            -1.8467793409222333,
+            0.7329607212459566,
+            -2.8917142921344507,
+            1.6776964729557475,
+            -3.130070285564601
+          ]
+        },
+        "S+R": {
+          "ci": [
+            -12.340713629115362,
+            483.1262091236748
+          ],
+          "delta": 227.28333434274424,
+          "loss": 10317.760862228844,
+          "pct": 2.2524536991893873,
+          "pct_ci": [
+            -0.12230059077987637,
+            4.787941975872842
+          ],
+          "per_fold_pct": [
+            -1.0694096656764018,
+            0.6156077192174259,
+            3.9734323242244685,
+            11.640227352725741,
+            0.12028313339300656
+          ]
+        },
+        "S+R+oracle": {
+          "ci": [
+            -6980.537690231476,
+            -5457.604159772904
+          ],
+          "delta": -6180.391571150088,
+          "loss": 3910.085956736011,
+          "pct": -61.249743176870716,
+          "pct_ci": [
+            -69.17945826587517,
+            -54.08667869969721
+          ],
+          "per_fold_pct": [
+            -64.00623489846188,
+            -71.26408745356426,
+            -65.08446135552552,
+            -33.91109234234487,
+            -55.42786107870319
+          ]
+        },
+        "control": {
+          "ci": [
+            0,
+            0
+          ],
+          "delta": 0,
+          "loss": 10090.477527886098,
+          "pct": 0,
+          "pct_ci": [
+            0,
+            0
+          ],
+          "per_fold_pct": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "oracle": {
+          "ci": [
+            -7145.549889078053,
+            -5600.986691165477
+          ],
+          "delta": -6342.500965878747,
+          "loss": 3747.976562007351,
+          "pct": -62.856301382670715,
+          "pct_ci": [
+            -70.81478422929513,
+            -55.50764743974267
+          ],
+          "per_fold_pct": [
+            -65.47170931378982,
+            -71.309189340172,
+            -65.81795398227499,
+            -43.12460044003071,
+            -55.93237896474095
+          ]
+        }
+      },
+      "note": "population is EVERY exact turn (no prompt-text filter); control is the 38-column v3 metadata GBM on the same rows, same learner, same seeds",
+      "oracle_ceiling_pct": 62.856301382670715,
+      "permutation_importance": {
+        "arm": "S",
+        "base_loss": 10028.850240658765,
+        "columns": {
+          "s_minutesSincePrevTurn": {
+            "drop": 45.174733275511606,
+            "pct": 0.4504477800691958,
+            "sd": 97.46427844555858
+          },
+          "s_mutatedSoFar": {
+            "drop": 50.08989801979971,
+            "pct": 0.49945803175648434,
+            "sd": 85.00957861399186
+          },
+          "s_present": {
+            "drop": 0,
+            "pct": 0,
+            "sd": 0
+          },
+          "s_prevTurnMutated": {
+            "drop": -4.544247589486743,
+            "pct": -0.04531175040448351,
+            "sd": 22.39253736147321
+          },
+          "s_prevTurnOutput": {
+            "drop": 194.7076224832326,
+            "pct": 1.9414750226686288,
+            "sd": 314.57383241523553
+          },
+          "s_prevTurnPresent": {
+            "drop": 0,
+            "pct": 0,
+            "sd": 0
+          },
+          "s_readSoFar": {
+            "drop": 16.630712501164737,
+            "pct": 0.16582870520631401,
+            "sd": 97.43251334763555
+          },
+          "s_searchedSoFar": {
+            "drop": 0,
+            "pct": 0,
+            "sd": 0
+          },
+          "s_turnsSoFar": {
+            "drop": 589.9034960549621,
+            "pct": 5.882065061290747,
+            "sd": 384.84606645469023
+          }
+        }
+      },
+      "permutation_importance_oracle": {
+        "arm": "oracle",
+        "base_loss": 3984.2512340862354,
+        "columns": {
+          "o_anyWrite": {
+            "drop": 8.836198668813703,
+            "pct": 0.22177814976168875,
+            "sd": 13.89992379188299
+          },
+          "o_calls": {
+            "drop": 8154.959734354741,
+            "pct": 204.67985714824113,
+            "sd": 1732.5019717745258
+          },
+          "o_filesMutated": {
+            "drop": 192.836289869379,
+            "pct": 4.839963108240208,
+            "sd": 143.1579573865111
+          },
+          "o_filesRead": {
+            "drop": 102.19154036982222,
+            "pct": 2.564886960328927,
+            "sd": 74.5202378958741
+          },
+          "o_filesSearched": {
+            "drop": 0,
+            "pct": 0,
+            "sd": 0
+          },
+          "o_maxToolInput": {
+            "drop": 6254.602888619211,
+            "pct": 156.98314491590205,
+            "sd": 2600.8821219643874
+          }
+        }
+      },
+      "pooled_holdout_rows": 6675,
+      "projects": 22,
+      "rows": 2225,
+      "seeds": 3,
+      "sessions": 689,
+      "step0_stop_rule_fired": false,
+      "wall_clock_seconds": 108.64925599098206
+    }
+  },
+  "generatedAt": [
+    "context:step2:local 2026-09-03T12:22:21Z",
+    "context:sanity 2026-09-03T12:23:47Z",
+    "context:population 2026-09-03T12:23:47Z"
+  ],
+  "turnGate": {
+    "note": "Step 3 follow-up: the two session-so-far columns that cleared the sklearn probe, put through the real turn-total boost gate in experiments/evaluation/eval-winning-boost.mjs (schema portable-precall-v5 vs the portable-precall-v3 control). Nothing was wired or shipped.",
+    "generatedAt": "2026-09-03T12:35:38.507Z",
+    "dataset": {
+      "filesScanned": 2308,
+      "calls": 32746,
+      "sessions": 689,
+      "users": 1
+    },
+    "sessionSignalGate": {
+      "protocol": "B.3 d1: 5 chronological session blocks over all exact turns, leave-one-block-out, both arms trained inside each fold off the same rung ladder, pinball at p50/p90/p99, 2,000-resample session-block bootstrap on the paired per-turn difference",
+      "rule": "adopt portable-precall-v5 iff the whole 95% CI versus portable-precall-v3 is below zero AND no fold is worse than +5% AND both arms clear the turn-total gate",
+      "columns": {
+        "42": "log1p(turnsSoFar) / 6",
+        "43": "log1p(previousTurnOutputTokens) / 10",
+        "44": "session-context presence bit"
+      },
+      "controlSchema": "portable-precall-v3",
+      "candidateSchema": "portable-precall-v5",
+      "exactTurns": 2229,
+      "turnRoots": 2229,
+      "sessions": 689,
+      "turnsWithPreviousOutput": 1338,
+      "turnsBeyondFirst": 1540,
+      "controlLoss": 10481.4345580978,
+      "candidateLoss": 10511.01706594888,
+      "percent": 0.28223720414515263,
+      "meanDifference": 29.582507851054167,
+      "ciLower": -41.191868223519506,
+      "ciUpper": 100.13442440318276,
+      "percentCiLower": -0.39299838199815196,
+      "percentCiUpper": 0.9553503754485629,
+      "worstFoldPercent": 0.9398688757732199,
+      "folds": [
+        {
+          "fold": 1,
+          "turns": 552,
+          "trainTurns": 1677,
+          "controlLoss": 10461.569601449277,
+          "candidateLoss": 10516.525942028986,
+          "percent": 0.5253163977620989
+        },
+        {
+          "fold": 2,
+          "turns": 356,
+          "trainTurns": 1873,
+          "controlLoss": 12485.873904494372,
+          "candidateLoss": 12603.224747191005,
+          "percent": 0.9398688757732199
+        },
+        {
+          "fold": 3,
+          "turns": 697,
+          "trainTurns": 1532,
+          "controlLoss": 10084.369913916791,
+          "candidateLoss": 10046.343515064555,
+          "percent": -0.3770825463250693
+        },
+        {
+          "fold": 4,
+          "turns": 222,
+          "trainTurns": 2007,
+          "controlLoss": 11204.114639639649,
+          "candidateLoss": 11275.712972972964,
+          "percent": 0.6390360651970184
+        },
+        {
+          "fold": 5,
+          "turns": 402,
+          "trainTurns": 1827,
+          "controlLoss": 9022.987114427862,
+          "candidateLoss": 9034.022388059699,
+          "percent": 0.1223017775808577
+        }
+      ],
+      "ciBelowZero": false,
+      "foldsWithinTolerance": true,
+      "turnTotalGateAdopt": true,
+      "turnTotalGateAdoptV5": true,
+      "candidateSessionSplits": 51,
+      "typing": {
+        "demoModel": "claude-fable-5",
+        "phrases": 7,
+        "incumbent": {
+          "featureSchema": "portable-precall-v2",
+          "p50s": [
+            3883,
+            3883,
+            3883,
+            22323,
+            22760,
+            22760,
+            22760
+          ],
+          "growth": 18877,
+          "drops": 0
+        },
+        "candidateTurnsSoFar0": {
+          "featureSchema": "portable-precall-v5",
+          "turnsSoFar": 0,
+          "p50s": [
+            3740,
+            3740,
+            3740,
+            22180,
+            22815,
+            22815,
+            22815
+          ],
+          "growth": 19075,
+          "drops": 0
+        },
+        "candidateTurnsSoFar5": {
+          "featureSchema": "portable-precall-v5",
+          "turnsSoFar": 5,
+          "p50s": [
+            3649,
+            3649,
+            3649,
+            22089,
+            22815,
+            22815,
+            22815
+          ],
+          "growth": 19166,
+          "drops": 0
+        }
+      },
+      "adopt": false,
+      "deployedTurnSchema": "portable-precall-v2",
+      "shipsThisRun": false
+    },
+    "turnTotalGate": {
+      "adopt": true,
+      "combinedVsThinking": {
+        "meanDifference": -1853.6123325062056,
+        "ciLower": -2642.189824561399,
+        "ciUpper": -1262.7766247379418
+      },
+      "p90Coverage": 0.9305210918114144,
+      "adoptV5": true,
+      "combinedV5VsThinking": {
+        "meanDifference": -1817.210198511167,
+        "ciLower": -2582.1087071240117,
+        "ciUpper": -1222.9312615955507
+      },
+      "p90CoverageV5": 0.9305210918114144
+    },
+    "deployedTurnSchema": "portable-precall-v2"
+  }
+}
