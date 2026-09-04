@@ -526,6 +526,12 @@ export function historicalTurnTotalForecast(
         : { promptHasImage: request.promptHasImage }),
       boostedContext: {
         prompt,
+        // The base text head, when the caller ran it on the draft. Three
+        // numbers, never text; a v3 turn-total correction ignores them
+        // because its trees never index past 37.
+        ...(request.boostedContext?.textHead === undefined
+          ? {}
+          : { textHead: request.boostedContext.textHead }),
         agentLoop: {
           sessionPosition:
             Number.isInteger(sessionPosition) && sessionPosition >= 0

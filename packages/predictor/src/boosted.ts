@@ -58,9 +58,41 @@ export interface AgentLoopForecastContext {
   priorArtifactObserved?: boolean;
 }
 
+/**
+ * What the session has already done, at the moment the human presses enter.
+ * Both fields are known before the turn's first call, so this is a legal
+ * pre-call family (docs/CONTEXT-SIGNALS-PLAN.md, constraint 3). Absent means
+ * unknown, never zero: a caller that cannot count its own turns leaves the
+ * whole object off and the v5 columns read as "no session context".
+ */
+export interface SessionForecastContext {
+  /** Turn roots that started earlier in this session. Zero on the first turn. */
+  turnsSoFar: number;
+  /**
+   * Output tokens of the immediately previous turn, when that turn had already
+   * finished before this one started. Omitted when there is no previous turn or
+   * when it was still running, which is a different thing from "it produced 0".
+   */
+  previousTurnOutputTokens?: number;
+}
+
 export interface BoostedForecastContext {
   prompt?: PromptForecastFeatures;
   agentLoop?: AgentLoopForecastContext;
+  /**
+   * Session-so-far context for the v5 turn-total columns (42-44). Optional for
+   * the same reason `textHead` is: most callers hold neither, and a missing
+   * family must not read as a session that has done nothing.
+   */
+  sessionContext?: SessionForecastContext;
+  /**
+   * `baseTextHead(draft)` — the public base head's `[p50, p90, p99]` on the
+   * `log1p(tokens)` scale. Optional because most callers hold only prompt
+   * aggregates; when it is absent the v4 columns read as "no head ran" rather
+   * than as a short prompt. Text never reaches this request, only these three
+   * numbers.
+   */
+  textHead?: readonly [number, number, number];
 }
 
 export interface QuantileBoostLeaf {
@@ -86,15 +118,27 @@ export interface QuantileBoostProfile {
 
 /**
  * Schemas this runtime can apply, each appending features to its predecessor.
- * v2 appended turn-root image presence (index 36) and v3 appends the
- * compression follow-up bit (index 37). A tree trained against an older schema
- * never references an index above that schema's width, so an old profile
- * evaluates identically against the widest feature vector.
+ * v2 appended turn-root image presence (index 36), v3 the compression
+ * follow-up bit (index 37), v4 the base text head: its three `log1p(tokens)`
+ * quantiles at 38-40 and a presence bit at 41, and v5 the session-so-far
+ * family: `log1p(turnsSoFar)` at 42, `log1p(previousTurnOutputTokens)` at 43
+ * and a presence bit at 44. A tree trained against an older schema never
+ * references an index above that schema's width, so an old profile evaluates
+ * identically against the widest feature vector.
+ *
+ * Indices only ever append; they are never reused. v5's family is *conceptually*
+ * v3 + session (the text head it skips over was graded and refused), but it
+ * cannot sit at 38-40 without a v4 profile's trees reading session numbers as
+ * head quantiles. Which columns a v5 model may actually split on is a training
+ * question, and the trainer answers it by offering the v3 prefix plus 42-44;
+ * the runtime only needs the width to be monotone.
  */
 export const SUPPORTED_BOOST_FEATURE_SCHEMAS = [
   "portable-precall-v1",
   "portable-precall-v2",
   "portable-precall-v3",
+  "portable-precall-v4",
+  "portable-precall-v5",
 ] as const;
 export type PortableBoostFeatureSchema =
   (typeof SUPPORTED_BOOST_FEATURE_SCHEMAS)[number];
@@ -106,9 +150,11 @@ export const BOOST_FEATURE_COUNT_BY_SCHEMA: Record<
   "portable-precall-v1": 36,
   "portable-precall-v2": 37,
   "portable-precall-v3": 38,
+  "portable-precall-v4": 42,
+  "portable-precall-v5": 45,
 };
 /** Width the extractor emits today: the newest supported schema. */
-export const QUANTILE_BOOST_FEATURE_COUNT = 38;
+export const QUANTILE_BOOST_FEATURE_COUNT = 45;
 const META_WIDTH = 24;
 
 function fnv1a(value: string): number {
@@ -210,6 +256,38 @@ export function portableQuantileBoostFeatures(
   // either a compression follow-up or it is not, and no prompt at all is the
   // same "not a compression follow-up" as a prompt that asks for an artifact.
   features[37] = prompt?.followupCompression ? 1 : 0;
+  // v4: the public base text head. Indices 38-40 carry its three log1p
+  // quantiles and 41 is the presence bit, so a tree can split on "a head ran"
+  // before it splits on what the head said. All four are zero together when
+  // the caller had no draft text -- a missing head is not a short prompt.
+  const textHead = request.boostedContext.textHead;
+  if (textHead !== undefined) {
+    if (textHead.length !== 3 || !textHead.every((value) => Number.isFinite(value))) {
+      throw new Error("boostedContext.textHead must be three finite numbers");
+    }
+    features[38] = textHead[0];
+    features[39] = textHead[1];
+    features[40] = textHead[2];
+    features[41] = 1;
+  }
+  // v5: the session so far. 42 is the turn index inside the session, 43 the
+  // previous turn's output tokens, 44 the presence bit, so a tree can split on
+  // "the caller knows where it is in the session" before it splits on where.
+  // All three are zero together when no session context was supplied -- an
+  // unknown session is not a session at its first turn.
+  const sessionContext = request.boostedContext.sessionContext;
+  if (sessionContext !== undefined) {
+    assertNonNegativeInteger("sessionContext.turnsSoFar", sessionContext.turnsSoFar);
+    if (sessionContext.previousTurnOutputTokens !== undefined) {
+      assertNonNegativeInteger(
+        "sessionContext.previousTurnOutputTokens",
+        sessionContext.previousTurnOutputTokens,
+      );
+    }
+    features[42] = Math.log1p(sessionContext.turnsSoFar) / 6;
+    features[43] = Math.log1p(sessionContext.previousTurnOutputTokens ?? 0) / 10;
+    features[44] = 1;
+  }
   return features;
 }
 
