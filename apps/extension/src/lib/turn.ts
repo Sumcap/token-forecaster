@@ -21,6 +21,7 @@ import type {
   ForecastConfidence,
   ForecastSource,
   PromptForecastFeatureObservation,
+  TextHeadQuantilesObservation,
 } from "@token-forecaster/core";
 import type { Surface } from "./surface.js";
 
@@ -56,6 +57,8 @@ export interface ForecastSnapshot {
   inputTokens?: number;
   inputQuality?: CountQuality;
   promptFeatures?: PromptForecastFeatureObservation;
+  /** `baseTextHead(draft)` -- three numbers on the log1p(tokens) scale. */
+  textHeadQuantiles?: TextHeadQuantilesObservation;
   promptMentionsPath?: boolean;
   promptHasImage?: boolean;
   sessionPosition?: number;

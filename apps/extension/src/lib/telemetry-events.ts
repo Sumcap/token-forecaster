@@ -98,6 +98,12 @@ export function researchEventFromTurn(input: {
         promptMentionsPath: snapshot.promptMentionsPath,
         promptHasImage: snapshot.promptHasImage,
         promptForecastFeatures: snapshot.promptFeatures,
+        // Three numbers from the base text head, when the chip ran it. Absent
+        // rather than zeroed when it did not: "no head" and "a head that said
+        // zero" are different rows to the server.
+        ...(snapshot.textHeadQuantiles === undefined
+          ? {}
+          : { textHeadQuantiles: snapshot.textHeadQuantiles }),
         agentLoopForecastContext: {
           sessionPosition: snapshot.sessionPosition,
           loopDepth: 0,

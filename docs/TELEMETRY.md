@@ -43,6 +43,21 @@ separately from the data and do not upload it. User and workload hashes need a
 stable study salt so the evaluator can resample correlated blocks; keep that
 salt in the VM secret store.
 
+Semantic forecasting does not change this. The measured way to use prompt
+text (STATE-OF-PLAY §6.32) is a text head computed on the client and blended
+locally; the only thing worth uploading is that head's prediction. Shipping
+embeddings, let alone text, would need its own ADR. See
+`docs/SEMANTIC-PLAN.md`.
+
+That upload now has a field. `request.textHeadQuantiles` is an optional
+three-number tuple, `[p50, p90, p99]` on the `log1p(tokens)` scale, holding
+exactly what `baseTextHead(prompt)` returned for the turn root; it sits beside
+`promptForecastFeatures` and is written by any client that already sends those
+features and still holds the draft. Send it only when the head actually ran --
+omit the field otherwise, because "no head" and "a head that predicted a short
+turn" are different rows. It carries no text and cannot be inverted into any,
+so `hash_only` is unchanged by it and remains the default.
+
 ## Minimal integration
 
 ```ts
