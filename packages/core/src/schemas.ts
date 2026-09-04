@@ -81,6 +81,31 @@ export type PromptStorageMode = z.infer<typeof promptStorageModeSchema>;
 /** Default privacy mode: derived features and hashes only, never raw prompts. */
 export const DEFAULT_PROMPT_STORAGE_MODE: PromptStorageMode = "hash_only";
 
+/**
+ * The longest prompt this contract will carry.
+ *
+ * Turn-root prompts on the local corpus are shorter than this at the 99.9th
+ * percentile; beyond it a "prompt" is a pasted file, which is exactly the
+ * content nobody consented to upload. Longer text is rejected rather than
+ * truncated, so a client cannot quietly ship half of one.
+ */
+export const MAX_PROMPT_TEXT_CHARS = 8_000;
+
+/**
+ * Why the model stopped, as the harness reported it.
+ *
+ * `other` is for a provider value this enum has not seen; it is not a default,
+ * and a client that does not know must omit the field instead.
+ */
+export const stopReasonSchema = z.enum([
+  "end_turn",
+  "tool_use",
+  "max_tokens",
+  "stop_sequence",
+  "other",
+]);
+export type StopReasonObservation = z.infer<typeof stopReasonSchema>;
+
 export const expectedOutputKindSchema = z.enum([
   "message",
   "artifact",
@@ -196,11 +221,17 @@ export type AgentLoopForecastContextObservation = z.infer<
  * One normalized telemetry event: what we predicted and what actually
  * happened. This is the training-data unit for later predictor baselines.
  */
-export const forecastObservationSchema = z.object({
+const forecastObservationObjectSchema = z.object({
   id: z.string(),
   timestamp: z.string().datetime(),
 
-  provider: z.literal("anthropic"),
+  /**
+   * Widened from `"anthropic"` when the companion daemon began uploading Codex
+   * rows, which carry the same usage contract from a different vendor. Every
+   * row written before that parses unchanged; nothing may pool the two when
+   * fitting quantiles.
+   */
+  provider: z.enum(["anthropic", "openai"]),
   model: z.string(),
   modelSnapshot: z.string().optional(),
 
@@ -249,6 +280,67 @@ export const forecastObservationSchema = z.object({
     /** `baseTextHead(prompt)` -- three numbers, sibling of the features above. */
     textHeadQuantiles: textHeadQuantilesSchema.optional(),
     agentLoopForecastContext: agentLoopForecastContextSchema.optional(),
+
+    /**
+     * The cleaned turn-root prompt, harness wrappers removed.
+     *
+     * Present ONLY under `promptStorageMode` `redacted` or `full_opt_in`; the
+     * observation-level check below rejects a row that carries text under any
+     * other mode, or with no mode at all. This is the enforcement the storage
+     * enum has been missing since it was written. See ADR 0002.
+     */
+    promptText: z.string().max(MAX_PROMPT_TEXT_CHARS).optional(),
+    /**
+     * Which tier of prompt storage the row was collected under. Required
+     * whenever `promptText` is present; meaningful without it, because a
+     * feature-only row that says `hash_only` is a positive statement that the
+     * client held text and did not send it.
+     */
+    promptStorageMode: promptStorageModeSchema.optional(),
+
+    // --- loop structure -----------------------------------------------------
+    // Where this call sits in its agent loop. Numbers and short enum strings
+    // only, so they ship under every storage mode including `none`. Two of
+    // them (`toolNames`, `stopReason`) describe the response rather than the
+    // request; they live here because the loop position of the NEXT call is
+    // what they are collected for, and separating them from `turnRootId` and
+    // `callIndex` would split one table across two objects.
+
+    /**
+     * Opaque identifier of the human turn that opened this call's agent loop.
+     * Every call of one turn shares it; it is a transcript uuid, never derived
+     * from prompt content. Turn-scale rows carry their own root id.
+     */
+    turnRootId: z.string().max(128).optional(),
+    /**
+     * Zero-based index of this call inside its turn.
+     *
+     * The same quantity as `agentLoopForecastContext.priorCallCount` -- the
+     * number of calls this loop already made -- exposed on its own because a
+     * caller that knows only the loop position cannot fill that object's
+     * required siblings (`priorMaxOutputTokens` and friends). When both are
+     * present they must agree, which the check below enforces.
+     */
+    callIndex: z.number().int().nonnegative().optional(),
+    /**
+     * Zero-based index of this call's TURN inside its session.
+     *
+     * Distinct from `agentLoopForecastContext.sessionPosition`, which counts
+     * CALLS in the session: a session of three turns whose loops ran ten calls
+     * each ends at `turnIndexInSession` 2 and `sessionPosition` 29.
+     */
+    turnIndexInSession: z.number().int().nonnegative().optional(),
+    /**
+     * Names of the `tool_use` blocks in this call's response, in the order the
+     * response emitted them. Tool NAMES only -- never inputs, never results.
+     * An empty array means "the call made no tool call", which is information;
+     * omitting the field means the surface could not see the blocks.
+     */
+    toolNames: z.array(z.string().min(1).max(64)).max(32).optional(),
+    /** Size of the largest tool input this call emitted, in characters. */
+    largestToolInputChars: z.number().int().nonnegative().optional(),
+    /** Why the call stopped. Post-call at call scale, pre-call for the next. */
+    stopReason: stopReasonSchema.optional(),
     /**
      * Caller-declared intent before generation. This is the smallest telemetry
      * addition capable of targeting the unresolved long-artifact regime.
@@ -289,7 +381,13 @@ export const forecastObservationSchema = z.object({
 
   actual: z
     .object({
-      inputTokens: z.number().int().nonnegative(),
+      /**
+       * Optional since the companion began uploading transcript rows: Claude
+       * Code records the billed OUTPUT of every call and no per-call input
+       * count, and writing a zero there would be inventing a measurement.
+       * Missing is not zero. Rows written before this was relaxed all carry it.
+       */
+      inputTokens: z.number().int().nonnegative().optional(),
       outputTokens: z.number().int().nonnegative(),
 
       cacheCreationInputTokens: z.number().int().nonnegative().optional(),
@@ -313,6 +411,12 @@ export const forecastObservationSchema = z.object({
        * Whether outputTokens came from provider usage or an estimate of the
        * rendered text. Training code must never mix these without an explicit
        * measurement-error decision.
+       *
+       * This IS the exact/estimated tag for a row: the Chrome extension's
+       * DOM-counted rows say `dom_estimate` and everything read from a
+       * transcript's usage block says `provider_exact`. A second field naming
+       * the same distinction was considered and refused -- two tags that can
+       * disagree are worse than one.
        */
       outputTokenQuality: z
         .enum(["provider_exact", "dom_estimate"])
@@ -334,7 +438,15 @@ export const forecastObservationSchema = z.object({
       workflowId: z.string().optional(),
       agentId: z.string().optional(),
       experimentId: z.string().optional(),
-      /** Stable salted hashes; raw user/workload identifiers are not required. */
+      /**
+       * Stable salted hashes; raw user/workload identifiers are not required.
+       *
+       * `userIdHash` is also how a direct-API row says which INSTALLATION sent
+       * it: the companion generates a random opaque id once, keeps it locally,
+       * and puts it here. That is the key `DELETE /v1/installations/:id` and
+       * the purge script match on, so somebody can have their rows deleted
+       * without an account having to exist anywhere.
+       */
       userIdHash: z.string().optional(),
       workloadIdHash: z.string().optional(),
       /** Browser-only provenance. Omitted on direct API observations. */
@@ -345,6 +457,52 @@ export const forecastObservationSchema = z.object({
     })
     .optional(),
 });
+
+/**
+ * One normalized telemetry event, with the prompt-storage contract enforced.
+ *
+ * The enum on its own never stopped anybody: a client could set `hash_only`
+ * and attach a prompt, and the row parsed. Text and mode are now checked
+ * together, at the observation level, so the check runs everywhere the schema
+ * does -- writer, ingest, and any reader replaying a file.
+ */
+export const forecastObservationSchema = forecastObservationObjectSchema.superRefine(
+  (observation, issue) => {
+    const { promptText, promptStorageMode, callIndex, agentLoopForecastContext } =
+      observation.request;
+
+    if (promptText !== undefined) {
+      if (promptStorageMode === undefined) {
+        issue.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["request", "promptStorageMode"],
+          message:
+            "promptStorageMode is required whenever request.promptText is present",
+        });
+      } else if (promptStorageMode === "none" || promptStorageMode === "hash_only") {
+        issue.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["request", "promptText"],
+          message: `request.promptText is not allowed under promptStorageMode "${promptStorageMode}"; send redacted or full_opt_in text, or no text at all`,
+        });
+      }
+    }
+
+    // Two names for one number may not disagree; see `request.callIndex`.
+    if (
+      callIndex !== undefined &&
+      agentLoopForecastContext !== undefined &&
+      agentLoopForecastContext.priorCallCount !== callIndex
+    ) {
+      issue.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["request", "callIndex"],
+        message:
+          "request.callIndex and request.agentLoopForecastContext.priorCallCount count the same calls and must agree",
+      });
+    }
+  },
+);
 export type ForecastObservation = z.infer<typeof forecastObservationSchema>;
 
 export const EXTENSION_TELEMETRY_SCHEMA_VERSION = 1 as const;

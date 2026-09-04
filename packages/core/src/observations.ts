@@ -93,6 +93,33 @@ export interface UsageObservation {
   contextWindow: number | null;
   /** Features of the user prompt that opened this turn, when recoverable. */
   promptFeatures: PromptFeatures | null;
+
+  // --- loop structure, added with telemetry v2 -------------------------------
+  // Undefined and null mean different things here. `undefined` is a row an
+  // importer produced before these existed, or a source that cannot see them;
+  // `null` is "this source looked and the transcript does not say". Neither is
+  // an empty tool list, which is a real observation that the call made no call.
+
+  /**
+   * Opaque id of the human turn that opened this call's loop. A transcript
+   * uuid for Claude Code, a synthesised `session:index` for Codex, whose
+   * rollouts do not identify turns.
+   */
+  turnRootId?: string | null;
+  /**
+   * Names of the tool_use blocks in this call's response, in emission order.
+   * Names only: no inputs, no results, no paths.
+   */
+  toolNames?: readonly string[] | null;
+  /** Characters in the largest tool input this call emitted. */
+  largestToolInputChars?: number | null;
+  /**
+   * Provider stop reason exactly as the transcript reported it, lower-cased.
+   * Null when the format does not record one -- Codex rollouts do not, and
+   * deriving "tool_use" from the presence of a tool call would be inventing a
+   * provider statement out of our own inference.
+   */
+  stopReason?: string | null;
 }
 
 /** Why a transcript row did not become an observation. */

@@ -527,6 +527,12 @@ describe("PersonalStore", () => {
         "source_file", "source_offset",
         "pf_chars", "pf_words", "pf_lines", "pf_code_fences", "pf_urls",
         "pf_paths", "pf_has_question", "pf_has_imperative", "pf_images", "pf_hash",
+        // v4. Loop structure and the upload cursor: an opaque turn id, a JSON
+        // array of tool NAMES from a fixed vocabulary, a character count, a
+        // provider stop reason, and a timestamp. None of them can hold a
+        // prompt or a response, which is the property this list exists to pin.
+        "turn_root_id", "tool_names", "largest_tool_input_chars", "stop_reason",
+        "uploaded_at",
       ].sort(),
     );
     store.close();

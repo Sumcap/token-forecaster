@@ -63,6 +63,17 @@ export interface ParseCodexOptions {
    * gets its real saving by skipping unchanged files outright.
    */
   fromOffset?: number;
+  /**
+   * LOCAL ONLY, opt-in: also return each turn's opening prompt text in
+   * {@link ParseCodexResult.promptTexts}, keyed by turn index.
+   *
+   * Nothing in the returned observations carries it, and the store has no
+   * column for it. It exists for one caller — the telemetry uploader, when the
+   * user has chosen a tier that sends prompts — which reads the text, uses it,
+   * and does not keep it. Default off, and the parser's own privacy note above
+   * still holds for every other caller.
+   */
+  withPromptText?: boolean;
 }
 
 /** Result of parsing one transcript. */
@@ -76,6 +87,10 @@ export interface ParseCodexResult {
   cliVersion: string | null;
   /** Latest model seen, for reporting. */
   lastModel: string | null;
+  /**
+   * Turn index to opening prompt text. Empty unless `withPromptText` was set.
+   */
+  promptTexts: Map<number, string>;
 }
 
 interface TurnState {
@@ -91,6 +106,10 @@ interface TurnState {
   contextWindow: number | null;
   /** Byte offset just past this turn's most recent call, for the emit cursor. */
   lastOffset: number;
+  /** Tool names across the whole turn, in emission order. */
+  toolNames: string[];
+  /** Largest single tool input the turn emitted, in characters. */
+  maxToolChars: number;
 }
 
 /**
@@ -102,7 +121,8 @@ interface TurnState {
  * @param text Full transcript contents (JSONL).
  */
 export function parseCodexRollout(text: string, options: ParseCodexOptions): ParseCodexResult {
-  const { sourceFile, salt, fromOffset = 0 } = options;
+  const { sourceFile, salt, fromOffset = 0, withPromptText = false } = options;
+  const promptTexts = new Map<number, string>();
   const stats = emptyImportStats();
   stats.filesScanned = 1;
   const observations: UsageObservation[] = [];
@@ -116,6 +136,13 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
   let lastTimestamp = new Date(0).toISOString();
 
   const seenUsage = new Set<string>();
+  // Tool calls seen since the last billing row, flushed into the call it paid
+  // for. Codex rollouts record no stop reason at all, so `stopReason` stays
+  // null on every row this parser emits: inferring "tool_use" from the
+  // presence of a tool call would be reporting our own guess as the
+  // provider's word.
+  let pendingToolNames: string[] = [];
+  let pendingMaxToolChars = 0;
   const turns: TurnState[] = [];
   let turn: TurnState | null = null;
   let sawUserMessageEvent = false;
@@ -194,6 +221,18 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
         break;
       case "response_item": {
         if (emitting) stats.schemaVariants[variantKey] = (stats.schemaVariants[variantKey] ?? 0) + 1;
+        // A rollout writes the model's response items and then the
+        // `token_count` that bills them, so the tool calls seen since the last
+        // billing row are exactly this call's tool calls. Names and input
+        // LENGTHS only; the input itself is never read.
+        if (payloadType === "function_call" || payloadType === "custom_tool_call") {
+          const name = str(payload["name"]);
+          if (name) pendingToolNames.push(name);
+          const input = payload["input"] ?? payload["arguments"];
+          const length = typeof input === "string" ? input.length : 0;
+          if (length > pendingMaxToolChars) pendingMaxToolChars = length;
+          continue;
+        }
         if (hasUserMessageEvents || payloadType !== "message") continue;
         if (str(payload["role"]) !== "user") continue;
         const content = payload["content"];
@@ -209,6 +248,7 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
         }
         if (chars === 0) continue;
         stats.schemaVariants["legacy_turn_root"] = (stats.schemaVariants["legacy_turn_root"] ?? 0) + 1;
+        if (withPromptText) promptTexts.set(turns.length, text_);
         turn = {
           index: turns.length,
           features: extractPromptFeatures(text_, salt, 0),
@@ -221,6 +261,8 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
           reasoning,
           contextWindow,
           lastOffset: rowStart,
+          toolNames: [],
+          maxToolChars: 0,
         };
         turns.push(turn);
         continue;
@@ -249,6 +291,9 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
         // Text enters here and leaves as counts. It is not retained.
         const features =
           typeof message === "string" ? extractPromptFeatures(message, salt, images) : null;
+        if (withPromptText && typeof message === "string") {
+          promptTexts.set(turns.length, message);
+        }
         turn = {
           index: turns.length,
           features,
@@ -261,6 +306,8 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
           reasoning,
           contextWindow,
           lastOffset: rowStart,
+          toolNames: [],
+          maxToolChars: 0,
         };
         turns.push(turn);
         continue;
@@ -319,6 +366,8 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
             reasoning,
             contextWindow,
             lastOffset: rowStart,
+            toolNames: [],
+            maxToolChars: 0,
           };
           turns.push(turn);
           if (emitting) countSkip(stats, "no_turn_context");
@@ -334,6 +383,12 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
         if (turn.contextWindow === null) turn.contextWindow = contextWindow;
 
         turn.lastOffset = offset;
+        const callToolNames = pendingToolNames;
+        const callMaxToolChars = pendingMaxToolChars;
+        pendingToolNames = [];
+        pendingMaxToolChars = 0;
+        turn.toolNames.push(...callToolNames);
+        turn.maxToolChars = Math.max(turn.maxToolChars, callMaxToolChars);
         if (!emitting) continue;
         observations.push({
           provider: "openai",
@@ -354,6 +409,10 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
           reasoningOutputTokens: reasoningOut,
           totalTokens: lastTotal,
           contextWindow: turn.contextWindow,
+          turnRootId: `${sessionId}:${turn.index}`,
+          toolNames: callToolNames,
+          largestToolInputChars: callMaxToolChars,
+          stopReason: null,
           promptFeatures: turn.features,
         });
         stats.rowsUsed += 1;
@@ -391,6 +450,10 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
       reasoningOutputTokens: t.reasoningTotal,
       totalTokens: t.totalTotal,
       contextWindow: t.contextWindow,
+      turnRootId: `${sessionId}:${t.index}`,
+      toolNames: t.toolNames,
+      largestToolInputChars: t.maxToolChars,
+      stopReason: null,
       promptFeatures: t.features,
     });
   }
@@ -407,5 +470,6 @@ export function parseCodexRollout(text: string, options: ParseCodexOptions): Par
     sessionId,
     cliVersion,
     lastModel: model,
+    promptTexts,
   };
 }

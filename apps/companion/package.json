@@ -23,6 +23,8 @@
     "@token-forecaster/ingest-claude": "workspace:*",
     "@token-forecaster/ingest-codex": "workspace:*",
     "@token-forecaster/personal": "workspace:*",
+    "@token-forecaster/predictor": "workspace:*",
+    "@token-forecaster/telemetry": "workspace:*",
     "@token-forecaster/token-counter": "workspace:*"
   }
 }

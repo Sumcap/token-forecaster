@@ -101,6 +101,24 @@ export async function startDaemon(options: DaemonOptions = {}): Promise<RunningD
               `${Object.keys(service.profile?.scales ?? {}).length} profile slices`,
           );
         }
+        // Uploading is the last thing an index run does, and nothing waits on
+        // it: the profile is already trained and being served by the time the
+        // first row leaves. A collector that is down costs a log line.
+        void service
+          .uploadTelemetry(log)
+          .then((upload) => {
+            if (upload.skipped === undefined) {
+              log(
+                `[telemetry] uploaded ${upload.uploaded.toLocaleString()} rows in ` +
+                  `${upload.batches} batches, ${upload.remaining.toLocaleString()} pending`,
+              );
+            }
+          })
+          .catch((error: unknown) => {
+            log(
+              `[telemetry] upload error: ${error instanceof Error ? error.message : String(error)}`,
+            );
+          });
         if (queued) {
           queued = false;
           schedule("queued change");

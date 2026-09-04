@@ -11,3 +11,16 @@ export {
 } from "./server.js";
 export type { RunningServer, RuntimeInfo, StartServerOptions } from "./server.js";
 export { dashboardHtml } from "./dashboard.js";
+export {
+  ingestUrlAllowed,
+  isUploadMode,
+  resolveIngestToken,
+  telemetrySettings,
+  uploadPendingObservations,
+} from "./telemetry.js";
+export type {
+  TelemetrySettings,
+  TelemetryUploadMode,
+  UploadDependencies,
+  UploadResult,
+} from "./telemetry.js";

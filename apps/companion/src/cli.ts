@@ -12,6 +12,7 @@ import {
   uninstallAlias,
 } from "./shell-alias.js";
 import { CompanionService } from "./service.js";
+import { isUploadMode } from "./telemetry.js";
 
 /**
  * Command line front end. Every command is a thin wrapper over
@@ -26,6 +27,7 @@ Commands
   evaluate              Print the chronological holdout report.
   status                Print sources, profile and coverage.
   forecast              Print a forecast. Requires --provider and --scale.
+  telemetry             Show or change what this machine uploads, if anything.
   reset                 Delete all derived data. History files are untouched.
   install-shell         Alias \`claude\` to the draft-aware launcher in your shell rc.
   uninstall-shell       Remove that alias and restore the shell rc.
@@ -39,6 +41,14 @@ Options
   --reasoning <level>
   --json                Machine-readable output where supported.
   --rc <path>           Shell startup file for install-shell/uninstall-shell.
+
+Telemetry options (all optional; with none of them, the command only reports)
+  --mode <none|hash_only|redacted|full_opt_in>
+                        What a row may carry. Default none: nothing is sent.
+  --url <origin>        Collector origin. https, or http on localhost.
+  --token <value>       Bearer token, or keychain:<service>[/<account>] on macOS.
+  --resend              Forget what was already uploaded and send it again.
+  --now                 Upload immediately instead of waiting for an index run.
 `;
 
 function parseArgs(argv: string[]): { command: string; flags: Map<string, string> } {
@@ -252,6 +262,45 @@ async function main(): Promise<number> {
         }
         out(`P50 ${num(result.p50)}   P90 ${num(result.p90)}   P99 ${num(result.p99)}`);
         out(`source: ${result.source} — ${result.reason}`);
+        return 0;
+      }
+
+      case "telemetry": {
+        const mode = flags.get("mode");
+        if (mode !== undefined && !isUploadMode(mode)) {
+          out(`--mode must be one of none, hash_only, redacted, full_opt_in`);
+          return 2;
+        }
+        service.setTelemetry({
+          ...(isUploadMode(mode) ? { mode } : {}),
+          ...(flags.has("url") ? { url: flags.get("url")! } : {}),
+          ...(flags.has("token") ? { token: flags.get("token")! } : {}),
+        });
+        if (flags.get("resend") === "true") service.resetUploadCursor();
+
+        const settings = service.telemetry;
+        if (json) {
+          out(JSON.stringify({ ...settings, pending: store.pendingUploadCount() }, null, 2));
+        } else {
+          out(`mode            ${settings.mode}`);
+          out(`collector       ${settings.url || "(none)"}`);
+          out(`token           ${settings.tokenConfigured ? "configured" : "(none)"}`);
+          out(`installation    ${settings.installationId}`);
+          out(`rows pending    ${num(store.pendingUploadCount())}`);
+          if (settings.mode === "none") {
+            out("");
+            out("nothing is uploaded. `--mode redacted --url … --token …` turns it on.");
+          }
+        }
+        if (flags.get("now") === "true") {
+          const result = await service.uploadTelemetry((message) => out(message));
+          out(
+            result.skipped
+              ? `not uploaded: ${result.skipped}`
+              : `uploaded ${num(result.uploaded)} rows in ${result.batches} batches, ` +
+                  `${num(result.remaining)} pending`,
+          );
+        }
         return 0;
       }
 
