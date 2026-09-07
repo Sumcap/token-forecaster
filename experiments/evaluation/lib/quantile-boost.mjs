@@ -1,14 +1,40 @@
 import { quantile } from "./stats.mjs";
 
-/** Feature-vector width per schema; the newest is what the trainer defaults to. */
+/** Feature-vector width per schema. */
 export const PORTABLE_BOOST_FEATURE_COUNT_BY_SCHEMA = {
   "portable-precall-v1": 36,
   "portable-precall-v2": 37,
   "portable-precall-v3": 38,
+  "portable-precall-v4": 42,
+  "portable-precall-v5": 45,
 };
+/**
+ * The trainer's DEFAULT schema, deliberately not the newest: the per-call
+ * correction still trains on v3, and only callers that pass
+ * `featureSchema: "portable-precall-v4"` (the turn-total candidate) offer the
+ * text-head columns to the trees.
+ */
 export const PORTABLE_BOOST_FEATURE_SCHEMA = "portable-precall-v3";
+/** Width the extractor always emits: the newest schema, mirroring predictor. */
 export const PORTABLE_BOOST_FEATURE_COUNT =
-  PORTABLE_BOOST_FEATURE_COUNT_BY_SCHEMA[PORTABLE_BOOST_FEATURE_SCHEMA];
+  PORTABLE_BOOST_FEATURE_COUNT_BY_SCHEMA["portable-precall-v5"];
+/**
+ * Which columns each schema may split on. Every schema except v5 is a prefix of
+ * the vector, so the width is the answer. v5 is the exception on purpose: it is
+ * v3 plus the session-so-far family, NOT v4 plus it, because the text head at
+ * 38-41 was graded and refused (docs/SEMANTIC-PLAN.md) and offering it here
+ * would make a v5-vs-v3 comparison measure the head as well as the session.
+ * Indices never move, so the family lands at 42-44 and this table -- not the
+ * width -- decides what the trees are allowed to see.
+ */
+export const PORTABLE_BOOST_FEATURE_COLUMNS_BY_SCHEMA = {
+  "portable-precall-v5": [
+    ...Array.from({ length: 38 }, (_, index) => index),
+    42,
+    43,
+    44,
+  ],
+};
 const META_WIDTH = 24;
 
 function fnv1a(value) {
@@ -56,6 +82,29 @@ export function portableBoostFeatures(row) {
   // "no prompt observed" and "prompt that is not a compression follow-up" are
   // the same thing for this bit.
   features[37] = row.turnPrompt?.followupCompression ? 1 : 0;
+  // v4: the public base text head's three log1p quantiles (38-40) plus a
+  // presence bit (41). `row.textHead` is computed by the caller from the turn
+  // opener's text and the text is dropped before the row is written anywhere;
+  // rows without it leave all four at zero, which is what a caller with no
+  // draft sends at runtime.
+  const textHead = row.textHead;
+  if (textHead) {
+    features[38] = textHead[0];
+    features[39] = textHead[1];
+    features[40] = textHead[2];
+    features[41] = 1;
+  }
+  // v5: the session so far, computed by the caller from the turn accumulator.
+  // 42 is the turn index inside the session, 43 the previous turn's output
+  // tokens when that turn had finished before this one started, 44 the presence
+  // bit. Rows without the object leave all three at zero, which is what a
+  // runtime caller that cannot count its own turns sends.
+  const sessionContext = row.sessionContext;
+  if (sessionContext) {
+    features[42] = Math.log1p(sessionContext.turnsSoFar) / 6;
+    features[43] = Math.log1p(sessionContext.previousTurnOutputTokens ?? 0) / 10;
+    features[44] = 1;
+  }
   return features;
 }
 
@@ -74,8 +123,8 @@ function fitTree(features, gradients, residuals, probability, thresholds, option
       return { value: quantile(indices.map((index) => residuals[index]), probability) };
     }
     let best = null;
-    for (let feature = 0; feature < thresholds.length; feature++) {
-      for (const threshold of thresholds[feature]) {
+    for (const [feature, featureThresholds] of thresholds) {
+      for (const threshold of featureThresholds) {
         let leftN = 0;
         let rightN = 0;
         let leftSum = 0;
@@ -159,12 +208,19 @@ export function trainPortableQuantileBoost(trainRows, baseForecast, options = {}
     throw new Error(`Unknown boost feature schema: ${featureSchema}`);
   }
   const features = trainRows.map((row) => portableBoostFeatures(row));
-  const thresholds = Array.from(
-    { length: schemaWidth },
-    (_, feature) => {
+  // Candidate columns: the schema prefix, except where the table above says a
+  // schema deliberately skips columns its predecessor owns.
+  const columns =
+    PORTABLE_BOOST_FEATURE_COLUMNS_BY_SCHEMA[featureSchema] ??
+    Array.from({ length: schemaWidth }, (_, feature) => feature);
+  const thresholds = new Map(
+    columns.map((feature) => {
       const values = features.map((row) => row[feature]);
-      return [...new Set([0.2, 0.4, 0.6, 0.8].map((p) => quantile(values, p)))];
-    },
+      return [
+        feature,
+        [...new Set([0.2, 0.4, 0.6, 0.8].map((p) => quantile(values, p)))],
+      ];
+    }),
   );
   const ensembles = probabilities.map((probability, quantileIndex) => {
     const predictions = trainRows.map((row) => baseForecast(row)[quantileIndex]);

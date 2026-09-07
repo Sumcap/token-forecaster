@@ -233,6 +233,74 @@ steps behind the Phase 4/5 items below.
 - [ ] Call-count and loop-count distributions, branch probabilities,
       context growth modeling
 
+## Issue, 2 September 2026: does the prompt TEXT beat prompt FEATURES?
+
+Measured (STATE-OF-PLAY §6.32, plan in `docs/SEMANTIC-PLAN.md`). On turn
+totals, prompt words beat the shipped feature vector on one chronological
+split (−10.6%) and fail to on five pooled session folds (+0.8%, folds swing
+−10.5% … +28.8%). A λ=0.35 shrink toward the metadata model is the only
+configuration with its whole CI below zero (−2.0% [−3.1%, −0.7%]). Text hurts
+the opener call (+5.0%). What the text model reads is length, conjunctions
+and ack-versus-instruction, which the features already mostly carry.
+
+- [x] Step A/B (2 Sep 2026): 35k public developer-prompt turns harvested;
+      hashed-n-gram head −0.9% public, −2.6% local as FEATURES into the local
+      GBM (blended prediction fails on a ~10× label-scale mismatch). Tables in
+      `docs/SEMANTIC-PLAN.md`.
+- [x] Stage 1 (2 Sep 2026): base head shipped in the predictor
+      (`baseTextHead`, 13 bits × 48 dims, 1.3 MB, bit-identical parity),
+      schema `portable-precall-v4`, `textHead` on the turn-total request,
+      `textHeadQuantiles` telemetry column. **v4 turnTotalBoost NOT adopted**:
+      −0.31% [−1.54%, +0.76%] vs v3 on five folds, and the typing trajectory
+      gains two dips. Shipped correction stays v2; extension wiring reverted
+      (+1.3 MB bundle for an ignored head). Tables in `docs/SEMANTIC-PLAN.md`.
+- [x] Text-head asset behind a subpath (4 Sep 2026): the 1.3 MB asset moved to
+      `packages/predictor/src/text-head/`, exported as `./text-head`, off
+      `src/index.ts`'s import graph. Main entry 1.7 MB → 412 KB reachable.
+- [ ] Base profile regeneration: corpus doubled since 12 Aug (16,687 →
+      32,268 calls); the pipeline's own gates now adopt the per-call
+      `promptPath` ladder and drop the pooled thinking groups, breaking 5
+      predictor tests that pin the cold-start contract. Separate change.
+- [ ] Stage 1b: boost trainer into `packages/personal` so other users
+      post-train the head locally. Blocked until a v4 correction adopts.
+- [ ] Telemetry: add the head's local prediction as a field; keep `hash_only`.
+- [ ] Stage 2: more TURNS. Public agent trajectories for pretraining;
+      multi-user turns via the client-side head; a synthetic-developer loop
+      whose prompts are run through the real agent for labels.
+- [x] Stage 3 (3 Sep 2026): MiniLM fine-tuned as a quantile head on the
+      35k public coding turns lands where the hashed head did (−0.9%
+      [−3.0%, +1.3%] with meta; frozen embedding −1.6% [−2.4%, −0.9%]);
+      as features into the local GBM −3.9% [−6.1%, −1.6%], every fold
+      negative. "Global ranks, local rescales" refused (no rank advantage,
+      one fold +16–52%). **Encoder does not replace the hashed head; prompt
+      text closed at this turn count.** Tables in `docs/SEMANTIC-PLAN.md`.
+- [ ] Forecasting effort moves to context/repo signals (what the agent will
+      touch, not what the user typed). Plan, gates and the oracle-ceiling
+      stop rule in `docs/CONTEXT-SIGNALS-PLAN.md` (3 Sep 2026): session-
+      so-far counts and repository state at the nearest commit, graded on
+      five local session folds before anything ships. **Measured 3 Sep:**
+      oracle −62.9% but it is loop duration, not files; session-so-far
+      −1.6% [−3.0%, −0.05%] passes by a hair on turn index + previous
+      turn's output; repository state +3.3% and memorises projects under
+      leave-one-project-out. The two S columns went through the real v5
+      trainer gate and were refused (+0.28% [−0.39%, +0.96%]); schema v5
+      exists in the predictor, nothing wired. **Context signals closed**
+      (STATE-OF-PLAY §6.33). Next lever: re-forecast-as-you-go (§6.9, §7.1)
+      and a multi-user corpus.
+- [x] Re-forecast-as-you-go (3 Sep 2026): turn total re-forecast at k = 1,
+      2, 3, 5 completed calls vs a dip-free clamp control, −4.7% → −10.2%
+      with whole CIs below zero but under the pre-registered −10%/−15%
+      margin; oracle −62% at every k (the ceiling is how the loop ends);
+      raw path dips on a third of steps, ratchet is free. **Not adopted**;
+      plan and tables in `docs/REFORECAST-PLAN.md`, STATE-OF-PLAY §6.34.
+      Single-user turn-total work is closed; next is the multi-user corpus.
+- [ ] `export-turn-text.mjs` writes the 42-wide v4 vector with head columns
+      38–41 unfilled (all zero); either populate them or export 38 columns.
+- [ ] If an encoder is ever revisited: frozen MiniLM embedding as GBM
+      features behind the companion daemon only (22M params), and only
+      after the Stage 1 boost-trainer gate, which shrank the hashed head
+      from −3.06% to −0.31%.
+
 ## Issue, 11 August 2026: prompt-aware boost is flat at chat turn roots
 
 Live repro in the consumer app (turn root, `sessionPosition=1`, `loopDepth=0`,

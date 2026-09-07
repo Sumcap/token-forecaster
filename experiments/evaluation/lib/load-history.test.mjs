@@ -102,6 +102,7 @@ describe("loadRequests prompt ancestry", () => {
       priorArtifactCount: 1,
       priorWrite: "yes",
       priorArtifact: "yes",
+      sessionContext: { turnsSoFar: 3, previousTurnOutputTokens: 7_500 },
     });
     const runtime = portableQuantileBoostFeatures({
       model: "claude-opus-5",
@@ -128,6 +129,7 @@ describe("loadRequests prompt ancestry", () => {
           priorWriteObserved: true,
           priorArtifactObserved: true,
         },
+        sessionContext: { turnsSoFar: 3, previousTurnOutputTokens: 7_500 },
       },
     });
     expect(runtime).toEqual([...training]);
