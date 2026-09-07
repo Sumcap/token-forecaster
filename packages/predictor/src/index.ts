@@ -26,6 +26,7 @@ export type {
   QuantileBoostProfile,
   QuantileBoostSplit,
   RequestedOutputFormat,
+  SessionForecastContext,
 } from "./boosted.js";
 
 export {
@@ -55,3 +56,16 @@ export type {
   TurnTotalForecast,
 } from "./historical.js";
 export { BUNDLED_CLAUDE_CODE_PROFILE } from "./bundled-profile.js";
+
+// The text head's pure half only. The shipped head and its 1.2 MB asset sit
+// behind `@token-forecaster/predictor/text-head`, so importing this entry does
+// not drag the asset into every bundle that only wants the forecaster.
+export { baseTextHashTerms, createBaseTextHead } from "./base-text-head.js";
+export type {
+  BaseTextHeadAsset,
+  BaseTextHeadLeaf,
+  BaseTextHeadNode,
+  BaseTextHeadProjection,
+  BaseTextHeadQuantile,
+  BaseTextHeadSplit,
+} from "./base-text-head.js";

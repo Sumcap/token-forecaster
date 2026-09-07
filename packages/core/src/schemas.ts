@@ -146,6 +146,21 @@ export type PromptForecastFeatureObservation = z.infer<
   typeof promptForecastFeaturesSchema
 >;
 
+/**
+ * The public base text head's three `log1p(tokens)` quantiles for the turn
+ * root, in `[p50, p90, p99]` order. Three numbers, never text: the head is a
+ * pure function of the prompt whose output cannot be inverted back into it,
+ * which is what lets the server measure the head without ever seeing a draft.
+ * Optional -- rows written before Stage 1 carry no such field, and a caller
+ * that holds only prompt FEATURES cannot compute it.
+ */
+export const textHeadQuantilesSchema = z.tuple([
+  z.number().finite(),
+  z.number().finite(),
+  z.number().finite(),
+]);
+export type TextHeadQuantilesObservation = z.infer<typeof textHeadQuantilesSchema>;
+
 export const agentLoopForecastContextSchema = z
   .object({
     sessionPosition: z.number().int().nonnegative(),
@@ -231,6 +246,8 @@ export const forecastObservationSchema = z.object({
      */
     promptHasImage: z.boolean().optional(),
     promptForecastFeatures: promptForecastFeaturesSchema.optional(),
+    /** `baseTextHead(prompt)` -- three numbers, sibling of the features above. */
+    textHeadQuantiles: textHeadQuantilesSchema.optional(),
     agentLoopForecastContext: agentLoopForecastContextSchema.optional(),
     /**
      * Caller-declared intent before generation. This is the smallest telemetry

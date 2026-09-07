@@ -328,6 +328,13 @@ function buildMeter(
 function boostedContext(draft: string, sessionPosition: number): BoostedForecastContext {
   return {
     prompt: promptForecastFeatures(draft),
+    // The public base text head is deliberately NOT computed here: the shipped
+    // turnTotalBoost is still schema v2 and ignores it, and its asset costs the
+    // content script 1.3 MB (docs/SEMANTIC-PLAN.md, Stage 1 part 2). That is
+    // why it lives behind `@token-forecaster/predictor/text-head` rather than
+    // on the package's main entry -- this file's import of the predictor does
+    // not pull it in. Wire it the day a v4 correction adopts; the request field
+    // and telemetry column already exist.
     agentLoop: {
       sessionPosition: Math.max(0, Math.trunc(sessionPosition)),
       loopDepth: 0,
@@ -641,6 +648,8 @@ export function buildViewModel(input: EngineInput): ChipViewModel {
       inputTokens: input.inputTokens,
       inputQuality: input.inputQuality,
       promptFeatures: context.prompt!,
+      // Copied, not aliased: the snapshot outlives the context object.
+      ...(context.textHead ? { textHeadQuantiles: [...context.textHead] as [number, number, number] } : {}),
       promptMentionsPath: mentionsPath,
       promptHasImage: input.hasImage,
       sessionPosition: Math.max(0, Math.trunc(input.sessionPosition)),

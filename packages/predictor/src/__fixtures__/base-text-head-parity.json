@@ -1,0 +1,2759 @@
+{
+ "generator": "experiments/evaluation/semantic/make_parity_fixture.py seed=20260902",
+ "note": "Every prompt here is synthetic. No corpus text, public or local.",
+ "assetVersion": "base-text-head-github-agent-chats-b13k48-2026-09-02",
+ "bits": 13,
+ "dims": 48,
+ "truncateChars": 2000,
+ "longestPromptChars": 4755,
+ "clampedPrompts": 0,
+ "prompts": [
+  {
+   "text": "once_task)",
+   "head": [
+    6.514836543017885,
+    8.496951577567545,
+    10.071642957643506
+   ]
+  },
+  {
+   "text": "use right report struct view these debug código node route yet method merge pull once server the get also before call type than revert the expect would docs read revisão add cli under open show message improve help add start please and more table 286 1639 split 956 thread simple flag stack lib/http-client/retry.rs run thread assert plan merge disable method like 2383?",
+   "head": [
+    6.6723649346210046,
+    8.603851644131547,
+    9.978601620336036
+   ]
+  },
+  {
+   "text": "to than config build migrate?\n- implement task schema node open token always probably!\n- apps/extension/build.mjs_result clean pattern problem!",
+   "head": [
+    6.344325960826958,
+    8.28150234039937,
+    9.941778711902527
+   ]
+  },
+  {
+   "text": "any explain session break TASK probably update apps/extension/build.mjs should --\n```sh\n  setup(git, 95);\n  simple(this, 27);\n  resolve(flag, 58);\n```",
+   "head": [
+    6.240884591152603,
+    8.031842879113604,
+    9.76041593897321
+   ]
+  },
+  {
+   "text": "watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch yet_queue check feature só dependency:",
+   "head": [
+    6.527279283947816,
+    8.415026167738734,
+    9.854879053453686
+   ]
+  },
+  {
+   "text": "packages/predictor/src/boosted.ts apps/extension/build.mjs package.json docs/SEMANTIC-PLAN.md tests/unit/parser_test.py src/index.ts",
+   "head": [
+    6.446116670997612,
+    8.403207675321386,
+    9.931849386770413
+   ]
+  },
+  {
+   "text": "revisão por favor então pacote",
+   "head": [
+    6.366189700703119,
+    8.30985841834802,
+    9.97763852021393
+   ]
+  },
+  {
+   "text": "stack event issue way here this 2371 branch on find correct revisão correct mock issue because filter text usage parse same map install into like generate produce 2487 main server output packages/predictor/src/boosted.ts tool 2376 match scale ...\n\npor favor json how only folder let idea compile long parameter tool edit this always commit trace small wait THE ok where model database time open option detail way apps/extension/build.mjs const branch value index node ensure score)\n\ndata_time because source compile schema report lib/http-client/retry.rs faça packages/predictor/src/boosted.ts 2190 will 2364 example debug também reason will package.json prefer answer where process missing where simple look line split from per show 2195 where finally make argument'\n\nREADME.md report component name need filter produce before read later since last 1922 docs set migrate field loop flag class request .github/workflows/ci.yml static clean stop argument sort deploy other api print array expect package.json down next key large search enum yet large yet because give else exit'\n\nkey_option other undo suite event regression can flag think merge text data verify describe let issue prefer version case message while script every are default example thread 2282 client under through these idea value 1256 hook else pacote long use skip export count pattern see CALL test ...\n\nsee task version WILL commit task case function export should set message edit possible apps/extension/build.mjs add component wait start type reason .github/workflows/ci.yml warn last setup and once layer of through delete before are export error,\n\nstep task idea apps/extension/build.mjs these step 1794 query node state time return those string long done install static SERVER run score reason when context open argument describe 2233 way schema think docs/SEMANTIC-PLAN.md else inside por favor note OF issue agora server why where load message some reset without output warn table?\n\npróximo through service return cache require handle merge folder build many run new later reason query agora quick that próximo argument token package scale debug ROUTE push other message só view main support commit service apply ANSWER .github/workflows/ci.yml packages/predictor/src/boosted.ts --\n\nsetup where apply link process OUTPUT yet KEY module test arquivo 3188 later 1631 push move link team await arquivo context want ok correct does over get prompt if lib/http-client/retry.rs script give copy revert push diff let any include 2930 repeat load here revisão src/index.ts cli edit null script await map arquivo export run'\n\nprint model lib/http-client/retry.rs instead value agora src/index.ts ação mock prefer put those these missing pointer loop load done empty behaviour diff missing 212 correct input usage fail line step call tests/unit/parser_test.py tests/unit/parser_test.py fetch should empty export src/index.ts else store src/index.ts index session through array support lib/http-client/retry.rs local pacote token'\n\ngive long list thread async faça give refactor prompt export input that argument some limit just só draft read await sure size RESULT print arquivo which regression static remove measure check ok 2173 folder edit parameter próximo possible FAIL output lib/http-client/retry.rs other apply 1232 close lib/http-client/retry.rs lib/http-client/retry.rs ensure probably)",
+   "head": [
+    7.220896110500812,
+    8.555633009963087,
+    10.475156269711006
+   ]
+  },
+  {
+   "text": "Sort -- Of, Session' Command? Create ... While: Map: Usage, Schema. Session.",
+   "head": [
+    6.547868106261132,
+    8.383419885742004,
+    9.884906401015245
+   ]
+  },
+  {
+   "text": "await_faça clean get route docs size here string ensure também;\n\n```rust\n  warn(analyse, 98);\n  log(why, 67);\n  where(before, 97);\n```\n\n2684 assume layer solve .github/workflows/ci.yml apps/extension/build.mjs wait,",
+   "head": [
+    6.3973411852590365,
+    8.072978878844513,
+    9.775663502158356
+   ]
+  },
+  {
+   "text": "measure config!",
+   "head": [
+    6.390839336298687,
+    8.342138591805918,
+    10.001128424935839
+   ]
+  },
+  {
+   "text": "experiments/evaluation/semantic/text_hash.py_layer way like count possible schema 469 close layer pointer since test const this watch from and repeat require async 3215 than agora state help também match 2245 proper and per which diff many rename train docs versão limit if switch data object code watch when arquivo filter error this,",
+   "head": [
+    6.517615778384691,
+    8.309080581643968,
+    9.730832801080831
+   ]
+  },
+  {
+   "text": "debug build apps/extension/build.mjs plan those)\n- get_small queue faça would label dependency maybe once package import 618 ...\n- arquivo example warn set;\n- value ensure there ...\n- assume keep quick client can just.\n- finally_update help compile should key!",
+   "head": [
+    6.547594009027497,
+    8.33666475213639,
+    9.828814978165799
+   ]
+  },
+  {
+   "text": "yet apps/extension/build.mjs sync.\n```python\n  new(page, 57);\n  write(through, 75);\n  support(like, 18);\n```",
+   "head": [
+    6.520633473383338,
+    8.22470315457459,
+    9.697981441742357
+   ]
+  },
+  {
+   "text": "json json json json json json json json json json json json json the reason solve which usage error --",
+   "head": [
+    6.374827373456806,
+    8.122900907706834,
+    9.819193799782443
+   ]
+  },
+  {
+   "text": "docs/SEMANTIC-PLAN.md .github/workflows/ci.yml apps/extension/build.mjs docs/SEMANTIC-PLAN.md README.md tests/unit/parser_test.py",
+   "head": [
+    6.476505816125346,
+    8.319143799802525,
+    9.889837940901772
+   ]
+  },
+  {
+   "text": "código próximo versão pacote faça ação também faça também não faça pacote próximo pacote",
+   "head": [
+    6.375800198925987,
+    8.041020110956932,
+    9.704575743989425
+   ]
+  },
+  {
+   "text": "for interface help context apps/extension/build.mjs track regression reference error detail local under without which script let packages/predictor/src/boosted.ts also undo link ok type include key struct layer código tests/unit/parser_test.py unit data limit view get test tests/unit/parser_test.py find score;\n\nother suite last tool default render read return once 2478 done compile help right return are which mock see report sure loop component then compare reference experiments/evaluation/semantic/text_hash.py packages/predictor/src/boosted.ts skip skip other style every'\n\ndetail store map proper count hook data queue include later 692 over pacote before PRODUCE session reset else same usage more also local replace first function project issue read parameter time await size rebase não sync!\n\nif_more client fetch split return require method per only README.md right other default help track load only help skip packages/predictor/src/boosted.ts read message load state key now package on usage context rebase route,\n\nrevert_3715 README.md maybe versão not regression style fail also source put read compare fail WAY name source commit from get build into last inside copy proper faça main 1545 session flag per.\n\nsetup command store 1172 move here return build class usage apps/extension/build.mjs view line never filter print yet and from review search call example message diff other pattern delete enable does version flag request list queue open set large load arquivo tests/unit/parser_test.py last limit if ensure project score include ensure replace FEATURE how,\n\nstruct order state without correct page under also text infer 1598 solve note data parse create 2746 because analyse compare yes call but então function here measure usage version ensure generate each file queue server .github/workflows/ci.yml team README.md git size test list analyse answer parameter help put!\n\nwithout enable input still but draft fix these when maybe here API key correct reference time proper but value default bug infer link bug 2810 node token use behaviour apply build search install to proper versão proper generate event packages/predictor/src/boosted.ts train look score close fetch generate deploy assert apps/extension/build.mjs.\n\npackage.json src/index.ts message think log limit branch server store docs/SEMANTIC-PLAN.md version feature exact fetch index trace problem resolve score REVIEW reference edit that mock app where case clean debug task verify connect module move enum through sort reference 881:\n\napp_class put request match apps/extension/build.mjs see delete interface docs/SEMANTIC-PLAN.md client note ok context component path código store handle hook merge want page print interface 2864 bug split copy queue check command?\n\npush sync each edit layer draft watch object assume 3978 field log design skip close type design server remove time verify require case size need explain path src/index.ts which way inside would token query local route server pacote plan cli input verify state REGRESSION since 4084:\n\nlimit tests/unit/parser_test.py later 1671 delete 1531 suite when list these please null array fail see other for .github/workflows/ci.yml wait break warn prompt replace install rebase can código data get wait text layer please prefer static repeat 3557 repeat now issue fetch make model not load header?\n\nstart return yet describe merge 850 parse mock see branch write key struct usage the sync scale 480 stack case rebase per assert always event since way process stop handle static function rebase behaviour cli fetch prompt like behaviour null here analyse to pacote call any search explain undo read deploy render;\n\nmore_PLEASE tests/unit/parser_test.py repeat hook this variable document put service else make yet static source file when database prefer many when faça 757 quick sure on pacote label size apps/extension/build.mjs read new:",
+   "head": [
+    7.2906092998984935,
+    8.630247562154487,
+    9.766535144626689
+   ]
+  },
+  {
+   "text": "Compare) Inside -- Page; Fail? Table ... Json. Field! Static! Read -- Many --",
+   "head": [
+    6.567103623193699,
+    8.40368586180299,
+    9.890240868996445
+   ]
+  },
+  {
+   "text": "order pacote api run próximo 2196 lib/http-client/retry.rs why file variable long pattern page start apps/extension/build.mjs object --",
+   "head": [
+    6.472289391583746,
+    8.351321620962212,
+    9.75390987544161
+   ]
+  },
+  {
+   "text": "response new)",
+   "head": [
+    6.548091767263057,
+    8.230518827196077,
+    9.793199461350111
+   ]
+  },
+  {
+   "text": "long_show cli rename lib/http-client/retry.rs clean improve below score sort map thread first before answer type quick style library input session assert detail since clean per mock if these sort cache port get file way without implement null number make faça else and proper does where 3294 3480 where than page rebase should when array large token merge get let any 3089 find client variable require please;",
+   "head": [
+    6.65233265517154,
+    8.441413780616102,
+    9.802949343704919
+   ]
+  },
+  {
+   "text": "layer limit suite package data ...\n- 3282 still note match)\n- work .github/workflows/ci.yml fail,\n- look draft style think layer now;\n- describe arquivo include deploy node report query ...\n- regression key 3972 .github/workflows/ci.yml on await;\n- packages/predictor/src/boosted.ts line 2382 implement long input cli new make has wait)",
+   "head": [
+    6.537044405970468,
+    8.326612648079285,
+    9.816968210638272
+   ]
+  },
+  {
+   "text": "usage_install result loop migrate:\n```sh\n  disable(method, 99);\n  add(migrate, 69);\n  expect(setup, 23);\n  long(then, 43);\n  ask(this, 12);\n```",
+   "head": [
+    6.398151331840216,
+    8.023402965722008,
+    9.685860436232334
+   ]
+  },
+  {
+   "text": "file file file packages/predictor/src/boosted.ts session watch event install sort)",
+   "head": [
+    6.554106363390056,
+    8.306177215131806,
+    9.782972804812076
+   ]
+  },
+  {
+   "text": "lib/http-client/retry.rs lib/http-client/retry.rs apps/extension/build.mjs",
+   "head": [
+    6.607360413195428,
+    8.287112513338572,
+    10.012403850711085
+   ]
+  },
+  {
+   "text": "versão só agora também pacote agora versão próximo próximo",
+   "head": [
+    6.577598848665564,
+    8.472551124301647,
+    10.080043885777275
+   ]
+  },
+  {
+   "text": "help_lib/http-client/retry.rs docs/SEMANTIC-PLAN.md label next apps/extension/build.mjs since version state that só 1344 read project compare array version which value interface copy então large context null include prefer docs/SEMANTIC-PLAN.md verify track input migrate when team each const rebase arquivo undo 1398 behaviour note expect value module let enable também suite design lib/http-client/retry.rs user page;\n\ninfer_packages/predictor/src/boosted.ts of package plan src/index.ts 1867 model done show fail of docs ação below file então return 3866 yes port put então server train track each then without that tests/unit/parser_test.py why trace port need take see wait docs else;\n\nyes_thread need regression without MORE pacote can directory review 2649 revert name rename hook split should yes now now detail index queue add expect undo break lib/http-client/retry.rs style project pattern docs/SEMANTIC-PLAN.md feature data task list else pointer also like pull git large service add but exit 1843?\n\nload README.md query class value delete ensure 2903 document process task load track response rebase só inside suite problem lib/http-client/retry.rs diff flag packages/predictor/src/boosted.ts suite response see stop finally fetch hook reference array .github/workflows/ci.yml each por favor style document want src/index.ts put the undo support issue agora wait process 735 cli DETAIL handle think user patch)\n\nsource_every packages/predictor/src/boosted.ts 596 command test verify node wait sort só apps/extension/build.mjs label take sort later because docs/SEMANTIC-PLAN.md dependency module README.md replace 2081 below sure .github/workflows/ci.yml parameter 2798 print const when ação create RESULT model packages/predictor/src/boosted.ts line key ensure produce which 2390 review would ação score render,\n\ndisable possible list user new enable interface to faça ok always explain type minor README.md 158 thing there from which usage local sort maybe also project call can draft enable lib/http-client/retry.rs version because per correct não pacote export new 249 describe README.md work report mock are case get order example use now from skip --\n\nreference_note move default cache revisão other over design than revert REQUIRE endpoint export reset BELOW put packages/predictor/src/boosted.ts prefer document command sort loop if index link count for .github/workflows/ci.yml regression output loop would process agora commit issue value main;\n\nreturn pacote .github/workflows/ci.yml tests/unit/parser_test.py source compile agora than step list update find state split também WAY how só proper make problem can agora how per query push train static then split are let diff time document proper versão)\n\ncopy_here once string key has 3581 command pull every fetch layer case where measure edit correct local PATTERN request problem would COMPARE inside copy migrate warn start enum down map step before small would look message put key some merge reference folder line 826 queue MEASURE ...\n\nreplace build did enable support simple find docs on some plan patch make fail always under note app SURE still interface revert route struct user page local 2108 rebase since await done than input will probably import!",
+   "head": [
+    6.933824622957126,
+    8.467151562831484,
+    9.83610776676621
+   ]
+  },
+  {
+   "text": "Database; Find) Verify) Path; Result'",
+   "head": [
+    6.491986578357896,
+    8.343207082299122,
+    9.872993302101097
+   ]
+  },
+  {
+   "text": "connect scale refactor próximo async model lib/http-client/retry.rs folder dependency analyse of how command package.",
+   "head": [
+    6.390386675169947,
+    8.041092756103629,
+    9.753122172302014
+   ]
+  },
+  {
+   "text": "rename.",
+   "head": [
+    6.498321641183329,
+    8.454104651572893,
+    10.043367401141166
+   ]
+  },
+  {
+   "text": "schema get think RESULT need help revert correct queue did example are number não draft minor each think parameter now string usage 3709 remove why text design merge 3337 over node table expect see argument from then tests/unit/parser_test.py exit empty pattern wait below status disable message layer versão tool)",
+   "head": [
+    6.348739396454712,
+    8.043881666785346,
+    9.652232154698677
+   ]
+  },
+  {
+   "text": "revert_because which revert inside!\n- então_task fix user model queue?\n- README.md_empty migrate'\n- apps/extension/build.mjs produce improve file enum but while before'\n- return infer require way apps/extension/build.mjs event --\n- how 422 revert arquivo header export script help ...\n- mock_over match trace verify EVENT type sure code without por favor:",
+   "head": [
+    6.403649975918765,
+    8.171114397243027,
+    9.763815248087104
+   ]
+  },
+  {
+   "text": "last api proper --\n```ts\n  sync(string, 36);\n```",
+   "head": [
+    6.501310952409524,
+    8.234460341058634,
+    9.879338202364053
+   ]
+  },
+  {
+   "text": "if if if if if if if if if if if if if if if if if if só done why apps/extension/build.mjs version bug;",
+   "head": [
+    6.376365096418072,
+    8.149191543438507,
+    9.733045482245126
+   ]
+  },
+  {
+   "text": "tests/unit/parser_test.py packages/predictor/src/boosted.ts apps/extension/build.mjs experiments/evaluation/semantic/text_hash.py package.json .github/workflows/ci.yml README.md experiments/evaluation/semantic/text_hash.py",
+   "head": [
+    6.605885451911348,
+    8.460903230199502,
+    10.054346663571872
+   ]
+  },
+  {
+   "text": "não faça pacote então pacote arquivo por favor não arquivo próximo",
+   "head": [
+    6.651276765142762,
+    8.523615748308583,
+    10.03175621774213
+   ]
+  },
+  {
+   "text": "stop_packages/predictor/src/boosted.ts run trace pacote replace empty rename before include verify data step route to 1393 please still sync versão const into README.md thread these reference ask proper include last these if document pacote disable has arquivo for merge branch use find include design fix lib/http-client/retry.rs --\n\nfrom_help maybe document exit então into maybe refactor server generate reset other response node think delete client improve than tool add switch APP cache the enum long route revisão ensure sure código remove FIRST)\n\nelse experiments/evaluation/semantic/text_hash.py remove does inside message BUT verify result package module index before docs over refactor function missing código 972 docs empty connect cache cli patch update map match pacote model like connect add store can 1260 TIME ação 3094 because message take render then data support versão repeat many other só train api maybe should design,\n\nfield please create split assume probably client rename that answer error order scale for see fix look read time before handle lib/http-client/retry.rs header are user print from include docs/SEMANTIC-PLAN.md 3985 there train move setup now file review enable header diff package.json database put status work event file this experiments/evaluation/semantic/text_hash.py context need status close push possible change,\n\nsize issue command missing like yes replace port those proper 41 default feature here does default app search into apps/extension/build.mjs when process help review describe sync exit repeat example packages/predictor/src/boosted.ts put behaviour down exit 1896 1332 list?\n\nreset delete script PROMPT message empty time merge simple exit packages/predictor/src/boosted.ts config over package how .github/workflows/ci.yml parameter código now document let size with idea review EACH PRINT ensure yes list código)\n\nversion_once reset response replace option issue quick não new yet into tool then limit library api branch behaviour list create measure work compare then await data size large token if module large tests/unit/parser_test.py add json while data label from these setup stop próximo EACH under verify are;\n\nanalyse produce fetch example 1972 setup want write store if can status component load packages/predictor/src/boosted.ts fail patch size versão lib/http-client/retry.rs docs edit git CACHE ensure file where hook set has output lib/http-client/retry.rs more interface api,\n\nprint_merge when else agora yes read POSSIBLE src/index.ts 3680 render open NEED please get dependency map então 2374 empty test por favor link before versão empty queue server inside way api find why always response hook from .github/workflows/ci.yml tests/unit/parser_test.py,\n\nmatch did first else verify this state later código deploy last produce parse infer regression set 875 than apply connect por favor diff size index if mock state later but regression status clean remove help think prefer docs/SEMANTIC-PLAN.md always directory api const stack think quick and break 100 while note are interface interface 1876 response through git 751:",
+   "head": [
+    7.486573489073337,
+    8.73630947860241,
+    9.96766303561147
+   ]
+  },
+  {
+   "text": "Text. State? Folder? Those ... Remove! Produce. Suite: Render; Bug? With' Command, If' Clean! For. Change:",
+   "head": [
+    6.501501506140223,
+    8.314669037560304,
+    9.802053658221734
+   ]
+  },
+  {
+   "text": "next view client are first update return train set .github/workflows/ci.yml size token issue result main)\n\napp_branch database deploy style table install bug flag inside other assert package.json match model sync,\n\nnow_null report solve task só parameter thread prefer arquivo watch view source experiments/evaluation/semantic/text_hash.py'\n\nadd reset next git header input diff measure package.json infer each make 1850.",
+   "head": [
+    6.46099095436309,
+    8.067840137840864,
+    9.833653928944681
+   ]
+  },
+  {
+   "text": "since loop context'",
+   "head": [
+    6.486206019039499,
+    8.322194129941492,
+    9.989647490145513
+   ]
+  },
+  {
+   "text": "get link if repeat empty find NUMBER README.md inside solve add dependency ok reason possible module class to parse without 1721 script step resolve read lib/http-client/retry.rs ok cli draft would usage data solve sort experiments/evaluation/semantic/text_hash.py object config search below correct can page number can first call page então object text path arquivo static right tests/unit/parser_test.py default need test index local app código behaviour node improve source finally 895 static struct ok view source put flag event use show did 2489.",
+   "head": [
+    6.692710597199136,
+    8.257912628685215,
+    9.539713558162449
+   ]
+  },
+  {
+   "text": "json_work expect this describe?\n- apps/extension/build.mjs mock library measure suite,\n- fail commit 2595 type setup 961 value assume const'\n- once_split packages/predictor/src/boosted.ts into every suite .github/workflows/ci.yml why source thing response think --",
+   "head": [
+    6.281761564221801,
+    8.008116110523314,
+    9.57071545756132
+   ]
+  },
+  {
+   "text": "lib/http-client/retry.rs_sync folder deploy arquivo unit docs where train name --\n```ts\n  add(just, 31);\n  else(analyse, 74);\n  would(parameter, 74);\n  note(sync, 2);\n```",
+   "head": [
+    6.28807495152905,
+    7.91507578945994,
+    9.586134687003376
+   ]
+  },
+  {
+   "text": "the the the the the the the the the the the the the 1493 assert exit every 1012 status.",
+   "head": [
+    6.3572692302464056,
+    7.962416966942377,
+    9.830979564889688
+   ]
+  },
+  {
+   "text": "docs/SEMANTIC-PLAN.md .github/workflows/ci.yml experiments/evaluation/semantic/text_hash.py package.json",
+   "head": [
+    6.501522132205535,
+    8.416736464372685,
+    10.005833162653373
+   ]
+  },
+  {
+   "text": "só código não não ação não então pacote ação ação",
+   "head": [
+    6.561735514486469,
+    8.348900594847295,
+    10.078695352315144
+   ]
+  },
+  {
+   "text": "service_answer design case new same wait reason over under type include long script PORT folder support packages/predictor/src/boosted.ts when implement per service ANSWER agora should rebase always use message src/index.ts call team status possible train many query if delete FROM state run load behaviour than if parse before,\n\ncódigo versão replace compare package order text any correct apps/extension/build.mjs também move work config class instead session later .github/workflows/ci.yml missing while draft build time lib/http-client/retry.rs server code that note não set open function argument port argument THREAD from undo status once input which any explain repeat version CLEAN command lib/http-client/retry.rs those então command state please;\n\ncontext ask array config want bug schema now for query name 266 variable session put on solve empty layer explain tests/unit/parser_test.py MOVE first with order async case null delete behaviour from solve run cache não note array need write has docs/SEMANTIC-PLAN.md print never scale analyse apps/extension/build.mjs add command ...\n\ncorrect_label setup 3121 handle verify time prefer reference stop ação rename cache warn import those any commit ask api support small example behaviour team node match não scale not delete handle?\n\nBREAK ensure missing static help explain split line show fix describe endpoint test faça stack help problem stop component code PROBABLY create field code when number próximo fail minor call 1752 então show não done will style library include while take bug)\n\narquivo experiments/evaluation/semantic/text_hash.py render array else agora hook hook por favor here 1489 ANSWER code 3030 update .github/workflows/ci.yml filter handle TABLE query implement if 3763 while generate clean since filter package.json setup branch server usage problem simple dependency path link directory unit label MODULE 3293 method can debug those to match migrate'\n\nok order reference way README.md input text example scale quick thread usage put docs/SEMANTIC-PLAN.md these that think to some enum debug debug page client default when yet package.json time edit than docs/SEMANTIC-PLAN.md refactor render plan describe detail time string static undo read ação thread event text work long search text command open copy faça measure find run require missing!\n\nonly apps/extension/build.mjs process import experiments/evaluation/semantic/text_hash.py plan queue response store correct default later each improve because give parameter improve undo rename tests/unit/parser_test.py refactor código suite route team build lib/http-client/retry.rs status fail exact input response list 3396 map error package inside but bug docs refactor INCLUDE commit expect always like interface break event case interface repeat example under draft solve method faça --\n\nreport_ação dependency mock assume check rename cli delete store report report ask pattern infer close set update design loop schema solve header src/index.ts explain packages/predictor/src/boosted.ts ação 1127 compile revisão api ask pattern maybe score there enable também maybe through load error flag response missing tests/unit/parser_test.py only.",
+   "head": [
+    7.03015764426587,
+    8.428950732805625,
+    9.943362601817563
+   ]
+  },
+  {
+   "text": "Output' Option; Enum ... Large) Server: Model ... Commit' Tool. Edit'",
+   "head": [
+    6.461377033251968,
+    8.247281244766967,
+    9.895812061595311
+   ]
+  },
+  {
+   "text": "create_version status analyse start take também instead track 673 cache index dependency 1140 does draft;\n\nversão endpoint close string .github/workflows/ci.yml OUTPUT database issue stack config setup over note and add once --",
+   "head": [
+    6.54681151838417,
+    8.450433995604968,
+    9.938972173831804
+   ]
+  },
+  {
+   "text": "since_switch)",
+   "head": [
+    6.5329632190030535,
+    8.461523631841574,
+    10.04854828532171
+   ]
+  },
+  {
+   "text": "why packages/predictor/src/boosted.ts database queue token feature line null install these struct without simple size cache context apps/extension/build.mjs pacote pattern pattern method step session over event support instead user issue answer count maybe object number count like option prefer under 166 1690 PROBABLY from error move ensure index size did code thing lib/http-client/retry.rs set header start read solve stack ok method implement reference code status por favor)",
+   "head": [
+    6.558624007887646,
+    8.291550351474067,
+    10.012752058565944
+   ]
+  },
+  {
+   "text": "last_detail yet here type note VERIFY .github/workflows/ci.yml if path!\n- first_file parse route,\n- queue_over please then push object support task want!",
+   "head": [
+    6.395499047090285,
+    8.03191782488758,
+    9.614883046018335
+   ]
+  },
+  {
+   "text": "order compare apply rebase.\n```sh\n  enum(why, 81);\n  check(scale, 49);\n  behaviour(and, 79);\n  patch(cache, 28);\n  option(struct, 6);\n```",
+   "head": [
+    6.571857537027649,
+    8.582159960545324,
+    9.83253381239636
+   ]
+  },
+  {
+   "text": "option option option option option option option code without route idea fix while;",
+   "head": [
+    6.312788441114908,
+    8.07258981742494,
+    9.780917382111745
+   ]
+  },
+  {
+   "text": "packages/predictor/src/boosted.ts README.md tests/unit/parser_test.py",
+   "head": [
+    6.592562712318401,
+    8.530933374894378,
+    10.04988789475716
+   ]
+  },
+  {
+   "text": "agora pacote agora ação versão faça arquivo pacote por favor",
+   "head": [
+    6.369680176325265,
+    8.387557534179981,
+    9.980661275286728
+   ]
+  },
+  {
+   "text": "under_json service line sure yet here data find describe não bug never path header parse table of simple check did if README.md packages/predictor/src/boosted.ts now check wait README.md but main score hook src/index.ts prefer 3372 yes fetch add should label .github/workflows/ci.yml request.\n\nsó for label flag text load now migrate since package.json dependency remove library read this close debug feature flag switch look let query undo render other large src/index.ts sort apps/extension/build.mjs that user include result 1769 just experiments/evaluation/semantic/text_hash.py number config const 3889 require edit method response,\n\nheader_reason input name client result per describe ação ALWAYS sort agora next src/index.ts include 833 não rename usage this exit detail 57 from async WATCH finally behaviour see not below src/index.ts last query:\n\nopen per tests/unit/parser_test.py simple value field struct replace scale from data analyse endpoint watch local set setup name document expect match print value will can call problem those CLI that SCHEMA read ...\n\nresult sort git log response component fetch 3029 remove solve library próximo request library solve load próximo não should clean file order answer tool on has 3179 loop input endpoint name since include analyse here assume packages/predictor/src/boosted.ts while apps/extension/build.mjs key keep fetch unit from change done missing;\n\nmock push não now request command skip always because plan README.md lib/http-client/retry.rs 2774 context warn here config layer branch import .github/workflows/ci.yml api once struct README.md resolve string down problem tests/unit/parser_test.py does ação compare 1918 else count experiments/evaluation/semantic/text_hash.py did node schema get)\n\ncompile experiments/evaluation/semantic/text_hash.py over take search edit open label request load any código migrate START create empty module const draft input should match find does want report close this just field verify lib/http-client/retry.rs!\n\nerror_not parse status run store process script behaviour sort usage loop function user error work else compare set break README.md under than break connect from infer detail limit bug on .github/workflows/ci.yml reason token which list skip cli ensure repeat search compile copy const endpoint write só and stop value thread,",
+   "head": [
+    7.345146710867432,
+    8.36454579431159,
+    9.78660453275068
+   ]
+  },
+  {
+   "text": "Config ... Ask -- Reason, Table, Maybe) Are ... Error' Answer?",
+   "head": [
+    6.427437412723935,
+    8.338884264493919,
+    9.806961792366595
+   ]
+  },
+  {
+   "text": "value clean por favor last ação finally method usage header flag empty:\n\n```ts\n  status(load, 78);\n  setup(for, 53);\n```",
+   "head": [
+    6.357481479957687,
+    8.237880613189098,
+    9.765032034421578
+   ]
+  },
+  {
+   "text": "limit process:",
+   "head": [
+    6.570057086097316,
+    8.41110759446913,
+    10.000152954925907
+   ]
+  },
+  {
+   "text": "app apply .github/workflows/ci.yml exit só export handle value exact think report test cli docs/SEMANTIC-PLAN.md fix path revert these without NOW package.json run response page scale scale regression has get describe pacote generate file produce module src/index.ts answer hook report default draft type order schema measure there time não client include lib/http-client/retry.rs merge THOSE train 3126 suite yet because make small compare docs faça version event async ask endpoint list print prompt apps/extension/build.mjs else review README.md 686 over message exit ...",
+   "head": [
+    6.582500356936258,
+    8.23056439938449,
+    9.648561807910731
+   ]
+  },
+  {
+   "text": "struct update por favor exit this check table!\n- thing why STATUS não implement render variable endpoint await has directory each;\n- store query disable rename here)\n- também main with export compile create delete test install this --\n- output docs search compile name faça count should 3464 por favor 2677;",
+   "head": [
+    6.629338631879364,
+    8.277521751142768,
+    9.689006541450487
+   ]
+  },
+  {
+   "text": "versão_revisão sync command ...\n```sh\n  undo(pattern, 40);\n  answer(prefer, 62);\n  compile(under, 51);\n  api(label, 80);\n```",
+   "head": [
+    6.4811683772518105,
+    8.320716604767414,
+    9.8673335679136
+   ]
+  },
+  {
+   "text": "deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy deploy usage detail still schema watch please,",
+   "head": [
+    6.392624749300423,
+    8.245285471237832,
+    9.931371335461245
+   ]
+  },
+  {
+   "text": "lib/http-client/retry.rs .github/workflows/ci.yml apps/extension/build.mjs src/index.ts lib/http-client/retry.rs lib/http-client/retry.rs README.md",
+   "head": [
+    6.586899656538908,
+    8.313784096050545,
+    10.021700559477042
+   ]
+  },
+  {
+   "text": "não agora revisão ação então só código arquivo também pacote pacote versão",
+   "head": [
+    6.5652687625372765,
+    8.357819616622422,
+    9.96529158647652
+   ]
+  },
+  {
+   "text": "async 3705 token case step how improve since revisão each arquivo docs/SEMANTIC-PLAN.md if task tests/unit/parser_test.py how idea does code never header finally pattern name small enum README.md there minor mock support view explain enum review node other line simple module switch 2686 compile case before context order get yet ok case.\n\nRESULT prompt async can task export reset where local watch label próximo check package.json proper close way packages/predictor/src/boosted.ts server WHY later apps/extension/build.mjs last before watch note lib/http-client/retry.rs refactor rename set behaviour require code STATE result undo other bug pacote once 3008 would order read scale 3727 json line missing line module why make.\n\nCOMMAND token this undo that train json request component data .github/workflows/ci.yml build warn explain quick default parameter string tool watch quick train with INSTALL implement component merge list MAKE note always FILTER verify module process sync process finally will input plan thing versão 3573 só packages/predictor/src/boosted.ts delete faça branch,\n\nwith assert without static merge package.json work exact give implement user loop só through make package.json proper 2043 once these README.md example string agora também model refactor reset 1027 tests/unit/parser_test.py log scale debug measure look handle fetch done src/index.ts expect wait 3854 number patch does order want deploy por favor README.md patch reference yet every which connect fix review)\n\nsync versão make hook now key but input não same option exit fetch NUMBER ask small finally quick config many why from document delete BUT merge give fail filter like setup infer can example folder user maybe ensure new código these agora each endpoint sort tool código possible object ok create module assume add'\n\nupdate interface each folder ENABLE else watch user git support has object view see patch size edit once not DESCRIBE 2002 hook apps/extension/build.mjs merge call minor store ask REQUEST use branch)\n\nnever document label type inside change lib/http-client/retry.rs arquivo sure then trace queue src/index.ts model commit MORE diff 2400 that infer way loop where match revert user the docs before review test match watch split fix index list else file match infer thing down connect server run prefer undo render 533 include some check route debug tool assume instead print?\n\nroute_want 2973 detail patch watch default on each still missing design match server than method inside key compare user 3960 database não without time order argument fail só ask docs arquivo thing;\n\ndata 3373 infer require example ON many class thing empty proper key 3106 and also verify delete 3173 help scale every of script lib/http-client/retry.rs under tests/unit/parser_test.py message stop LOAD explain search object wait folder run compare plan close struct)\n\ndocs_want split look number null src/index.ts infer main that bug document rename proper number of só small reset still done still bug improve instead without experiments/evaluation/semantic/text_hash.py queue setup more apply name note order database also interface rename packages/predictor/src/boosted.ts result on package.json PATCH build per source por favor handle code render)\n\nMETHOD idea port source note hook let model improve rebase 2057 verify count skip problem every token class result só that .github/workflows/ci.yml split look interface mock 3406 empty result empty branch empty component repeat once)",
+   "head": [
+    7.302923555649988,
+    8.818460602677241,
+    9.930389420471087
+   ]
+  },
+  {
+   "text": "Api ... Are: Every? Work: Thread -- Type) Produce -- Edit; Await! Next' Debug: When -- Cli. Connect;",
+   "head": [
+    6.642751660714579,
+    8.230652227970833,
+    9.718482937396045
+   ]
+  },
+  {
+   "text": "prompt_stack stack code README.md document search apps/extension/build.mjs review 1833 probably code 1639 some schema those set'\n\nnode_only task tests/unit/parser_test.py main exact null generate since issue later change context 3607.\n\nRESOLVE would input directory include over ...\n\ntime_need task document but problem since fetch next how the method probably set store else like once install;\n\n```\n  match(build, 17);\n  status(regression, 51);\n  reason(design, 81);\n```",
+   "head": [
+    6.574077162572268,
+    8.14259060041379,
+    9.971431719979405
+   ]
+  },
+  {
+   "text": "value_from const:",
+   "head": [
+    6.501829460892173,
+    8.252177950341066,
+    9.849777314628556
+   ]
+  },
+  {
+   "text": "later test finally other limit 1874 2428 result while want module então enum line fetch sort reference list database disable agora branch look method schema just faça directory compare let explain down VERIFY ação probably since model example improve tests/unit/parser_test.py client reset order render 3590 on enum read later render export write verify run disable TRACK want read other get message open ação 2626 SINCE THING run,",
+   "head": [
+    6.848071163226161,
+    8.447485306760095,
+    9.871637233348867
+   ]
+  },
+  {
+   "text": "open view diff without show limit that make --\n- src/index.ts prompt compile edit maybe return 506 tests/unit/parser_test.py table produce --\n- message bug token PACKAGE create build package git push class string ...\n- enum prompt json README.md behaviour README.md branch fetch inside before review código!",
+   "head": [
+    6.544482868992222,
+    8.328491814501877,
+    9.88001158601878
+   ]
+  },
+  {
+   "text": "split_start log file path script issue produce show:\n```rust\n  missing(text, 2);\n```",
+   "head": [
+    6.436319849938625,
+    8.098571447417347,
+    9.587009671659137
+   ]
+  },
+  {
+   "text": "const const const const const const const const path keep wait read empty versão)",
+   "head": [
+    6.48812025316914,
+    8.29438103798315,
+    9.807238365355605
+   ]
+  },
+  {
+   "text": "src/index.ts package.json docs/SEMANTIC-PLAN.md",
+   "head": [
+    6.3912280778792825,
+    8.396970347996966,
+    9.950418489557363
+   ]
+  },
+  {
+   "text": "arquivo próximo pacote agora versão por favor por favor faça agora ação",
+   "head": [
+    6.411354187188621,
+    8.478916674143553,
+    9.926207795490537
+   ]
+  },
+  {
+   "text": "setup_idea reference now on status score there fail scale else undo write não debug packages/predictor/src/boosted.ts por favor array 690 analyse return task order build measure stop ação hook const edit where give then tests/unit/parser_test.py LOG for node queue last sync note local diff apply list rebase static array per class import input possible pull please tool limit.\n\nbug request 1675 option trace if context size get não test function delete remove correct text source BRANCH project change package.json status warn assume many update stop also query generate revert versão check score message explain and 1258 lib/http-client/retry.rs which só response path maybe loop step put return README.md thing ERROR how script resolve reason later:\n\norder faça help thing finally rebase proper where example does mock still long first explain put hook fetch count any node enum src/index.ts type packages/predictor/src/boosted.ts static draft detail script infer model problem module without request text server experiments/evaluation/semantic/text_hash.py option quick ensure DETAIL option move other fix variable log versão.\n\nclient take process look label then object draft struct session style pattern rebase match ask código process simple search simple project call step MODULE exact other reason tool call source filter trace output find undo faça edit report compile which;\n\nfield struct README.md trace warn 4085 delete still assert tool apps/extension/build.mjs if are over analyse produce connect module experiments/evaluation/semantic/text_hash.py store prompt query empty still infer implement port type command when missing skip FIRST run docs 560 argument packages/predictor/src/boosted.ts client --\n\nfinally match table CAN então replace next docs THIS list method return experiments/evaluation/semantic/text_hash.py README.md merge still token também fail version those bug key call split note tool log right step queue check are use to regression PROJECT draft não package rebase please --\n\nbug model ADD token route of log src/index.ts infer revisão patch token 2238 also 2118 patch update on split repeat assume never possible warn script here argument idea código clean handle explain component prompt run?\n\ndefault install take probably apps/extension/build.mjs method example small 237 compile get through data should debug lib/http-client/retry.rs commit parse switch 2282 deploy over session próximo those node while ensure has handle docs/SEMANTIC-PLAN.md agora stack object see!",
+   "head": [
+    7.137904552887672,
+    8.522101319774517,
+    9.73338527804798
+   ]
+  },
+  {
+   "text": "Before' Await, Under ... Label -- Scale ... Proper ... Create: Path; For? Did? And -- Clean --",
+   "head": [
+    6.47757278533373,
+    8.370034863027417,
+    9.898335289926356
+   ]
+  },
+  {
+   "text": "on output name fix schema server parameter field port model 3250 packages/predictor/src/boosted.ts SETUP only INPUT number'\n\nPARAMETER_service deploy label path clean scale api under list cache field command see type over ...\n\ntrain need replace also long table where write loop.\n\n```python\n  message(ensure, 72);\n  state(can, 36);\n  break(library, 40);\n  regression(patch, 66);\n  any(score, 32);\n```\n\n2813 with ask 71 improve on field think task value ALWAYS work'",
+   "head": [
+    6.5045019708069605,
+    8.120864163372106,
+    9.763376218886114
+   ]
+  },
+  {
+   "text": "apps/extension/build.mjs --",
+   "head": [
+    6.5469247282953935,
+    8.406137314026633,
+    10.026530281914338
+   ]
+  },
+  {
+   "text": "use_import enable require add over over still then into problem library without repeat note folder merge document page minor 729 object text port docs/SEMANTIC-PLAN.md README.md because still store wait cli before possible under take match parameter with apps/extension/build.mjs any just hook variable implement schema method there source clean não help commit count enable disable PRODUCE,",
+   "head": [
+    6.670769548150258,
+    8.372738421310311,
+    9.805144055182728
+   ]
+  },
+  {
+   "text": "replace key script database missing async)\n- directory_static deploy any docs/SEMANTIC-PLAN.md task and cache through revisão code?\n- add_1721 query flag start 871;\n- 1091_put add revert config main disable 1835 package.json error!\n- search_diff reason issue main pattern option diff directory 3899;\n- field_output then rebase --\n- 3219 migrate inside WORK produce,",
+   "head": [
+    6.66336574793414,
+    8.613599677659233,
+    9.932662348896502
+   ]
+  },
+  {
+   "text": "will new store --\n```ts\n  explain(result, 9);\n  did(revert, 26);\n  component(connect, 29);\n  proper(request, 16);\n  close(minor, 34);\n```",
+   "head": [
+    6.301500309720041,
+    8.479633498177371,
+    9.814958518028655
+   ]
+  },
+  {
+   "text": "value value value value value value value value value yes_can endpoint move array delete'",
+   "head": [
+    6.398536662125148,
+    8.123278192199528,
+    9.735516752895915
+   ]
+  },
+  {
+   "text": "packages/predictor/src/boosted.ts tests/unit/parser_test.py README.md apps/extension/build.mjs README.md README.md README.md",
+   "head": [
+    6.587098415386534,
+    8.422603492942866,
+    10.014221495011114
+   ]
+  },
+  {
+   "text": "próximo por favor só agora",
+   "head": [
+    6.471543634581142,
+    8.357311301552935,
+    9.994386177280148
+   ]
+  },
+  {
+   "text": "once lib/http-client/retry.rs through sure regression packages/predictor/src/boosted.ts those string every 1817 did compare próximo compare are status through revert else last make status the sync agora stop git wait missing case 556 include take simple while loop issue method return than fetch train diff script cache same const'\n\ntoken_parse schema return array but interface apply size export edit usage model index let open through command without push possible 2104 data does connect include those fetch revisão correct FILE usage user sync server will expect look response print install step reason!\n\nrename_deploy faça of session help put while render unit packages/predictor/src/boosted.ts option docs/SEMANTIC-PLAN.md lib/http-client/retry.rs below let think match package reason layer render sure README.md hook and patch variable detail apply 2357 const enum source on any number track from lib/http-client/retry.rs array null run open not since route simple enable 607 each database tests/unit/parser_test.py function import design apply component review clean:\n\nbranch library describe README.md support reset but também DID replace size ensure hook include node revert undo process text package.json default number compile below arquivo struct stop solve find step read are look field like need set import 2195 setup output src/index.ts CLASS set cli revisão flag component type sure filter get fetch ok refactor just example?\n\nverify_context test review command database test 2699 draft node once node limit loop style want can cli interface move event assume query type push só produce generate render option please remove break later count view and?\n\nhere change function of case the function replace assume argument only loop team error list exact value under src/index.ts main status código give tool src/index.ts fix docs/SEMANTIC-PLAN.md .github/workflows/ci.yml cache WANT solve here quick behaviour route right response port filter yes pointer THE clean rename many please rebase search json connect split database search report keep map const fetch missing parameter)\n\nput if command tests/unit/parser_test.py folder header START package.json package.json please check other design list ação stack component implement show add those cli train mock parse since score test version report session down rename score assume bug object código 2123 down not resolve ask if version experiments/evaluation/semantic/text_hash.py help variable reset take generate query context later how rebase 1413.\n\nversão query input move like struct style every while check diff text type 3700 create time field would export else revisão array measure por favor dependency team store size assume later store while every design revert please mock first to OF name;\n\ntoken_key make não src/index.ts these 3878 usage pattern apps/extension/build.mjs lib/http-client/retry.rs report map então the src/index.ts example review search expect need context case create parameter detail merge does reset but move revisão handle status route always'\n\ntool PROMPT result large cache use add if exit note request json those let index não queue below sort handle fix async deploy trace agora trace text 3445 does update yes copy parse!\n\nerror_just parameter version edit lib/http-client/retry.rs will por favor line proper faça infer below does experiments/evaluation/semantic/text_hash.py trace experiments/evaluation/semantic/text_hash.py see proper código possible input put probably path probably many version warn 2262 database design measure those versão same schema script without analyse layer request solve switch style 309 exact order right commit import output server 1745 require 1128 skip'\n\ncache_service below set null where argument task start now LOOK new done that there into per código reason versão reason compare still table later feature each main should empty argument not large docs/SEMANTIC-PLAN.md replace move line struct call client resolve compile make give table text repeat number design time .github/workflows/ci.yml tests/unit/parser_test.py plan answer build'",
+   "head": [
+    7.133932121292557,
+    8.79427054904957,
+    10.091569743825916
+   ]
+  },
+  {
+   "text": "Enable' Instead: Thing' Mock, Each' First: Problem; Tool -- Message -- Interface! Const -- Analyse? Name ... From. Dependency, Interface' Implement: Regression!",
+   "head": [
+    6.48397469410346,
+    8.245270906047924,
+    9.844977699770983
+   ]
+  },
+  {
+   "text": "also solve suite every test path large should describe src/index.ts where docs/SEMANTIC-PLAN.md tests/unit/parser_test.py apply print 1708 schema store --\n\npackage.json_.github/workflows/ci.yml 3280 source command source only build case docs/SEMANTIC-PLAN.md always pattern parse need correct query answer?",
+   "head": [
+    6.456474752338503,
+    8.365110826135156,
+    9.956959626016436
+   ]
+  },
+  {
+   "text": "idea;",
+   "head": [
+    6.504786590646971,
+    8.514492465075445,
+    10.010369547636746
+   ]
+  },
+  {
+   "text": "command_empty PATTERN package probably merge lib/http-client/retry.rs código see só apps/extension/build.mjs próximo report import commit key assume page prefer merge apps/extension/build.mjs agora yet from map experiments/evaluation/semantic/text_hash.py minor usage prompt move count bug proper package.json dependency package.json please reason skip skip schema package request pointer right then has package.json then some rename if note delete output git count node issue because string disable scale import only with:",
+   "head": [
+    6.638762879701381,
+    8.18547832929083,
+    9.894773390193762
+   ]
+  },
+  {
+   "text": "skip this import path mock produce yes key ...\n- task_enable import minor route,\n- pattern think later parse ok compile,\n- 3693_3199 break test 3584 check lib/http-client/retry.rs model:\n- has_response search agora component SUPPORT of)\n- delete_api reference write just would input improve;",
+   "head": [
+    6.664105798175392,
+    8.24586222918722,
+    9.783943846717824
+   ]
+  },
+  {
+   "text": "resolve later docs/SEMANTIC-PLAN.md value unit app;\n```json\n  last(but, 3);\n  request(message, 19);\n  repeat(these, 2);\n  import(test, 60);\n  argument(start, 33);\n```",
+   "head": [
+    6.373195931216327,
+    8.091778365189107,
+    9.846199373581078
+   ]
+  },
+  {
+   "text": "some some some some some some some some some some some some some some some some generate yet require header await packages/predictor/src/boosted.ts!",
+   "head": [
+    6.425570161638328,
+    8.139512362788393,
+    9.838188375881927
+   ]
+  },
+  {
+   "text": "apps/extension/build.mjs packages/predictor/src/boosted.ts .github/workflows/ci.yml .github/workflows/ci.yml lib/http-client/retry.rs package.json",
+   "head": [
+    6.517266653853102,
+    8.381778183706565,
+    9.986253405463772
+   ]
+  },
+  {
+   "text": "agora então versão revisão por favor então agora revisão também também pacote então ação",
+   "head": [
+    6.371787859173543,
+    8.263679533515166,
+    9.923156400089942
+   ]
+  },
+  {
+   "text": "per show patch same line and interface cli faça ok schema null minor view compile inside into give then let some event package.json path array warn state flag port package.json improve other put analyse src/index.ts --\n\nput api support status src/index.ts where expect not pacote to note parse package.json same which size por favor quick thread last show hook analyse style array empty tests/unit/parser_test.py process when docs/SEMANTIC-PLAN.md resolve hook connect não print fetch parse,\n\nstop_por favor want put some prompt arquivo directory wait versão null export watch só through rename example fail docs/SEMANTIC-PLAN.md cache idea 1208 query string think docs/SEMANTIC-PLAN.md small always default look array how when never maybe where local lib/http-client/retry.rs never quick PROPER code start packages/predictor/src/boosted.ts 3992 arquivo describe docs/SEMANTIC-PLAN.md;\n\nresolve endpoint patch async over compile table are directory next can detail packages/predictor/src/boosted.ts push 101 database always pacote struct tool lib/http-client/retry.rs size response key just match watch ok order agora expect loop explain unit package.json apply default support patch other like where interface fail only then work docs revisão ensure which close enum revert próximo então task?\n\ncontext use read flag pointer remove pointer class commit need queue directory docs/SEMANTIC-PLAN.md enum start skip assert should report array connect process resolve done commit per without STACK same por favor ...\n\nação but inside 1724 run pattern detail tests/unit/parser_test.py solve src/index.ts answer call context number patch port order view directory view quick some .github/workflows/ci.yml use sure main give just count packages/predictor/src/boosted.ts install solve ...\n\ninfer review README.md revisão design proper can tool has context implement last prompt remove connect give type check next solve require 1184 track reason move agora long object just filter write but também apps/extension/build.mjs;\n\ncódigo mock json run measure revert server import analyse bug behaviour from agora local option while loop código variable but hook once on build revisão parse test update code thread library copy any create diff ação string install does why tests/unit/parser_test.py list support open.",
+   "head": [
+    7.082607063886318,
+    8.637834467215699,
+    9.950488878828725
+   ]
+  },
+  {
+   "text": "Import! Also? Please ... Example! Note, Struct) Those' Hook, Maybe. Of) Same ... Prefer' These: Note -- Session? Cli' Example'",
+   "head": [
+    6.376750621412053,
+    7.9626342582717475,
+    9.828236062232104
+   ]
+  },
+  {
+   "text": "não_version apps/extension/build.mjs through value while last handle which log 2796 não problem these set but document ...\n\ninclude_train generate package.json answer scale map object add bug load!\n\nany_require skip apply inside next ...",
+   "head": [
+    6.399172407584221,
+    8.10505252710369,
+    9.761271402739117
+   ]
+  },
+  {
+   "text": "queue argument,",
+   "head": [
+    6.568365348485151,
+    8.45703273698749,
+    10.006728274458677
+   ]
+  },
+  {
+   "text": "right_hook arquivo under status like dependency work replace option fetch proper sure assume never missing proper move let app value package.json search agora function argument config quick token also library limit step endpoint write index measure reset count header method draft docs package.json?",
+   "head": [
+    6.338962425504786,
+    8.211883389421399,
+    9.881948641346264
+   ]
+  },
+  {
+   "text": "think design dependency 3207 can where install fetch instead,\n- missing team result 1823 describe error apps/extension/build.mjs src/index.ts message?\n- use_small event minor USE later find;\n- directory suite style implement request verify status feature README.md!\n- solve_string package input:",
+   "head": [
+    6.651923351348341,
+    8.476838721714731,
+    9.791985315759614
+   ]
+  },
+  {
+   "text": "também store into watch design below more ...\n```json\n  exact(before, 96);\n  train(probably, 39);\n  filter(pull, 96);\n  struct(many, 67);\n```",
+   "head": [
+    6.391228952217539,
+    8.277460862987748,
+    9.806359001537341
+   ]
+  },
+  {
+   "text": "store store store store store store store store store store store store store store store store store store store store draft_not still take quick assume.",
+   "head": [
+    6.588449255377015,
+    8.396825846057556,
+    9.87361998574902
+   ]
+  },
+  {
+   "text": "package.json lib/http-client/retry.rs src/index.ts experiments/evaluation/semantic/text_hash.py",
+   "head": [
+    6.539206781196776,
+    8.39642395385629,
+    10.033726046755005
+   ]
+  },
+  {
+   "text": "versão próximo então revisão só código",
+   "head": [
+    6.596318437866157,
+    8.329564231246458,
+    10.012726998929658
+   ]
+  },
+  {
+   "text": "on versão packages/predictor/src/boosted.ts event repeat search print from replace are use are const count expect component still 178 route and revisão reason loop warn thing issue sure handle support call revert faça path log proper 406 database script behaviour;\n\nnumber_tests/unit/parser_test.py under default map verify schema object help field through deploy repeat apps/extension/build.mjs parse else of interface there database case score refactor read library merge resolve package add object match tool under case struct size to .github/workflows/ci.yml link thread load split later done large help exact these last through these skip await loop?\n\nresponse .github/workflows/ci.yml since change improve docs/SEMANTIC-PLAN.md README.md change usage count start without ok schema since any when status scale module search layer parameter database agora response reason call generate interface infer handle produce just query like break print string ensure small 3022 every which model então below port script skip'\n\ncódigo did to answer other does option see sort limit track COPY than THROUGH where só regression include result any revisão quick reference think docs/SEMANTIC-PLAN.md put export now analyse filter 2665 without state sort .github/workflows/ci.yml function into não YES README.md enable status train lib/http-client/retry.rs 728'\n\nparameter_experiments/evaluation/semantic/text_hash.py sort export deploy call map case cache mock load right 107 next keep script report 4021 keep async assume page fetch this make yes experiments/evaluation/semantic/text_hash.py arquivo diff interface step agora move string static down plan hook ask switch diff bug flag layer state rename ask then stack'\n\nedit_faça now would response problem proper set never thread tests/unit/parser_test.py there long loop pattern process render repeat infer like 1415 see 3862 sure while code layer show else to where string test module will let there done score config does ação refactor step are of hook how enable link document sort done set every queue sync component load?\n\nreport how mock component HAS plan close deploy from think array print example revisão database schema error time always edit commit produce 1001 arquivo team warn pull rebase long then endpoint --\n\nminor_let measure pacote wait each open through repeat add default label of test minor ensure patch lib/http-client/retry.rs output message wait maybe issue if case string down unit push directory disable delete parse object missing database list thing folder 2359 next database where once parameter error under build edit take last close since will put.\n\nsó hook generate não will set will keep local render close show git empty scale switch THAN thread the there 867 sort 1688 search then under fetch table edit hook library regression case edit faça expect suite clean later:\n\ndirectory_reference api report any copy push line large under layer then cache resolve ok detail query finally await tests/unit/parser_test.py fail set need test over token resolve result por favor stack find experiments/evaluation/semantic/text_hash.py context exact change same database the run type push there this now update static replace there remove src/index.ts 1675 never label infer if design on sync 999 resolve:\n\nrevisão compile não every sure take WHY command pacote get assume só main faça apps/extension/build.mjs right error that function feature json input LIKE load cache apps/extension/build.mjs over dependency node próximo possible since limit option work,\n\nrefactor replace code static now limit static finally diff README.md first version load test script regression work please this port map style export agora next header type README.md 2644 number'",
+   "head": [
+    6.9500539467013,
+    8.668420425767529,
+    9.856762150955191
+   ]
+  },
+  {
+   "text": "Run) Pull. While! Diff. Explain ... Index: Library: Skip? Link? Schema' Migrate, Issue!",
+   "head": [
+    6.371577454157567,
+    8.146314938864814,
+    9.855391667239216
+   ]
+  },
+  {
+   "text": "README.md filter warn enum message because skip input arquivo diff search CODE now main view search THING --\n\nschema setup see compare improve stop look main while possible function apps/extension/build.mjs page detail run git --",
+   "head": [
+    6.539319449956347,
+    8.315639971854594,
+    9.816691925971025
+   ]
+  },
+  {
+   "text": "stop ...",
+   "head": [
+    6.524122296816386,
+    8.586706168995072,
+    10.01312993108616
+   ]
+  },
+  {
+   "text": "fetch_test argument view first ask create describe docs/SEMANTIC-PLAN.md and these error lib/http-client/retry.rs render these with tool apps/extension/build.mjs watch store apps/extension/build.mjs package.json packages/predictor/src/boosted.ts loop ensure these filter apps/extension/build.mjs 2173 map first THESE src/index.ts app input command packages/predictor/src/boosted.ts did can next over apps/extension/build.mjs write compare flag response sort on package null src/index.ts give;",
+   "head": [
+    6.763862801313673,
+    8.88170748271987,
+    9.884984872750687
+   ]
+  },
+  {
+   "text": "time_route docs/SEMANTIC-PLAN.md handle'\n- data think array context input export!\n- call_through check read before 3373 still every can count?\n- compare_apply GENERATE version por favor exact step'\n- write list docs/SEMANTIC-PLAN.md key parse apps/extension/build.mjs cli pacote label;\n- status_packages/predictor/src/boosted.ts should experiments/evaluation/semantic/text_hash.py api step src/index.ts new skip!\n- status through track verify export docs próximo since --",
+   "head": [
+    6.825467620022308,
+    8.442289163713998,
+    9.776609379553356
+   ]
+  },
+  {
+   "text": "fail_undo enable see variable export tests/unit/parser_test.py header report break.\n```\n  move(path, 65);\n```",
+   "head": [
+    6.43401750310938,
+    8.277151291851698,
+    9.817807870441445
+   ]
+  },
+  {
+   "text": "now now now library_prompt assert directory number compare:",
+   "head": [
+    6.655928592737322,
+    8.485531460928435,
+    9.777969565880422
+   ]
+  },
+  {
+   "text": "package.json package.json README.md",
+   "head": [
+    6.495662947828068,
+    8.532503701333045,
+    10.060637575366357
+   ]
+  },
+  {
+   "text": "ação ação por favor agora agora próximo código",
+   "head": [
+    6.480670520552157,
+    8.29242075980056,
+    9.914530366035159
+   ]
+  },
+  {
+   "text": ".github/workflows/ci.yml parameter any MAKE user source connect write under render number track .github/workflows/ci.yml script queue prefer README.md struct json diff 1213 size queue assert por favor but input more keep missing to new!\n\nsource proper project implement count will name git config show refactor 627 size server export pacote database also but large 2771 get option replace ok first schema 1781 not regression apps/extension/build.mjs size does regression later apps/extension/build.mjs move design generate describe case for instead would 1714 many parameter let STOP are quick .github/workflows/ci.yml port database scale'\n\nnew merge explain list experiments/evaluation/semantic/text_hash.py down exit never enable data argument ensure LARGE app large some SEE set TABLE can stop call lib/http-client/retry.rs table index pattern unit require small merge!\n\nassert file than problem MAIN these cli order for experiments/evaluation/semantic/text_hash.py próximo model 1999 inside WANT dependency remove read check of unit change session module any request string config include under next pull find 1322 line number store right migrate below class look possible wait 3915'\n\ntext_test tests/unit/parser_test.py open fetch default 3934 .github/workflows/ci.yml static when query delete else code because struct repeat enum 1143 these check 4061 problem git this package.json GET only process should version move will field endpoint maybe delete script render commit once default library call into first schema not finally unit wait should;\n\nimprove then 1716 only maybe local revert directory data data service these without também require did option than long has replace design config package.json error there this hook task other rebase 2189 --\n\nnot_to file sync reason let experiments/evaluation/semantic/text_hash.py experiments/evaluation/semantic/text_hash.py 3852 watch count quick tool compile if warn warn done status exact minor case SERVICE page repeat bug código later .github/workflows/ci.yml apply debug take under agora deploy build port check docs compile bug there 534 log sync package.json read state write done update later user sort report,\n\nfail array rebase create agora src/index.ts folder prompt 592 some local ok link next keep apply scale option missing install docs/SEMANTIC-PLAN.md package.json has type implement project require issue path include open build RENAME read search verify sure assume design src/index.ts need experiments/evaluation/semantic/text_hash.py string into?\n\ntambém maybe compile repeat than variable fetch copy maybe also packages/predictor/src/boosted.ts thread expect score null can measure interface match solve filter tool lib/http-client/retry.rs sure prefer README.md service name team please patch map write flag version:\n\nerror folder improve if sort think like implement delete parse prompt watch enable directory user refactor 1970 load answer task make into explain sync that analyse under limit find project:",
+   "head": [
+    7.073429673712221,
+    8.25681056333019,
+    9.654813951618682
+   ]
+  },
+  {
+   "text": "Draft! Can ... Map: Import; View) Yes; Not! Build, Regression) Replace -- File' Inside: Patch -- To ... Are, Compile -- Line'",
+   "head": [
+    6.451047834472328,
+    8.277325104565168,
+    9.713323578106765
+   ]
+  },
+  {
+   "text": "event_SAME class verify package but node document diff.\n\nvalue 3498 think const find fail use function open detail plan first analyse ...\n\n```\n  next(when, 66);\n  switch(rebase, 6);\n  load(node, 5);\n  there(dependency, 31);\n  show(require, 87);\n```\n\nname_without event infer response dependency not state endpoint problem compile think .github/workflows/ci.yml now.",
+   "head": [
+    6.529381853087471,
+    7.865694829777838,
+    9.68127580007886
+   ]
+  },
+  {
+   "text": "compile_put then:",
+   "head": [
+    6.495813278991473,
+    8.42289278116932,
+    9.992336983250867
+   ]
+  },
+  {
+   "text": "PROMPT 775 versão score class refactor start document solve through README.md over verify service apps/extension/build.mjs import pull start case build are exact through without regression json list argument tool think project name create 684 copy import static README.md simple array revisão code implement edit which name pacote const variable finally refactor revert module test thread later close verify await lib/http-client/retry.rs lib/http-client/retry.rs generate por favor method switch message library warn diff tests/unit/parser_test.py;",
+   "head": [
+    6.539934543378137,
+    8.394670896699742,
+    10.113887104553255
+   ]
+  },
+  {
+   "text": "track for down docs improve --\n- object that arquivo feature describe search cli)\n- size_node prompt session response value log set UNIT)\n- generate_process static package with read'\n- number_docs/SEMANTIC-PLAN.md sync use show analyse write expect build text never through;\n- null make faça data reference;",
+   "head": [
+    6.795519001021125,
+    8.399638724467613,
+    9.808419517475082
+   ]
+  },
+  {
+   "text": "query because service 3351 client ...\n```\n  directory(run, 25);\n```",
+   "head": [
+    6.4907615073888225,
+    8.359988245170227,
+    9.965506235716152
+   ]
+  },
+  {
+   "text": "flag flag flag flag why style pacote database 2125 ask;",
+   "head": [
+    6.53100070341137,
+    8.351343529615662,
+    9.862628858899157
+   ]
+  },
+  {
+   "text": "tests/unit/parser_test.py packages/predictor/src/boosted.ts apps/extension/build.mjs experiments/evaluation/semantic/text_hash.py src/index.ts src/index.ts src/index.ts apps/extension/build.mjs",
+   "head": [
+    6.5300056570869955,
+    8.312854756682107,
+    9.95087643632294
+   ]
+  },
+  {
+   "text": "por favor faça faça pacote então próximo não",
+   "head": [
+    6.440720414147212,
+    8.347358162306362,
+    9.94922504873081
+   ]
+  },
+  {
+   "text": "find_line then 2055 produce message thread scale file support other stack describe bug .github/workflows/ci.yml build não map config parameter document folder não and get that work of else behaviour over once flag README.md keep many later since map debug token 642 describe run map merge merge,\n\nnumber 1379 but see build set should return into 4004 token page some interface read over way message done agora database long unit DATABASE ok ensure on dependency please when compare lib/http-client/retry.rs page undo dependency step into load README.md please later call list put 9 problem through minor cache source handle think input only!\n\nroute PLAN arquivo example then experiments/evaluation/semantic/text_hash.py once faça design agora file render scale next if pointer build while packages/predictor/src/boosted.ts close start call also first index change schema missing there static handle install on infer próximo enum example text there but enum work source only still check 2026 case PACKAGE probably add ...\n\nreport possible sure implement apps/extension/build.mjs key service wait add implement command replace time task include inside await need yet that that 2061 name .github/workflows/ci.yml remove scale test queue class ensure quick bug script look review probably:\n\nstatic lib/http-client/retry.rs view src/index.ts .github/workflows/ci.yml VARIABLE copy module README.md more now AND number version branch style create later key read for exit delete open draft track package.json want ação result name process json undo module WITH put src/index.ts render close config value header start exit 1479 tests/unit/parser_test.py change table review tests/unit/parser_test.py;\n\nunder where src/index.ts solve queue const test wait undo enable cache regression report page json key tests/unit/parser_test.py draft static let pattern argument ensure show patch possible per quick trace compile issue layer split reference and command does src/index.ts warn to look expect ensure else 3939 thing array search ...\n\n1520 sure dependency src/index.ts por favor over there stack process that por favor prefer mock when endpoint correct hook count PER deploy issue enable main not branch just now data bug once hook infer show log explain await user here design next apps/extension/build.mjs order packages/predictor/src/boosted.ts argument while sync match)\n\nCOMPILE ação migrate test README.md small describe 3695 please field 110 match generate local merge with data filter more before but how minor command from port function compare sort inside now merge hook please variable README.md SCORE run create empty agora undo queue did text describe set 2047 component request pacote help'\n\ninput support suite while done like number enum other input problem will want train if setup solve tool train answer run log for down tests/unit/parser_test.py struct produce table src/index.ts component edit código expect step route map take quick include endpoint:\n\nanswer_branch handle reason does small per node skip DONE does README.md commit since pattern plan draft experiments/evaluation/semantic/text_hash.py sort route there regression probably also explain exit example patch produce log later expect give packages/predictor/src/boosted.ts and than right file make debug docs/SEMANTIC-PLAN.md local lib/http-client/retry.rs commit 3704 suite design patch break build merge migrate .github/workflows/ci.yml proper each object produce not ...\n\napply state 76 page rebase migrate reset main debug just message assert 112 match class document check number sort reference update link else layer only main quick .github/workflows/ci.yml array text size feature delete since of hook query not node src/index.ts layer parameter faça behaviour scale sure before migrate idea describe possible please ok copy source 4033 where proper ...\n\nwithout work start generate parse BREAK index score não ação map simple which próximo match route infer fix like lib/http-client/retry.rs document unit include some handle and push install change correct case query deploy app match experiments/evaluation/semantic/text_hash.py assume page 1188 fail;\n\nstart copy experiments/evaluation/semantic/text_hash.py render command last use string since interface would debug sort right track port lib/http-client/retry.rs show next view done with context array always queue that read under issue missing query push add repeat versão issue put possible once'\n\nunder where break return response function também always since store need enum yet src/index.ts src/index.ts step message enable directory apply design delete stack probably has também parse STOP case support error folder like refactor behaviour verify wait draft usage same cli suite are below than once type HOW ...",
+   "head": [
+    7.4251638241077265,
+    9.285536895179122,
+    10.403643727547028
+   ]
+  },
+  {
+   "text": "Change! Just, Unit: Deploy) Support; Variable -- Size ... Skip! Plan -- Below' Next? Create, Measure. Link? Usage ... Behaviour) Run ... Await,",
+   "head": [
+    6.511145613231364,
+    8.559714138522875,
+    9.99813034500226
+   ]
+  },
+  {
+   "text": "LIST README.md dependency has faça apply source right scale output código start still answer!",
+   "head": [
+    6.475904983029032,
+    8.175239422653776,
+    9.878849364849298
+   ]
+  },
+  {
+   "text": "class_parameter for.",
+   "head": [
+    6.511658133576755,
+    8.43193613830438,
+    9.999176234860784
+   ]
+  },
+  {
+   "text": "include then loop session will data expect só setup null json hook SMALL explain maybe patch THE 3873 minor pacote train port trace tests/unit/parser_test.py só those lib/http-client/retry.rs the pattern way context open CONTEXT fix will possible finally yet build and assume write experiments/evaluation/semantic/text_hash.py 3307 project where process main layer DESIGN like set include else pull track endpoint push event merge over database last component style want project close folder from option option request handle!",
+   "head": [
+    6.492287550128987,
+    8.411227803611418,
+    10.118803085303787
+   ]
+  },
+  {
+   "text": "2566 import task cli experiments/evaluation/semantic/text_hash.py BUILD --\n- CAN_from folder message usage label WHILE;\n- fail_just any large implement idea;\n- once_yet prefer next src/index.ts)\n- deploy version store without faça README.md diff edit faça exact for has --\n- change check edit put trace:\n- how 2344 value empty compile 2228 process pacote last queue behaviour;",
+   "head": [
+    6.462018549613415,
+    8.421389451343414,
+    9.90198667572604
+   ]
+  },
+  {
+   "text": "use maybe packages/predictor/src/boosted.ts reset log user small 1075:\n```ts\n  input(main, 28);\n  probably(these, 89);\n  argument(field, 91);\n```",
+   "head": [
+    6.355600665685845,
+    8.010916476641906,
+    9.725865653605528
+   ]
+  },
+  {
+   "text": "generate generate generate generate generate generate to port there connect arquivo include;",
+   "head": [
+    6.2707093995816345,
+    8.058075813946022,
+    9.574933119147675
+   ]
+  },
+  {
+   "text": "docs/SEMANTIC-PLAN.md lib/http-client/retry.rs docs/SEMANTIC-PLAN.md lib/http-client/retry.rs src/index.ts lib/http-client/retry.rs",
+   "head": [
+    6.5242474778977195,
+    8.281478139968264,
+    9.912924902561707
+   ]
+  },
+  {
+   "text": "código ação arquivo código",
+   "head": [
+    6.5065364493850595,
+    8.389075545175752,
+    10.040032841144104
+   ]
+  },
+  {
+   "text": "local unit implement limit código limit session measure add código add variable right assume plan null always 2766 connect push ensure example fix static for this label não undo below 2679 log infer port tests/unit/parser_test.py maybe script;\n\nprompt layer async on command sync stop time then próximo exact large PER RESET once null does versão código api verify next else limit variable return apps/extension/build.mjs any size dependency static próximo 1735 match tool map produce 3035 undo 1312 null return load src/index.ts key ask service 1006 some database line LOAD can every just sync tests/unit/parser_test.py.\n\n2555 just test código src/index.ts 1781 key delete print each exit below think can run score simple these app stack size dependency model correct rebase under why event limit disable route)\n\nbut_split por favor resolve these keep agora here per pacote null main error versão below support since git delete infer see next assert track assume please since score plan any like LOOP)\n\nare pull lib/http-client/retry.rs enum but measure need problem instead find sure option create fail DEPENDENCY down find commit log print branch only would finally variable pattern link tests/unit/parser_test.py but way to hook path ok enable log empty like check when src/index.ts output src/index.ts reason create package.json 2758 solve with 1645 faça package.json apply revert arquivo ...\n\nMOVE rename explain patch stop move example why label read render migrate pull below line README.md large the packages/predictor/src/boosted.ts document sure prefer compile keep once event feature other maybe print parse const there client fail apps/extension/build.mjs describe draft while?\n\ndefault require diff style way use exit right lib/http-client/retry.rs remove state struct experiments/evaluation/semantic/text_hash.py please NODE README.md experiments/evaluation/semantic/text_hash.py src/index.ts use else package.json to layer here sort support see usage add store export small draft await for por favor revert set response still)\n\neach store fail pointer why same experiments/evaluation/semantic/text_hash.py down node stop switch script limit git path setup path bug exit way versão for ação branch usage review same arquivo count pull.\n\nassume_hook filter thread without context por favor dependency 2933 need pacote fail make split problem output commit put require set link string suite improve prompt implement long deploy enum tests/unit/parser_test.py apply problem work dependency delete async delete draft argument map still improve find track;\n\nlater MAP undo find order set of disable from packages/predictor/src/boosted.ts idea table client from agora since see node package.json array value other write layer log assume generate last missing só improve team log review reference expect sure flag ...\n\nstring_filter case class route edit explain deploy expect first since get of skip só null rename unit proper over assert copy compare response package.json reset NULL trace const também every copy refactor hook parse json então code get print pull read only warn write map deploy apps/extension/build.mjs fail from.\n\nrequest let need check cache option without link note verify database per keep missing include export token docs fix design git README.md design process test commit include way because package split show apps/extension/build.mjs array interface update some input always não reference task cache packages/predictor/src/boosted.ts main keep answer with team token packages/predictor/src/boosted.ts então assume tool await version THREAD put lib/http-client/retry.rs variable ...\n\ngive_local line did function call connect start need correct before query prompt interface please fail source still query if solve limit SOURCE exact load repeat module cli should keep also see way null start suite see long list 443 still src/index.ts later count here those undo pattern each skip time!\n\nthing user packages/predictor/src/boosted.ts behaviour directory git usage new então every const diff output tests/unit/parser_test.py pull large 2535 that compile start link edit api ok json apply lib/http-client/retry.rs always INPUT draft quick limit pull null disable compare diff but cache local please idea,",
+   "head": [
+    7.1966294253049945,
+    9.072275799695085,
+    9.874865768689519
+   ]
+  },
+  {
+   "text": "Option -- To) Produce! Trace; Regression) Page) Value? Build:",
+   "head": [
+    6.2720682879084535,
+    8.097458402220436,
+    9.800745739364551
+   ]
+  },
+  {
+   "text": "2898 fail stop only split array loop mock require apply cache lib/http-client/retry.rs server order return SCRIPT 1741 enable;\n\ncall README.md example proper never process docs/SEMANTIC-PLAN.md scale always store add array method run load feature implement:",
+   "head": [
+    6.560023276491863,
+    8.342127095053677,
+    9.879054299322615
+   ]
+  },
+  {
+   "text": "use give help:",
+   "head": [
+    6.533488620275789,
+    8.249957775081691,
+    9.889868727479483
+   ]
+  },
+  {
+   "text": "PLEASE_show with key behaviour 654 docs também take also project design STACK rebase ask probably fail feature every switch create before lib/http-client/retry.rs IDEA default compile query measure feature always parse large store if 230 sure version docs/SEMANTIC-PLAN.md explain input want token setup type value has prompt hook always também?",
+   "head": [
+    6.536602884654405,
+    8.28729476938216,
+    9.67789765113834
+   ]
+  },
+  {
+   "text": "compare disable README.md apps/extension/build.mjs)\n- if name same report input style time number 4085,\n- argument_want those)\n- não let handle describe header 3946 import see rebase.\n- way per sure large flag trace proper;\n- method_component match probably 616 exact default!",
+   "head": [
+    6.603736330122482,
+    8.366710753680648,
+    9.807997912193784
+   ]
+  },
+  {
+   "text": "size prompt build 2117 idea exact exact the ...\n```rust\n  pointer(note, 89);\n  map(large, 79);\n```",
+   "head": [
+    6.372440227354078,
+    8.075649633533567,
+    9.83286847593193
+   ]
+  },
+  {
+   "text": "minor minor minor minor docs report number event folder trace)",
+   "head": [
+    6.485648810791997,
+    8.365124225487037,
+    9.82973638534318
+   ]
+  },
+  {
+   "text": "tests/unit/parser_test.py tests/unit/parser_test.py experiments/evaluation/semantic/text_hash.py",
+   "head": [
+    6.503836275934435,
+    8.35788117476528,
+    10.028089716364297
+   ]
+  },
+  {
+   "text": "próximo arquivo então próximo também próximo revisão",
+   "head": [
+    6.653542463014815,
+    8.4154042155155,
+    10.059034954700346
+   ]
+  },
+  {
+   "text": "proper_reset field describe why folder yet STRUCT with packages/predictor/src/boosted.ts did which there fetch .github/workflows/ci.yml improve header method of queue apps/extension/build.mjs port these service that exit 4005 limit proper number module small process instead but commit ...\n\n4043_correct always now script copy with has result simple watch patch THROUGH source just folder why problem docs only status report assert draft commit missing docs/SEMANTIC-PLAN.md código generate print solve ensure setup json into thread string when path 1615 --\n\nreturn_install same still rename without REGRESSION take 652 library problem README.md open are prompt there static describe behaviour only function support than stack improve let always README.md include array size só src/index.ts later method 1776 TEXT will status these while still deploy só local service)\n\ntask_directory over static migrate schema help implement through limit data user session any README.md compare message event loop parameter simple these check which open example done once copy dependency write style should possible 1282 measure hook também write push show filter 1456 package.json command undo link exact style maybe const.\n\n1038 per last under support response function compile README.md yet refactor load result still server are large why 3286 argument output did simple tests/unit/parser_test.py input src/index.ts 2146 próximo any open would here tests/unit/parser_test.py never component because queue clean always simple input then minor ação faça arquivo feature enable look;\n\npage CONNECT yes flag write session else docs/SEMANTIC-PLAN.md where match track of task response infer design like update apps/extension/build.mjs take disable pointer these switch revisão 1706 3099 first before close without faça docs/SEMANTIC-PLAN.md merge array 3449 migrate those port rebase run switch then there status see need 3221 enum fix status git package.json each find thing some step resolve --\n\nassert explain state código git LOOP from will file state código faça replace fetch packages/predictor/src/boosted.ts path table service later input produce await type map lib/http-client/retry.rs maybe lib/http-client/retry.rs reason tests/unit/parser_test.py layer 1802 push dependency install measure before null review detail because case view detail docs/SEMANTIC-PLAN.md has produce see reset these sync support correct than schema every!\n\nbut detail explain mock event parse ask map check src/index.ts compare dependency many command 7 undo ok team create done explain compare score let 3260 warn of tests/unit/parser_test.py once does patch commit docs/SEMANTIC-PLAN.md case improve scale feature detail.",
+   "head": [
+    7.1362671869029555,
+    8.951031100020073,
+    10.196068725813598
+   ]
+  },
+  {
+   "text": "Revert, Exit! Ensure' Static' Test! Because? List, Revert. But'",
+   "head": [
+    6.40166481270522,
+    8.213634754001133,
+    9.945903156110386
+   ]
+  },
+  {
+   "text": "implement arquivo exit how on keep 199 await clean key per just class --\n\n```python\n  dependency(exact, 62);\n  work(install, 1);\n  those(does, 86);\n  table(thing, 17);\n  loop(find, 95);\n```",
+   "head": [
+    6.657996797413162,
+    8.425654613050119,
+    9.937674047290963
+   ]
+  },
+  {
+   "text": "build?",
+   "head": [
+    6.536373472164582,
+    8.714913943811352,
+    10.052956040989331
+   ]
+  },
+  {
+   "text": "use_apps/extension/build.mjs make time null make simple the time over versão to style queue command style wait missing session handle sure cli many então verify behaviour packages/predictor/src/boosted.ts need load always not apps/extension/build.mjs usage report under why event document make number every route 274 also first should answer step próximo are give tests/unit/parser_test.py describe run link pacote thing missing próximo enum value await variable 379 should stack:",
+   "head": [
+    6.753642043249597,
+    8.432883839658334,
+    9.704768521935259
+   ]
+  },
+  {
+   "text": "default_endpoint test write finally?\n- map apps/extension/build.mjs each parameter.\n- state_to implement these then!",
+   "head": [
+    6.5041276029780795,
+    8.452603881608495,
+    9.969740602557204
+   ]
+  },
+  {
+   "text": "which_próximo import undo order long first same?\n```python\n  clean(connect, 35);\n  name(if, 49);\n  replace(prefer, 53);\n```",
+   "head": [
+    6.44561913971698,
+    7.98286656411143,
+    9.77518675736458
+   ]
+  },
+  {
+   "text": "local local local local local local local local local local local local local local local agora git enum código fail 2609.",
+   "head": [
+    6.354120584121272,
+    8.152971767845694,
+    9.93634432610314
+   ]
+  },
+  {
+   "text": "experiments/evaluation/semantic/text_hash.py experiments/evaluation/semantic/text_hash.py src/index.ts tests/unit/parser_test.py src/index.ts packages/predictor/src/boosted.ts docs/SEMANTIC-PLAN.md apps/extension/build.mjs",
+   "head": [
+    6.466314323881345,
+    8.305868465348237,
+    9.797946269995633
+   ]
+  },
+  {
+   "text": "próximo não só faça só revisão revisão só agora revisão ação agora",
+   "head": [
+    6.324786399181724,
+    8.23791268104711,
+    9.935031403862284
+   ]
+  },
+  {
+   "text": "src/index.ts fail src/index.ts now compare delete project note api function package.json suite 2021 docs/SEMANTIC-PLAN.md here sure keep maybe now const file connect package.json add error create exit cli under will app support faça skip compare docs function keep cache code require refactor update option null mock close task will enum layer docs/SEMANTIC-PLAN.md rebase path revisão idea these parameter?\n\nlink_these assert apps/extension/build.mjs right like through route struct source próximo 3642 default not tests/unit/parser_test.py queue any pattern 2862 small function copy break setup experiments/evaluation/semantic/text_hash.py próximo migrate answer close rebase packages/predictor/src/boosted.ts create way thing,\n\ncommand solve quick service size close without change TIME bug each array function yes folder pacote await read check object than query long while replace take handle per change read function describe repeat install também update thread process event null get result small instead that request correct before load will probably interface por favor commit também fail take!\n\nmethod_enable missing app lib/http-client/retry.rs minor experiments/evaluation/semantic/text_hash.py struct api prefer enable sort read prompt data then first const look import event LAST thread other código prefer keep break yet debug FIND which?\n\npacote time pointer behaviour replace new exact patch só test parameter folder limit update state source require suite more api código number analyse set answer struct verify stack if feature small inside event the parse enum compile possible só sync can README.md key report event instead answer export of SIZE bug docs/SEMANTIC-PLAN.md type result)\n\nstill_tool 1862 679 label main task to 2786 ask time please these every first when wait some done src/index.ts prompt return new scale instead patch create would file unit give down those only every build field cli queue migrate packages/predictor/src/boosted.ts schema did team diff explain project call done prompt write of 3531 1372:\n\npointer_size read deploy connect assume get also hook once revert edit tests/unit/parser_test.py assume RENAME 842 give tool push train lib/http-client/retry.rs packages/predictor/src/boosted.ts ação server prefer 2807 route fetch start then run more through should agora on diff .github/workflows/ci.yml explain expect undo put experiments/evaluation/semantic/text_hash.py command package.json warn require finally per possible when require design can replace take!\n\nreference way thing please reset search size small correct docs/SEMANTIC-PLAN.md link migrate there look open more design file page enum log user label long track command TOKEN detail 767 warn process the read trace user while number reason always output and probably'\n\nedit server 143 src/index.ts file enum tests/unit/parser_test.py line each through there error package link problem regression script input parse por favor thread unit também where table analyse call 344 example case ENDPOINT scale skip time só request which maybe stack design without reference where model right CONNECT context pointer test ask 3643 other those give produce other down experiments/evaluation/semantic/text_hash.py'\n\nloop struct build remove infer api than help src/index.ts queue app pacote limit repeat link later config before query should mock route data setup packages/predictor/src/boosted.ts split team new then support README.md client enable 3330 docs/SEMANTIC-PLAN.md when build type service empty main not 998 link split task load line more 420 803 lib/http-client/retry.rs por favor 3387 variable;\n\nsize more empty can prompt component docs/SEMANTIC-PLAN.md since would on step struct parameter use refactor skip file name class just for experiments/evaluation/semantic/text_hash.py session sync key create into print repeat test layer has next 3875 reason commit below size object schema than get pull source more some package text when note)\n\nthink_apps/extension/build.mjs find same replace script only 1952 find delete tool correct help 476 thread usage plan of thing also build connect below arquivo suite and example add detail connect command test user same local pull argument command wait await prefer else proper?\n\nport which can source unit component data before create plan revert has example per export source per diff cli replace clean event thing done git add variable string 468 give por favor component token team generate migrate import stop detail and measure limit before put 3019 module take yet open debug generate?",
+   "head": [
+    7.308595597774622,
+    8.76432230882696,
+    10.173495085103744
+   ]
+  },
+  {
+   "text": "Pull. Infer' Thing) Fetch, Key -- Render: Down. Docs ... Struct? Suite) Small' While? Possible ... Require: Still; Team' Migrate;",
+   "head": [
+    6.423205603682055,
+    8.253037304098452,
+    9.921730896534552
+   ]
+  },
+  {
+   "text": "port_undo sure list would cli before yet merge page include)\n\nthink revert main reset small because string missing did default tests/unit/parser_test.py;\n\ndesign new sure prompt 3093 header pacote for switch json thing are every tool label revert detail --\n\n```json\n  parse(exact, 56);\n```\n\nresponse yet then apps/extension/build.mjs exact state yes branch number command então disable argument other solve parameter search --",
+   "head": [
+    6.7225485498311635,
+    8.250307151220538,
+    9.615300218837683
+   ]
+  },
+  {
+   "text": "the field lib/http-client/retry.rs)",
+   "head": [
+    6.295670333669075,
+    8.010631530240863,
+    9.755279427043885
+   ]
+  },
+  {
+   "text": "let variable import ação design pull interface module setup need event from apply those agora folder THAT verify 3491 ask value close verify token reason work COMMIT 1689 right LOAD api endpoint apps/extension/build.mjs those other flag same token maybe probably over quick rename here merge only module some package next apps/extension/build.mjs diff remove dependency log verify client work where pacote same possible 2042 pull README.md down component pull tests/unit/parser_test.py last object endpoint on null label server also command stack produce not later ANSWER server'",
+   "head": [
+    6.516040813867433,
+    8.367645726201538,
+    9.923414940799118
+   ]
+  },
+  {
+   "text": "export local trace command compile draft LABEL!\n- branch command trace set view skip answer 665.\n- experiments/evaluation/semantic/text_hash.py_module right yes revert command compile look install there query:\n- build_CONTEXT those error table unit team small each trace possible!\n- still has simple simple'",
+   "head": [
+    6.484277922228198,
+    8.302442198923094,
+    9.93973131806779
+   ]
+  },
+  {
+   "text": "describe write first behaviour push 2761 await where:\n```\n  enable(work, 4);\n  infer(parameter, 70);\n  down(source, 85);\n```",
+   "head": [
+    6.388556753584561,
+    8.10343448893537,
+    9.888651725501813
+   ]
+  },
+  {
+   "text": "with with with with with with with with the flag src/index.ts stack improve hook)",
+   "head": [
+    6.771896324650956,
+    8.475607548119092,
+    9.88359552846505
+   ]
+  },
+  {
+   "text": "src/index.ts src/index.ts experiments/evaluation/semantic/text_hash.py tests/unit/parser_test.py packages/predictor/src/boosted.ts experiments/evaluation/semantic/text_hash.py src/index.ts",
+   "head": [
+    6.5922817273108265,
+    8.355256151555615,
+    9.989873095732461
+   ]
+  },
+  {
+   "text": "também arquivo só arquivo só só pacote",
+   "head": [
+    6.5625156110203875,
+    8.423427380792887,
+    9.943151104627425
+   ]
+  },
+  {
+   "text": "946_this text of time input export interface apps/extension/build.mjs response option bug push message limit ação rename line branch loop response style 1202 agora produce warn docs/SEMANTIC-PLAN.md never quick apply design look field session IMPORT connect make TASK every docs/SEMANTIC-PLAN.md small packages/predictor/src/boosted.ts .github/workflows/ci.yml label method search add enable'\n\nlater reason set state compile call layer table query like text lib/http-client/retry.rs load store why start type page every apply api repeat draft README.md open 3372 undo faça only want would 2697 these empty model skip the experiments/evaluation/semantic/text_hash.py large small while --\n\nremove_here client rename 3115 async suite please project stop first same will library these apps/extension/build.mjs warn map header produce case server score variable before packages/predictor/src/boosted.ts stack string filter change ação without pointer make não number page arquivo for detail can:\n\nverify_where improve test include debug reference handle fetch service list possible pacote render compile session reset track README.md move token same over enable unit never session note não those here lib/http-client/retry.rs correct are skip,\n\nrepeat fail type source docs/SEMANTIC-PLAN.md here order experiments/evaluation/semantic/text_hash.py então would setup these create require 1720 pull train docs more put start key 3615 always app .github/workflows/ci.yml assert rebase build 1886 merge push get git também directory support and close mock of task order error many thing compare help prompt!\n\nquery_these correct measure route patch lib/http-client/retry.rs test object scale bug then warn apps/extension/build.mjs enable count many data did config possible README.md detail 1674 under switch enum check model with team const below this export --\n\nhook per exit packages/predictor/src/boosted.ts deploy bug size repeat every plan instead 1072 pattern undo handle function query regression these também branch any stop but local undo always pattern without enable --\n\nimprove text só match here over later name done prompt package.json token push request simple since patch each rename fail local search make 3112 when set report value patch fail sure stack src/index.ts step próximo move folder stop?\n\npatch apply delete component 439 event parameter install directory thread schema cli under also answer parse folder apply exact which label src/index.ts label default want prefer expect app 3390 thing variable clean:\n\nfaça text than agora test reference rename change undo instead split await list create move migrate some .github/workflows/ci.yml this per import same explain result count packages/predictor/src/boosted.ts merge src/index.ts sync help once bug expect 2491 session update session missing clean 3778 finally which require assert does limit there empty class please README.md show implement remove STACK update think expect now possible!\n\ntests/unit/parser_test.py make issue keep docs apps/extension/build.mjs any code folder else size give suite store script push every because arquivo text fix rebase track arquivo só parameter source export test per new prefer pull with,\n\npossible_implement ask cache event line export tests/unit/parser_test.py dependency later parse project 2779 skip EXAMPLE 1823 here faça resolve revert link header find agora header design yet measure score because tests/unit/parser_test.py still TOOL since parameter hook probably function refactor small regression component expect include per tests/unit/parser_test.py pointer sort why rename while!\n\nright reset status docs/SEMANTIC-PLAN.md call through infer rename patch warn pointer compare add get sync here endpoint arquivo has patch generate measure last than simple pull error missing how example query .github/workflows/ci.yml through per where more prompt expect default look main run with delete detail 3036 sort handle some here fetch for?\n\napp resolve compare revisão small stop view endpoint ensure result probably expect commit change agora look yet 3257 state show cli assert minor lib/http-client/retry.rs how get revisão array with later stack track generate parameter probably 3045 size version describe draft reference give style WHICH every probably.",
+   "head": [
+    7.38738908291692,
+    8.578957143129182,
+    9.761662372460568
+   ]
+  },
+  {
+   "text": "Example? The' Argument' Train! Line. Find! Move' User. State! Schema -- Set: Api -- Open,",
+   "head": [
+    6.231573986703404,
+    7.923817919295014,
+    9.801105239246787
+   ]
+  },
+  {
+   "text": "400_field write só once README.md require faça help JUST null thing ensure switch work ENDPOINT other 1032!\n\nsort diff analyse skip take session give docs/SEMANTIC-PLAN.md add header 2960)",
+   "head": [
+    6.268866687866733,
+    8.030660988823824,
+    9.780098078892747
+   ]
+  },
+  {
+   "text": "sure;",
+   "head": [
+    6.577031821875935,
+    8.460517734679017,
+    9.936797744855065
+   ]
+  },
+  {
+   "text": "still reason function fetch package.json docs/SEMANTIC-PLAN.md 2613 api open done enable through README.md into 2603 correct local argument replace which type method style directory finally pattern answer example let each 3581 instead queue before next session database rebase later fetch warn simple split só why table would generate start size fetch remove store that which 22 when merge tool apps/extension/build.mjs map write output await tests/unit/parser_test.py parse apps/extension/build.mjs client last?",
+   "head": [
+    6.541076566785277,
+    8.193790979676258,
+    9.714951671453962
+   ]
+  },
+  {
+   "text": "packages/predictor/src/boosted.ts since track put since flag file!\n- main change below rename size 1631 label server show model maybe diff,\n- are_patch without which library lib/http-client/retry.rs compile revisão usage read inside:\n- package_like regression also reference style packages/predictor/src/boosted.ts ...\n- MIGRATE 509 copy instead .github/workflows/ci.yml:",
+   "head": [
+    6.515718018488683,
+    8.245195897470763,
+    9.689575880194633
+   ]
+  },
+  {
+   "text": "agora_limit match while event with minor 2966 like check --\n```sh\n  script(interface, 55);\n  interface(warn, 92);\n```",
+   "head": [
+    6.714080503820913,
+    8.269107869846822,
+    9.780303900335724
+   ]
+  },
+  {
+   "text": "process process process process process process process process process process process process process process process process process process process process field_move await unit 2335 those?",
+   "head": [
+    6.570065920327867,
+    8.22138465719152,
+    9.840773405114986
+   ]
+  },
+  {
+   "text": ".github/workflows/ci.yml package.json src/index.ts packages/predictor/src/boosted.ts tests/unit/parser_test.py README.md packages/predictor/src/boosted.ts .github/workflows/ci.yml",
+   "head": [
+    6.665238292081013,
+    8.52953886227915,
+    10.083700398210397
+   ]
+  },
+  {
+   "text": "também arquivo versão agora só então próximo então faça",
+   "head": [
+    6.62430219713336,
+    8.396343660686147,
+    9.994939210155977
+   ]
+  },
+  {
+   "text": "pointer session parameter experiments/evaluation/semantic/text_hash.py find inside minor node undo link queue improve create right async agora review path suite library fail reset edit docs/SEMANTIC-PLAN.md which for this below pointer REFACTOR thing read revert tests/unit/parser_test.py próximo request status revisão src/index.ts variable close?\n\npor favor bug 824 prefer README.md revisão when cache down branch parse stack while query hook rename more show let possible below that commit assert finally sync regression from struct explain copy scale task idea branch --\n\ncache explain name static branch message src/index.ts disable clean analyse store command arquivo not por favor many view please port some wait train import note mock how rebase message package.json write many cache test struct package.json size test close arquivo empty dependency last give make minor still START directory are error still and endpoint enable request give like LIMIT always disable!\n\npush migrate case generate number work proper inside store instead expect watch assume 2364 LABEL library missing page tests/unit/parser_test.py cli value versão issue team document always arquivo file src/index.ts docs/SEMANTIC-PLAN.md where export quick skip enable exact endpoint many fix describe component connect apply thing component option disable pointer?\n\nsplit and resolve store instead connect track way show will explain prompt database package.json 1417 next clean ensure docs/SEMANTIC-PLAN.md ação code layer 2270 find code replace packages/predictor/src/boosted.ts add draft line arquivo per install scale status implement let local issue package.json explain feature name remove sync SCORE open get start match path index enable .github/workflows/ci.yml array check experiments/evaluation/semantic/text_hash.py library:\n\ninfer_resolve example apps/extension/build.mjs script server usage without generate 1819 migrate improve thread fail EXACT argument split TAKE loop revert give set get design error only source finally INPUT break tests/unit/parser_test.py when tests/unit/parser_test.py probably inside like queue database check command now thing input field answer ...\n\nnumber how expect show problem score table só the yes into list did note repeat size start add hook arquivo each require case look once 2176 explain support else CREATE long simple see src/index.ts rename mock wait local of thread packages/predictor/src/boosted.ts these pointer give wait project undo large instead project pacote --\n\ntrace_score mock pacote switch below README.md também só field match of yes fix string skip of refactor then option SUPPORT note update yet então header main draft now tests/unit/parser_test.py count script só answer 3227 idea session experiments/evaluation/semantic/text_hash.py under event merge;\n\nbehaviour context README.md então return path 3590 simple example now token scale behaviour key input idea any on thread where struct read there reason interface model long example search apply exact context can other pull argument generate those 3920 ação open done infer docs/SEMANTIC-PLAN.md report 2308 track deploy some list empty)",
+   "head": [
+    6.88806228066742,
+    8.442043379072173,
+    10.227723131225515
+   ]
+  },
+  {
+   "text": "Large ... Data! Style, Key -- Prefer' Enum, Document? Store; App? Reference! Analyse --",
+   "head": [
+    6.500260654776167,
+    8.382653837965169,
+    9.866247914826145
+   ]
+  },
+  {
+   "text": "src/index.ts_por favor trace answer show empty produce WHILE implement create 1383 só return;\n\nempty train from time use faça when only value ensure explain UNIT other arquivo move start --\n\n```sh\n  array(session, 88);\n  never(client, 20);\n  fix(setup, 26);\n```\n\ndependency directory null table fix just prefer 629 does message COMMAND take patch loop return still empty where --\n\nlib/http-client/retry.rs patch reference stack way apps/extension/build.mjs warn?",
+   "head": [
+    6.661272783234736,
+    8.478857716305908,
+    10.029085089834377
+   ]
+  },
+  {
+   "text": "many_.github/workflows/ci.yml find?",
+   "head": [
+    6.503999784213741,
+    8.451316659182627,
+    10.008575614170732
+   ]
+  },
+  {
+   "text": "find_data like enum from sure like done config 2938 write próximo the first call tests/unit/parser_test.py ensure break 151 skip field look done RESOLVE compare run feature model log delete loop review put lib/http-client/retry.rs packages/predictor/src/boosted.ts usage command report query can yet agora command close draft ação assume token message pointer file line sync order log state maybe down setup sync clean always stack variable those THAT enum remove has per print ask use key mock model'",
+   "head": [
+    6.506479329509983,
+    8.267364769222405,
+    9.770586082394544
+   ]
+  },
+  {
+   "text": "layer_option describe ok number describe any migrate:\n- static clean missing like)\n- enum_take write there sort trace function event produce agora missing header)\n- yet render open show long because 3041'",
+   "head": [
+    6.435850388691991,
+    8.0905283095945,
+    9.677243085730792
+   ]
+  },
+  {
+   "text": "patch apps/extension/build.mjs way;\n```python\n  update(type, 56);\n  move(branch, 0);\n```",
+   "head": [
+    6.492255997780345,
+    8.010524277640846,
+    9.837006872457488
+   ]
+  },
+  {
+   "text": "module module module where reference only ok cli trace --",
+   "head": [
+    6.452726253751168,
+    8.231611087274052,
+    9.810497334119905
+   ]
+  },
+  {
+   "text": "src/index.ts package.json tests/unit/parser_test.py package.json",
+   "head": [
+    6.526588138690917,
+    8.482928840934866,
+    10.021264697700497
+   ]
+  },
+  {
+   "text": "então também código ação",
+   "head": [
+    6.527132348076829,
+    8.422336996799363,
+    10.048146699939467
+   ]
+  },
+  {
+   "text": "exact_find size então parse sync thing 1441 src/index.ts copy always flag copy will context interface route object write diff still this also loop project other reference README.md every exit string component enable over main style track:\n\nlib/http-client/retry.rs open parse can not keep YES queue fail print more fail large put issue versão done sure close disable refactor copy answer generate did server clean reference break prompt hook.\n\nneed through remove time line let make pull now simple skip plan add struct explain código thread any fix before LINK still código let model static await enum package.json sync compare package.json src/index.ts regression 1523 null fail describe limit would reason since FAIL request stack package.json like expect are case answer keep wait last queue create'\n\nreport finally request então stop package commit remove command schema class README.md install ok usage variable também tests/unit/parser_test.py prefer event let example log prefer DATA search verify ação verify 2478 label flag maybe 13 since ok problem but over diff script rebase load client por favor before behaviour código branch there,\n\nscript deploy and 1629 state are split parameter text diff since client docs/SEMANTIC-PLAN.md thing regression api código read pointer session take query tests/unit/parser_test.py yes put patch keep sure style add async first stack connect test also não --\n\ncommit new prefer json issue parse right yes work down function prompt 2813 result então under change are push client include each ask reference field import trace apps/extension/build.mjs unit count pattern class install .github/workflows/ci.yml .github/workflows/ci.yml behaviour maybe?\n\ninstall_where argument setup 519 process let work method state many write local BECAUSE trace instead would change example correct ask without loop skip arquivo can reason now skip over example code:\n\nserver_method .github/workflows/ci.yml port table field result .github/workflows/ci.yml expect sort when 1107 last tool close give event packages/predictor/src/boosted.ts enum new has done token setup expect exact missing package there style enum minor trace use and docs/SEMANTIC-PLAN.md only faça check local analyse port não large version usage stop instead library need never ok código text like wait config token 2248 table:\n\nthen else there on copy tool THOSE apps/extension/build.mjs idea warn finally module status array package.json size index limit if behaviour reference yet explain assert name assert pattern delete task minor also README.md string THING fail sort expect próximo last option score!",
+   "head": [
+    7.175703178717178,
+    8.96130912897257,
+    9.751607446351729
+   ]
+  },
+  {
+   "text": "Await! Long. Component' Correct! Write: More' On ... Object) Package' Input) Project, Prefer, Exit' On) Fail -- Per, These: Json' Use:",
+   "head": [
+    6.566303086946892,
+    8.38064441101689,
+    9.847176376655742
+   ]
+  },
+  {
+   "text": "filter_const export regression think mock line show break main field'\n\nentão_flag route assume run draft default where solve)\n\nbug same bug replace than log handle context feature because size text with new quick fail push!\n\nstate please 3470 lib/http-client/retry.rs update src/index.ts render apps/extension/build.mjs docs/SEMANTIC-PLAN.md test table lib/http-client/retry.rs exact --",
+   "head": [
+    6.5936050369240355,
+    8.305476569785194,
+    9.8637811006778
+   ]
+  },
+  {
+   "text": "reference through just ...",
+   "head": [
+    6.489748795470653,
+    8.477901047118214,
+    9.984476002165078
+   ]
+  },
+  {
+   "text": "event trace each 936 behaviour event connect pull design message 3253 more ok track will later call tests/unit/parser_test.py push page once query api expect still case team MORE correct directory revisão process então size agora many under null under with route list detail reference static break)",
+   "head": [
+    6.543203960202501,
+    8.21749466989184,
+    9.847409178287942
+   ]
+  },
+  {
+   "text": "proper flag some .github/workflows/ci.yml package.json score prompt por favor struct:\n- 2043 json need exit .github/workflows/ci.yml of time analyse loop give every rename)\n- config route compile text:",
+   "head": [
+    6.249879955963758,
+    7.967889750535218,
+    9.758809051877538
+   ]
+  },
+  {
+   "text": "class not track exact case please local!\n```json\n  default(inside, 95);\n  string(will, 94);\n  pull(file, 65);\n  trace(import, 11);\n```",
+   "head": [
+    6.360265889535532,
+    7.755318565342827,
+    9.647435089030623
+   ]
+  },
+  {
+   "text": "stop stop stop stop stop stop stop stop stop stop stop than_schema output REVERT split 2382?",
+   "head": [
+    6.519298388920638,
+    8.394927812951513,
+    9.85347285924009
+   ]
+  },
+  {
+   "text": "README.md apps/extension/build.mjs package.json .github/workflows/ci.yml .github/workflows/ci.yml",
+   "head": [
+    6.714552788861436,
+    8.487909189309358,
+    10.060992361905333
+   ]
+  },
+  {
+   "text": "também arquivo então arquivo então",
+   "head": [
+    6.633404436509732,
+    8.429989705228383,
+    10.030473629517461
+   ]
+  },
+  {
+   "text": "patch_option tests/unit/parser_test.py agora pattern start other response ensure issue código simple see move read branch mock assume result possible input prefer add install database client many index rebase script through other fetch score find object simple clean main input thread thread json fix let number let library view inside commit push check the sort --\n\non new pacote 3528 inside usage later tests/unit/parser_test.py push set clean right number dependency also because size require queue então watch cli generate unit task server null undo break LINE into node packages/predictor/src/boosted.ts config async probably merge 611 each parameter test debug find include done service new fetch type array split example async switch fetch design SET write:\n\nexperiments/evaluation/semantic/text_hash.py cache test 4034 copy warn on please verify view version filter maybe delete config only process watch stack git type then rename 1968 diff 417 return also apps/extension/build.mjs count option 3755 then'\n\nto use example print 1564 use install some parameter flag number enum reason apps/extension/build.mjs detail apps/extension/build.mjs regression track hook return other server só load feature time skip fetch packages/predictor/src/boosted.ts pacote bug has answer write never trace apply some search connect then ENABLE yet from right test.\n\nmigrate problem status pacote maybe name would query like .github/workflows/ci.yml const 348 só database regression project port wait EDIT regression since issue put first data input through context missing implement struct always app just always score work LAST arquivo keep before status method size apply these last api default let BUG render)\n\nbecause always support update match but install experiments/evaluation/semantic/text_hash.py see same fetch async where empty faça parameter setup maybe disable const build TRAIN experiments/evaluation/semantic/text_hash.py large rebase session find const merge of some want --\n\nwork_sort tests/unit/parser_test.py type faça tool input docs/SEMANTIC-PLAN.md só compile option IMPROVE when write match report limit packages/predictor/src/boosted.ts build copy if tool infer ok thing to main possible docs/SEMANTIC-PLAN.md versão PAGE queue exit text git never on module patch delete packages/predictor/src/boosted.ts split expect per response show these test handle small just set exact to process folder set não'\n\nqueue right make are watch reason 1247 então field database step compile this docs per read await packages/predictor/src/boosted.ts task want use call path thing versão always 2039 get apps/extension/build.mjs api where lib/http-client/retry.rs of split event user team show verify of 1500 watch patch service yet large method watch assume null method'",
+   "head": [
+    7.037582372216798,
+    8.938312233520527,
+    10.329876182308135
+   ]
+  },
+  {
+   "text": "Endpoint; Need! Assert, Quick; Trace? Docs; Input. Plan' Header! Label! Analyse' Commit ... Include ... Page; Page'",
+   "head": [
+    6.369005755878777,
+    8.13829233737593,
+    9.77461007114222
+   ]
+  },
+  {
+   "text": "src/index.ts_reference não when component string enable --\n\n```sh\n  source(did, 46);\n  that(thing, 5);\n```",
+   "head": [
+    6.274557964186573,
+    8.005454431559908,
+    9.661264764535481
+   ]
+  }
+ ],
+ "hasher": [
+  {
+   "text": "",
+   "bits": 13,
+   "terms": []
+  },
+  {
+   "text": "   ",
+   "bits": 13,
+   "terms": []
+  },
+  {
+   "text": "!!! ??? ...",
+   "bits": 13,
+   "terms": []
+  },
+  {
+   "text": "ok",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 7960,
+     "sign": 1
+    }
+   ]
+  },
+  {
+   "text": "ok ok ok",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 7960,
+     "sign": 1
+    },
+    {
+     "bucket": 7960,
+     "sign": 1
+    },
+    {
+     "bucket": 4543,
+     "sign": -1
+    },
+    {
+     "bucket": 7960,
+     "sign": 1
+    },
+    {
+     "bucket": 4543,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "OK Ok oK",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 7960,
+     "sign": 1
+    },
+    {
+     "bucket": 7960,
+     "sign": 1
+    },
+    {
+     "bucket": 4543,
+     "sign": -1
+    },
+    {
+     "bucket": 7960,
+     "sign": 1
+    },
+    {
+     "bucket": 4543,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "src/index.ts",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 6122,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "_private-name.v2",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 2796,
+     "sign": 1
+    }
+   ]
+  },
+  {
+   "text": "não faça isso",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 594,
+     "sign": 1
+    },
+    {
+     "bucket": 1055,
+     "sign": -1
+    },
+    {
+     "bucket": 2712,
+     "sign": -1
+    },
+    {
+     "bucket": 1300,
+     "sign": -1
+    },
+    {
+     "bucket": 5014,
+     "sign": 1
+    }
+   ]
+  },
+  {
+   "text": "café com açúcar",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 1391,
+     "sign": -1
+    },
+    {
+     "bucket": 3855,
+     "sign": -1
+    },
+    {
+     "bucket": 6833,
+     "sign": 1
+    },
+    {
+     "bucket": 6866,
+     "sign": -1
+    },
+    {
+     "bucket": 2478,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "fix these: docs/SEMANTIC-PLAN.md and packages/predictor/src/boosted.ts",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 1905,
+     "sign": -1
+    },
+    {
+     "bucket": 6533,
+     "sign": -1
+    },
+    {
+     "bucket": 5623,
+     "sign": -1
+    },
+    {
+     "bucket": 2613,
+     "sign": -1
+    },
+    {
+     "bucket": 3631,
+     "sign": 1
+    },
+    {
+     "bucket": 3431,
+     "sign": -1
+    },
+    {
+     "bucket": 6593,
+     "sign": -1
+    },
+    {
+     "bucket": 4799,
+     "sign": -1
+    },
+    {
+     "bucket": 5315,
+     "sign": 1
+    }
+   ]
+  },
+  {
+   "text": "a b a b a b",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 2541,
+     "sign": 1
+    },
+    {
+     "bucket": 1332,
+     "sign": 1
+    },
+    {
+     "bucket": 6218,
+     "sign": 1
+    },
+    {
+     "bucket": 2541,
+     "sign": 1
+    },
+    {
+     "bucket": 4914,
+     "sign": 1
+    },
+    {
+     "bucket": 1332,
+     "sign": 1
+    },
+    {
+     "bucket": 6218,
+     "sign": 1
+    },
+    {
+     "bucket": 2541,
+     "sign": 1
+    },
+    {
+     "bucket": 4914,
+     "sign": 1
+    },
+    {
+     "bucket": 1332,
+     "sign": 1
+    },
+    {
+     "bucket": 6218,
+     "sign": 1
+    }
+   ]
+  },
+  {
+   "text": "42 0 007",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 4420,
+     "sign": -1
+    },
+    {
+     "bucket": 2666,
+     "sign": 1
+    },
+    {
+     "bucket": 2099,
+     "sign": 1
+    },
+    {
+     "bucket": 475,
+     "sign": -1
+    },
+    {
+     "bucket": 7854,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "```ts\nconst x = 1;\n```",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 2135,
+     "sign": 1
+    },
+    {
+     "bucket": 5717,
+     "sign": 1
+    },
+    {
+     "bucket": 6315,
+     "sign": -1
+    },
+    {
+     "bucket": 658,
+     "sign": 1
+    },
+    {
+     "bucket": 6516,
+     "sign": 1
+    },
+    {
+     "bucket": 3069,
+     "sign": 1
+    },
+    {
+     "bucket": 3524,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "let's do it -- afterwards, reply with the diff",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 6951,
+     "sign": 1
+    },
+    {
+     "bucket": 3479,
+     "sign": 1
+    },
+    {
+     "bucket": 5327,
+     "sign": 1
+    },
+    {
+     "bucket": 7859,
+     "sign": 1
+    },
+    {
+     "bucket": 163,
+     "sign": 1
+    },
+    {
+     "bucket": 6899,
+     "sign": 1
+    },
+    {
+     "bucket": 7097,
+     "sign": 1
+    },
+    {
+     "bucket": 823,
+     "sign": -1
+    },
+    {
+     "bucket": 6773,
+     "sign": -1
+    },
+    {
+     "bucket": 5954,
+     "sign": -1
+    },
+    {
+     "bucket": 5608,
+     "sign": -1
+    },
+    {
+     "bucket": 5818,
+     "sign": 1
+    },
+    {
+     "bucket": 2321,
+     "sign": 1
+    },
+    {
+     "bucket": 3493,
+     "sign": -1
+    },
+    {
+     "bucket": 5702,
+     "sign": 1
+    },
+    {
+     "bucket": 973,
+     "sign": -1
+    },
+    {
+     "bucket": 219,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "TOKEN_FORECASTER_HOME=/tmp/tf",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 5988,
+     "sign": -1
+    },
+    {
+     "bucket": 3290,
+     "sign": -1
+    },
+    {
+     "bucket": 4243,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "one\ntwo\nthree",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 6102,
+     "sign": -1
+    },
+    {
+     "bucket": 876,
+     "sign": -1
+    },
+    {
+     "bucket": 3689,
+     "sign": -1
+    },
+    {
+     "bucket": 62,
+     "sign": -1
+    },
+    {
+     "bucket": 3169,
+     "sign": 1
+    }
+   ]
+  },
+  {
+   "text": "hyphen-word slash/word dot.word under_word",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 5409,
+     "sign": 1
+    },
+    {
+     "bucket": 4636,
+     "sign": 1
+    },
+    {
+     "bucket": 6826,
+     "sign": 1
+    },
+    {
+     "bucket": 6577,
+     "sign": 1
+    },
+    {
+     "bucket": 594,
+     "sign": -1
+    },
+    {
+     "bucket": 4269,
+     "sign": 1
+    },
+    {
+     "bucket": 4481,
+     "sign": 1
+    }
+   ]
+  },
+  {
+   "text": "use right report struct view these debug código node route yet method merge pull once server the get also before call type than revert the expect would docs read revisão add cli under open show message improve help add start please and more table 286 1639 split 956 thread simple flag stack lib/http-client/retry.rs run thread assert plan merge disable method like 2383?",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 7289,
+     "sign": -1
+    },
+    {
+     "bucket": 4948,
+     "sign": -1
+    },
+    {
+     "bucket": 542,
+     "sign": 1
+    },
+    {
+     "bucket": 1228,
+     "sign": -1
+    },
+    {
+     "bucket": 7769,
+     "sign": -1
+    },
+    {
+     "bucket": 3051,
+     "sign": 1
+    },
+    {
+     "bucket": 4732,
+     "sign": -1
+    },
+    {
+     "bucket": 4223,
+     "sign": 1
+    },
+    {
+     "bucket": 2937,
+     "sign": 1
+    },
+    {
+     "bucket": 6533,
+     "sign": -1
+    },
+    {
+     "bucket": 2871,
+     "sign": -1
+    },
+    {
+     "bucket": 3209,
+     "sign": -1
+    },
+    {
+     "bucket": 2263,
+     "sign": -1
+    },
+    {
+     "bucket": 5705,
+     "sign": 1
+    },
+    {
+     "bucket": 4891,
+     "sign": -1
+    },
+    {
+     "bucket": 5770,
+     "sign": 1
+    },
+    {
+     "bucket": 3610,
+     "sign": 1
+    },
+    {
+     "bucket": 6967,
+     "sign": -1
+    },
+    {
+     "bucket": 6644,
+     "sign": -1
+    },
+    {
+     "bucket": 2908,
+     "sign": 1
+    },
+    {
+     "bucket": 2424,
+     "sign": 1
+    },
+    {
+     "bucket": 4467,
+     "sign": -1
+    },
+    {
+     "bucket": 1006,
+     "sign": 1
+    },
+    {
+     "bucket": 1582,
+     "sign": -1
+    },
+    {
+     "bucket": 6484,
+     "sign": 1
+    },
+    {
+     "bucket": 7565,
+     "sign": -1
+    },
+    {
+     "bucket": 1590,
+     "sign": 1
+    },
+    {
+     "bucket": 7899,
+     "sign": -1
+    },
+    {
+     "bucket": 6919,
+     "sign": 1
+    },
+    {
+     "bucket": 3193,
+     "sign": -1
+    },
+    {
+     "bucket": 4871,
+     "sign": 1
+    },
+    {
+     "bucket": 3493,
+     "sign": -1
+    },
+    {
+     "bucket": 4309,
+     "sign": -1
+    },
+    {
+     "bucket": 6090,
+     "sign": 1
+    },
+    {
+     "bucket": 3480,
+     "sign": -1
+    },
+    {
+     "bucket": 5981,
+     "sign": 1
+    },
+    {
+     "bucket": 7082,
+     "sign": -1
+    },
+    {
+     "bucket": 2617,
+     "sign": -1
+    },
+    {
+     "bucket": 6089,
+     "sign": 1
+    },
+    {
+     "bucket": 1346,
+     "sign": 1
+    },
+    {
+     "bucket": 6694,
+     "sign": -1
+    },
+    {
+     "bucket": 7262,
+     "sign": -1
+    },
+    {
+     "bucket": 2555,
+     "sign": 1
+    },
+    {
+     "bucket": 7061,
+     "sign": 1
+    },
+    {
+     "bucket": 7296,
+     "sign": -1
+    },
+    {
+     "bucket": 3008,
+     "sign": 1
+    },
+    {
+     "bucket": 5704,
+     "sign": 1
+    },
+    {
+     "bucket": 3493,
+     "sign": -1
+    },
+    {
+     "bucket": 1584,
+     "sign": -1
+    },
+    {
+     "bucket": 6331,
+     "sign": -1
+    },
+    {
+     "bucket": 2557,
+     "sign": 1
+    },
+    {
+     "bucket": 7843,
+     "sign": -1
+    },
+    {
+     "bucket": 6329,
+     "sign": -1
+    },
+    {
+     "bucket": 6073,
+     "sign": 1
+    },
+    {
+     "bucket": 2857,
+     "sign": -1
+    },
+    {
+     "bucket": 5878,
+     "sign": 1
+    },
+    {
+     "bucket": 726,
+     "sign": -1
+    },
+    {
+     "bucket": 637,
+     "sign": 1
+    },
+    {
+     "bucket": 5634,
+     "sign": -1
+    },
+    {
+     "bucket": 3037,
+     "sign": -1
+    },
+    {
+     "bucket": 4091,
+     "sign": -1
+    },
+    {
+     "bucket": 6024,
+     "sign": -1
+    },
+    {
+     "bucket": 6630,
+     "sign": 1
+    },
+    {
+     "bucket": 5512,
+     "sign": 1
+    },
+    {
+     "bucket": 7911,
+     "sign": 1
+    },
+    {
+     "bucket": 7998,
+     "sign": 1
+    },
+    {
+     "bucket": 1171,
+     "sign": 1
+    },
+    {
+     "bucket": 131,
+     "sign": -1
+    },
+    {
+     "bucket": 3414,
+     "sign": -1
+    },
+    {
+     "bucket": 5661,
+     "sign": -1
+    },
+    {
+     "bucket": 43,
+     "sign": -1
+    },
+    {
+     "bucket": 2446,
+     "sign": -1
+    },
+    {
+     "bucket": 6292,
+     "sign": -1
+    },
+    {
+     "bucket": 3265,
+     "sign": 1
+    },
+    {
+     "bucket": 4558,
+     "sign": -1
+    },
+    {
+     "bucket": 3037,
+     "sign": -1
+    },
+    {
+     "bucket": 4597,
+     "sign": -1
+    },
+    {
+     "bucket": 6702,
+     "sign": -1
+    },
+    {
+     "bucket": 7368,
+     "sign": 1
+    },
+    {
+     "bucket": 2792,
+     "sign": -1
+    },
+    {
+     "bucket": 1523,
+     "sign": -1
+    },
+    {
+     "bucket": 3431,
+     "sign": -1
+    },
+    {
+     "bucket": 6154,
+     "sign": -1
+    },
+    {
+     "bucket": 4895,
+     "sign": 1
+    },
+    {
+     "bucket": 6067,
+     "sign": 1
+    },
+    {
+     "bucket": 4786,
+     "sign": -1
+    },
+    {
+     "bucket": 956,
+     "sign": -1
+    },
+    {
+     "bucket": 6950,
+     "sign": -1
+    },
+    {
+     "bucket": 595,
+     "sign": -1
+    },
+    {
+     "bucket": 45,
+     "sign": -1
+    },
+    {
+     "bucket": 1598,
+     "sign": 1
+    },
+    {
+     "bucket": 3094,
+     "sign": -1
+    },
+    {
+     "bucket": 6638,
+     "sign": -1
+    },
+    {
+     "bucket": 5554,
+     "sign": 1
+    },
+    {
+     "bucket": 707,
+     "sign": 1
+    },
+    {
+     "bucket": 2218,
+     "sign": -1
+    },
+    {
+     "bucket": 6609,
+     "sign": -1
+    },
+    {
+     "bucket": 3044,
+     "sign": -1
+    },
+    {
+     "bucket": 4681,
+     "sign": 1
+    },
+    {
+     "bucket": 3216,
+     "sign": -1
+    },
+    {
+     "bucket": 775,
+     "sign": -1
+    },
+    {
+     "bucket": 3598,
+     "sign": -1
+    },
+    {
+     "bucket": 3575,
+     "sign": -1
+    },
+    {
+     "bucket": 7496,
+     "sign": -1
+    },
+    {
+     "bucket": 3607,
+     "sign": 1
+    },
+    {
+     "bucket": 3319,
+     "sign": 1
+    },
+    {
+     "bucket": 5890,
+     "sign": 1
+    },
+    {
+     "bucket": 2218,
+     "sign": -1
+    },
+    {
+     "bucket": 3698,
+     "sign": -1
+    },
+    {
+     "bucket": 5780,
+     "sign": -1
+    },
+    {
+     "bucket": 5981,
+     "sign": -1
+    },
+    {
+     "bucket": 581,
+     "sign": -1
+    },
+    {
+     "bucket": 774,
+     "sign": 1
+    },
+    {
+     "bucket": 1582,
+     "sign": -1
+    },
+    {
+     "bucket": 7742,
+     "sign": 1
+    },
+    {
+     "bucket": 4534,
+     "sign": 1
+    },
+    {
+     "bucket": 171,
+     "sign": 1
+    },
+    {
+     "bucket": 4467,
+     "sign": -1
+    },
+    {
+     "bucket": 6980,
+     "sign": 1
+    },
+    {
+     "bucket": 3221,
+     "sign": 1
+    },
+    {
+     "bucket": 2891,
+     "sign": -1
+    },
+    {
+     "bucket": 4908,
+     "sign": -1
+    },
+    {
+     "bucket": 7800,
+     "sign": -1
+    }
+   ]
+  },
+  {
+   "text": "watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch watch yet_queue check feature só dependency:",
+   "bits": 13,
+   "terms": [
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 1597,
+     "sign": 1
+    },
+    {
+     "bucket": 251,
+     "sign": 1
+    },
+    {
+     "bucket": 4756,
+     "sign": 1
+    },
+    {
+     "bucket": 3382,
+     "sign": -1
+    },
+    {
+     "bucket": 2222,
+     "sign": 1
+    },
+    {
+     "bucket": 3029,
+     "sign": 1
+    },
+    {
+     "bucket": 6880,
+     "sign": -1
+    },
+    {
+     "bucket": 2869,
+     "sign": -1
+    },
+    {
+     "bucket": 5228,
+     "sign": -1
+    },
+    {
+     "bucket": 3109,
+     "sign": -1
+    },
+    {
+     "bucket": 3003,
+     "sign": 1
+    },
+    {
+     "bucket": 7192,
+     "sign": -1
+    }
+   ]
+  }
+ ]
+}

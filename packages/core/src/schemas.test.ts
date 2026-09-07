@@ -96,6 +96,7 @@ describe("forecast-time telemetry schemas", () => {
             requestedFormat: "unspecified",
             deliverableType: "other",
           },
+          textHeadQuantiles: [6.32, 8.11, 9.74],
         },
         forecast: {
           outputP50: 100,
@@ -112,6 +113,7 @@ describe("forecast-time telemetry schemas", () => {
       },
     });
     expect(parsed.observation.actual?.outputTokenQuality).toBe("dom_estimate");
+    expect(parsed.observation.request.textHeadQuantiles).toEqual([6.32, 8.11, 9.74]);
     expect(JSON.stringify(parsed)).not.toContain("strip me");
   });
 });

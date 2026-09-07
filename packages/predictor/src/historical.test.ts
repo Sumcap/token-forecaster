@@ -14,6 +14,7 @@ import {
   promptForecastFeatures,
   promptMentionsPath,
 } from "./index.js";
+import { baseTextHead } from "./text-head/index.js";
 
 function observation(
   index: number,
@@ -805,6 +806,60 @@ describe("historicalTurnTotalForecast", () => {
     expect(full!.p50).toBeGreaterThan(short!.p50 * 1.5);
     expect(full!.p90).toBeGreaterThanOrEqual(full!.p50);
     expect(full!.p99).toBeGreaterThanOrEqual(full!.p90);
+  });
+
+  it("passes an optional base text head into the turn-total correction", () => {
+    const prompt = "write a small report into ./here.txt about predicting output tokens";
+    const request = (textHead?: readonly [number, number, number]) => ({
+      model: "claude-opus-4-8",
+      thinkingEnabled: true,
+      promptMentionsPath: promptMentionsPath(prompt),
+      promptHasImage: false,
+      boostedContext: {
+        prompt: promptForecastFeatures(prompt),
+        agentLoop: { sessionPosition: 1, loopDepth: 0, priorCallCount: 0 },
+        ...(textHead === undefined ? {} : { textHead }),
+      },
+    });
+    const without = historicalTurnTotalForecast(request(), BUNDLED_CLAUDE_CODE_PROFILE);
+    const withHead = historicalTurnTotalForecast(
+      request(baseTextHead(prompt)),
+      BUNDLED_CLAUDE_CODE_PROFILE,
+    );
+    // Both forms produce a usable, ordered, corrected forecast: a caller that
+    // cannot run the head is never worse off than one that can.
+    for (const forecast of [without, withHead]) {
+      expect(forecast!.promptCorrectionApplied).toBe(true);
+      expect(forecast!.p50).toBeGreaterThan(0);
+      expect(forecast!.p90).toBeGreaterThanOrEqual(forecast!.p50);
+      expect(forecast!.p99).toBeGreaterThanOrEqual(forecast!.p90);
+    }
+  });
+
+  it("ignores indices >= 38 when the shipped turnTotalBoost is a v3 model", () => {
+    const boost = BUNDLED_CLAUDE_CODE_PROFILE.turnTotalBoost;
+    expect(boost).toBeDefined();
+    const v3Profile = {
+      ...BUNDLED_CLAUDE_CODE_PROFILE,
+      turnTotalBoost: { ...boost!, featureSchema: "portable-precall-v3" as const },
+    };
+    const prompt = "write a small report into ./here.txt about predicting output tokens";
+    const request = (textHead?: readonly [number, number, number]) => ({
+      model: "claude-opus-4-8",
+      thinkingEnabled: true,
+      promptMentionsPath: promptMentionsPath(prompt),
+      promptHasImage: false,
+      boostedContext: {
+        prompt: promptForecastFeatures(prompt),
+        agentLoop: { sessionPosition: 1, loopDepth: 0, priorCallCount: 0 },
+        ...(textHead === undefined ? {} : { textHead }),
+      },
+    });
+    const plain = historicalTurnTotalForecast(request(), v3Profile);
+    const headed = historicalTurnTotalForecast(request([6.5, 8.25, 9.75]), v3Profile);
+    const absurd = historicalTurnTotalForecast(request([-99, 0, 999]), v3Profile);
+    expect(headed).toEqual(plain);
+    expect(absurd).toEqual(plain);
   });
 
   it("skips the turn-total correction without prompt features or thinking", () => {
