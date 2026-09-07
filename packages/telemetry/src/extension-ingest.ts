@@ -213,6 +213,22 @@ export class JsonlExtensionTelemetryWriter {
     events: readonly ExtensionTelemetryClientEvent[],
   ): Promise<void> {
     const parsed = events.map((event) => extensionTelemetryClientEventSchema.parse(event));
+    // The extension collector has no storage mode, no ceiling and no redactor
+    // -- all three live on JsonlTelemetryWriter, which this route does not
+    // use. But `extensionResearchEventSchema` embeds the full observation
+    // schema, and that schema now permits `request.promptText`. So a client
+    // authenticating as an install could append verbatim prompts to this file
+    // with nothing standing in the way. Drop the text here, unconditionally:
+    // this route is documented as one the prompt text never reaches, and a
+    // route with no enforcement must not accept a field that needs it.
+    const stripped = new Set<string>();
+    for (const event of parsed) {
+      if (event.kind !== "research") continue;
+      const request = event.observation.request as { promptText?: string };
+      if (request.promptText === undefined) continue;
+      delete request.promptText;
+      stripped.add(event.id);
+    }
     return this.serialize(async () => {
       if (this.blockedUsers.has(installationIdHash)) {
         throw new Error("installation is revoked");
@@ -222,7 +238,15 @@ export class JsonlExtensionTelemetryWriter {
       await mkdir(path.dirname(this.filePath), { recursive: true });
       const receivedAt = new Date().toISOString();
       const lines = fresh.map((event) =>
-        JSON.stringify({ receivedAt, installationIdHash, event }),
+        JSON.stringify({
+          receivedAt,
+          installationIdHash,
+          // Say so on the row rather than leaving a mode that now describes
+          // something this file does not hold. A reader must not have to infer
+          // from an absent field whether text was never sent or was dropped.
+          ...(stripped.has(event.id) ? { promptTextDroppedByCollector: true } : {}),
+          event,
+        }),
       );
       await appendFile(this.filePath, `${lines.join("\n")}\n`, {
         encoding: "utf8",

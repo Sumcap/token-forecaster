@@ -532,6 +532,13 @@ export function historicalTurnTotalForecast(
         ...(request.boostedContext?.textHead === undefined
           ? {}
           : { textHead: request.boostedContext.textHead }),
+        // Session-so-far is turn-scale by construction, so a turn-total
+        // correction is exactly what wants it. Dropping it here scored every
+        // production row as "no session context" while the trainer scored the
+        // same rows with it populated.
+        ...(request.boostedContext?.sessionContext === undefined
+          ? {}
+          : { sessionContext: request.boostedContext.sessionContext }),
         agentLoop: {
           sessionPosition:
             Number.isInteger(sessionPosition) && sessionPosition >= 0

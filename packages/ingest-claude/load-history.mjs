@@ -437,6 +437,20 @@ const studySalt = () => {
   return runSalt;
 };
 
+/**
+ * The one derivation of a workload id. It was open-coded in the scanner and
+ * recomputed by hand in `claude_calls.mjs`; when the study salt was added here
+ * the hand-rolled copy kept hashing without it, the two stopped agreeing, and
+ * every harvested call was silently dropped as unattributable. Anything that
+ * needs to map a workload root to its id calls this.
+ */
+export function workloadIdFor(workloadRoot) {
+  return createHash("sha256")
+    .update(`token-forecaster-workload\0${studySalt()}\0${workloadRoot}`)
+    .digest("hex")
+    .slice(0, 16);
+}
+
 async function* jsonlFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   for (const entry of entries) {
@@ -508,10 +522,7 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
     filesScanned++;
     const relative = path.relative(projectsDir, file);
     const workloadRoot = relative.split(path.sep)[0] || "(root)";
-    const workloadId = createHash("sha256")
-      .update(`token-forecaster-workload\0${studySalt()}\0${workloadRoot}`)
-      .digest("hex")
-      .slice(0, 16);
+    const workloadId = workloadIdFor(workloadRoot);
     const lines = createInterface({
       input: createReadStream(file, "utf8"),
       crlfDelay: Infinity,

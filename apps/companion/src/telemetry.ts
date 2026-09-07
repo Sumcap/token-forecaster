@@ -273,7 +273,15 @@ async function buildRow(
 
   const features = observation.promptFeatures;
   return {
-    id: observation.id,
+    // The ingest ids are built as `claude:<sessionId>:<requestId>` and
+    // `codex:<sessionId>:<turn>:<call>`, so shipping one verbatim would hand
+    // the collector the raw session UUID (which is the local transcript
+    // filename) and the raw Anthropic `req_` id (which joins these rows to the
+    // provider's own logs) -- next to, and defeating, the salted hashes of
+    // exactly those fields below. Hash it under the same salt: still unique,
+    // still stable, still joinable to the text row, and no longer a key into
+    // anything off this machine.
+    id: hashTelemetryIdentifier(observation.id, salt).slice(0, 32),
     timestamp: observation.timestamp,
     provider: observation.provider,
     model: observation.model ?? "unknown",

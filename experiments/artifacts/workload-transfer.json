@@ -4,7 +4,7 @@
   "readThisFirst": "Leave-one-project-out with the PERSON HELD FIXED. Every project shares one person, one prompting style, one toolchain, one machine, one Claude Code version, one model mix, one era, one account. A PASS is therefore a LOWER BOUND on the between-user problem and never a clearance. A FAIL is conclusive in the other direction: a fit that cannot survive the same person changing project will not survive the person changing.",
   "privacy": "Aggregates and salted workload hashes only. No prompt text, no response text, no file paths.",
   "corpus": {
-    "source": "/Users/polpedu/.claude/projects",
+    "source": "~/.claude/projects",
     "filesScanned": 682,
     "calls": 23368,
     "sessions": 434,
@@ -65,7 +65,7 @@
   ],
   "workloads": [
     {
-      "workloadId": "0c5debe71f4a713d",
+      "workloadId": "w00",
       "tier": "primary",
       "calls": 9505,
       "sessions": 150,
@@ -318,7 +318,7 @@
       }
     },
     {
-      "workloadId": "fdc8547dbc3865f8",
+      "workloadId": "w13",
       "tier": "primary",
       "calls": 4043,
       "sessions": 77,
@@ -571,7 +571,7 @@
       }
     },
     {
-      "workloadId": "5aa86f5894fb06c9",
+      "workloadId": "w02",
       "tier": "primary",
       "calls": 3013,
       "sessions": 52,
@@ -824,7 +824,7 @@
       }
     },
     {
-      "workloadId": "b3b23c713cfe17d3",
+      "workloadId": "w09",
       "tier": "secondary",
       "calls": 2507,
       "sessions": 14,
@@ -1077,7 +1077,7 @@
       }
     },
     {
-      "workloadId": "c798f46f3ee652a0",
+      "workloadId": "w10",
       "tier": "primary",
       "calls": 1680,
       "sessions": 80,
@@ -1330,12 +1330,12 @@
       }
     },
     {
-      "workloadId": "9782f4b19f0d079f",
+      "workloadId": "w07",
       "tier": "secondary",
       "skipped": "holdout under floor (2 sessions, 306 calls)"
     },
     {
-      "workloadId": "6c5f3a32e14abb41",
+      "workloadId": "w06",
       "tier": "secondary",
       "calls": 579,
       "sessions": 11,
@@ -1524,7 +1524,7 @@
       }
     },
     {
-      "workloadId": "58ddff4e530a01d8",
+      "workloadId": "w01",
       "tier": "secondary",
       "calls": 374,
       "sessions": 12,

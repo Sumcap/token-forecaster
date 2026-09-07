@@ -125,10 +125,18 @@ command with `cd /testbed &&`), then `nl`, `grep`, `python`, `sed`, `ls`.
 
 ## Licensing
 
-`SWE-bench/experiments` is MIT. The trajectories are model output over public
-GitHub issues from the SWE-bench task set; no human prompt text is involved
-beyond the issue statements, which are already public. Use here is research
-input only and nothing is redistributed.
+**The trajectories carry no stated licence.** `SWE-bench/experiments` is MIT,
+but the trajectories are not in that repository: they are third-party
+submissions under `s3://swe-bench-submissions/<prefix>/<submission>/trajs`,
+each produced by a different submitting organisation, and neither the bucket
+nor the submissions state terms. The census records them as `unstated` rather
+than borrowing the neighbouring repository's MIT.
+
+What is true regardless: the content is model output over public GitHub issues
+from the SWE-bench task set, so no human prompt text is involved beyond the
+issue statements, which are already public. Use here is research input only,
+nothing is redistributed, and no derived model trained on this data should be
+published without settling terms with the submitters first.
 
 ## Reproduce
 

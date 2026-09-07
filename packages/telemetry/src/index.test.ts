@@ -118,6 +118,71 @@ describe("JSONL telemetry", () => {
   });
 });
 
+describe("the extension route and prompt text", () => {
+  it("drops promptText, which it has no machinery to enforce a mode for", async () => {
+    // `extensionResearchEventSchema` embeds the full observation schema, and
+    // that schema permits `request.promptText` under redacted/full_opt_in. But
+    // the three enforcement layers -- the mode ceiling, the redactor, and the
+    // separate 0600 text file -- all live on JsonlTelemetryWriter, which this
+    // route does not use. So the field must not survive the trip.
+    const directory = await mkdtemp(path.join(tmpdir(), "token-extension-text-"));
+    directories.push(directory);
+    const filePath = path.join(directory, "events.jsonl");
+    const writer = new JsonlExtensionTelemetryWriter({ filePath });
+
+    await writer.appendBatch("install-hash-0001", [researchEvent("with-text")]);
+    await writer.flush?.();
+
+    const contents = await readFile(filePath, "utf8");
+    expect(contents).not.toContain("this text must never reach the collector");
+    expect(contents).not.toContain('"promptText"');
+
+    const stored = contents
+      .split("\n")
+      .filter((line) => line.trim())
+      .map((line) => JSON.parse(line) as Record<string, unknown>);
+    expect(stored).toHaveLength(1);
+    // Say what happened rather than leaving a reader to infer it from absence.
+    expect(stored[0]?.promptTextDroppedByCollector).toBe(true);
+    const request = (stored[0]?.event as { observation: { request: Record<string, unknown> } })
+      .observation.request;
+    expect(request).not.toHaveProperty("promptText");
+    // The client's claim about what IT held is left intact: the row says the
+    // client opted in AND that this collector dropped the text, which are two
+    // different facts and both are true.
+    expect(request.promptStorageMode).toBe("full_opt_in");
+  });
+});
+
+function researchEvent(id: string): ExtensionTelemetryClientEvent {
+  return {
+    schemaVersion: EXTENSION_TELEMETRY_SCHEMA_VERSION,
+    id: `research-${id}-00000000`,
+    timestamp: "2026-08-27T12:00:00.000Z",
+    extensionVersion: "0.1.0",
+    consentVersion: 1,
+    kind: "research",
+    observation: {
+      id: "claude:sess-0001:req_0001",
+      timestamp: "2026-08-27T12:00:00.000Z",
+      provider: "anthropic",
+      model: "claude-opus-5",
+      request: {
+        promptStorageMode: "full_opt_in",
+        promptText: "this text must never reach the collector",
+      },
+      forecast: {
+        outputP50: 500,
+        outputP90: 2_000,
+        predictorVersion: "test-profile",
+        forecastSource: "historical",
+        confidence: "low",
+      },
+      actual: { outputTokens: 100 },
+    },
+  } as ExtensionTelemetryClientEvent;
+}
+
 function diagnosticEvent(id: string): ExtensionTelemetryClientEvent {
   return {
     schemaVersion: EXTENSION_TELEMETRY_SCHEMA_VERSION,

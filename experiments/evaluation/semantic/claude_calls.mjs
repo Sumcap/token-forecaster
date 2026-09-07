@@ -22,7 +22,6 @@
  * Output carries the CLEANED TURN-ROOT PROMPT TEXT on turn-opening calls, so it
  * is written under the gitignored dataset directory and never committed.
  */
-import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import { createInterface } from "node:readline";
@@ -31,6 +30,7 @@ import path from "node:path";
 import {
   hasThinkingBlock,
   loadRequests,
+  workloadIdFor,
 } from "../../../packages/ingest-claude/load-history.mjs";
 
 const args = process.argv.slice(2);
@@ -42,16 +42,10 @@ const staging = argValue("--staging");
 const out = argValue("--out");
 if (!staging || !out) throw new Error("--staging and --out are required");
 
-const workloadId = (root) =>
-  createHash("sha256")
-    .update(`token-forecaster-workload\0${root}`)
-    .digest("hex")
-    .slice(0, 16);
-
 const dirs = (await readdir(staging, { withFileTypes: true }))
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name);
-const byWorkload = new Map(dirs.map((sha) => [workloadId(sha), sha]));
+const byWorkload = new Map(dirs.map((sha) => [workloadIdFor(sha), sha]));
 
 /**
  * Largest single `tool_use` input, per call.

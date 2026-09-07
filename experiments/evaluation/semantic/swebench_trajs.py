@@ -397,7 +397,13 @@ def parse_trajectory(path: Path, submission: str, model: str | None, encoder):
                     "stop_reason": message.get("status"),
                 }
             )
-        return rows
+        # A `1.1` trajectory whose messages carry no `usage` is a LiteLLM-
+        # normalised submission: the format tag says per-step usage, the
+        # payload does not have it. Returning here would hand back an empty
+        # corpus and report it as a successful parse. Fall through to the
+        # estimated path instead, which is what the legacy era gets.
+        if rows:
+            return rows
 
     for message in messages:
         if not isinstance(message, dict) or message.get("role") != "assistant":

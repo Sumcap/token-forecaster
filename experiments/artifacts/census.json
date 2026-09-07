@@ -399,7 +399,7 @@
       "prompt_chars_p90": null,
       "prompt_present_fraction": 0.0,
       "licenses": {
-        "MIT": 120
+        "unstated": 120
       },
       "loop": true,
       "cycle": false,
@@ -426,7 +426,7 @@
       "prompt_chars_p90": 3993,
       "prompt_present_fraction": 1.0,
       "licenses": {
-        "None": 56318
+        "ODC-BY-1.0": 56318
       },
       "loop": false,
       "cycle": true,

@@ -174,7 +174,7 @@ def read_jsonl(path: Path):
                 yield json.loads(line)
 
 
-def flat_rows(path: Path, kind: str):
+def flat_rows(path: Path, kind: str, default_license: str | None = None):
     """`github-agent-chats` and the WildChat slices share the flat turn schema.
 
     They do NOT share what its two id columns mean, and reading them the same
@@ -199,7 +199,7 @@ def flat_rows(path: Path, kind: str):
             "calls": row.get("calls", 1),
             "total": row.get("total", 0),
             "prompt_chars": len(text),
-            "license": row.get("license"),
+            "license": row.get("license") or default_license,
             "tool": row.get("tool"),
         }
 
@@ -279,7 +279,12 @@ def main() -> int:
                     "calls": 0,
                     "total": 0,
                     "prompt_chars": 0,
-                    "license": "MIT",
+                    # The trajectories are third-party submissions in
+                    # s3://swe-bench-submissions, each written by a different
+                    # org. `SWE-bench/experiments` is MIT; these are not in it
+                    # and no licence is stated for them. Record that, do not
+                    # borrow a neighbouring repo's licence.
+                    "license": "unstated",
                 },
             )
             entry["calls"] += 1
@@ -294,7 +299,7 @@ def main() -> int:
         path = public / name / "turns.jsonl"
         if not path.exists():
             continue
-        part = list(flat_rows(path, "wildchat"))
+        part = list(flat_rows(path, "wildchat", "ODC-BY-1.0"))
         slices[name] = len(part)
         wild.extend(part)
     if wild:

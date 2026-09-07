@@ -172,6 +172,27 @@ describe("telemetry upload", () => {
     }
   });
 
+  it("never ships a raw session or request id in the row id", async () => {
+    // The ingest ids are `codex:<sessionId>:<turn>:<call>` and
+    // `claude:<sessionId>:<requestId>`. Shipping one verbatim would hand the
+    // collector the raw session UUID and the raw Anthropic `req_` id, beside
+    // and defeating the salted hashes of those same fields. hash_only is the
+    // MINIMUM uploading tier, so this has to hold at the bottom of the ladder.
+    const { features } = await runUpload("hash_only");
+    expect(features.length).toBeGreaterThan(0);
+    for (const row of features) {
+      const id = (row as { id: string }).id;
+      expect(id).not.toContain("sess-0001");
+      expect(id).not.toContain("codex:");
+      expect(id).not.toContain("claude:");
+      expect(id).toMatch(/^[0-9a-f]{32}$/);
+      expect(JSON.stringify(row)).not.toContain("sess-0001");
+    }
+    // Still unique per row, or the collector cannot tell two calls apart.
+    const ids = features.map((row) => (row as { id: string }).id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
   it("sends redacted text under redacted, with the features beside it", async () => {
     const { result, features, texts, storedRows } = await runUpload("redacted");
     expect(result.skipped).toBeUndefined();
