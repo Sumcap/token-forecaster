@@ -7,6 +7,7 @@ export {
   outputForecastSchema,
   thinkingUsageSchema,
   promptStorageModeSchema,
+  stopReasonSchema,
   expectedOutputKindSchema,
   expectedOutputKindSourceSchema,
   resolvedFileContextSchema,
@@ -19,6 +20,7 @@ export {
   extensionTelemetryClientEventSchema,
   EXTENSION_TELEMETRY_SCHEMA_VERSION,
   DEFAULT_PROMPT_STORAGE_MODE,
+  MAX_PROMPT_TEXT_CHARS,
 } from "./schemas.js";
 export type {
   CountQuality,
@@ -29,6 +31,7 @@ export type {
   OutputForecast,
   ThinkingUsage,
   PromptStorageMode,
+  StopReasonObservation,
   ExpectedOutputKind,
   ExpectedOutputKindSource,
   ResolvedFileContextObservation,

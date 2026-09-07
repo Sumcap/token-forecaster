@@ -13,6 +13,7 @@ import {
   uninstallAlias,
 } from "./shell-alias.js";
 import type { CompanionService } from "./service.js";
+import { isUploadMode } from "./telemetry.js";
 
 /**
  * A deliberately small loopback API.
@@ -239,6 +240,8 @@ export async function startServer(options: StartServerOptions): Promise<RunningS
         shellAlias: shellRc() !== null && aliasInstalled(shellRc()!),
         shellAliasSupported: shellRc() !== null,
         shellAliasOffered: service.shellAliasOffered,
+        // The token itself is never served back, only whether one is set.
+        telemetry: service.telemetry,
       });
       return;
     }
@@ -267,6 +270,27 @@ export async function startServer(options: StartServerOptions): Promise<RunningS
         // The rungs it selects are baked into the profile, so the switch means
         // nothing until the profile is rebuilt.
         if (changed) options.onRebuild();
+      }
+      const telemetry = body["telemetry"];
+      if (telemetry && typeof telemetry === "object") {
+        const patch = telemetry as Record<string, unknown>;
+        const mode = patch["mode"];
+        if (mode !== undefined && !isUploadMode(mode)) {
+          send(response, 400, {
+            error: "telemetry.mode must be none, hash_only, redacted or full_opt_in",
+          });
+          return;
+        }
+        service.setTelemetry({
+          ...(isUploadMode(mode) ? { mode } : {}),
+          ...(typeof patch["url"] === "string" ? { url: patch["url"] } : {}),
+          ...(typeof patch["token"] === "string" ? { token: patch["token"] } : {}),
+        });
+        // Changing the tier changes what a row contains, so rows already sent
+        // under the old one are not resent: the collector is append-only and a
+        // second copy of a row under a richer tier would be a duplicate, not an
+        // upgrade. `resetUploadCursor` is the deliberate way to resend.
+        if (patch["resendEverything"] === true) service.resetUploadCursor();
       }
       if (typeof body["launchAtLogin"] === "boolean") {
         service.store.set("launch_at_login", body["launchAtLogin"] ? "true" : "false");

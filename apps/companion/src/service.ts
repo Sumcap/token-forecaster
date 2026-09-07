@@ -6,6 +6,16 @@ import { join } from "node:path";
 import { mergeImportStats, type ImportStats, type UsageProvider } from "@token-forecaster/core";
 
 import { meterFill } from "./meter.js";
+import {
+  SETTING_INGEST_TOKEN,
+  SETTING_INGEST_URL,
+  SETTING_UPLOAD_MODE,
+  telemetrySettings,
+  uploadPendingObservations,
+  type TelemetrySettings,
+  type TelemetryUploadMode,
+  type UploadResult,
+} from "./telemetry.js";
 import { importClaudeHistory } from "@token-forecaster/ingest-claude";
 import { defaultCodexSessionsDir, importCodexHistory } from "@token-forecaster/ingest-codex";
 import {
@@ -311,6 +321,8 @@ export class CompanionService {
   };
   #profile: PersonalProfile | null;
   #running = false;
+  /** One upload at a time: a slow collector must not stack up runs. */
+  #uploading = false;
   /**
    * One slot per reporting session, not one slot in total.
    *
@@ -379,6 +391,66 @@ export class CompanionService {
 
   setDraftConditioning(enabled: boolean): void {
     this.store.set(SETTING_DRAFT_CONDITIONING, enabled ? "true" : "false");
+  }
+
+  /**
+   * What, if anything, this machine sends to a research collector.
+   *
+   * `none` by default and after every fresh install: nothing is uploaded until
+   * somebody says so, and saying so means naming a collector as well as a
+   * tier. See ADR 0002 for what each tier sends.
+   */
+  get telemetry(): TelemetrySettings {
+    return telemetrySettings(this.store);
+  }
+
+  setTelemetry(settings: {
+    mode?: TelemetryUploadMode;
+    url?: string;
+    /** `keychain:<service>[/<account>]` reads from the macOS keychain instead. */
+    token?: string;
+  }): void {
+    if (settings.mode !== undefined) this.store.set(SETTING_UPLOAD_MODE, settings.mode);
+    if (settings.url !== undefined) this.store.set(SETTING_INGEST_URL, settings.url.trim());
+    if (settings.token !== undefined) this.store.set(SETTING_INGEST_TOKEN, settings.token.trim());
+  }
+
+  /** Forget that anything was uploaded, so the next run sends it all again. */
+  resetUploadCursor(): void {
+    this.store.clearUploadCursor();
+  }
+
+  /**
+   * Send whatever the chosen tier allows, then return the counts.
+   *
+   * Called after an index run, never awaited by anything a user is looking at.
+   */
+  async uploadTelemetry(log?: (message: string) => void): Promise<UploadResult> {
+    if (this.#uploading) {
+      return { uploaded: 0, batches: 0, failed: 0, remaining: 0, skipped: "nothing_pending" };
+    }
+    this.#uploading = true;
+    try {
+      return await uploadPendingObservations({
+        store: this.store,
+        claudeDir: this.claudeDir,
+        codexDir: this.codexDir,
+        predictorVersion: this.#profile?.id ?? "personal-untrained",
+        forecast: (request) => {
+          const result = this.forecast(request);
+          return {
+            p50: result.p50,
+            p90: result.p90,
+            p99: result.p99,
+            source: result.source,
+            sampleSize: result.sampleSize,
+          };
+        },
+        ...(log ? { log } : {}),
+      });
+    } finally {
+      this.#uploading = false;
+    }
   }
 
   /**

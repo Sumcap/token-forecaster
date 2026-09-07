@@ -48,6 +48,8 @@ export interface ClaudeHistoryRow {
   thinkingChars: number;
   blockTypes: Set<string>;
   tools: string[];
+  /** Characters in the largest single tool input this call emitted. */
+  maxToolChars: number;
   model: string | null;
   effort: string | null;
   sessionId: string | null;
@@ -78,6 +80,8 @@ export interface ClaudeHistoryRow {
   /** Slash-command name on the turn root, `"none"`, or null when unknown. */
   turnCommand?: string | null;
   turnHasImage?: boolean | null;
+  /** Cleaned turn-root prompt text; present only with `withPromptText`. */
+  turnPromptText?: string | null;
 
   // --- present only with `withResolvedFileContext` ---
   toolPathHashes?: string[];
@@ -93,6 +97,13 @@ export interface LoadRequestsOptions {
   withLoopContext?: boolean;
   withPromptFeatures?: boolean;
   withResolvedFileContext?: boolean;
+  /**
+   * LOCAL ONLY. Keep the cleaned turn-root text on each row as
+   * `turnPromptText`. The loader's own comment spells out the contract: a
+   * caller that asks for this is responsible for making sure the text does not
+   * reach a committed artifact.
+   */
+  withPromptText?: boolean;
 }
 
 export interface LoadRequestsResult {
@@ -101,6 +112,13 @@ export interface LoadRequestsResult {
 }
 
 export declare function derivePromptFeatures(rawText: unknown): PromptFeaturesRaw | null;
+
+/**
+ * The human text with harness wrappers removed, or null when nothing human is
+ * left. LOCAL ONLY, like `withPromptText`: this is the one export of this
+ * module that returns text.
+ */
+export declare function cleanPromptText(rawText: unknown): string | null;
 
 export declare function defaultProjectsDir(): string;
 

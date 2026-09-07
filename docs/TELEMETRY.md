@@ -37,20 +37,121 @@ completed `Read`/`Glob`/`Grep` steps before a later call. It stores counts and a
 boolean only—no paths. Omit the entire object when that context was not
 observed; missing is not zero.
 
-Raw prompts are unnecessary. Default to `hash_only`: store privacy-safe prompt
-features and, if deduplication is needed, a salted prompt hash. Rotate the salt
-separately from the data and do not upload it. User and workload hashes need a
-stable study salt so the evaluator can resample correlated blocks; keep that
-salt in the VM secret store.
+## The four storage tiers
 
-Semantic forecasting does not change this. The measured way to use prompt
-text (STATE-OF-PLAY §6.32) is a text head computed on the client and blended
-locally; the only thing worth uploading is that head's prediction. Shipping
-embeddings, let alone text, would need its own ADR. See
-`docs/SEMANTIC-PLAN.md`.
+`promptStorageMode` is no longer a label. Since ADR 0002 it is enforced by the
+schema, by the JSONL writer and by the ingest handler, and it decides exactly
+which fields a row may carry.
 
-That upload now has a field. `request.textHeadQuantiles` is an optional
-three-number tuple, `[p50, p90, p99]` on the `log1p(tokens)` scale, holding
+| field | `none` | `hash_only` | `redacted` | `full_opt_in` |
+| --- | --- | --- | --- | --- |
+| `actual` usage, `model`, `modelSnapshot` | — | yes | yes | yes |
+| `metadata.sessionId`, `userIdHash` (salted) | — | yes | yes | yes |
+| `turnRootId` (salted), `callIndex`, `turnIndexInSession` | — | yes | yes | yes |
+| `toolNames`, `largestToolInputChars`, `stopReason` | — | yes | yes | yes |
+| `promptMentionsPath`, `promptHasImage` | — | yes | yes | yes |
+| `textHeadQuantiles` (three numbers, not invertible) | — | yes | yes | yes |
+| `promptForecastFeatures` | — | — | yes | yes |
+| `promptText` | — | — | redacted | verbatim |
+
+`none` means no row is sent at all, not a row with empty fields. It is the
+default, and a fresh install stays there until somebody names both a tier and a
+collector.
+
+The companion omits `promptForecastFeatures` under `hash_only` rather than
+mapping the store's own feature columns onto it: the two feature sets do not
+line up, and filling in the difference would mean inventing five of the seven
+fields. A client that holds the draft — the extension, sheep-manager — is not
+subject to that and sends features under `hash_only` as it always has.
+
+Three checks stand between a client and a text file it did not opt into:
+
+1. `forecastObservationSchema` rejects a row carrying `promptText` under `none`
+   or `hash_only`, or with no `promptStorageMode` at all. Because the check is
+   on the schema, it runs in the writer, in the ingest handler, and in any
+   reader replaying a file.
+2. `JsonlTelemetryWriter`'s `mode` is the file's ceiling. A `none`/`hash_only`
+   file strips the text and the field name with it; a `redacted` file re-runs
+   the redactor over whatever it is handed, whatever the client claims.
+3. `createTelemetryIngestHandler` writes text only to a separate `textWriter`;
+   the feature row, minus the text, always goes to the feature writer. With no
+   text writer configured, a row with text is accepted at 202 and the text is
+   dropped.
+
+`packages/telemetry/src/leak.test.ts` asserts all three on file bytes rather
+than on parsed objects, because a serialiser that writes a field the schema
+dropped would pass an object comparison.
+
+### The redactor
+
+`redactPromptText(text)` is a pure function returning the redacted text and a
+count per class. It replaces filesystem paths (`<path>`), URLs, bare hostnames
+and IPv4 addresses (`<url>`), e-mail addresses (`<email>`), uuids and long hex
+runs (`<hex>`), long opaque runs (`<b64>`), and provider token shapes, bearer
+values and `key=value` secrets (`<secret>`). It keeps prose, identifiers and
+code. It is idempotent, so running it on the client and again on the server
+costs nothing.
+
+Grade it before trusting it:
+
+```sh
+pnpm --filter @token-forecaster/telemetry build
+node packages/telemetry/scripts/grade-redactor.mjs
+```
+
+It reads every turn-root prompt on the machine, redacts, then runs a second and
+independently written detector over the output. It prints counts only — for a
+residual hit it prints the class and the matched length, never the text. The
+target is zero hits; on this machine's 1,885 turn-root prompts (2.5 M
+characters) it is zero.
+
+### Deleting an installation's rows, and retention
+
+Rows say which installation sent them in `metadata.userIdHash`: a random opaque
+id the client generates on first use and keeps locally. No account exists, so
+that string is the whole identity.
+
+- `DELETE /v1/installations/:installationId`, bearer-authed, appends a tombstone
+  to `deletions.jsonl` beside the data files and answers 202.
+- `packages/telemetry/scripts/purge-installation.mjs` does the physical
+  removal. Run it with the collector stopped: an append-only JSONL cannot be
+  rewritten safely underneath live appends.
+
+```sh
+# dry run: prints what would go
+node packages/telemetry/scripts/purge-installation.mjs \
+  --file /var/lib/token-forecaster/observations.jsonl \
+  --file /var/lib/token-forecaster/observations-text.jsonl
+
+# apply every pending tombstone, and the retention window with it
+systemctl stop token-forecaster-ingest
+node packages/telemetry/scripts/purge-installation.mjs \
+  --file /var/lib/token-forecaster/observations.jsonl \
+  --file /var/lib/token-forecaster/observations-text.jsonl \
+  --retain-days 400 --apply
+systemctl start token-forecaster-ingest
+```
+
+The intended cron is that command, nightly, at a quiet hour. It is written down
+here and deliberately not deployed by this repository: the retention number is
+the operator's decision and belongs beside their own backup policy.
+
+## The old advice, still true for anything that has not opted in
+
+Raw prompts are unnecessary for most of this. Default to `hash_only`: store
+privacy-safe prompt features and, if deduplication is needed, a salted prompt
+hash. Rotate the salt separately from the data and do not upload it. User and
+workload hashes need a stable study salt so the evaluator can resample
+correlated blocks; keep that salt in the VM secret store.
+
+Semantic forecasting is what changed this. The measured way to use prompt text
+(STATE-OF-PLAY §6.32) is a text head computed on the client and blended
+locally, and the only thing worth uploading *from one machine* is that head's
+prediction. The reason text collection now exists at all is that the 1% figure
+cannot be interpreted without other people's prompts: see ADR 0002 and
+`docs/PLAN-OF-ATTACK.md`.
+
+`request.textHeadQuantiles` is an optional three-number tuple, `[p50, p90, p99]` on the `log1p(tokens)` scale, holding
 exactly what `baseTextHead(prompt)` returned for the turn root; it sits beside
 `promptForecastFeatures` and is written by any client that already sends those
 features and still holds the draft. Send it only when the head actually ran --
@@ -100,11 +201,52 @@ export TOKEN_FORECASTER_PORT=8787
 pnpm telemetry:serve
 ```
 
-Clients POST a single `ForecastObservation` as JSON to `/v1/observations` with
-`Authorization: Bearer …`; `/healthz` is the only unauthenticated route. The
-server caps rows at 256 KiB, returns generic validation errors, never logs
-bodies, and strips schema-unknown fields before writing. Bind to loopback and
-let Caddy, nginx, or your cloud load balancer handle TLS and rate limiting.
+Clients POST either a single `ForecastObservation` or an array of up to 200 of
+them as JSON to `/v1/observations` with `Authorization: Bearer …`; `/healthz` is
+the only unauthenticated route. The server caps a single row at 256 KiB and a
+batch at 2 MiB, returns generic validation errors, never logs bodies, and
+strips schema-unknown fields before writing. Bind to loopback and let Caddy,
+nginx, or your cloud load balancer handle TLS and rate limiting.
+
+`TF_TEXT_MODE` sets the prompt-text file's ceiling; it defaults to `redacted`
+and writes `observations-text.jsonl` beside the feature file at mode 600. Set
+it to `none` to run without a text file at all, in which case rows carrying
+text are still accepted and their text dropped.
+
+## Uploading from the companion daemon
+
+The companion is the main new source: it already holds every Claude Code and
+Codex turn with true provider usage. Uploading is off until it is turned on:
+
+```sh
+node apps/companion/dist/cli.js telemetry \
+  --mode redacted \
+  --url https://telemetry.example.com \
+  --token 'keychain:token-forecaster-ingest'   # or a plain string
+node apps/companion/dist/cli.js telemetry      # report only
+```
+
+`--token keychain:<service>[/<account>]` reads from the macOS keychain, so the
+token is not sitting in a SQLite file that gets copied around with the derived
+data. The daemon uploads after each index run, in batches of 200, never
+blocking the status line; a failed batch does not move the cursor and goes
+again next run. `https` is required except on loopback.
+
+Two things on those rows are worth knowing before grading them:
+
+- The `forecast` block is **the installation's own pre-call forecast function
+  evaluated at upload time**, not a forecast the user saw, and it is in-sample
+  for the personal profile. Grade models on `actual`; treat `forecast` as
+  provenance.
+- `actual.inputTokens` is optional. Claude Code transcripts record the billed
+  output of every call and no per-call input count; a zero there would be an
+  invented measurement.
+
+Loop-structure columns are filled in by the importers going forward. Rows
+imported before that migration keep null, and the Codex importer is incremental
+by file identity, so an unchanged rollout is not re-read and keeps its nulls.
+Null there means "imported before the importer looked", never "no tools" — an
+empty tool list is what that looks like.
 
 ## Chrome extension collector
 

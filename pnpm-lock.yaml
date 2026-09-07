@@ -32,6 +32,12 @@ importers:
       '@token-forecaster/personal':
         specifier: workspace:*
         version: link:../../packages/personal
+      '@token-forecaster/predictor':
+        specifier: workspace:*
+        version: link:../../packages/predictor
+      '@token-forecaster/telemetry':
+        specifier: workspace:*
+        version: link:../../packages/telemetry
       '@token-forecaster/token-counter':
         specifier: workspace:*
         version: link:../../packages/token-counter

@@ -12,6 +12,7 @@ import type {
   ForecastObservation,
   PromptStorageMode,
 } from "@token-forecaster/core";
+import { redactPromptText } from "./redact.js";
 
 export {
   DEFAULT_PROMPT_STORAGE_MODE,
@@ -21,6 +22,8 @@ export {
 export type { ForecastObservation, PromptStorageMode };
 export { createTelemetryIngestHandler } from "./http-ingest.js";
 export type { TelemetryIngestOptions } from "./http-ingest.js";
+export { REDACTION_TOKENS, redactPromptText, redactionChanged } from "./redact.js";
+export type { RedactionCounts, RedactionResult } from "./redact.js";
 export {
   JsonlExtensionTelemetryWriter,
   JsonlInstallationRegistry,
@@ -46,13 +49,22 @@ export function hashTelemetryIdentifier(value: string, salt: string): string {
 
 export interface JsonlTelemetryWriterOptions {
   filePath: string;
-  /** fsync is intentionally left to the host/shipper; each line is one append. */
+  /**
+   * The strongest prompt-storage tier this file is allowed to hold. Enforced,
+   * not advertised: see {@link JsonlTelemetryWriter}. fsync is intentionally
+   * left to the host/shipper; each line is one append.
+   */
   mode?: PromptStorageMode;
 }
 
 /**
  * Append-only, schema-valid JSONL. Calls are serialized so concurrent response
  * completions cannot interleave bytes and corrupt a line.
+ *
+ * The writer's `mode` is the file's ceiling. A `none` or `hash_only` file
+ * cannot be made to contain prompt text by any client; a `redacted` file runs
+ * the redactor over every prompt it is handed, whatever the client claims to
+ * have done already. Only a `full_opt_in` file passes text through untouched.
  */
 export class JsonlTelemetryWriter {
   readonly filePath: string;
@@ -69,8 +81,42 @@ export class JsonlTelemetryWriter {
     );
   }
 
+  /**
+   * Make the row match the file's mode, rather than trusting the client's.
+   *
+   * The mode on the row is a claim; the mode on the writer is the promise the
+   * operator made about the file. Where they disagree the file wins, silently:
+   * a client that ships text to a `hash_only` file is a bug, and the correct
+   * behaviour is that the text does not land, not that a log line somewhere
+   * quotes it. Nothing is mutated in place -- the caller keeps their object.
+   */
+  #enforceMode(observation: ForecastObservation): ForecastObservation {
+    const text = observation.request.promptText;
+    if (this.mode === "none" || this.mode === "hash_only") {
+      if (text === undefined && observation.request.promptStorageMode === this.mode) {
+        return observation;
+      }
+      const request = { ...observation.request, promptStorageMode: this.mode };
+      delete request.promptText;
+      return { ...observation, request };
+    }
+    if (this.mode === "redacted" && text !== undefined) {
+      // Run it again even when the client says it already did. "I redacted it"
+      // is not a thing a file can check, and the redactor is idempotent.
+      return {
+        ...observation,
+        request: {
+          ...observation.request,
+          promptText: redactPromptText(text).text,
+          promptStorageMode: "redacted",
+        },
+      };
+    }
+    return observation;
+  }
+
   append(observation: ForecastObservation): Promise<void> {
-    const parsed = forecastObservationSchema.parse(observation);
+    const parsed = this.#enforceMode(forecastObservationSchema.parse(observation));
     const line = `${JSON.stringify(parsed)}\n`;
     const write = this.pending.then(async () => {
       await mkdir(path.dirname(this.filePath), { recursive: true });

@@ -640,6 +640,10 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
           thinkingChars: 0,
           blockTypes: new Set(),
           tools: [],
+          // The LARGEST tool input, not their sum: a call that read one huge
+          // file and a call that ran twenty small greps have the same
+          // `toolChars` and nothing else in common.
+          maxToolChars: 0,
           model,
           effort: entry.effort ?? null,
           sessionId: entry.sessionId ?? null,
@@ -710,6 +714,7 @@ export async function loadRequests(projectsDir = defaultProjectsDir(), options =
           const chars = JSON.stringify(block.input ?? {}).length;
           record.visibleChars += chars;
           record.toolChars += chars;
+          if (chars > record.maxToolChars) record.maxToolChars = chars;
           if (block.name) record.tools.push(block.name);
           if (withResolvedFileContext) {
             mergeSemanticHash(

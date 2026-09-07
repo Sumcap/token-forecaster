@@ -34,7 +34,7 @@ import type { SufficiencyReport } from "./sufficiency.js";
 export { defaultDataDir, draftDir } from "./data-dir.js";
 export type { DataDirEnvironment } from "./data-dir.js";
 
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 
 /**
  * How many finished turns to keep.
@@ -151,6 +151,30 @@ const MIGRATIONS: readonly string[] = [
     used_fallback INTEGER NOT NULL
   );
   CREATE INDEX IF NOT EXISTS turn_outcomes_ts ON turn_outcomes (ts_ms);
+  `,
+  // v4 — loop structure per call, and the upload cursor.
+  //
+  // Which turn a call belongs to, what it asked its tools for, and why it
+  // stopped: the columns the re-forecast probe (STATE-OF-PLAY §6.34) needed
+  // and the store could not answer. All four are numbers, opaque ids and short
+  // enum strings; `tool_names` is a JSON array of tool NAMES, which is a fixed
+  // vocabulary of about twenty words, not content.
+  //
+  // Rows imported before this migration keep NULL in all four. Null there
+  // means "imported before the importer looked", not "no tools" — an empty
+  // JSON array is what "no tools" looks like.
+  //
+  // `uploaded_at` is the telemetry cursor. Set once, never cleared: an
+  // append-only collector keyed on row id gains nothing from a second copy of
+  // a row whose turn later grew.
+  `
+  ALTER TABLE observations ADD COLUMN turn_root_id TEXT;
+  ALTER TABLE observations ADD COLUMN tool_names TEXT;
+  ALTER TABLE observations ADD COLUMN largest_tool_input_chars INTEGER;
+  ALTER TABLE observations ADD COLUMN stop_reason TEXT;
+  ALTER TABLE observations ADD COLUMN uploaded_at TEXT;
+  CREATE INDEX IF NOT EXISTS observations_pending_upload
+    ON observations (uploaded_at, ts_ms);
   `,
 ];
 
@@ -284,13 +308,18 @@ export class PersonalStore {
         output_tokens, reasoning_output_tokens, total_tokens, context_window,
         source_file, source_offset,
         pf_chars, pf_words, pf_lines, pf_code_fences, pf_urls, pf_paths,
-        pf_has_question, pf_has_imperative, pf_images, pf_hash
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        pf_has_question, pf_has_imperative, pf_images, pf_hash,
+        turn_root_id, tool_names, largest_tool_input_chars, stop_reason
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
       ON CONFLICT(id) DO UPDATE SET
         output_tokens = excluded.output_tokens,
         reasoning_output_tokens = excluded.reasoning_output_tokens,
         total_tokens = excluded.total_tokens,
-        source_offset = excluded.source_offset
+        source_offset = excluded.source_offset,
+        turn_root_id = excluded.turn_root_id,
+        tool_names = excluded.tool_names,
+        largest_tool_input_chars = excluded.largest_tool_input_chars,
+        stop_reason = excluded.stop_reason
     `);
     const insertFile = this.#db.prepare(`
       INSERT INTO files (file_key, provider, path, size, mtime_ms, offset, scanned_at)
@@ -335,6 +364,14 @@ export class PersonalStore {
           f ? (f.hasImperative ? 1 : 0) : null,
           f?.images ?? null,
           f?.hash ?? null,
+          o.turnRootId ?? null,
+          // Stored as JSON rather than a joined string: a tool name is allowed
+          // to contain anything the harness calls a tool, and a separator that
+          // has to be escaped is a bug waiting for the first MCP server whose
+          // name has a comma in it.
+          o.toolNames ? JSON.stringify([...o.toolNames]) : null,
+          o.largestToolInputChars ?? null,
+          o.stopReason ?? null,
         );
       }
       for (const [fileKey, cursor] of cursors) {
@@ -374,6 +411,60 @@ export class PersonalStore {
     const sql = `SELECT * FROM observations ${where.length ? `WHERE ${where.join(" AND ")}` : ""} ORDER BY ts_ms ASC`;
     const rows = this.#db.prepare(sql).all(...params) as Record<string, unknown>[];
     return rows.map(rowToObservation);
+  }
+
+  /**
+   * The oldest observations that have never been uploaded, oldest first.
+   *
+   * Oldest first on purpose: an upload that keeps failing should keep retrying
+   * the same rows rather than walking forward and leaving a hole behind it.
+   */
+  pendingUploads(limit: number): UsageObservation[] {
+    const rows = this.#db
+      .prepare(
+        `SELECT * FROM observations WHERE uploaded_at IS NULL ORDER BY ts_ms ASC LIMIT ?`,
+      )
+      .all(Math.max(1, Math.round(limit))) as Record<string, unknown>[];
+    return rows.map(rowToObservation);
+  }
+
+  /** How many rows are still waiting to be uploaded. */
+  pendingUploadCount(): number {
+    return (
+      this.#db
+        .prepare("SELECT COUNT(*) AS n FROM observations WHERE uploaded_at IS NULL")
+        .get() as { n: number }
+    ).n;
+  }
+
+  /**
+   * Mark rows as uploaded, in one transaction.
+   *
+   * Called only after the collector has answered 2xx. A crash between the POST
+   * and this call costs a duplicate row on a collector that is keyed on id,
+   * which is the cheaper of the two failures.
+   */
+  markUploaded(ids: readonly string[], at: string = new Date().toISOString()): void {
+    if (ids.length === 0) return;
+    const update = this.#db.prepare("UPDATE observations SET uploaded_at = ? WHERE id = ?");
+    this.#db.exec("BEGIN");
+    try {
+      for (const id of ids) update.run(at, id);
+      this.#db.exec("COMMIT");
+    } catch (error) {
+      this.#db.exec("ROLLBACK");
+      throw error;
+    }
+  }
+
+  /**
+   * Forget that anything was ever uploaded, without deleting a row.
+   *
+   * For the case where the user points the daemon at a different collector, or
+   * changes tier and wants the new tier's rows sent from the start.
+   */
+  clearUploadCursor(): void {
+    this.#db.exec("UPDATE observations SET uploaded_at = NULL");
   }
 
   /** Counts and spans for the status UI. */
@@ -649,6 +740,17 @@ export class PersonalStore {
   }
 }
 
+/** JSON in the `tool_names` column, or null for a row imported before v4. */
+function parseToolNames(value: unknown): string[] | null {
+  if (typeof value !== "string") return null;
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed.filter((name) => typeof name === "string") : null;
+  } catch {
+    return null;
+  }
+}
+
 function rowToObservation(row: Record<string, unknown>): UsageObservation {
   const chars = row["pf_chars"] as number | null;
   return {
@@ -670,6 +772,10 @@ function rowToObservation(row: Record<string, unknown>): UsageObservation {
     reasoningOutputTokens: (row["reasoning_output_tokens"] as number | null) ?? null,
     totalTokens: (row["total_tokens"] as number | null) ?? null,
     contextWindow: (row["context_window"] as number | null) ?? null,
+    turnRootId: (row["turn_root_id"] as string | null) ?? null,
+    toolNames: parseToolNames(row["tool_names"]),
+    largestToolInputChars: (row["largest_tool_input_chars"] as number | null) ?? null,
+    stopReason: (row["stop_reason"] as string | null) ?? null,
     promptFeatures:
       chars === null
         ? null
