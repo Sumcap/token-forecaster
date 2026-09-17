@@ -22,7 +22,15 @@ Token Forecaster estimates how many output tokens a Claude reply, or a whole age
 
 ## What you see
 
-The Claude Code status line while a reply is being written, then between turns, then while you are still typing through the `tf-claude` launcher:
+Token Forecaster runs on four surfaces, all fed by one local daemon: the Claude Code status line, a macOS menu bar app, a local dashboard, and a Chrome extension for claude.ai/code.
+
+<img alt="Animated walkthrough of the four surfaces" src="docs/readme-assets/demo.gif" width="100%">
+
+*Animated walkthrough. Every number in it is from a real session on 17 Sep 2026.*
+
+<img alt="The four surfaces, real captures" src="docs/readme-assets/surfaces-2x2.jpg" width="100%">
+
+**Status line.** In Claude Code while a reply is being written, then between turns, then while you are still typing through the `tf-claude` launcher:
 
 ```text
 ◆ 15k tokens out  ·  ▓▓▓░░░░░░░ typical  ·  usual 22k tokens  ·  ctx 41%  ·  $0.42
@@ -33,13 +41,23 @@ The Claude Code status line while a reply is being written, then between turns, 
 
 `typical` means below your p50, `running long` between p50 and p90, `very long` past p90. The dollar figure is what Claude Code has billed this session so far. It is not a forecast.
 
-The Chrome extension shows a pill above the composer on claude.ai/code: input tokens, the p50 to p90 output band, then a context meter.
+**Menu bar.** The glyph is a face and a meter. The face smiles while the live turn is at or under your p50, goes flat between p50 and p90, and frowns past p90; the meter fills as the reply grows. Click it for the state in words, the p50 and p90 behind it, the call count, and an Accuracy strip: one bar per finished turn against the forecast it was given, solid line p50, dotted line p90, so a calibrated forecaster looks like noise around the line rather than a trend. Under it, how often turns came in under the estimate and under the worst case. Open dashboard (⌘D) and Rebuild profile (⌘R) are the two actions; Settings holds the switches listed under [Using it](#using-it).
+
+<img alt="The menu bar menu" src="docs/readme-assets/surface-menu.png" width="494">
+
+**Dashboard.** A local page the daemon serves on 127.0.0.1. Status shows what one task usually costs you (p50, p90 and p99 of your own tasks) and the four things that have to be true before the numbers are yours: Codex connected, Claude Code connected, personal model trained, and whether the personal model beats the generic one, per forecast type. Accuracy shows whether the forecasts covered what they promised (a "9 in 10" range should be right 9 times in 10) and how much better than generic the personal model is. Data needed lists what is still missing for each forecast type.
+
+<img alt="The dashboard" src="docs/readme-assets/surface-dashboard.jpg" width="100%">
+
+**Chrome extension.** A pill above the composer on claude.ai/code: input tokens, the p50 to p90 output band, then a context meter. The forecast is frozen at the moment you send, the reply is scored against it as it arrives, and the panel keeps a running total for the whole conversation.
 
 ```text
 ● 6 in · ~348-1.4k out ▁▁▁ 6%
 ```
 
 Its panel ends with: "Fitted on one person's Claude Code agent traffic, which is the work this page does. Read these as a prior for this kind of work, not a promise about how you write." Confidence is capped at `low` on both extension surfaces.
+
+<img alt="The extension panel" src="docs/readme-assets/surface-extension-panel.png" width="735">
 
 ## How the forecaster works
 
@@ -246,6 +264,12 @@ The app supervises a local daemon. The daemon indexes your Claude Code transcrip
 Run `tf-claude` instead of `claude` to see the estimate move while you type. The daemon writes that shell wrapper itself on first run and the app shows a notice once, with an Undo button. By hand: `node apps/companion/dist/cli.js install-shell`, and `uninstall-shell` restores the file byte for byte.
 
 On Windows the status line setting is the same, pointing at `apps\\companion\\dist\\statusline.js` in your checkout with the backslashes doubled.
+
+**The menu bar app's settings.** Show number in menu bar (adds the compact p50 next to the glyph), Detailed terminal status line (adds p50, p90 and the session total to the status line), Forecast from your draft (conditions the forecast on the prompt you are typing, when the CLI was launched with `tf-claude` or `tf-codex`), Wrap `claude` and `codex` in new terminals (on from the first run; switching it off is remembered), Launch at login, Pause or resume watching, Choose history directories, Restart daemon, Open log, Delete all derived data, Uninstall.
+
+**Several sessions.** Every Claude Code session with the status line installed reports its own live turn. The daemon keeps one slot per session; the menu bar features the live one and moves on when it finishes.
+
+**Uninstalling.** Settings › Uninstall Token Forecaster restores your shell startup file from the copy taken before the first edit, deletes the profile, the index and every setting, moves the app to the Trash and quits. Your Claude Code and Codex history is never touched; the app only reads it. By hand: `node apps/companion/dist/cli.js uninstall-shell`, then delete `~/Library/Application Support/TokenForecaster` and `~/Library/Logs/TokenForecaster`.
 
 ## Using the predictor as a library
 
