@@ -28,8 +28,6 @@ Token Forecaster runs on four surfaces, all fed by one local daemon: the Claude 
 
 *Animated walkthrough. Every number in it is from a real session on 17 Sep 2026.*
 
-<img alt="The four surfaces, real captures" src="docs/readme-assets/surfaces-2x2.jpg" width="100%">
-
 **Status line.** In Claude Code while a reply is being written, then between turns, then while you are still typing through the `tf-claude` launcher:
 
 ```text
