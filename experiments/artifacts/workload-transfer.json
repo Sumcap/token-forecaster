@@ -1,0 +1,1716 @@
+{
+  "generatedAt": "2026-08-26T16:30:01.848Z",
+  "probe": "probe-workload-transfer.mjs",
+  "readThisFirst": "Leave-one-project-out with the PERSON HELD FIXED. Every project shares one person, one prompting style, one toolchain, one machine, one Claude Code version, one model mix, one era, one account. A PASS is therefore a LOWER BOUND on the between-user problem and never a clearance. A FAIL is conclusive in the other direction: a fit that cannot survive the same person changing project will not survive the person changing.",
+  "privacy": "Aggregates and salted workload hashes only. No prompt text, no response text, no file paths.",
+  "corpus": {
+    "source": "~/.claude/projects",
+    "filesScanned": 682,
+    "calls": 23368,
+    "sessions": 434,
+    "exactTurns": 1660,
+    "projects": 20
+  },
+  "protocol": {
+    "holdout": "the project's last 20% of sessions, chronological by session start",
+    "transferFit": "every OTHER project's rows strictly before the holdout start",
+    "withinFit": "the project's OWN rows strictly before the holdout start",
+    "blocks": "session (bootstrapBlocks), 2000 resamples, BOOTSTRAP_SEED",
+    "ladder": "model+thinking+promptPath -> pooled promptPath -> model+thinking -> model -> overall",
+    "boost": {
+      "featureSchema": "portable-precall-v2"
+    },
+    "turnBoost": {
+      "featureSchema": "portable-precall-v2",
+      "minimumLeaf": 60,
+      "iterations": 24,
+      "maxDepth": 2,
+      "learningRate": 0.05
+    },
+    "minGroup": 100,
+    "minTurnGroup": 60
+  },
+  "thresholds": {
+    "declaredBeforeRunning": true,
+    "eligibility": {
+      "primary": {
+        "sessions": 15,
+        "calls": 300
+      },
+      "secondary": {
+        "sessions": 8,
+        "calls": 300
+      },
+      "minimumHoldout": {
+        "sessions": 3,
+        "calls": 50
+      }
+    },
+    "gate": {
+      "passCoverageP90": 0.85,
+      "passScaleRange": [
+        0.75,
+        1.35
+      ],
+      "failCoverageP90": 0.8,
+      "failScale": 1.5
+    },
+    "gradedOn": "primary tier only; secondary projects are reported for information and never move the verdict"
+  },
+  "verdict": "MOSTLY_PERSONAL",
+  "verdictReasons": [
+    "0c5debe71f4a713d: restore-scale x0.67 is outside the pass range [0.75, 1.35]",
+    "fdc8547dbc3865f8: transfer P90 coverage 80.9% misses the 85% pass line",
+    "fdc8547dbc3865f8: needs x1.73 to restore 90% coverage, beyond the x1.5 fail line"
+  ],
+  "workloads": [
+    {
+      "workloadId": "w00",
+      "tier": "primary",
+      "calls": 9505,
+      "sessions": 150,
+      "holdout": {
+        "sessions": 30,
+        "calls": 2328,
+        "trainCallsTransfer": 6682,
+        "trainCallsWithin": 7177,
+        "trainProjectsTransfer": 11
+      },
+      "perCall": {
+        "ladder": {
+          "transfer": {
+            "n": 2328,
+            "loss": 446.4337070446735,
+            "coverage": [
+              0.6902920962199313,
+              0.9553264604810997,
+              0.9965635738831615
+            ],
+            "coverageCi": [
+              [
+                0.6314012380416432,
+                0.7381258023106547
+              ],
+              [
+                0.9370473537604457,
+                0.9686567164179104
+              ],
+              [
+                0.9942797711908476,
+                0.9987966305655837
+              ]
+            ],
+            "restoreScaleP90": 0.6028880866425992,
+            "restoreScaleP50": 0.6641366223908918,
+            "restoreScaleP99": 0.6452054794520548,
+            "meanP90": 1952.3170103092784
+          },
+          "within": {
+            "n": 2328,
+            "loss": 378.6437285223367,
+            "coverage": [
+              0.5442439862542955,
+              0.9226804123711341,
+              0.9939862542955327
+            ],
+            "coverageCi": [
+              [
+                0.49243379571248425,
+                0.6027088036117382
+              ],
+              [
+                0.9054510371442354,
+                0.9392378990731205
+              ],
+              [
+                0.9898945518453427,
+                0.9970794392523364
+              ]
+            ],
+            "restoreScaleP90": 0.8748201438848919,
+            "restoreScaleP50": 0.9122807017543859,
+            "restoreScaleP99": 0.7673205342237062,
+            "meanP90": 1318.4583333333333
+          },
+          "transferMinusWithin": {
+            "n": 2328,
+            "meanDifference": 67.78997852233547,
+            "ciLower": 15.633857142857114,
+            "ciUpper": 109.31865538316802,
+            "blocks": 30,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boosted": {
+          "transfer": {
+            "n": 2328,
+            "loss": 428.3853694158083,
+            "coverage": [
+              0.6855670103092784,
+              0.9540378006872853,
+              0.9935567010309279
+            ],
+            "coverageCi": [
+              [
+                0.6341127922971114,
+                0.7211384713783179
+              ],
+              [
+                0.9357798165137615,
+                0.9671467146714672
+              ],
+              [
+                0.9892876272094269,
+                0.9967931587386424
+              ]
+            ],
+            "restoreScaleP90": 0.6742507110041567,
+            "restoreScaleP50": 0.6838487972508591,
+            "restoreScaleP99": 0.7875571820677034,
+            "meanP90": 1824.2323883161512
+          },
+          "within": {
+            "n": 2328,
+            "loss": 368.3981486254299,
+            "coverage": [
+              0.5433848797250859,
+              0.9201030927835051,
+              0.9939862542955327
+            ],
+            "coverageCi": [
+              [
+                0.5044699872286079,
+                0.5867549668874172
+              ],
+              [
+                0.907563025210084,
+                0.9311203319502075
+              ],
+              [
+                0.9894291754756871,
+                0.9970422951789412
+              ]
+            ],
+            "restoreScaleP90": 0.8841059602649006,
+            "restoreScaleP50": 0.9408284023668638,
+            "restoreScaleP99": 0.8447497546614327,
+            "meanP90": 1289.5227663230241
+          },
+          "transferMinusWithin": {
+            "n": 2328,
+            "meanDifference": 59.98722079037795,
+            "ciLower": 18.65161887694142,
+            "ciUpper": 92.4795193708125,
+            "blocks": 30,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boostMinusLadderOnTransfer": {
+          "n": 2328,
+          "meanDifference": -18.048337628866133,
+          "ciLower": -27.654145580589393,
+          "ciUpper": -5.222445939452228,
+          "blocks": 30,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "turnTotals": {
+        "turns": 109,
+        "trainTurnsTransfer": 547,
+        "trainTurnsWithin": 368,
+        "transfer": {
+          "n": 109,
+          "loss": 9987.754036697248,
+          "coverage": [
+            0.29357798165137616,
+            0.926605504587156,
+            0.9908256880733946
+          ],
+          "coverageCi": [
+            [
+              0.1532258064516129,
+              0.5
+            ],
+            [
+              0.86,
+              0.967741935483871
+            ],
+            [
+              0.9640287769784173,
+              1
+            ]
+          ],
+          "restoreScaleP90": 0.9217117825452095,
+          "restoreScaleP50": 2.3507190795781394,
+          "restoreScaleP99": 0.9594757119269421,
+          "meanP90": 38800.15596330275
+        },
+        "within": {
+          "n": 109,
+          "loss": 8389.261651376144,
+          "coverage": [
+            0.47706422018348627,
+            0.8715596330275229,
+            0.9908256880733946
+          ],
+          "coverageCi": [
+            [
+              0.3867924528301887,
+              0.591304347826087
+            ],
+            [
+              0.7815126050420168,
+              0.9375
+            ],
+            [
+              0.9640287769784173,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.1342904611140714,
+          "restoreScaleP50": 1.1578510436432636,
+          "restoreScaleP99": 0.5181984322705655,
+          "meanP90": 29068.275229357798
+        },
+        "transferMinusWithin": {
+          "n": 109,
+          "meanDifference": 1598.492385321101,
+          "ciLower": -317.81960000000004,
+          "ciUpper": 2958.028970588234,
+          "blocks": 30,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "sessionTotals": {
+        "sessions": 30,
+        "trainSessionsTransfer": 161,
+        "transfer": {
+          "n": 30,
+          "loss": 32149.209000000006,
+          "coverage": [
+            0.4,
+            0.9,
+            0.9666666666666667
+          ],
+          "coverageCi": [
+            [
+              0.23333333333333334,
+              0.5666666666666667
+            ],
+            [
+              0.7666666666666667,
+              1
+            ],
+            [
+              0.9,
+              1
+            ]
+          ],
+          "restoreScaleP90": 0.7816843359531211,
+          "restoreScaleP50": 1.1838731982341364,
+          "restoreScaleP99": 1.1421290434243967,
+          "meanP90": 122529
+        }
+      }
+    },
+    {
+      "workloadId": "w13",
+      "tier": "primary",
+      "calls": 4043,
+      "sessions": 77,
+      "holdout": {
+        "sessions": 16,
+        "calls": 1115,
+        "trainCallsTransfer": 6628,
+        "trainCallsWithin": 2928,
+        "trainProjectsTransfer": 10
+      },
+      "perCall": {
+        "ladder": {
+          "transfer": {
+            "n": 1115,
+            "loss": 1174.1854439461872,
+            "coverage": [
+              0.4044843049327354,
+              0.8053811659192825,
+              0.9721973094170404
+            ],
+            "coverageCi": [
+              [
+                0.34512195121951217,
+                0.4509394572025052
+              ],
+              [
+                0.7645914396887159,
+                0.8944591029023746
+              ],
+              [
+                0.9663551401869159,
+                0.9842271293375394
+              ]
+            ],
+            "restoreScaleP90": 1.9279461279461279,
+            "restoreScaleP50": 1.2229038854805725,
+            "restoreScaleP99": 1.6833333333333331,
+            "meanP90": 1579.932735426009
+          },
+          "within": {
+            "n": 1115,
+            "loss": 1070.964968609866,
+            "coverage": [
+              0.5183856502242152,
+              0.8869955156950673,
+              0.9856502242152466
+            ],
+            "coverageCi": [
+              [
+                0.4835443037974684,
+                0.5986394557823129
+              ],
+              [
+                0.8681506849315068,
+                0.931640625
+              ],
+              [
+                0.9777158774373259,
+                0.9950920245398773
+              ]
+            ],
+            "restoreScaleP90": 1.1251053074978938,
+            "restoreScaleP50": 0.9732142857142856,
+            "restoreScaleP99": 1.152965235173824,
+            "meanP90": 2597.9569506726457
+          },
+          "transferMinusWithin": {
+            "n": 1115,
+            "meanDifference": 103.220475336323,
+            "ciLower": -28.044149765990507,
+            "ciUpper": 165.49288527072798,
+            "blocks": 16,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boosted": {
+          "transfer": {
+            "n": 1115,
+            "loss": 1129.2448968609854,
+            "coverage": [
+              0.42869955156950673,
+              0.8089686098654708,
+              0.9721973094170404
+            ],
+            "coverageCi": [
+              [
+                0.37298636926889717,
+                0.45642201834862384
+              ],
+              [
+                0.7739299610894942,
+                0.8745519713261649
+              ],
+              [
+                0.966467958271237,
+                0.9854545454545455
+              ]
+            ],
+            "restoreScaleP90": 1.729395604395604,
+            "restoreScaleP50": 1.1608996539792384,
+            "restoreScaleP99": 1.5927922814982973,
+            "meanP90": 1723.2816143497757
+          },
+          "within": {
+            "n": 1115,
+            "loss": 1060.3611210762351,
+            "coverage": [
+              0.46278026905829595,
+              0.8896860986547085,
+              0.9838565022421525
+            ],
+            "coverageCi": [
+              [
+                0.42474916387959866,
+                0.5422647527910686
+              ],
+              [
+                0.8742949234488316,
+                0.9228295819935691
+              ],
+              [
+                0.9789954337899544,
+                0.9908952959028832
+              ]
+            ],
+            "restoreScaleP90": 1.0654619843163995,
+            "restoreScaleP50": 1.0827067669172932,
+            "restoreScaleP99": 1.195476575121163,
+            "meanP90": 2886.1174887892375
+          },
+          "transferMinusWithin": {
+            "n": 1115,
+            "meanDifference": 68.88377578475327,
+            "ciLower": -24.181979166666665,
+            "ciUpper": 110.80759601706981,
+            "blocks": 16,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boostMinusLadderOnTransfer": {
+          "n": 1115,
+          "meanDifference": -44.94054708520208,
+          "ciLower": -69.67762062128246,
+          "ciUpper": 9.052799999999996,
+          "blocks": 16,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "turnTotals": {
+        "turns": 84,
+        "trainTurnsTransfer": 450,
+        "trainTurnsWithin": 316,
+        "transfer": {
+          "n": 84,
+          "loss": 17968.077500000007,
+          "coverage": [
+            0.5357142857142857,
+            0.8571428571428571,
+            0.9523809523809523
+          ],
+          "coverageCi": [
+            [
+              0.4576271186440678,
+              0.6730769230769231
+            ],
+            [
+              0.7959183673469388,
+              0.9574468085106383
+            ],
+            [
+              0.9052631578947369,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.1555027590435314,
+          "restoreScaleP50": 0.8536104368932038,
+          "restoreScaleP99": 1.7187771152177524,
+          "meanP90": 29592.369047619046
+        },
+        "within": {
+          "n": 84,
+          "loss": 20400.66297619048,
+          "coverage": [
+            0.4880952380952381,
+            0.8452380952380952,
+            0.9404761904761905
+          ],
+          "coverageCi": [
+            [
+              0.38666666666666666,
+              0.625
+            ],
+            [
+              0.780952380952381,
+              0.9397590361445783
+            ],
+            [
+              0.8782608695652174,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.291340793326114,
+          "restoreScaleP50": 1.0067496308795612,
+          "restoreScaleP99": 2.890437752250854,
+          "meanP90": 25931.321428571428
+        },
+        "transferMinusWithin": {
+          "n": 84,
+          "meanDifference": -2432.585476190475,
+          "ciLower": -5798.075047619049,
+          "ciUpper": 967.3241071428573,
+          "blocks": 16,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "sessionTotals": {
+        "sessions": 16,
+        "trainSessionsTransfer": 145,
+        "transfer": {
+          "n": 16,
+          "loss": 117942.084375,
+          "coverage": [
+            0.375,
+            0.8125,
+            0.9375
+          ],
+          "coverageCi": [
+            [
+              0.125,
+              0.625
+            ],
+            [
+              0.625,
+              1
+            ],
+            [
+              0.8125,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.2951502448367451,
+          "restoreScaleP50": 1.6719622440840203,
+          "restoreScaleP99": 3.547763661175928,
+          "meanP90": 110686
+        }
+      }
+    },
+    {
+      "workloadId": "w02",
+      "tier": "primary",
+      "calls": 3013,
+      "sessions": 52,
+      "holdout": {
+        "sessions": 11,
+        "calls": 746,
+        "trainCallsTransfer": 14328,
+        "trainCallsWithin": 2267,
+        "trainProjectsTransfer": 13
+      },
+      "perCall": {
+        "ladder": {
+          "transfer": {
+            "n": 746,
+            "loss": 706.589075067024,
+            "coverage": [
+              0.517426273458445,
+              0.8579088471849866,
+              0.9865951742627346
+            ],
+            "coverageCi": [
+              [
+                0.45080763582966227,
+                0.6039603960396039
+              ],
+              [
+                0.7793696275071633,
+                0.9179292929292929
+              ],
+              [
+                0.9731903485254692,
+                0.9980988593155894
+              ]
+            ],
+            "restoreScaleP90": 1.3935519733185102,
+            "restoreScaleP50": 0.9642857142857142,
+            "restoreScaleP99": 1.119971134764568,
+            "meanP90": 1642.3042895442359
+          },
+          "within": {
+            "n": 746,
+            "loss": 753.0407908847181,
+            "coverage": [
+              0.5697050938337802,
+              0.9235924932975871,
+              0.9946380697050938
+            ],
+            "coverageCi": [
+              [
+                0.49547511312217196,
+                0.6783783783783783
+              ],
+              [
+                0.88996138996139,
+                0.9676258992805755
+              ],
+              [
+                0.9896296296296296,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.8611446510504708,
+            "restoreScaleP50": 0.8263888888888888,
+            "restoreScaleP99": 0.7193769799366421,
+            "meanP90": 2493.3753351206433
+          },
+          "transferMinusWithin": {
+            "n": 746,
+            "meanDifference": -46.451715817694335,
+            "ciLower": -105.51625322997425,
+            "ciUpper": -10.157013274336173,
+            "blocks": 11,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boosted": {
+          "transfer": {
+            "n": 746,
+            "loss": 672.393123324397,
+            "coverage": [
+              0.4906166219839142,
+              0.8806970509383378,
+              0.9865951742627346
+            ],
+            "coverageCi": [
+              [
+                0.40501043841336115,
+                0.5621181262729125
+              ],
+              [
+                0.8236808236808236,
+                0.9227895392278954
+              ],
+              [
+                0.9731903485254692,
+                0.9980988593155894
+              ]
+            ],
+            "restoreScaleP90": 1.108,
+            "restoreScaleP50": 1.0233463035019454,
+            "restoreScaleP99": 1.1564828614008942,
+            "meanP90": 1715.573726541555
+          },
+          "within": {
+            "n": 746,
+            "loss": 735.4559249329756,
+            "coverage": [
+              0.5871313672922251,
+              0.9571045576407506,
+              0.9932975871313673
+            ],
+            "coverageCi": [
+              [
+                0.500823723228995,
+                0.6754270696452037
+              ],
+              [
+                0.9459459459459459,
+                0.9733924611973392
+              ],
+              [
+                0.9895712630359212,
+                0.9977973568281938
+              ]
+            ],
+            "restoreScaleP90": 0.6619174829326209,
+            "restoreScaleP50": 0.8306666666666667,
+            "restoreScaleP99": 0.7644694533762058,
+            "meanP90": 2759.6595174262734
+          },
+          "transferMinusWithin": {
+            "n": 746,
+            "meanDifference": -63.06280160857893,
+            "ciLower": -128.13057835820905,
+            "ciUpper": -24.737278325123146,
+            "blocks": 11,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boostMinusLadderOnTransfer": {
+          "n": 746,
+          "meanDifference": -34.195951742627294,
+          "ciLower": -59.779584055459225,
+          "ciUpper": -14.917223168654152,
+          "blocks": 11,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "turnTotals": {
+        "turns": 49,
+        "trainTurnsTransfer": 995,
+        "trainTurnsWithin": 183,
+        "transfer": {
+          "n": 49,
+          "loss": 10977.559387755105,
+          "coverage": [
+            0.5102040816326531,
+            0.8979591836734694,
+            1
+          ],
+          "coverageCi": [
+            [
+              0.29411764705882354,
+              0.65
+            ],
+            [
+              0.7954545454545454,
+              0.9722222222222222
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.0736375745641973,
+          "restoreScaleP50": 0.7507059298104073,
+          "restoreScaleP99": 0.8271617420316963,
+          "meanP90": 30863.38775510204
+        },
+        "within": {
+          "n": 49,
+          "loss": 12502.891836734692,
+          "coverage": [
+            0.40816326530612246,
+            0.7346938775510204,
+            0.9387755102040817
+          ],
+          "coverageCi": [
+            [
+              0.1875,
+              0.5517241379310345
+            ],
+            [
+              0.5384615384615384,
+              0.8775510204081632
+            ],
+            [
+              0.8548387096774194,
+              1
+            ]
+          ],
+          "restoreScaleP90": 2.064069264069264,
+          "restoreScaleP50": 2.4660452729693736,
+          "restoreScaleP99": 1.3938104387316002,
+          "meanP90": 16596.79591836735
+        },
+        "transferMinusWithin": {
+          "n": 49,
+          "meanDifference": -1525.3324489795914,
+          "ciLower": -3831.1578048780502,
+          "ciUpper": 319.30294117647026,
+          "blocks": 11,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "sessionTotals": {
+        "sessions": 11,
+        "trainSessionsTransfer": 306,
+        "transfer": {
+          "n": 11,
+          "loss": 41292.90909090909,
+          "coverage": [
+            0.2727272727272727,
+            0.8181818181818182,
+            1
+          ],
+          "coverageCi": [
+            [
+              0,
+              0.5454545454545454
+            ],
+            [
+              0.5454545454545454,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.3151241699927843,
+          "restoreScaleP50": 1.9735027014599376,
+          "restoreScaleP99": 0.9557723234535431,
+          "meanP90": 109487
+        }
+      }
+    },
+    {
+      "workloadId": "w09",
+      "tier": "secondary",
+      "calls": 2507,
+      "sessions": 14,
+      "holdout": {
+        "sessions": 3,
+        "calls": 753,
+        "trainCallsTransfer": 18726,
+        "trainCallsWithin": 1754,
+        "trainProjectsTransfer": 15
+      },
+      "perCall": {
+        "ladder": {
+          "transfer": {
+            "n": 753,
+            "loss": 1207.6172509960165,
+            "coverage": [
+              0.4156706507304117,
+              0.8353253652058433,
+              0.9774236387782205
+            ],
+            "coverageCi": [
+              [
+                0.39285714285714285,
+                1
+              ],
+              [
+                0.75,
+                1
+              ],
+              [
+                0.9642857142857143,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.4950038431975403,
+            "restoreScaleP50": 1.2155555555555555,
+            "restoreScaleP99": 1.8502981698539993,
+            "meanP90": 1684.4555112881806
+          },
+          "within": {
+            "n": 753,
+            "loss": 1130.262921646746,
+            "coverage": [
+              0.4541832669322709,
+              0.8685258964143426,
+              0.9787516600265604
+            ],
+            "coverageCi": [
+              [
+                0.42857142857142855,
+                1
+              ],
+              [
+                0.75,
+                1
+              ],
+              [
+                0.9285714285714286,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.2002754820936636,
+            "restoreScaleP50": 1.0783699059561127,
+            "restoreScaleP99": 1.3958991752100514,
+            "meanP90": 2223.4276228419653
+          },
+          "transferMinusWithin": {
+            "n": 753,
+            "meanDifference": 77.35432934926989,
+            "ciLower": -55.13321428571427,
+            "ciUpper": 82.67739972337456,
+            "blocks": 3,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boosted": {
+          "transfer": {
+            "n": 753,
+            "loss": 1171.3907304116876,
+            "coverage": [
+              0.4940239043824701,
+              0.8632138114209827,
+              0.9747675962815405
+            ],
+            "coverageCi": [
+              [
+                0.39285714285714285,
+                0.5
+              ],
+              [
+                0.8214285714285714,
+                1
+              ],
+              [
+                0.9642857142857143,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.2734771573604062,
+            "restoreScaleP50": 1.0183066361556063,
+            "restoreScaleP99": 1.7829268292682925,
+            "meanP90": 1829.5219123505976
+          },
+          "within": {
+            "n": 753,
+            "loss": 1131.0229482071716,
+            "coverage": [
+              0.4767596281540505,
+              0.8605577689243028,
+              0.9774236387782205
+            ],
+            "coverageCi": [
+              [
+                0.4642857142857143,
+                0.5
+              ],
+              [
+                0.75,
+                1
+              ],
+              [
+                0.9285714285714286,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.2199402539208362,
+            "restoreScaleP50": 1.0597667638483963,
+            "restoreScaleP99": 1.520736908975406,
+            "meanP90": 2204.1274900398407
+          },
+          "transferMinusWithin": {
+            "n": 753,
+            "meanDifference": 40.36778220451519,
+            "ciLower": -206.47071428571422,
+            "ciUpper": 50.0994190871369,
+            "blocks": 3,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boostMinusLadderOnTransfer": {
+          "n": 753,
+          "meanDifference": -36.226520584329386,
+          "ciLower": -104.14142857142856,
+          "ciUpper": -33.49354080221289,
+          "blocks": 3,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "turnTotals": {
+        "turns": 45,
+        "trainTurnsTransfer": 1304,
+        "trainTurnsWithin": 171,
+        "transfer": {
+          "n": 45,
+          "loss": 17943.746444444452,
+          "coverage": [
+            0.37777777777777777,
+            0.8222222222222222,
+            0.9777777777777777
+          ],
+          "coverageCi": [
+            [
+              0,
+              1
+            ],
+            [
+              0.8,
+              1
+            ],
+            [
+              0.975,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.7054817490003868,
+          "restoreScaleP50": 1.4279512439472364,
+          "restoreScaleP99": 1.1008166831907777,
+          "meanP90": 28035.333333333332
+        },
+        "within": {
+          "n": 45,
+          "loss": 21570.843333333334,
+          "coverage": [
+            0.4444444444444444,
+            0.7777777777777778,
+            0.9333333333333333
+          ],
+          "coverageCi": [
+            [
+              0,
+              1
+            ],
+            [
+              0.6666666666666666,
+              1
+            ],
+            [
+              0.925,
+              1
+            ]
+          ],
+          "restoreScaleP90": 1.9536938534278958,
+          "restoreScaleP50": 1.3284818067754078,
+          "restoreScaleP99": 1.59380322125444,
+          "meanP90": 32795.333333333336
+        },
+        "transferMinusWithin": {
+          "n": 45,
+          "meanDifference": -3627.096888888888,
+          "ciLower": -4063.6657499999997,
+          "ciUpper": 120.73666666666713,
+          "blocks": 3,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "sessionTotals": {
+        "sessions": 3,
+        "trainSessionsTransfer": 385,
+        "transfer": {
+          "n": 3,
+          "loss": 597003.3733333333,
+          "coverage": [
+            0.3333333333333333,
+            0.6666666666666666,
+            0.6666666666666666
+          ],
+          "coverageCi": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "restoreScaleP90": 7.669300863545658,
+          "restoreScaleP50": 2.2722200951703764,
+          "restoreScaleP99": 3.963797415209375,
+          "meanP90": 113254
+        }
+      }
+    },
+    {
+      "workloadId": "w10",
+      "tier": "primary",
+      "calls": 1680,
+      "sessions": 80,
+      "holdout": {
+        "sessions": 16,
+        "calls": 186,
+        "trainCallsTransfer": 14743,
+        "trainCallsWithin": 1469,
+        "trainProjectsTransfer": 13
+      },
+      "perCall": {
+        "ladder": {
+          "transfer": {
+            "n": 186,
+            "loss": 323.03586021505396,
+            "coverage": [
+              0.42473118279569894,
+              0.9032258064516129,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.37109375,
+                0.6818181818181818
+              ],
+              [
+                0.8872180451127819,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.9655172413793103,
+            "restoreScaleP50": 1.1930693069306928,
+            "restoreScaleP99": 0.6560908734821778,
+            "meanP90": 1392.9301075268818
+          },
+          "within": {
+            "n": 186,
+            "loss": 328.84763440860223,
+            "coverage": [
+              0.44086021505376344,
+              0.8978494623655914,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.39453125,
+                0.6666666666666666
+              ],
+              [
+                0.8333333333333334,
+                0.9568965517241379
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.0253521126760563,
+            "restoreScaleP50": 1.1798245614035086,
+            "restoreScaleP99": 0.6740850642927794,
+            "meanP90": 1380.4354838709678
+          },
+          "transferMinusWithin": {
+            "n": 186,
+            "meanDifference": -5.811774193548386,
+            "ciLower": -30.167307692307663,
+            "ciUpper": 21.34884615384618,
+            "blocks": 16,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boosted": {
+          "transfer": {
+            "n": 186,
+            "loss": 312.19623655913955,
+            "coverage": [
+              0.41935483870967744,
+              0.8817204301075269,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.36428571428571427,
+                0.65
+              ],
+              [
+                0.8695652173913043,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.080895008605852,
+            "restoreScaleP50": 1.2326530612244895,
+            "restoreScaleP99": 0.8045615414864333,
+            "meanP90": 1301.5913978494623
+          },
+          "within": {
+            "n": 186,
+            "loss": 334.8874731182796,
+            "coverage": [
+              0.42473118279569894,
+              0.8602150537634409,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.3355263157894737,
+                0.5727272727272728
+              ],
+              [
+                0.7333333333333333,
+                0.90625
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.2639999999999998,
+            "restoreScaleP50": 1.26713532513181,
+            "restoreScaleP99": 0.8232931726907631,
+            "meanP90": 1282.263440860215
+          },
+          "transferMinusWithin": {
+            "n": 186,
+            "meanDifference": -22.69123655913979,
+            "ciLower": -146.93192307692306,
+            "ciUpper": -10.088885135135136,
+            "blocks": 16,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boostMinusLadderOnTransfer": {
+          "n": 186,
+          "meanDifference": -10.83962365591398,
+          "ciLower": -74.44375000000001,
+          "ciUpper": 3.902784810126578,
+          "blocks": 16,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "turnTotals": {
+        "turns": 29,
+        "trainTurnsTransfer": 1011,
+        "trainTurnsWithin": 136,
+        "transfer": {
+          "n": 29,
+          "loss": 6621.160689655171,
+          "coverage": [
+            0.7931034482758621,
+            1,
+            1
+          ],
+          "coverageCi": [
+            [
+              0.5588235294117647,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "restoreScaleP90": 0.6068873145112967,
+          "restoreScaleP50": 0.14145595248807702,
+          "restoreScaleP99": 0.34279058738195867,
+          "meanP90": 31735.862068965518
+        },
+        "within": {
+          "n": 29,
+          "loss": 4912.428275862068,
+          "coverage": [
+            0.7586206896551724,
+            1,
+            1
+          ],
+          "coverageCi": [
+            [
+              0.5142857142857142,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "restoreScaleP90": 0.5846718054942441,
+          "restoreScaleP50": 0.22842781345992735,
+          "restoreScaleP99": 0.476582953553767,
+          "meanP90": 27694
+        },
+        "transferMinusWithin": {
+          "n": 29,
+          "meanDifference": 1708.7324137931037,
+          "ciLower": 774.0107317073175,
+          "ciUpper": 3143.4826086956523,
+          "blocks": 16,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "sessionTotals": {
+        "sessions": 16,
+        "trainSessionsTransfer": 273,
+        "transfer": {
+          "n": 16,
+          "loss": 25191.043749999997,
+          "coverage": [
+            0.875,
+            1,
+            1
+          ],
+          "coverageCi": [
+            [
+              0.6875,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "restoreScaleP90": 0.21679027553228797,
+          "restoreScaleP50": 0.05000000000000001,
+          "restoreScaleP99": 0.34439329806793184,
+          "meanP90": 116901
+        }
+      }
+    },
+    {
+      "workloadId": "w07",
+      "tier": "secondary",
+      "skipped": "holdout under floor (2 sessions, 306 calls)"
+    },
+    {
+      "workloadId": "w06",
+      "tier": "secondary",
+      "calls": 579,
+      "sessions": 11,
+      "holdout": {
+        "sessions": 3,
+        "calls": 71,
+        "trainCallsTransfer": 8307,
+        "trainCallsWithin": 508,
+        "trainProjectsTransfer": 9
+      },
+      "perCall": {
+        "ladder": {
+          "transfer": {
+            "n": 71,
+            "loss": 355.0505633802818,
+            "coverage": [
+              0.5211267605633803,
+              0.9295774647887324,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.2857142857142857,
+                0.8888888888888888
+              ],
+              [
+                0.8214285714285714,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.8279569892473118,
+            "restoreScaleP50": 0.9392265193370166,
+            "restoreScaleP99": 0.7864192656928544,
+            "meanP90": 1621.338028169014
+          },
+          "within": {
+            "n": 71,
+            "loss": 317.2757746478873,
+            "coverage": [
+              0.49295774647887325,
+              0.9154929577464789,
+              0.9577464788732394
+            ],
+            "coverageCi": [
+              [
+                0.2857142857142857,
+                0.8888888888888888
+              ],
+              [
+                0.8214285714285714,
+                1
+              ],
+              [
+                0.8928571428571429,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.7272727272727273,
+            "restoreScaleP50": 1.0040816326530613,
+            "restoreScaleP99": 1.2935019624945485,
+            "meanP90": 1259.0140845070423
+          },
+          "transferMinusWithin": {
+            "n": 71,
+            "meanDifference": 37.774788732394384,
+            "ciLower": -27.528928571428565,
+            "ciUpper": 81.34558823529419,
+            "blocks": 3,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boosted": {
+          "transfer": {
+            "n": 71,
+            "loss": 317.8338028169016,
+            "coverage": [
+              0.4647887323943662,
+              0.9436619718309859,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.32142857142857145,
+                0.5588235294117647
+              ],
+              [
+                0.8928571428571429,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.771665410700829,
+            "restoreScaleP50": 1.1446280991735538,
+            "restoreScaleP99": 0.6126833298905185,
+            "meanP90": 1359.718309859155
+          },
+          "within": {
+            "n": 71,
+            "loss": 314.68154929577474,
+            "coverage": [
+              0.5211267605633803,
+              0.9154929577464789,
+              0.9859154929577465
+            ],
+            "coverageCi": [
+              [
+                0.35714285714285715,
+                0.8888888888888888
+              ],
+              [
+                0.8214285714285714,
+                1
+              ],
+              [
+                0.9642857142857143,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.8576214405360134,
+            "restoreScaleP50": 0.982394366197183,
+            "restoreScaleP99": 1.2525337837837838,
+            "meanP90": 1375.8028169014085
+          },
+          "transferMinusWithin": {
+            "n": 71,
+            "meanDifference": 3.152253521126774,
+            "ciLower": -32.298888888888875,
+            "ciUpper": 25.741176470588275,
+            "blocks": 3,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boostMinusLadderOnTransfer": {
+          "n": 71,
+          "meanDifference": -37.216760563380284,
+          "ciLower": -117.95111111111113,
+          "ciUpper": -9.561428571428578,
+          "blocks": 3,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "turnTotals": {
+        "turns": 8,
+        "skipped": "under 20 held-out turns"
+      },
+      "sessionTotals": {
+        "sessions": 3,
+        "trainSessionsTransfer": 184,
+        "transfer": {
+          "n": 3,
+          "loss": 16647.343333333334,
+          "coverage": [
+            0.6666666666666666,
+            1,
+            1
+          ],
+          "coverageCi": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "restoreScaleP90": 0.17460356912064423,
+          "restoreScaleP50": 0.8055335131989632,
+          "restoreScaleP99": 0.09596907131993332,
+          "meanP90": 120702
+        }
+      }
+    },
+    {
+      "workloadId": "w01",
+      "tier": "secondary",
+      "calls": 374,
+      "sessions": 12,
+      "holdout": {
+        "sessions": 3,
+        "calls": 155,
+        "trainCallsTransfer": 22031,
+        "trainCallsWithin": 219,
+        "trainProjectsTransfer": 16
+      },
+      "perCall": {
+        "ladder": {
+          "transfer": {
+            "n": 155,
+            "loss": 353.3357419354839,
+            "coverage": [
+              0.33548387096774196,
+              0.9032258064516129,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.2972972972972973,
+                0.7142857142857143
+              ],
+              [
+                0.8918918918918919,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.9613011777902412,
+            "restoreScaleP50": 1.277227722772277,
+            "restoreScaleP99": 0.6301621802374184,
+            "meanP90": 1398.9483870967742
+          },
+          "within": {
+            "n": 155,
+            "loss": 396.7438064516129,
+            "coverage": [
+              0.45161290322580644,
+              0.9290322580645162,
+              0.9870967741935484
+            ],
+            "coverageCi": [
+              [
+                0.35135135135135137,
+                0.7142857142857143
+              ],
+              [
+                0.9099099099099099,
+                1
+              ],
+              [
+                0.9819819819819819,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.8163145539906103,
+            "restoreScaleP50": 1.2100238663484486,
+            "restoreScaleP99": 1.0247417074497007,
+            "meanP90": 1704
+          },
+          "transferMinusWithin": {
+            "n": 155,
+            "meanDifference": -43.40806451612899,
+            "ciLower": -52.95738738738723,
+            "ciUpper": -16.288918918918885,
+            "blocks": 3,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boosted": {
+          "transfer": {
+            "n": 155,
+            "loss": 352.49787096774196,
+            "coverage": [
+              0.33548387096774196,
+              0.896774193548387,
+              1
+            ],
+            "coverageCi": [
+              [
+                0.21621621621621623,
+                0.5714285714285714
+              ],
+              [
+                0.8571428571428571,
+                0.918918918918919
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "restoreScaleP90": 1.0207792207792208,
+            "restoreScaleP50": 1.2198275862068964,
+            "restoreScaleP99": 0.7498184458968773,
+            "meanP90": 1305.1483870967743
+          },
+          "within": {
+            "n": 155,
+            "loss": 392.01380645161294,
+            "coverage": [
+              0.47096774193548385,
+              0.9225806451612903,
+              0.9935483870967742
+            ],
+            "coverageCi": [
+              [
+                0.35135135135135137,
+                0.7142857142857143
+              ],
+              [
+                0.9009009009009009,
+                1
+              ],
+              [
+                0.990990990990991,
+                1
+              ]
+            ],
+            "restoreScaleP90": 0.8753933291378224,
+            "restoreScaleP50": 1.0833333333333335,
+            "restoreScaleP99": 0.9957727873183619,
+            "meanP90": 1589
+          },
+          "transferMinusWithin": {
+            "n": 155,
+            "meanDifference": -39.515935483871026,
+            "ciLower": -114.44857142857141,
+            "ciUpper": -13.382162162162135,
+            "blocks": 3,
+            "blockKind": "session",
+            "resamples": 2000
+          }
+        },
+        "boostMinusLadderOnTransfer": {
+          "n": 155,
+          "meanDifference": -0.8378709677419436,
+          "ciLower": -79.05142857142857,
+          "ciUpper": 7.714864864864845,
+          "blocks": 3,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      "turnTotals": {
+        "turns": 7,
+        "skipped": "under 20 held-out turns"
+      },
+      "sessionTotals": {
+        "sessions": 3,
+        "trainSessionsTransfer": 399,
+        "transfer": {
+          "n": 3,
+          "loss": 23837.593333333334,
+          "coverage": [
+            0.3333333333333333,
+            1,
+            1
+          ],
+          "coverageCi": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "restoreScaleP90": 0.6547217051837453,
+          "restoreScaleP50": 1.1094217588570325,
+          "restoreScaleP99": 0.3164824052583176,
+          "meanP90": 121418
+        }
+      }
+    }
+  ]
+}

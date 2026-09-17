@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Token Forecaster for claude.ai",
+  "version": "0.1.0",
+  "description": "Live input count and output-length forecast in the claude.ai composer, from the Token Forecaster model.",
+  "permissions": ["storage", "alarms"],
+  "optional_host_permissions": ["https://api.anthropic.com/*"],
+  "background": {
+    "service_worker": "sw.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "Token Forecaster settings",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

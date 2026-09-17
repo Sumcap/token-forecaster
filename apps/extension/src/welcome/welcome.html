@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Token Forecaster is installed</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <p class="kicker">Installed</p>
+      <h1>Token Forecaster for claude.ai</h1>
+      <p class="lede">
+        While you type, a pill above the composer shows how big the message is
+        and how long the reply is likely to be. Click it and the panel opens on
+        the forecast itself.
+      </p>
+
+      <pre class="sample" aria-label="What the pill looks like above the composer">
+                          ┌──────────────────────────┐
+                          │ ● 6 in · ~348–1.4k out   │
+                          └──────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│ hello does this work?                                     │
+│  + Chat  Cowork                      Opus 5  High   [ ↑ ] │
+└───────────────────────────────────────────────────────────┘</pre>
+
+      <section>
+        <h2>What the three numbers mean</h2>
+        <ul class="plain">
+          <li>
+            <strong>The draft.</strong> Counted in your browser with a
+            character heuristic, labelled <code>estimate</code>. Turning on
+            verified counting makes it an exact Anthropic count.
+          </li>
+          <li>
+            <strong>The reply.</strong> A band, not a needle. The forecaster
+            has no single answer to give, so it draws the range and fades it
+            outward where it knows less.
+          </li>
+          <li>
+            <strong>The conversation.</strong> Only what the page renders while
+            the chip is active. It is prefixed <code>≥</code> because
+            it cannot see the system prompt, attachments, tools, or memory.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Where it runs</h2>
+        <p class="note">
+          On <code>claude.ai/code</code>, and nowhere else by default. The
+          profile was fitted on Claude Code agent traffic, so that is the
+          surface it describes. On the chat surface the panel says it is out of
+          domain. The confidence reads <code>low</code> on both surfaces,
+          because the profile was fitted on one person&rsquo;s history.
+        </p>
+        <label class="row">
+          <input type="checkbox" id="showInChat" />
+          <span>Also show on the chat surface</span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="transcriptGaugeEnabled" />
+          <span>
+            Measure the visible conversation
+            <em>Local only, and a lower bound. It fills the context bar on the chip.</em>
+          </span>
+        </label>
+      </section>
+
+      <section>
+        <h2>What leaves your browser</h2>
+        <p class="note">
+          Nothing by default. Verified counting is one optional path: only
+          after you enable it and paste your own API key do the draft text and
+          model id go to Anthropic's <code>count_tokens</code> endpoint. The two
+          separate contribution choices below are the other optional path and
+          send only the fields they describe. Raw conversation text is never
+          contributed. Your claude.ai session, cookies, and history are never
+          touched.
+        </p>
+      </section>
+
+      <section>
+        <h2>Help improve it (optional)</h2>
+        <p class="note">
+          Forecasting works with both choices off. Each box is separate and
+          nothing is collected until you check it. Prompt text, reply text,
+          URLs, Claude account information, cookies, and API keys are never
+          included. <a href="privacy.html" target="_blank">Read the full packaged privacy notice.</a>
+        </p>
+        <label class="row consent-row">
+          <input type="checkbox" id="diagnosticsConsent" />
+          <span>
+            Share anonymous reliability diagnostics
+            <em>Version, supported surface, enumerated success/failure stages, and coarse timing only.</em>
+          </span>
+        </label>
+        <label class="row consent-row">
+          <input type="checkbox" id="researchConsent" />
+          <span>
+            Contribute derived observations for forecast training research
+            <em>Numeric/categorical draft features, the frozen forecast, and a visible-reply token estimate explicitly marked as estimated. No raw text.</em>
+          </span>
+        </label>
+        <p id="telemetryStatus" class="status" aria-live="polite"></p>
+      </section>
+
+      <section>
+        <h2>The profile behind the forecast</h2>
+        <p class="note" id="provenance">Reading the bundled profile...</p>
+        <p class="note" id="provenanceCaveat"></p>
+        <p class="note">
+          Nothing is learned in your browser. The profile is frozen at build
+          time and it does not adapt to you as you use it. Training it on your
+          own local Claude Code history is not available yet; when it is, this
+          page will say so and the panel will name which profile it used.
+        </p>
+        <p class="meta" id="profileId"></p>
+      </section>
+
+      <div class="actions">
+        <a class="button primary" href="https://claude.ai/code" target="_blank" rel="noreferrer">
+          Open claude.ai/code
+        </a>
+        <button type="button" id="openOptions">All settings</button>
+        <span id="saved" class="status ok" hidden>Saved.</span>
+      </div>
+
+      <p class="meta">
+        Read the band as scale, not as a promise. It is a forecast about a
+        distribution of replies, not about this one.
+      </p>
+    </main>
+    <script type="module" src="welcome.js"></script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+"""
+Launch Codex with a live draft forecast under the composer.
+
+    tf-codex [any codex arguments]
+
+Codex has a status line, but it is not one anything outside Codex can write to.
+`tui.status_line` takes a list of *built-in* item names — model, reasoning,
+directory, branch, context left, token totals — configured through
+`/statusline`; anything else is answered with `Ignored invalid status line
+item`, and there is no hook, plugin or config key that runs a command and shows
+what it prints. Claude Code's `statusLine.command` has no counterpart here.
+
+So the bar is painted from outside. The launcher gives Codex a screen one row
+shorter than the terminal really is, clamps every scrolling region Codex sets
+to that shorter screen, and keeps the last row for the forecast — the same
+technique a status bar has always used, and the reason Codex can neither scroll
+over the row nor draw on it. The line itself is rendered by `statusline.js`,
+the very program Claude Code runs, so both CLIs show one bar built by one piece
+of code:
+
+    ◆ prompt 9 tokens in → est 12k tokens out  ·  worst case 30k tokens
+
+Everything the launcher knows about the prompt comes from the keystrokes it is
+already forwarding, and it is reduced to counts before it is written anywhere.
+See `tf_wrap` for that, `tf_reserve` for the row, and `tf_bar` for the renderer.
+"""
+
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from tf_wrap import run  # noqa: E402
+
+if __name__ == "__main__":
+    sys.exit(
+        run(
+            program="tf-codex",
+            child_env="TOKEN_FORECASTER_CODEX_BIN",
+            child_default="codex",
+            reserve_row=True,
+        )
+    )

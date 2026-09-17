@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Token Forecaster settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Token Forecaster for claude.ai</h1>
+      <p class="lede">
+        The chip shows an estimate of the input you are about to send and a
+        forecast of the reply length. Everything is computed in your browser.
+        It runs on <code>claude.ai/code</code>, which is the surface the
+        shipped profile was fitted on.
+      </p>
+
+      <section>
+        <h2>Display</h2>
+        <label class="row">
+          <input type="checkbox" id="chipEnabled" />
+          <span>Show the chip on claude.ai</span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="startExpanded" />
+          <span>Open the panel expanded</span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="showInChat" />
+          <span>
+            Also show on the chat surface
+            <em>Out of domain: the profile describes Claude Code agent traffic, not chat. The panel says so. The confidence reads low on both surfaces, because the profile was fitted on one person&rsquo;s history.</em>
+          </span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="liveTrackingEnabled" />
+          <span>
+            Follow the reply while it is written
+            <em>The chip freezes its forecast when you send, walks to the reply being written, and shows what has been written so far against that forecast. Local only: it reads the text already on your screen.</em>
+          </span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="verdictsEnabled" />
+          <span>
+            Leave the score on each reply
+            <em>After a turn ends, a small line stays pinned to it saying how the length compared with the prediction. Only turns this extension forecast are scored.</em>
+          </span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="transcriptGaugeEnabled" />
+          <span>
+            Measure the visible conversation
+            <em>Local only, and it feeds the context bar on the chip. It is a lower bound: it cannot see the system prompt, attachments, tools, or memory.</em>
+          </span>
+        </label>
+      </section>
+
+      <section>
+        <h2>Forecast inputs</h2>
+        <label class="row stacked">
+          <span>Model</span>
+          <select id="modelOverride"></select>
+          <em>Auto reads the model picker on the page.</em>
+        </label>
+        <label class="row stacked">
+          <span>Extended thinking</span>
+          <select id="thinking">
+            <option value="on">On (default)</option>
+            <option value="off">Off</option>
+            <option value="auto">Auto (read the page)</option>
+          </select>
+          <em>
+            On by default, because that is how claude.ai ships and it is the
+            longer of the two forecasts. Auto reads the effort control next to
+            the model picker, and falls back to the thinking block in the newest
+            reply; when neither can be read, it assumes on. The panel always
+            says which answered.
+          </em>
+        </label>
+      </section>
+
+      <section>
+        <h2>Verified input count (optional)</h2>
+        <p class="note">
+          Off by default. With it on, and only then, the draft text and the
+          model id go to Anthropic's <code>count_tokens</code> endpoint to
+          replace the local estimate with an exact count. The conversation is
+          never sent. The key is stored unencrypted in extension storage.
+        </p>
+        <label class="row">
+          <input type="checkbox" id="verifyEnabled" />
+          <span>Use Anthropic count_tokens for the draft</span>
+        </label>
+        <label class="row stacked">
+          <span>Anthropic API key</span>
+          <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off" />
+        </label>
+        <div class="row">
+          <button type="button" id="testKey">Test the key</button>
+          <span id="testStatus" class="status"></span>
+        </div>
+      </section>
+
+      <section>
+        <h2>Data contribution (optional)</h2>
+        <p class="note">
+          Forecasting works completely without telemetry. These are separate,
+          off-by-default choices. No prompt text, reply text, URL, Claude
+          account information, cookie, or API key is collected. See the
+          <a href="privacy.html" target="_blank">full packaged privacy notice</a>.
+        </p>
+        <label class="row consent-row">
+          <input type="checkbox" id="diagnosticsConsent" />
+          <span>
+            Share anonymous reliability diagnostics
+            <em>Extension version, supported surface, enumerated success/failure stages, and coarse timing buckets.</em>
+          </span>
+        </label>
+        <label class="row consent-row">
+          <input type="checkbox" id="researchConsent" />
+          <span>
+            Contribute derived forecast observations for training research
+            <em>Numeric/categorical draft features, the frozen forecast, and an explicitly marked estimate of visible reply tokens. Raw text never leaves the browser.</em>
+          </span>
+        </label>
+        <div class="row actions-inline">
+          <button type="button" id="flushTelemetry">Send queued events now</button>
+          <button type="button" id="deleteTelemetry" class="danger">Delete contributed data</button>
+        </div>
+        <p id="telemetryStatus" class="status" aria-live="polite"></p>
+      </section>
+
+      <section>
+        <h2>The profile behind the forecast</h2>
+        <p class="note" id="provenance"></p>
+        <p class="note" id="provenanceCaveat"></p>
+        <p class="meta" id="profileId"></p>
+        <div class="row">
+          <a class="button" href="welcome.html" target="_blank" rel="noreferrer">
+            Show the welcome page
+          </a>
+        </div>
+      </section>
+
+      <p id="saved" class="saved" hidden>Saved.</p>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

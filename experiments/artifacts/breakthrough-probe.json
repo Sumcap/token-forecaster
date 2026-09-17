@@ -1,0 +1,2960 @@
+{
+  "generatedAt": "2026-08-06T12:16:34.876Z",
+  "source": "~/.claude/projects",
+  "methodology": {
+    "split": "5-fold rolling origin after 0.8 seed",
+    "minGroup": 100,
+    "comparison": "paired session-block bootstrap; candidate minus baseline",
+    "breakthrough": "CI upper < 0 and at least 5% loss reduction",
+    "preCallOnly": true
+  },
+  "dataset": {
+    "filesScanned": 434,
+    "calls": 15181,
+    "holdoutCalls": 3037,
+    "sessions": 300,
+    "workloads": 13,
+    "users": 1,
+    "promptCoverage": 0.9058691785784863,
+    "writeRate": 0.032145444964099865,
+    "longArtifactRate": 0.043541268691127066
+  },
+  "results": {
+    "baseline": {
+      "n": 3037,
+      "loss": 671.1681165623978,
+      "coverage": [
+        0.4955548238393151,
+        0.8689496213368456,
+        0.9858412907474481
+      ],
+      "width": [
+        1146.7872900889035,
+        5164.0190977938755
+      ],
+      "vsBaseline": null,
+      "relativeLossReduction": 0
+    },
+    "workload": {
+      "n": 3037,
+      "loss": 673.8280836351671,
+      "coverage": [
+        0.4922621007573263,
+        0.8709252551860388,
+        0.9828778399736582
+      ],
+      "width": [
+        1145.8600592690154,
+        4635.86466908133
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 2.659967072769096,
+        "ciLower": -8.737777365491795,
+        "ciUpper": 15.596868655798282,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.003963190454267953,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "sessionPosition": {
+      "n": 3037,
+      "loss": 676.7006684227857,
+      "coverage": [
+        0.48995719459993414,
+        0.864998353638459,
+        0.977938755350675
+      ],
+      "width": [
+        1111.0184392492592,
+        4189.326308857425
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 5.532551860388494,
+        "ciLower": -5.838483462350468,
+        "ciUpper": 17.375059914959326,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.008243168475769122,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "loopDepth": {
+      "n": 3037,
+      "loss": 674.8578564372733,
+      "coverage": [
+        0.5001646361540995,
+        0.8679618044122489,
+        0.9812314784326638
+      ],
+      "width": [
+        1117.3760289759632,
+        4316.538689496213
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 3.6897398748765595,
+        "ciLower": -4.999390080428933,
+        "ciUpper": 12.41527821939576,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.005497489799984455,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "deliverable": {
+      "n": 3037,
+      "loss": 679.3469476457032,
+      "coverage": [
+        0.49489627922291735,
+        0.8729008890352321,
+        0.9832071122818571
+      ],
+      "width": [
+        1159.004939084623,
+        5155.06585446164
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 8.178831083306031,
+        "ciLower": -0.7488873720137542,
+        "ciUpper": 18.193038016528813,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.012185964859589175,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "requestedFormat": {
+      "n": 3037,
+      "loss": 682.7149357918993,
+      "coverage": [
+        0.49127428383272964,
+        0.8798156075074086,
+        0.9832071122818571
+      ],
+      "width": [
+        1230.592690154758,
+        4921.403687849852
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 11.546819229502857,
+        "ciLower": 2.467839416058399,
+        "ciUpper": 21.698067324434398,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.017204063996131974,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "artifactIntent": {
+      "n": 3037,
+      "loss": 673.1371550872567,
+      "coverage": [
+        0.4925913730655252,
+        0.8712545274942377,
+        0.983536384590056
+      ],
+      "width": [
+        1135.1735265064208,
+        5148.7550214027
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 1.969038524860138,
+        "ciLower": -4.384495677233393,
+        "ciUpper": 8.047550295858102,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.0029337486037703917,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "priorWrite": {
+      "n": 3037,
+      "loss": 677.975614092855,
+      "coverage": [
+        0.48798156075074084,
+        0.8669739874876523,
+        0.9795851168916694
+      ],
+      "width": [
+        1090.3154428712546,
+        4250.231478432664
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 6.807497530457553,
+        "ciLower": -2.1842604501607377,
+        "ciUpper": 17.337920318725057,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.010142760602700154,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "priorArtifact": {
+      "n": 3037,
+      "loss": 676.0708725716132,
+      "coverage": [
+        0.4939084622983207,
+        0.8686203490286467,
+        0.9818900230490616
+      ],
+      "width": [
+        1107.223575897267,
+        4320.082318077049
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 4.902756009219542,
+        "ciLower": -2.1478573819886138,
+        "ciUpper": 12.386734430461457,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.007304810655086798,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "priorMax": {
+      "n": 3037,
+      "loss": 655.579107672043,
+      "coverage": [
+        0.49324991768192294,
+        0.8798156075074086,
+        0.9832071122818571
+      ],
+      "width": [
+        1138.8218636812644,
+        4964.785972999671
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -15.58900889035265,
+        "ciLower": -30.683981556821006,
+        "ciUpper": -0.7614449541284485,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.023226682712815302,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "priorMaxFine": {
+      "n": 3037,
+      "loss": 661.3602700032936,
+      "coverage": [
+        0.4909450115245308,
+        0.8781692459664142,
+        0.9812314784326638
+      ],
+      "width": [
+        1152.9845242015147,
+        4778.739545604215
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -9.807846559104435,
+        "ciLower": -26.134234679059016,
+        "ciUpper": 5.614308131241089,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.01461309963491481,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "priorArtifactCount": {
+      "n": 3037,
+      "loss": 680.0570991109637,
+      "coverage": [
+        0.48962792229173524,
+        0.8626934474810668,
+        0.9802436615080672
+      ],
+      "width": [
+        1087.272966743497,
+        4250.788277905828
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 8.888982548567643,
+        "ciLower": -0.31426293524243537,
+        "ciUpper": 18.470850405875588,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.013244047697163284,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "priorMaxArtifactIntent": {
+      "n": 3037,
+      "loss": 664.251198551201,
+      "coverage": [
+        0.501152453078696,
+        0.8900230490615739,
+        0.9845242015146526
+      ],
+      "width": [
+        1244.7240698057294,
+        5223.746460322687
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -6.916918011195166,
+        "ciLower": -20.670586927523278,
+        "ciUpper": 5.826019320452994,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.010305790517318334,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "oracleAction": {
+      "n": 3037,
+      "loss": 544.8246163977622,
+      "coverage": [
+        0.47843266381297334,
+        0.8692788936450444,
+        0.9769509384260784
+      ],
+      "width": [
+        982.2525518603885,
+        3219.408956206783
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -126.34350016463505,
+        "ciLower": -175.61556730378237,
+        "ciUpper": -79.5924127310067,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.18824419254559305,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "oracleWriteGroup": {
+      "n": 3037,
+      "loss": 597.6658808034274,
+      "coverage": [
+        0.495884096147514,
+        0.8709252551860388,
+        0.9802436615080672
+      ],
+      "width": [
+        1135.24860059269,
+        3699.2644056634836
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -73.50223575897171,
+        "ciLower": -121.20173167848404,
+        "ciUpper": -29.505421605148054,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.10951389666040294,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "oracleLongArtifactGroup": {
+      "n": 3037,
+      "loss": 567.895693118208,
+      "coverage": [
+        0.5057622653934805,
+        0.8781692459664142,
+        0.9799143891998683
+      ],
+      "width": [
+        1156.3516628251564,
+        3598.3157721435628
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -103.27242344418883,
+        "ciLower": -156.409090267985,
+        "ciUpper": -52.947220670392056,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.15386968018256228,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "oracleLongOutputGroup": {
+      "n": 3037,
+      "loss": 422.75795851168783,
+      "coverage": [
+        0.49851827461310505,
+        0.881461969048403,
+        0.9832071122818571
+      ],
+      "width": [
+        1060.993414553836,
+        2810.556470200856
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -248.410158050706,
+        "ciLower": -325.3838324360643,
+        "ciUpper": -178.81721938775394,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.370116148131437,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "promptHistory5": {
+      "n": 3037,
+      "loss": 768.2575930194251,
+      "coverage": [
+        0.4955548238393151,
+        0.8610470859400724,
+        0.9456700691471848
+      ],
+      "width": [
+        1429.3058939743169,
+        4233.042805400066
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 97.08947645702995,
+        "ciLower": 70.61215224111272,
+        "ciUpper": 123.38387928324418,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.1446574622082836,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "sessionHistory5": {
+      "n": 3037,
+      "loss": 754.6621534408952,
+      "coverage": [
+        0.49357918999012185,
+        0.8755350675008232,
+        0.9555482383931512
+      ],
+      "width": [
+        1400.486664471518,
+        4827.37833388212
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 83.49403687849863,
+        "ciLower": 59.89849150141643,
+        "ciUpper": 107.20575047258987,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.12440107749179155,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "hierarchicalHistory5": {
+      "n": 3037,
+      "loss": 771.9540632202804,
+      "coverage": [
+        0.4991768192295028,
+        0.86763253210405,
+        0.9436944352979915
+      ],
+      "width": [
+        1452.763253210405,
+        4313.185380309516
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 100.78594665788613,
+        "ciLower": 73.81732211538461,
+        "ciUpper": 127.62394151025715,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.15016497978791601,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "promptHistory10": {
+      "n": 3037,
+      "loss": 733.2784425419821,
+      "coverage": [
+        0.5123477115574581,
+        0.8752057951926243,
+        0.9641093184063221
+      ],
+      "width": [
+        1443.7477774119197,
+        4701.049720118538
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 62.11032597958499,
+        "ciLower": 35.42501034482762,
+        "ciUpper": 86.9818950064019,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.09254063839877093,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "sessionHistory10": {
+      "n": 3037,
+      "loss": 735.5899143892009,
+      "coverage": [
+        0.5077378992426737,
+        0.8873888705959829,
+        0.9677313137965097
+      ],
+      "width": [
+        1445.8834376028976,
+        5148.743826144221
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 64.42179782680287,
+        "ciLower": 41.31197061365591,
+        "ciUpper": 84.22098929494301,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.09598459199277778,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "hierarchicalHistory10": {
+      "n": 3037,
+      "loss": 750.1108330589378,
+      "coverage": [
+        0.509384260783668,
+        0.8801448798156075,
+        0.961475139940731
+      ],
+      "width": [
+        1485.0856108001317,
+        4824.096147513994
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 78.9427164965426,
+        "ciLower": 53.38939672293944,
+        "ciUpper": 103.3724173850572,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.11761988471811351,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "promptHistory20": {
+      "n": 3037,
+      "loss": 709.3541652946988,
+      "coverage": [
+        0.5169575238722424,
+        0.8808034244320053,
+        0.9805729338162661
+      ],
+      "width": [
+        1398.0125123477117,
+        5126.503128086928
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 38.18604873230154,
+        "ciLower": 17.40320741758242,
+        "ciUpper": 56.52721714865558,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.05689490872701702,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "sessionHistory20": {
+      "n": 3037,
+      "loss": 716.9069739874888,
+      "coverage": [
+        0.5222258808034245,
+        0.8956206783009549,
+        0.9792558445834705
+      ],
+      "width": [
+        1457.6187026671057,
+        5505.1346723740535
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 45.73885742509049,
+        "ciLower": 23.685550865344005,
+        "ciUpper": 63.576167333128375,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.06814813799463043,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "hierarchicalHistory20": {
+      "n": 3037,
+      "loss": 731.3384162001962,
+      "coverage": [
+        0.5149818900230491,
+        0.8926572275271649,
+        0.9785972999670728
+      ],
+      "width": [
+        1490.5400065854462,
+        5381.220283174185
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 60.1702996378004,
+        "ciLower": 36.82170442662936,
+        "ciUpper": 80.44016383307573,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.08965011619738708,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "promptHistory50": {
+      "n": 3037,
+      "loss": 683.2286532762602,
+      "coverage": [
+        0.5110306223246625,
+        0.8748765228844254,
+        0.9848534738228515
+      ],
+      "width": [
+        1236.6483371748436,
+        5246.10602568324
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 12.060536713862366,
+        "ciLower": 1.1026354679802874,
+        "ciUpper": 23.197865931268538,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.017969472053640245,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "sessionHistory50": {
+      "n": 3037,
+      "loss": 699.1161442212721,
+      "coverage": [
+        0.5281527823510043,
+        0.8946328613763582,
+        0.9848534738228515
+      ],
+      "width": [
+        1395.7444846888377,
+        5641.683898584129
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 27.948027658873862,
+        "ciLower": 9.61673705179283,
+        "ciUpper": 43.31313096270606,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.04164087501953851,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "hierarchicalHistory50": {
+      "n": 3037,
+      "loss": 723.6947843266362,
+      "coverage": [
+        0.5225551531116233,
+        0.897925584458347,
+        0.9851827461310504
+      ],
+      "width": [
+        1446.3664800790255,
+        5988.200526835693
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 52.526667764240955,
+        "ciLower": 32.90505154639171,
+        "ciUpper": 71.25255068078663,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.07826156587007303,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "conformal64": {
+      "n": 3037,
+      "loss": 669.7702304906152,
+      "coverage": [
+        0.5110306223246625,
+        0.8854132367467896,
+        0.9858412907474481
+      ],
+      "width": [
+        1347.1396114586764,
+        5143.2173197234115
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -1.3978860717813657,
+        "ciLower": -9.03361277445106,
+        "ciUpper": 6.473099999999952,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.0020827659081022595,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "workloadConformal64": {
+      "n": 3037,
+      "loss": 667.0001053671376,
+      "coverage": [
+        0.5004939084622984,
+        0.8834376028975963,
+        0.9858412907474481
+      ],
+      "width": [
+        1297.9713533091867,
+        5136.173197234112
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -4.168011195258478,
+        "ciLower": -13.155765167521825,
+        "ciUpper": 5.376307476307493,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.006210085211744384,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "conformal128": {
+      "n": 3037,
+      "loss": 670.4099736582158,
+      "coverage": [
+        0.5057622653934805,
+        0.8939743167599605,
+        0.9828778399736582
+      ],
+      "width": [
+        1362.8916694106026,
+        5099.943035890682
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -0.758142904181754,
+        "ciLower": -10.118022696011105,
+        "ciUpper": 8.55261415525111,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.0011295871860910577,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "workloadConformal128": {
+      "n": 3037,
+      "loss": 666.7801975633856,
+      "coverage": [
+        0.501152453078696,
+        0.8929864998353638,
+        0.983536384590056
+      ],
+      "width": [
+        1322.4385907145208,
+        5050.166282515641
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -4.387918999012265,
+        "ciLower": -13.50202810758434,
+        "ciUpper": 4.627313278008318,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.006537734571609861,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "conformal256": {
+      "n": 3037,
+      "loss": 666.8585610800124,
+      "coverage": [
+        0.5060915377016793,
+        0.8959499506091537,
+        0.9868291076720448
+      ],
+      "width": [
+        1349.9907803753704,
+        5391.522555153111
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -4.309555482383901,
+        "ciLower": -13.8727799607072,
+        "ciUpper": 5.689028199566183,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.0064209776597503885,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "workloadConformal256": {
+      "n": 3037,
+      "loss": 665.9164702008555,
+      "coverage": [
+        0.49357918999012185,
+        0.8939743167599605,
+        0.9855120184392493
+      ],
+      "width": [
+        1338.6331906486664,
+        5375.830754033585
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -5.251646361541009,
+        "ciLower": -14.181788223891479,
+        "ciUpper": 3.721441633648303,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.007824636230396335,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "conformal512": {
+      "n": 3037,
+      "loss": 666.3394995060912,
+      "coverage": [
+        0.4972011853803095,
+        0.8946328613763582,
+        0.989134013829437
+      ],
+      "width": [
+        1339.5271649654264,
+        5578.613105037866
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -4.828617056305533,
+        "ciLower": -14.687261668321902,
+        "ciUpper": 5.0134006011163645,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.007194348088280534,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "workloadConformal512": {
+      "n": 3037,
+      "loss": 665.6168883766882,
+      "coverage": [
+        0.4856766545933487,
+        0.8943035890681593,
+        0.9868291076720448
+      ],
+      "width": [
+        1336.2430029634509,
+        5502.615080671715
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -5.5512281857095935,
+        "ciLower": -14.789120426459906,
+        "ciUpper": 3.314113394216134,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.008270995073696266,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "priorMaxConformal512": {
+      "n": 3037,
+      "loss": 656.3073427724734,
+      "coverage": [
+        0.5031280869278894,
+        0.8972670398419493,
+        0.9878169245966414
+      ],
+      "width": [
+        1286.8910108659861,
+        6104.827790582812
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -14.860773789924295,
+        "ciLower": -33.797505394907276,
+        "ciUpper": 5.262917466410738,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.022141656349885182,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "priorMaxWorkloadConformal512": {
+      "n": 3037,
+      "loss": 653.8853803095162,
+      "coverage": [
+        0.4942377346065196,
+        0.8969377675337504,
+        0.9838656568982549
+      ],
+      "width": [
+        1272.6924596641422,
+        5919.7853144550545
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -17.282736252881165,
+        "ciLower": -37.10640575640581,
+        "ciUpper": 3.0805716824644502,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.02575023429509767,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "semanticWriteHurdle": {
+      "n": 3037,
+      "loss": 677.7324333223592,
+      "coverage": [
+        0.49489627922291735,
+        0.8729008890352321,
+        0.9848534738228515
+      ],
+      "width": [
+        1137.6252881132696,
+        4662.218966084953
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 6.564316759960447,
+        "ciLower": -7.370155339805885,
+        "ciUpper": 20.4923586078309,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.009780435926518226,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "semanticLongArtifactHurdle": {
+      "n": 3037,
+      "loss": 680.8946690813311,
+      "coverage": [
+        0.49687191307211065,
+        0.8699374382614422,
+        0.9818900230490616
+      ],
+      "width": [
+        1124.6190319394138,
+        4825.245637141917
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 9.726552518933076,
+        "ciLower": -4.668703333333367,
+        "ciUpper": 24.544939393939504,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": -0.014491976419783953,
+      "adopts": false,
+      "breakthrough": false
+    },
+    "boostedQuantile": {
+      "n": 3037,
+      "loss": 651.1905663483695,
+      "coverage": [
+        0.49028646690813305,
+        0.8798156075074086,
+        0.9871583799802437
+      ],
+      "width": [
+        1126.1149160355615,
+        5175.118208758643
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -19.97755021402716,
+        "ciLower": -28.313263327948004,
+        "ciUpper": -13.234438502674061,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.02976534451062511,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedStructured": {
+      "n": 3037,
+      "loss": 650.5714323345406,
+      "coverage": [
+        0.4906157392163319,
+        0.8784985182746131,
+        0.9851827461310504
+      ],
+      "width": [
+        1111.7280210734277,
+        5120.731313796509
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -20.59668422785654,
+        "ciLower": -29.206731424676235,
+        "ciUpper": -14.098833387044884,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.03068781683693356,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedPortable": {
+      "n": 3037,
+      "loss": 650.3832301613427,
+      "coverage": [
+        0.49160355614092854,
+        0.8784985182746131,
+        0.9871583799802437
+      ],
+      "width": [
+        1109.0912084293711,
+        5162.280540006585
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -20.78488640105381,
+        "ciLower": -30.203610191082657,
+        "ciUpper": -13.96245404143575,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.030968226720169984,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedPortableNoPrior": {
+      "n": 3037,
+      "loss": 662.614303589068,
+      "coverage": [
+        0.49324991768192294,
+        0.8748765228844254,
+        0.9868291076720448
+      ],
+      "width": [
+        1149.8936450444517,
+        5257.922291735265
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -8.55381297332897,
+        "ciLower": -13.457717729393504,
+        "ciUpper": -4.448641750227898,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.012744665251889584,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedPriorMax": {
+      "n": 3037,
+      "loss": 648.0198880474142,
+      "coverage": [
+        0.48304247612775764,
+        0.8824497859729997,
+        0.9864998353638459
+      ],
+      "width": [
+        1130.057622653935,
+        5235.305235429701
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -23.148228514982023,
+        "ciLower": -39.80140698772386,
+        "ciUpper": -7.206080105055738,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.03448946388207932,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedConformal512": {
+      "n": 3037,
+      "loss": 650.162245637142,
+      "coverage": [
+        0.501152453078696,
+        0.8936450444517616,
+        0.9888047415212381
+      ],
+      "width": [
+        1259.4622983207112,
+        5575.604543957853
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -21.005870925255213,
+        "ciLower": -34.14667962674961,
+        "ciUpper": -9.39523132748716,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.03129748032854048,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedWorkloadConformal512": {
+      "n": 3037,
+      "loss": 649.4738952914051,
+      "coverage": [
+        0.48666447151794534,
+        0.8946328613763582,
+        0.9878169245966414
+      ],
+      "width": [
+        1259.7974975304576,
+        5503.815278235101
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -21.694221270991093,
+        "ciLower": -34.13826725403822,
+        "ciUpper": -10.964961549416126,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.03232308081335119,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedPriorMaxConformal512": {
+      "n": 3037,
+      "loss": 648.2987849851827,
+      "coverage": [
+        0.49983536384590055,
+        0.8933157721435627,
+        0.9901218307540336
+      ],
+      "width": [
+        1250.0270003292724,
+        6159.897267039842
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -22.869331577214357,
+        "ciLower": -42.35920994649048,
+        "ciUpper": -2.398979025292993,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.03407392427153267,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "boostedPriorMaxWorkloadConformal512": {
+      "n": 3037,
+      "loss": 647.0496838985837,
+      "coverage": [
+        0.4889693776753375,
+        0.8946328613763582,
+        0.9874876522884426
+      ],
+      "width": [
+        1235.875864339809,
+        6024.445176160685
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -24.118432663813138,
+        "ciLower": -44.44755832037319,
+        "ciUpper": -3.9388199013157785,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.03593500952837778,
+      "adopts": true,
+      "breakthrough": false
+    },
+    "oracleWriteHurdle": {
+      "n": 3037,
+      "loss": 596.906700691468,
+      "coverage": [
+        0.495884096147514,
+        0.8755350675008232,
+        0.9809022061244649
+      ],
+      "width": [
+        1173.652288442542,
+        3823.147184721765
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -74.26141587092415,
+        "ciLower": -121.61119162184853,
+        "ciUpper": -31.652929112795682,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.11064502922349433,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "oracleLongArtifactHurdle": {
+      "n": 3037,
+      "loss": 572.396371419164,
+      "coverage": [
+        0.5074086269344749,
+        0.8850839644385907,
+        0.9805729338162661
+      ],
+      "width": [
+        1212.5702996378004,
+        3761.2821863681265
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -98.77174514323288,
+        "ciLower": -153.22940093828933,
+        "ciUpper": -47.57185672514653,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.14716394105417874,
+      "adopts": true,
+      "breakthrough": true
+    }
+  },
+  "oracleCeilings": {
+    "globalCalibration": {
+      "minimum": 100,
+      "groupsFitted": 1,
+      "meanLoss": 666.4864998353636,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -4.681616727033704,
+        "ciLower": -12.712229392784288,
+        "ciUpper": 4.029245283018768,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.006975326466656524,
+      "coverage": [
+        0.5001646361540995,
+        0.8999012183075403,
+        0.9897925584458347
+      ],
+      "width": [
+        1380.7872900889035,
+        5769.0190977938755
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "workload": {
+      "minimum": 100,
+      "groupsFitted": 3,
+      "meanLoss": 654.8879354626264,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -16.280181099769283,
+        "ciLower": -27.53854199066802,
+        "ciUpper": -5.638288190682765,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.024256487604258435,
+      "coverage": [
+        0.5018109976950939,
+        0.8995719459993414,
+        0.9894632861376358
+      ],
+      "width": [
+        1328.9397431675995,
+        5550.025683240039
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "sessionPosition": {
+      "minimum": 100,
+      "groupsFitted": 4,
+      "meanLoss": 656.7068324003956,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -14.461284162002986,
+        "ciLower": -25.635680766689557,
+        "ciUpper": -3.5256727135299157,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.021546440906744912,
+      "coverage": [
+        0.5034573592360883,
+        0.9008890352321369,
+        0.9897925584458347
+      ],
+      "width": [
+        1359.8501810997695,
+        5879.267369114257
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "loopDepth": {
+      "minimum": 100,
+      "groupsFitted": 5,
+      "meanLoss": 658.7610207441567,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -12.407095818241343,
+        "ciLower": -23.70652114128542,
+        "ciUpper": -1.2876905522591964,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.018485824210166975,
+      "coverage": [
+        0.5021402700032928,
+        0.8999012183075403,
+        0.989134013829437
+      ],
+      "width": [
+        1398.1050378663153,
+        5463.833717484359
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "deliverable": {
+      "minimum": 100,
+      "groupsFitted": 3,
+      "meanLoss": 662.9580276588734,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -8.210088903523035,
+        "ciLower": -16.19257649513175,
+        "ciUpper": -0.5806810321893738,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.012232537125830159,
+      "coverage": [
+        0.4856766545933487,
+        0.8933157721435627,
+        0.9881461969048403
+      ],
+      "width": [
+        1355.4563714191636,
+        5542.964109318406
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "requestedFormat": {
+      "minimum": 100,
+      "groupsFitted": 4,
+      "meanLoss": 665.9004346394465,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -5.267681922950178,
+        "ciLower": -12.393200473559627,
+        "ciUpper": 2.2144736842105397,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.007848528249420273,
+      "coverage": [
+        0.48534738228514984,
+        0.8939743167599605,
+        0.9881461969048403
+      ],
+      "width": [
+        1376.82449785973,
+        5516.672044781034
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "artifactIntent": {
+      "minimum": 100,
+      "groupsFitted": 2,
+      "meanLoss": 663.1306157392164,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -8.037500823181333,
+        "ciLower": -16.012058823529365,
+        "ciUpper": -0.2988912133891509,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.011975391298901331,
+      "coverage": [
+        0.4856766545933487,
+        0.8943035890681593,
+        0.9884754692130392
+      ],
+      "width": [
+        1362.8429371089892,
+        5516.365162989792
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "priorMax": {
+      "minimum": 100,
+      "groupsFitted": 4,
+      "meanLoss": 651.7129239380957,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -19.45519262430152,
+        "ciLower": -28.200135256987583,
+        "ciUpper": -10.99509740259771,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.028987063217405965,
+      "coverage": [
+        0.5057622653934805,
+        0.8992426736911425,
+        0.9894632861376358
+      ],
+      "width": [
+        1288.6542640763912,
+        5492.065525189331
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "workloadAndPriorMax": {
+      "minimum": 100,
+      "groupsFitted": 8,
+      "meanLoss": 643.5453012841627,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -27.622815278235556,
+        "ciLower": -38.11671728971964,
+        "ciUpper": -17.35236208473057,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.04115632819347057,
+      "coverage": [
+        0.5143233454066513,
+        0.8982548567665459,
+        0.9884754692130392
+      ],
+      "width": [
+        1264.7395456042148,
+        5358.94336516299
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "sessionIdentity": {
+      "minimum": 20,
+      "groupsFitted": 33,
+      "meanLoss": 626.1140467566682,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -45.054069805729036,
+        "ciLower": -62.90527459016343,
+        "ciUpper": -30.598423750534334,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.06712784575716717,
+      "coverage": [
+        0.5136648007902536,
+        0.8989134013829437,
+        0.9838656568982549
+      ],
+      "width": [
+        1349.7728021073428,
+        5280.317747777412
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "promptIdentity": {
+      "minimum": 20,
+      "groupsFitted": 51,
+      "meanLoss": 622.0529601580498,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -49.11515640434567,
+        "ciLower": -67.37054270882484,
+        "ciUpper": -34.22022222222195,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeCeiling": 0.07317861977101155,
+      "coverage": [
+        0.501481725386895,
+        0.8873888705959829,
+        0.9782680276588739
+      ],
+      "width": [
+        1238.1847217648997,
+        4873.198880474152
+      ],
+      "note": "optimistic hindsight fit on the held-out outcomes; ceiling only"
+    },
+    "trueAction": {
+      "n": 3037,
+      "loss": 544.8246163977622,
+      "coverage": [
+        0.47843266381297334,
+        0.8692788936450444,
+        0.9769509384260784
+      ],
+      "width": [
+        982.2525518603885,
+        3219.408956206783
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -126.34350016463505,
+        "ciLower": -175.61556730378237,
+        "ciUpper": -79.5924127310067,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.18824419254559305,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "trueWrite": {
+      "n": 3037,
+      "loss": 596.906700691468,
+      "coverage": [
+        0.495884096147514,
+        0.8755350675008232,
+        0.9809022061244649
+      ],
+      "width": [
+        1173.652288442542,
+        3823.147184721765
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -74.26141587092415,
+        "ciLower": -121.61119162184853,
+        "ciUpper": -31.652929112795682,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.11064502922349433,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "trueLongArtifact": {
+      "n": 3037,
+      "loss": 572.396371419164,
+      "coverage": [
+        0.5074086269344749,
+        0.8850839644385907,
+        0.9805729338162661
+      ],
+      "width": [
+        1212.5702996378004,
+        3761.2821863681265
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -98.77174514323288,
+        "ciLower": -153.22940093828933,
+        "ciUpper": -47.57185672514653,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.14716394105417874,
+      "adopts": true,
+      "breakthrough": true
+    },
+    "trueLongOutput": {
+      "n": 3037,
+      "loss": 422.75795851168783,
+      "coverage": [
+        0.49851827461310505,
+        0.881461969048403,
+        0.9832071122818571
+      ],
+      "width": [
+        1060.993414553836,
+        2810.556470200856
+      ],
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -248.410158050706,
+        "ciLower": -325.3838324360643,
+        "ciUpper": -178.81721938775394,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "relativeLossReduction": 0.370116148131437,
+      "adopts": true,
+      "breakthrough": true
+    }
+  },
+  "detectorQuality": [
+    {
+      "recall": 0.5,
+      "falsePositiveRate": 0.01,
+      "meanLoss": 669.7700493908433,
+      "relativeReduction": 0.002083035735832712,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -1.3980671715510098,
+        "ciLower": -35.55680381471381,
+        "ciUpper": 28.464187268233115,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.5,
+      "falsePositiveRate": 0.03,
+      "meanLoss": 702.7142509054956,
+      "relativeReduction": -0.047001836893974046,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 31.54613434310158,
+        "ciLower": -9.979615494160797,
+        "ciUpper": 70.50379993504339,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.5,
+      "falsePositiveRate": 0.05,
+      "meanLoss": 734.427105696408,
+      "relativeReduction": -0.09425207719641958,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 63.25898913401465,
+        "ciLower": 19.25802205375569,
+        "ciUpper": 101.5813860435351,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.7,
+      "falsePositiveRate": 0.01,
+      "meanLoss": 641.1784129074709,
+      "relativeReduction": 0.04468284907293394,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -29.989703654922955,
+        "ciLower": -64.36641218872832,
+        "ciUpper": 0.3528356679193214,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.7,
+      "falsePositiveRate": 0.03,
+      "meanLoss": 674.1226144221238,
+      "relativeReduction": -0.004402023556872881,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 2.9544978597296785,
+        "ciLower": -38.683981684982086,
+        "ciUpper": 38.787763019923965,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.7,
+      "falsePositiveRate": 0.05,
+      "meanLoss": 705.8354692130362,
+      "relativeReduction": -0.05165226385931746,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 34.66735265064211,
+        "ciLower": -8.109420779221097,
+        "ciUpper": 71.68642524916994,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.9,
+      "falsePositiveRate": 0.01,
+      "meanLoss": 620.0825156404309,
+      "relativeReduction": 0.07611446321916081,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -51.08560092196206,
+        "ciLower": -88.59682734443318,
+        "ciUpper": -17.11400345423184,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.9,
+      "falsePositiveRate": 0.03,
+      "meanLoss": 653.0267171550836,
+      "relativeReduction": 0.027029590589355387,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": -18.141399407310367,
+        "ciLower": -58.49576060710596,
+        "ciUpper": 19.96764255910937,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    {
+      "recall": 0.9,
+      "falsePositiveRate": 0.05,
+      "meanLoss": 684.7395719459962,
+      "relativeReduction": -0.02022064971308897,
+      "vsBaseline": {
+        "n": 3037,
+        "meanDifference": 13.571455383601913,
+        "ciLower": -26.384941222570895,
+        "ciUpper": 51.40291775646654,
+        "blocks": 49,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    }
+  ],
+  "semanticClassifiers": {
+    "write": {
+      "n": 3037,
+      "prevalence": 0.02601251234771156,
+      "logLoss": 0.1343049517968585,
+      "brier": 0.026134594960506474,
+      "auc": 0.5845294032060664,
+      "topDecileRate": 0.049342105263157895,
+      "topDecileLift": 1.8968604263824116
+    },
+    "longArtifact": {
+      "n": 3037,
+      "prevalence": 0.046427395456042145,
+      "logLoss": 0.22340216648635447,
+      "brier": 0.04581496919332342,
+      "auc": 0.5549400493711062,
+      "topDecileRate": 0.08881578947368421,
+      "topDecileLift": 1.9130039193729005
+    }
+  },
+  "decomposition": {
+    "byLevel": [
+      {
+        "level": "p50",
+        "meanLoss": 295.18982548567664,
+        "shareOfLoss": 0.4398150302454559,
+        "overForecastLossShare": 0.14805606076577413,
+        "underForecastLossShare": 0.8519439392342258
+      },
+      {
+        "level": "p90",
+        "meanLoss": 290.00836351662787,
+        "shareOfLoss": 0.4320949645254284,
+        "overForecastLossShare": 0.3269257276197231,
+        "underForecastLossShare": 0.673074272380278
+      },
+      {
+        "level": "p99",
+        "meanLoss": 85.96992756009212,
+        "shareOfLoss": 0.12809000522911398,
+        "overForecastLossShare": 0.5568160286999168,
+        "underForecastLossShare": 0.44318397130008563
+      }
+    ],
+    "concentration": {
+      "0.01": 0.25156579437428495,
+      "0.05": 0.4919811883759765,
+      "0.1": 0.5999851732115207
+    },
+    "byModelThinking": {
+      "claude-opus-5|thinking=no": {
+        "n": 1275,
+        "baseline": {
+          "n": 1275,
+          "loss": 410.61082352941133,
+          "coverage": [
+            0.4752941176470588,
+            0.8745098039215686,
+            0.9858823529411764
+          ],
+          "width": [
+            706.9349019607843,
+            2830.7992156862747
+          ]
+        },
+        "artifactRate": 0.042352941176470586,
+        "writeRate": 0.011764705882352941
+      },
+      "claude-opus-5|thinking=yes": {
+        "n": 1044,
+        "baseline": {
+          "n": 1044,
+          "loss": 890.4611302682009,
+          "coverage": [
+            0.4875478927203065,
+            0.8620689655172413,
+            0.9885057471264368
+          ],
+          "width": [
+            1552.0268199233717,
+            8088.846743295019
+          ]
+        },
+        "artifactRate": 0.04310344827586207,
+        "writeRate": 0.033524904214559385
+      },
+      "claude-fable-5|thinking=yes": {
+        "n": 421,
+        "baseline": {
+          "n": 421,
+          "loss": 1199.5308788598572,
+          "coverage": [
+            0.5415676959619953,
+            0.8551068883610451,
+            0.9738717339667459
+          ],
+          "width": [
+            1877.5771971496438,
+            6649.722090261283
+          ]
+        },
+        "artifactRate": 0.07125890736342043,
+        "writeRate": 0.0498812351543943
+      },
+      "claude-fable-5|thinking=no": {
+        "n": 297,
+        "baseline": {
+          "n": 297,
+          "loss": 269.91531986532,
+          "coverage": [
+            0.5454545454545454,
+            0.8888888888888888,
+            0.9932659932659933
+          ],
+          "width": [
+            574.6632996632997,
+            2793.158249158249
+          ]
+        },
+        "artifactRate": 0.04040404040404041,
+        "writeRate": 0.026936026936026935
+      }
+    },
+    "byPromptPath": {
+      "no": {
+        "n": 2112,
+        "baseline": {
+          "n": 2112,
+          "loss": 575.3783712121221,
+          "coverage": [
+            0.5246212121212122,
+            0.8877840909090909,
+            0.9867424242424242
+          ],
+          "width": [
+            1121.0416666666667,
+            4228.59375
+          ]
+        },
+        "artifactRate": 0.04071969696969697,
+        "writeRate": 0.028409090909090908
+      },
+      "yes": {
+        "n": 739,
+        "baseline": {
+          "n": 739,
+          "loss": 952.350866035182,
+          "coverage": [
+            0.4736129905277402,
+            0.8308525033829499,
+            0.986468200270636
+          ],
+          "width": [
+            1287.0595399188092,
+            8250.970230040595
+          ]
+        },
+        "artifactRate": 0.06224627875507442,
+        "writeRate": 0.02165087956698241
+      },
+      "(unknown)": {
+        "n": 186,
+        "baseline": {
+          "n": 186,
+          "loss": 641.6729032258065,
+          "coverage": [
+            0.25268817204301075,
+            0.8064516129032258,
+            0.9731182795698925
+          ],
+          "width": [
+            881.8064516129032,
+            3520.8010752688174
+          ]
+        },
+        "artifactRate": 0.04838709677419355,
+        "writeRate": 0.016129032258064516
+      }
+    },
+    "byWorkload": {
+      "workload-02": {
+        "n": 1976,
+        "baseline": {
+          "n": 1976,
+          "loss": 569.146082995951,
+          "coverage": [
+            0.5637651821862348,
+            0.9003036437246964,
+            0.9883603238866396
+          ],
+          "width": [
+            1164.3922064777328,
+            4658.523279352226
+          ]
+        },
+        "artifactRate": 0.038461538461538464,
+        "writeRate": 0.02631578947368421
+      },
+      "workload-01": {
+        "n": 853,
+        "baseline": {
+          "n": 853,
+          "loss": 896.0955216881601,
+          "coverage": [
+            0.35990621336459555,
+            0.8065650644783119,
+            0.984759671746776
+          ],
+          "width": [
+            1118.7420867526378,
+            6575.3540445486515
+          ]
+        },
+        "artifactRate": 0.06565064478311841,
+        "writeRate": 0.02579132473622509
+      },
+      "workload-03": {
+        "n": 163,
+        "baseline": {
+          "n": 163,
+          "loss": 736.6521472392637,
+          "coverage": [
+            0.3558282208588957,
+            0.803680981595092,
+            0.9631901840490797
+          ],
+          "width": [
+            1017.5644171779142,
+            3904.9263803680983
+          ]
+        },
+        "artifactRate": 0.049079754601226995,
+        "writeRate": 0.024539877300613498
+      }
+    },
+    "bySessionPosition": {
+      "60+": {
+        "n": 1202,
+        "baseline": {
+          "n": 1202,
+          "loss": 697.2461148086516,
+          "coverage": [
+            0.413477537437604,
+            0.8419301164725458,
+            0.9850249584026622
+          ],
+          "width": [
+            1096.689683860233,
+            5205.066555740433
+          ]
+        },
+        "artifactRate": 0.0524126455906822,
+        "writeRate": 0.029950083194675542
+      },
+      "20-59": {
+        "n": 1018,
+        "baseline": {
+          "n": 1018,
+          "loss": 705.7220628683689,
+          "coverage": [
+            0.4960707269155206,
+            0.8762278978388998,
+            0.981335952848723
+          ],
+          "width": [
+            1116.9145383104126,
+            4844.470530451867
+          ]
+        },
+        "artifactRate": 0.060903732809430254,
+        "writeRate": 0.03339882121807466
+      },
+      "5-19": {
+        "n": 587,
+        "baseline": {
+          "n": 587,
+          "loss": 681.1989948892676,
+          "coverage": [
+            0.5468483816013628,
+            0.8705281090289608,
+            0.989778534923339
+          ],
+          "width": [
+            1239.7120954003408,
+            5450.608177172061
+          ]
+        },
+        "artifactRate": 0.02555366269165247,
+        "writeRate": 0.013628620102214651
+      },
+      "1-4": {
+        "n": 182,
+        "baseline": {
+          "n": 182,
+          "loss": 360.3591758241759,
+          "coverage": [
+            0.8241758241758241,
+            0.9725274725274725,
+            1
+          ],
+          "width": [
+            1285.2857142857142,
+            5754.681318681319
+          ]
+        },
+        "artifactRate": 0.005494505494505495,
+        "writeRate": 0.005494505494505495
+      }
+    },
+    "byDeliverable": {
+      "other": {
+        "n": 1536,
+        "baseline": {
+          "n": 1536,
+          "loss": 534.6502799479166,
+          "coverage": [
+            0.5364583333333334,
+            0.8938802083333334,
+            0.9889322916666666
+          ],
+          "width": [
+            1102.0755208333333,
+            4277.438802083333
+          ]
+        },
+        "artifactRate": 0.0390625,
+        "writeRate": 0.0234375
+      },
+      "artifact": {
+        "n": 916,
+        "baseline": {
+          "n": 916,
+          "loss": 929.1996834061124,
+          "coverage": [
+            0.4421397379912664,
+            0.8307860262008734,
+            0.9836244541484717
+          ],
+          "width": [
+            1239.7008733624455,
+            7016.186681222707
+          ]
+        },
+        "artifactRate": 0.06331877729257641,
+        "writeRate": 0.03056768558951965
+      },
+      "operation": {
+        "n": 259,
+        "baseline": {
+          "n": 259,
+          "loss": 635.3592277992274,
+          "coverage": [
+            0.6061776061776062,
+            0.8918918918918919,
+            0.9845559845559846
+          ],
+          "width": [
+            1192.3243243243244,
+            5170.84555984556
+          ]
+        },
+        "artifactRate": 0.04247104247104247,
+        "writeRate": 0.03861003861003861
+      },
+      "(unknown)": {
+        "n": 186,
+        "baseline": {
+          "n": 186,
+          "loss": 641.6729032258065,
+          "coverage": [
+            0.25268817204301075,
+            0.8064516129032258,
+            0.9731182795698925
+          ],
+          "width": [
+            881.8064516129032,
+            3520.8010752688174
+          ]
+        },
+        "artifactRate": 0.04838709677419355,
+        "writeRate": 0.016129032258064516
+      }
+    },
+    "byArtifactIntent": {
+      "false": {
+        "n": 1935,
+        "baseline": {
+          "n": 1935,
+          "loss": 551.8550387596894,
+          "coverage": [
+            0.5441860465116279,
+            0.8930232558139535,
+            0.9881136950904392
+          ],
+          "width": [
+            1128.2744186046511,
+            4445.1834625323
+          ]
+        },
+        "artifactRate": 0.03824289405684755,
+        "writeRate": 0.024806201550387597
+      },
+      "true": {
+        "n": 916,
+        "baseline": {
+          "n": 916,
+          "loss": 929.1996834061124,
+          "coverage": [
+            0.4421397379912664,
+            0.8307860262008734,
+            0.9836244541484717
+          ],
+          "width": [
+            1239.7008733624455,
+            7016.186681222707
+          ]
+        },
+        "artifactRate": 0.06331877729257641,
+        "writeRate": 0.03056768558951965
+      },
+      "(unknown)": {
+        "n": 186,
+        "baseline": {
+          "n": 186,
+          "loss": 641.6729032258065,
+          "coverage": [
+            0.25268817204301075,
+            0.8064516129032258,
+            0.9731182795698925
+          ],
+          "width": [
+            881.8064516129032,
+            3520.8010752688174
+          ]
+        },
+        "artifactRate": 0.04838709677419355,
+        "writeRate": 0.016129032258064516
+      }
+    }
+  },
+  "worstMisses": [
+    {
+      "rank": 1,
+      "auditId": "d0f685265db9",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 10,
+      "deliverableType": "other",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "yes",
+      "action": "Edit",
+      "isLongArtifact": false,
+      "actual": 30018,
+      "forecast": [
+        666,
+        2537,
+        7092
+      ],
+      "loss": 62105.64
+    },
+    {
+      "rank": 2,
+      "auditId": "0f3eb10311db",
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 3,
+      "deliverableType": "artifact",
+      "requestedFormat": "unspecified",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 22551,
+      "forecast": [
+        353,
+        1347,
+        4068
+      ],
+      "loss": 48480.770000000004
+    },
+    {
+      "rank": 3,
+      "auditId": "8518bd4fb3b5",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "5-19",
+      "loopDepth": 11,
+      "deliverableType": "artifact",
+      "requestedFormat": "unspecified",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 23239,
+      "forecast": [
+        549,
+        1975,
+        6448
+      ],
+      "loss": 47105.69
+    },
+    {
+      "rank": 4,
+      "auditId": "e135af1757f4",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 4,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "(no-tool)",
+      "isLongArtifact": false,
+      "actual": 17170,
+      "forecast": [
+        670,
+        3687,
+        12247
+      ],
+      "loss": 25258.47
+    },
+    {
+      "rank": 5,
+      "auditId": "7da8e09409c4",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 64,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 15045,
+      "forecast": [
+        480,
+        1486,
+        12846
+      ],
+      "loss": 21662.609999999997
+    },
+    {
+      "rank": 6,
+      "auditId": "5acf5fa246dc",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 12,
+      "deliverableType": "artifact",
+      "requestedFormat": "code",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "(no-tool)",
+      "isLongArtifact": false,
+      "actual": 14727,
+      "forecast": [
+        670,
+        3687,
+        12247
+      ],
+      "loss": 19419.7
+    },
+    {
+      "rank": 7,
+      "auditId": "1ec8afd6a8d9",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 23,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "(no-tool)",
+      "isLongArtifact": false,
+      "actual": 14713,
+      "forecast": [
+        566,
+        2548,
+        13780
+      ],
+      "loss": 18945.67
+    },
+    {
+      "rank": 8,
+      "auditId": "512d6210fdc1",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 72,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 14346,
+      "forecast": [
+        584,
+        2823,
+        14299
+      ],
+      "loss": 17298.23
+    },
+    {
+      "rank": 9,
+      "auditId": "329eebfe1bb1",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "5-19",
+      "loopDepth": 12,
+      "deliverableType": "other",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 12759,
+      "forecast": [
+        480,
+        1486,
+        12846
+      ],
+      "loss": 16286.070000000002
+    },
+    {
+      "rank": 10,
+      "auditId": "96f162ac8148",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 5,
+      "deliverableType": "other",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "no",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 9713,
+      "forecast": [
+        549,
+        1975,
+        6448
+      ],
+      "loss": 14778.550000000001
+    },
+    {
+      "rank": 11,
+      "auditId": "dd85b51cbd34",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 22,
+      "deliverableType": "artifact",
+      "requestedFormat": "unspecified",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 11533,
+      "forecast": [
+        480,
+        1486,
+        12846
+      ],
+      "loss": 14581.93
+    },
+    {
+      "rank": 12,
+      "auditId": "dcc2adaeeb33",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 27,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 11355,
+      "forecast": [
+        480,
+        1486,
+        12846
+      ],
+      "loss": 14334.51
+    },
+    {
+      "rank": 13,
+      "auditId": "1808e5dcf62a",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 15,
+      "deliverableType": "operation",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "yes",
+      "action": "TaskUpdate",
+      "isLongArtifact": false,
+      "actual": 9526,
+      "forecast": [
+        672,
+        2459,
+        6503
+      ],
+      "loss": 13780.07
+    },
+    {
+      "rank": 14,
+      "auditId": "2cce6d03694b",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 5,
+      "deliverableType": "operation",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "no",
+      "action": "Bash",
+      "isLongArtifact": false,
+      "actual": 9427,
+      "forecast": [
+        672,
+        2459,
+        6503
+      ],
+      "loss": 13543.460000000001
+    },
+    {
+      "rank": 15,
+      "auditId": "b0b34190e9e4",
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 23,
+      "deliverableType": "other",
+      "requestedFormat": "mixed",
+      "artifactIntent": false,
+      "priorWrite": "no",
+      "action": "(no-tool)",
+      "isLongArtifact": false,
+      "actual": 6835,
+      "forecast": [
+        224,
+        797,
+        2370
+      ],
+      "loss": 13160.050000000001
+    },
+    {
+      "rank": 16,
+      "auditId": "29ab64584196",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 23,
+      "deliverableType": "artifact",
+      "requestedFormat": "list",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 9260,
+      "forecast": [
+        668,
+        2473,
+        7058
+      ],
+      "loss": 12584.279999999999
+    },
+    {
+      "rank": 17,
+      "auditId": "9b26db8df4b3",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 14,
+      "deliverableType": "artifact",
+      "requestedFormat": "code",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "Bash",
+      "isLongArtifact": false,
+      "actual": 10485,
+      "forecast": [
+        607,
+        2728,
+        14451
+      ],
+      "loss": 11959.96
+    },
+    {
+      "rank": 18,
+      "auditId": "24f7a1681f12",
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 90,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "Edit",
+      "isLongArtifact": true,
+      "actual": 7216,
+      "forecast": [
+        353,
+        1347,
+        4068
+      ],
+      "loss": 11830.12
+    },
+    {
+      "rank": 19,
+      "auditId": "c236dbb42ab4",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": null,
+      "workloadId": "workload-03",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 19,
+      "deliverableType": null,
+      "requestedFormat": null,
+      "artifactIntent": null,
+      "priorWrite": "no",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 8586,
+      "forecast": [
+        533,
+        2058,
+        7016
+      ],
+      "loss": 11456
+    },
+    {
+      "rank": 20,
+      "auditId": "970a3204b1f1",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": null,
+      "workloadId": "workload-03",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 0,
+      "deliverableType": null,
+      "requestedFormat": null,
+      "artifactIntent": null,
+      "priorWrite": null,
+      "action": "Bash",
+      "isLongArtifact": false,
+      "actual": 8270,
+      "forecast": [
+        534,
+        1823,
+        6521
+      ],
+      "loss": 11401.81
+    },
+    {
+      "rank": 21,
+      "auditId": "3b2e4db0fd19",
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "promptPath": null,
+      "workloadId": "workload-03",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 63,
+      "deliverableType": null,
+      "requestedFormat": null,
+      "artifactIntent": null,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 6231,
+      "forecast": [
+        230,
+        914,
+        2581
+      ],
+      "loss": 11399.3
+    },
+    {
+      "rank": 22,
+      "auditId": "cf21a00b018e",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 21,
+      "deliverableType": "other",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 8484,
+      "forecast": [
+        676,
+        2478,
+        6998
+      ],
+      "loss": 10780.54
+    },
+    {
+      "rank": 23,
+      "auditId": "883aa07672d6",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 73,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 8050,
+      "forecast": [
+        480,
+        1486,
+        12846
+      ],
+      "loss": 9740.560000000001
+    },
+    {
+      "rank": 24,
+      "auditId": "125b61525eda",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "5-19",
+      "loopDepth": 16,
+      "deliverableType": "other",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 7513,
+      "forecast": [
+        549,
+        1975,
+        6448
+      ],
+      "loss": 9520.550000000001
+    },
+    {
+      "rank": 25,
+      "auditId": "6c1631706ff8",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "yes",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "20-59",
+      "loopDepth": 7,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "ToolSearch",
+      "isLongArtifact": false,
+      "actual": 8984,
+      "forecast": [
+        678,
+        3624,
+        12350
+      ],
+      "loss": 9010.66
+    },
+    {
+      "rank": 26,
+      "auditId": "0323ce7a25ce",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "5-19",
+      "loopDepth": 13,
+      "deliverableType": "code",
+      "requestedFormat": "code",
+      "artifactIntent": false,
+      "priorWrite": "no",
+      "action": "Bash",
+      "isLongArtifact": false,
+      "actual": 7639,
+      "forecast": [
+        668,
+        2473,
+        7058
+      ],
+      "loss": 8710.09
+    },
+    {
+      "rank": 27,
+      "auditId": "883383dbcd4e",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-05",
+      "sessionPositionBucket": "5-19",
+      "loopDepth": 4,
+      "deliverableType": "artifact",
+      "requestedFormat": "mixed",
+      "artifactIntent": true,
+      "priorWrite": "no",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 7109,
+      "forecast": [
+        534,
+        2100,
+        6291
+      ],
+      "loss": 8605.42
+    },
+    {
+      "rank": 28,
+      "auditId": "391ff22be518",
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "5-19",
+      "loopDepth": 14,
+      "deliverableType": "other",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "no",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 7073,
+      "forecast": [
+        549,
+        1975,
+        6448
+      ],
+      "loss": 8468.95
+    },
+    {
+      "rank": 29,
+      "auditId": "4aa17e149f53",
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "promptPath": "no",
+      "workloadId": "workload-02",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 15,
+      "deliverableType": "other",
+      "requestedFormat": "unspecified",
+      "artifactIntent": false,
+      "priorWrite": "yes",
+      "action": "TaskUpdate",
+      "isLongArtifact": false,
+      "actual": 7494,
+      "forecast": [
+        676,
+        2478,
+        6998
+      ],
+      "loss": 8414.44
+    },
+    {
+      "rank": 30,
+      "auditId": "31bbc7b0a8a8",
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "promptPath": "yes",
+      "workloadId": "workload-01",
+      "sessionPositionBucket": "60+",
+      "loopDepth": 18,
+      "deliverableType": "artifact",
+      "requestedFormat": "unspecified",
+      "artifactIntent": true,
+      "priorWrite": "yes",
+      "action": "Write",
+      "isLongArtifact": true,
+      "actual": 5677,
+      "forecast": [
+        353,
+        1347,
+        4068
+      ],
+      "loss": 8151.91
+    }
+  ]
+}

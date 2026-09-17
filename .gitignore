@@ -1,0 +1,43 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+*.tsbuildinfo
+
+# local env and secrets
+.env
+.env.*
+
+# local experiment data (privacy: observations stay local)
+experiments/datasets/local/
+# public trajectory corpora (large, downloaded; MANIFEST.md is committed)
+experiments/datasets/public/*/*
+!experiments/datasets/public/*/MANIFEST.md
+# builder progress/state files next to those corpora
+experiments/datasets/public/.*.json
+experiments/artifacts/local/
+
+# editor and OS noise
+.DS_Store
+.idea/
+.vscode/
+
+# logs
+*.log
+
+# local agent config (this repo is worked on with Claude Code)
+.claude/
+
+# swift menu bar app
+apps/menubar/.build/
+apps/menubar/*.app
+
+# python bytecode
+__pycache__/
+*.pyc
+
+# base text head: the JSON is the trainer's intermediate and the size gate's
+# subject; the committed asset is
+# packages/predictor/src/text-head/base-text-head-asset.ts
+packages/predictor/src/text-head/base-text-head.json

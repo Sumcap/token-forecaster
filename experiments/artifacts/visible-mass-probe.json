@@ -1,0 +1,80 @@
+{
+  "generatedAt": "2026-08-04T14:21:20.681Z",
+  "source": "~/.claude/projects",
+  "uniqueApiCalls": 14478,
+  "reconstruction": {
+    "multiRowCalls": 9519,
+    "callsWithTool": 13469
+  },
+  "thinkingBlocks": {
+    "n": 8510,
+    "emptyShare": 0.9766157461809636
+  },
+  "calibration": {
+    "trainN": 4774,
+    "testN": 1194,
+    "interceptTokens": 90.12124486507054,
+    "proseCharsPerToken": 2.8170193244603596,
+    "toolCharsPerToken": 2.4714890176336115,
+    "rSquared": 0.9388822274060338,
+    "heldOutRSquared": 0.9778820437519421
+  },
+  "residualsByContent": {
+    "<200": {
+      "n": 1904,
+      "medianResidual": -22.969565451388647,
+      "p90Residual": -0.6150839164206345
+    },
+    "200-800": {
+      "n": 2478,
+      "medianResidual": 3.0484925293020524,
+      "p90Residual": 50.97412439576151
+    },
+    "800-3k": {
+      "n": 1290,
+      "medianResidual": 4.685278118695578,
+      "p90Residual": 125.55386499511643
+    },
+    ">=3k": {
+      "n": 296,
+      "medianResidual": 17.564159752130877,
+      "p90Residual": 361.76526404974504
+    }
+  },
+  "decomposition": {
+    "has thinking block": {
+      "n": 8390,
+      "medianY": 657.5,
+      "medianV": 265.31927201009364,
+      "medianH": 273.8757792727873,
+      "medianHShare": 0.45573085979815875,
+      "negativeHShare": 0.026460071513706794
+    },
+    "no thinking block": {
+      "n": 5467,
+      "medianY": 248,
+      "medianV": 236.9962653122839,
+      "medianH": -5.297912121377465,
+      "medianHShare": -0.02019238670910189,
+      "negativeHShare": 0.5633802816901409
+    },
+    "all calls": {
+      "n": 13857,
+      "medianY": 460,
+      "medianV": 254.5910628687857,
+      "medianH": 95.61226135978211,
+      "medianHShare": 0.22006866612146053,
+      "negativeHShare": 0.2382911164032619
+    }
+  },
+  "thinkingContrast": {
+    "yMedianRatio": 2.8289473684210527,
+    "medianHWithBlock": 267.0681487555688,
+    "medianHWithoutBlock": -7.963369470074497
+  },
+  "mislabelledThinking": {
+    "noiseFloor": 25.577546949988132,
+    "suspicious": 325,
+    "share": 0.05944759465886226
+  }
+}

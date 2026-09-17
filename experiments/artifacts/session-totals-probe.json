@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-08-10T12:02:59.993Z",
+  "asOf": null,
+  "sessions": 311,
+  "holdoutSessions": 63,
+  "holdoutPoints": 195,
+  "sessionTotalQuantiles": {
+    "p50": 21075,
+    "p90": 117016,
+    "p99": 223033
+  },
+  "turnsPerSession": {
+    "p50": 2,
+    "p90": 7
+  },
+  "candidates": {
+    "uncondTotal": {
+      "meanLoss": 54348.5962051282
+    },
+    "uncondRemaining": {
+      "meanLoss": 32420.58087179487,
+      "diff": -21928.01533333333,
+      "ci95": [
+        -50570.6795744681,
+        -415.8337500000005
+      ],
+      "verdict": "ADOPTABLE"
+    },
+    "turnsTimesTurnQ": {
+      "meanLoss": 52042.416974358974,
+      "diff": -2306.1792307692294,
+      "ci95": [
+        -12295.750823045264,
+        7740.249162011181
+      ],
+      "verdict": "not adopted",
+      "vsUncondRemaining": {
+        "diff": 19621.836102564062,
+        "ci95": [
+          1600.3751492537326,
+          39183.14399999991
+        ],
+        "verdict": "not adopted"
+      }
+    },
+    "kBucket": {
+      "meanLoss": 36926.53517948718,
+      "diff": -17422.061025641025,
+      "ci95": [
+        -39543.31226708076,
+        -20.728373493976495
+      ],
+      "verdict": "ADOPTABLE",
+      "vsUncondRemaining": {
+        "diff": 4505.954307692305,
+        "ci95": [
+          -575.4061855670109,
+          11111.649156626521
+        ],
+        "verdict": "not adopted"
+      }
+    },
+    "spentBucket": {
+      "meanLoss": 33918.74687179486,
+      "diff": -20429.84933333333,
+      "ci95": [
+        -46219.0394420601,
+        -582.4986249999998
+      ],
+      "verdict": "ADOPTABLE",
+      "vsUncondRemaining": {
+        "diff": 1498.1659999999968,
+        "ci95": [
+          -1031.031623376623,
+          4320.977339055803
+        ],
+        "verdict": "not adopted"
+      }
+    }
+  },
+  "uncondStartCoverage": [
+    0.4126984126984127,
+    0.9206349206349206,
+    0.9841269841269841
+  ]
+}
