@@ -1,0 +1,30 @@
+{
+  "name": "@token-forecaster/predictor",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Sumcap Research",
+  "type": "module",
+  "description": "Output-length forecasting with hierarchical quantiles, portable trained corrections, and explicit cold-start fallback",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./text-head": {
+      "types": "./dist/text-head/index.d.ts",
+      "default": "./dist/text-head/index.js"
+    }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@token-forecaster/core": "workspace:*"
+  }
+}

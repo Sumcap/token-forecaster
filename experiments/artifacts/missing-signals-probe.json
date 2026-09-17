@@ -1,0 +1,130 @@
+{
+  "generatedAt": "2026-08-10T00:41:00.807Z",
+  "corpus": {
+    "calls": 15857,
+    "holdout": 3172,
+    "sessions": 51
+  },
+  "baseMeanLoss": 497.1338587641856,
+  "candidates": {
+    "command": {
+      "field": "sigCommand",
+      "diffPerCall": 0.0931746532156357,
+      "ci95": [
+        -0.243583905177791,
+        0.6061163457599348
+      ],
+      "availableShare": 1,
+      "jointRungFiredShare": 0.9955863808322825,
+      "diffWhereFired": 0.09358771374287492,
+      "trainLevelCounts": {
+        "none": 15174
+      },
+      "verdict": "not adopted"
+    },
+    "image": {
+      "field": "sigImage",
+      "diffPerCall": -4.230753467843495,
+      "ci95": [
+        -10.772034026464997,
+        0.4392761452031386
+      ],
+      "availableShare": 1,
+      "jointRungFiredShare": 1,
+      "diffWhereFired": -4.23075346784363,
+      "trainLevelCounts": {
+        "no": 13014,
+        "yes": 2160
+      },
+      "verdict": "not adopted"
+    },
+    "artifact": {
+      "field": "sigArtifact",
+      "diffPerCall": 9.91424022698612,
+      "ci95": [
+        -10.793795114837652,
+        27.69132840387508
+      ],
+      "availableShare": 0.9457755359394704,
+      "jointRungFiredShare": 0.9457755359394704,
+      "diffWhereFired": 10.482656666666673,
+      "trainLevelCounts": {
+        "no": 10246,
+        "yes": 3555
+      },
+      "verdict": "not adopted"
+    },
+    "deliverable": {
+      "field": "sigDeliverable",
+      "diffPerCall": 10.395501261034134,
+      "ci95": [
+        -10.553606745879751,
+        28.42948481166417
+      ],
+      "availableShare": 0.9457755359394704,
+      "jointRungFiredShare": 0.9186633039092056,
+      "diffWhereFired": 11.315899107755676,
+      "trainLevelCounts": {
+        "operation": 1448,
+        "other": 7247,
+        "artifact": 3555,
+        "analysis": 1081,
+        "code": 315,
+        "structured": 132,
+        "document": 23
+      },
+      "verdict": "not adopted"
+    },
+    "expansive": {
+      "field": "sigExpansive",
+      "diffPerCall": 1.315346784363193,
+      "ci95": [
+        -2.7904297407912684,
+        5.116383062920413
+      ],
+      "availableShare": 0.9457755359394704,
+      "jointRungFiredShare": 0.9457755359394704,
+      "diffWhereFired": 1.3907600000000084,
+      "trainLevelCounts": {
+        "no": 11732,
+        "yes": 2069
+      },
+      "verdict": "not adopted"
+    },
+    "streak": {
+      "field": "sigStreak",
+      "diffPerCall": -0.24168978562422128,
+      "ci95": [
+        -3.4987992722862717,
+        3.2686303744799305
+      ],
+      "availableShare": 0.9505044136191677,
+      "jointRungFiredShare": 0.9505044136191677,
+      "diffWhereFired": -0.2542752902155858,
+      "trainLevelCounts": {
+        "1": 6836,
+        "2": 2457,
+        "3+": 4912
+      },
+      "verdict": "not adopted"
+    },
+    "turnCum": {
+      "field": "sigTurnCum",
+      "diffPerCall": 1.9662168978562147,
+      "ci95": [
+        -3.7229429945055106,
+        7.065166101694907
+      ],
+      "availableShare": 1,
+      "jointRungFiredShare": 0.9829760403530895,
+      "diffWhereFired": 2.000269403463765,
+      "trainLevelCounts": {
+        "0": 1015,
+        "lt3k": 3247,
+        "3k-10k": 3629,
+        "gte10k": 7283
+      },
+      "verdict": "not adopted"
+    }
+  }
+}

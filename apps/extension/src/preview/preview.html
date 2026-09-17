@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Token Forecaster chip preview</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #faf9f6;
+        color: #2c2b28;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      h1 { font-size: 18px; }
+      h2 { font-size: 12px; font-weight: 600; color: #6b6a66; margin: 0 0 8px; }
+      .case { margin-bottom: 420px; }
+      .stage { position: relative; }
+      .composer {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        padding: 16px;
+        min-height: 72px;
+        max-width: 760px;
+        background: #fff;
+      }
+      body.dark { background: #1e1e1c; color: #ececec; }
+      body.dark .composer { background: #262624; border-color: rgba(255, 255, 255, 0.16); }
+      button#theme {
+        font: inherit;
+        margin-bottom: 24px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid currentColor;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Token Forecaster chip preview</h1>
+    <button id="theme" type="button">Toggle dark</button>
+    <div id="cases"></div>
+    <script src="preview.js"></script>
+    <script>
+      document.getElementById("theme").addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        location.reload === undefined ? null : null;
+      });
+    </script>
+  </body>
+</html>

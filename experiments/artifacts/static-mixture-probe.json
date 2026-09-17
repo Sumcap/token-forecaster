@@ -1,0 +1,127 @@
+{
+  "generatedAt": "2026-08-09T11:13:59.778Z",
+  "source": "~/.claude/projects",
+  "calls": 14978,
+  "holdoutCalls": 2996,
+  "actionAlphabet": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write",
+    "(no-tool)",
+    "(other-tool)"
+  ],
+  "variants": {
+    "plain": {
+      "metrics": {
+        "n": 2996,
+        "loss": 508.4650400534035,
+        "coverage": [
+          0.5884512683578104,
+          0.9322429906542056,
+          0.9913217623497997
+        ],
+        "width": [
+          1235.9395861148198,
+          5220.45694259012
+        ]
+      }
+    },
+    "mixAllByAction": {
+      "metrics": {
+        "n": 2996,
+        "loss": 563.4582242990656,
+        "coverage": [
+          0.6151535380507344,
+          0.9329105473965287,
+          0.9949933244325768
+        ],
+        "width": [
+          1400.9612817089453,
+          6186.480974632844
+        ]
+      },
+      "comparison": {
+        "n": 2996,
+        "meanDifference": 54.99318424565921,
+        "ciLower": 43.06187539531889,
+        "ciUpper": 65.91326674065681,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "mixTailByAction": {
+      "metrics": {
+        "n": 2996,
+        "loss": 516.8766154873169,
+        "coverage": [
+          0.5884512683578104,
+          0.9322429906542056,
+          0.9949933244325768
+        ],
+        "width": [
+          1235.9395861148198,
+          6194.525033377837
+        ]
+      },
+      "comparison": {
+        "n": 2996,
+        "meanDifference": 8.411575433911953,
+        "ciLower": 6.198775720164612,
+        "ciUpper": 10.697456807187596,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "mixAllByActionThinking": {
+      "metrics": {
+        "n": 2996,
+        "loss": 516.0585313751674,
+        "coverage": [
+          0.6064753004005341,
+          0.9345794392523364,
+          0.9919893190921228
+        ],
+        "width": [
+          1288.3788384512684,
+          5442.715287049399
+        ]
+      },
+      "comparison": {
+        "n": 2996,
+        "meanDifference": 7.593491321762375,
+        "ciLower": 4.796929729729641,
+        "ciUpper": 10.973672514619853,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    },
+    "mixTailByActionThinking": {
+      "metrics": {
+        "n": 2996,
+        "loss": 510.1375700934585,
+        "coverage": [
+          0.5884512683578104,
+          0.9322429906542056,
+          0.9919893190921228
+        ],
+        "width": [
+          1235.9395861148198,
+          5457.436248331108
+        ]
+      },
+      "comparison": {
+        "n": 2996,
+        "meanDifference": 1.6725300400534047,
+        "ciLower": 0.36471956224350205,
+        "ciUpper": 2.733816920026456,
+        "blocks": 57,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    }
+  }
+}

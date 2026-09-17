@@ -1,0 +1,734 @@
+{
+  "generatedAt": "2026-08-05T11:16:15.850Z",
+  "source": "~/.claude/projects",
+  "byLevel": [
+    {
+      "level": "p50",
+      "meanLoss": 278.8638622060285,
+      "share": 0.4485439949925292,
+      "coverage": 0.4826101358065585,
+      "target": 0.5,
+      "lossShareFromOverForecast": 0.15294397130266424
+    },
+    {
+      "level": "p90",
+      "meanLoss": 268.01500496853254,
+      "share": 0.4310939398727488,
+      "coverage": 0.8711493872143093,
+      "target": 0.9,
+      "lossShareFromOverForecast": 0.35677603788627854
+    },
+    {
+      "level": "p99",
+      "meanLoss": 74.8301854918847,
+      "share": 0.12036206513472138,
+      "coverage": 0.9880755216959258,
+      "target": 0.99,
+      "lossShareFromOverForecast": 0.6430848196731866
+    }
+  ],
+  "byGroup": [
+    {
+      "key": "model=claude-opus-5|thinking=yes|promptPath=no",
+      "n": 589,
+      "total": 443128.45999999956,
+      "share": 0.2360909498192008,
+      "meanLoss": 752.3403395585731,
+      "levels": [
+        0.44987631803202216,
+        0.4280557831920796,
+        0.12206789877589905
+      ],
+      "worstLevel": "p50"
+    },
+    {
+      "key": "model=claude-fable-5|thinking=yes|promptPath=no",
+      "n": 476,
+      "total": 390940.98999999976,
+      "share": 0.20828639544469504,
+      "meanLoss": 821.3046008403356,
+      "levels": [
+        0.46751429160702773,
+        0.423445236581613,
+        0.1090404718113596
+      ],
+      "worstLevel": "p50"
+    },
+    {
+      "key": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "n": 262,
+      "total": 332303.1699999999,
+      "share": 0.1770452094934986,
+      "meanLoss": 1268.3327099236637,
+      "levels": [
+        0.43805480399118685,
+        0.4564154473759609,
+        0.10552974863285246
+      ],
+      "worstLevel": "p90"
+    },
+    {
+      "key": "model=claude-opus-5|thinking=no|promptPath=yes",
+      "n": 346,
+      "total": 229773.25,
+      "share": 0.12241909453422319,
+      "meanLoss": 664.0845375722544,
+      "levels": [
+        0.42918616505620216,
+        0.41093730449475735,
+        0.15987653044904057
+      ],
+      "worstLevel": "p50"
+    },
+    {
+      "key": "model=claude-opus-5|thinking=no|promptPath=no",
+      "n": 643,
+      "total": 166188.77,
+      "share": 0.08854241625235433,
+      "meanLoss": 258.4584292379471,
+      "levels": [
+        0.48653407808481886,
+        0.41318616173643985,
+        0.10027976017874132
+      ],
+      "worstLevel": "p50"
+    },
+    {
+      "key": "model=claude-fable-5|thinking=no|promptPath=no",
+      "n": 398,
+      "total": 107857.84999999999,
+      "share": 0.057464741154194685,
+      "meanLoss": 270.9996231155779,
+      "levels": [
+        0.41608932497727336,
+        0.44625310072470425,
+        0.13765757429802264
+      ],
+      "worstLevel": "p90"
+    },
+    {
+      "key": "model=claude-opus-5|thinking=no",
+      "n": 146,
+      "total": 70684.60999999997,
+      "share": 0.03765950106770346,
+      "meanLoss": 484.14116438356143,
+      "levels": [
+        0.47114216234623085,
+        0.3856242539924891,
+        0.14323358366128083
+      ],
+      "worstLevel": "p50"
+    },
+    {
+      "key": "model=claude-opus-5|thinking=yes",
+      "n": 56,
+      "total": 54170.86999999997,
+      "share": 0.028861274563210085,
+      "meanLoss": 967.3369642857139,
+      "levels": [
+        0.4666068682301025,
+        0.4068884254581843,
+        0.12650470631171337
+      ],
+      "worstLevel": "p50"
+    },
+    {
+      "key": "model=claude-fable-5|thinking=yes|promptPath=yes",
+      "n": 40,
+      "total": 50049.63000000001,
+      "share": 0.02666555130491863,
+      "meanLoss": 1251.2407500000004,
+      "levels": [
+        0.4146384298944866,
+        0.5014522584882244,
+        0.08390931161728873
+      ],
+      "worstLevel": "p90"
+    },
+    {
+      "key": "promptPath=yes",
+      "n": 45,
+      "total": 26918.480000000003,
+      "share": 0.014341686631657935,
+      "meanLoss": 598.1884444444445,
+      "levels": [
+        0.3124990712699974,
+        0.5315939087199574,
+        0.15590702001004528
+      ],
+      "worstLevel": "p90"
+    },
+    {
+      "key": "model=claude-fable-5|thinking=no|promptPath=yes",
+      "n": 17,
+      "total": 4339.25,
+      "share": 0.0023118751027703527,
+      "meanLoss": 255.25,
+      "levels": [
+        0.4261105029671026,
+        0.47595782681338933,
+        0.09793167021950808
+      ],
+      "worstLevel": "p90"
+    },
+    {
+      "key": "model=claude-fable-5|thinking=yes",
+      "n": 1,
+      "total": 584.3000000000001,
+      "share": 0.00031130463157198073,
+      "meanLoss": 584.3000000000001,
+      "levels": [
+        0.43898682183809684,
+        0.4283758343316788,
+        0.1326373438302243
+      ],
+      "worstLevel": "p50"
+    }
+  ],
+  "worstMisses": [
+    {
+      "rank": 1,
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "firstTool": "Write",
+      "loopDepth": 3,
+      "loopDepthExact": true,
+      "actual": 22551,
+      "forecast": [
+        374,
+        1366,
+        4264
+      ],
+      "groupKey": "model=claude-opus-5|thinking=no|promptPath=yes",
+      "loss": 48259.130000000005,
+      "shareOfTotal": 0.02571160479999028
+    },
+    {
+      "rank": 2,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 11,
+      "loopDepthExact": true,
+      "actual": 23239,
+      "forecast": [
+        559,
+        2030,
+        6469
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=no",
+      "loss": 47030.4,
+      "shareOfTotal": 0.02505695934397207
+    },
+    {
+      "rank": 3,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 9,
+      "loopDepthExact": true,
+      "actual": 12761,
+      "forecast": [
+        680,
+        2448,
+        6438
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=no",
+      "loss": 21581.97,
+      "shareOfTotal": 0.01149848916557854
+    },
+    {
+      "rank": 4,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 64,
+      "loopDepthExact": true,
+      "actual": 15045,
+      "forecast": [
+        481,
+        1474,
+        14701
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "loss": 19836.460000000003,
+      "shareOfTotal": 0.010568512531220833
+    },
+    {
+      "rank": 5,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "(no-tool)",
+      "loopDepth": 23,
+      "loopDepthExact": true,
+      "actual": 14713,
+      "forecast": [
+        565,
+        2561,
+        14392
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "loss": 18328.590000000004,
+      "shareOfTotal": 0.009765146255663
+    },
+    {
+      "rank": 6,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 72,
+      "loopDepthExact": true,
+      "actual": 14346,
+      "forecast": [
+        584,
+        2886,
+        14618
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "loss": 17197.72,
+      "shareOfTotal": 0.009162638864415684
+    },
+    {
+      "rank": 7,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 12,
+      "loopDepthExact": true,
+      "actual": 12759,
+      "forecast": [
+        481,
+        1474,
+        14701
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "loss": 16314.92,
+      "shareOfTotal": 0.008692298750173437
+    },
+    {
+      "rank": 8,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 5,
+      "loopDepthExact": true,
+      "actual": 9713,
+      "forecast": [
+        559,
+        2030,
+        6469
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=no",
+      "loss": 14703.26,
+      "shareOfTotal": 0.007833635011478763
+    },
+    {
+      "rank": 9,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 22,
+      "loopDepthExact": true,
+      "actual": 11533,
+      "forecast": [
+        481,
+        1474,
+        14701
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "loss": 14610.78,
+      "shareOfTotal": 0.0077843633148712375
+    },
+    {
+      "rank": 10,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 27,
+      "loopDepthExact": true,
+      "actual": 11355,
+      "forecast": [
+        481,
+        1474,
+        14701
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "loss": 14363.359999999999,
+      "shareOfTotal": 0.007652542346287394
+    },
+    {
+      "rank": 11,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "(other-tool)",
+      "loopDepth": 15,
+      "loopDepthExact": true,
+      "actual": 9526,
+      "forecast": [
+        679,
+        2479,
+        6463
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=no",
+      "loss": 13798.169999999998,
+      "shareOfTotal": 0.007351419182299429
+    },
+    {
+      "rank": 12,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "Bash",
+      "loopDepth": 5,
+      "loopDepthExact": true,
+      "actual": 9427,
+      "forecast": [
+        679,
+        2479,
+        6463
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=no",
+      "loss": 13561.560000000001,
+      "shareOfTotal": 0.007225357589151653
+    },
+    {
+      "rank": 13,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "Edit",
+      "loopDepth": 8,
+      "loopDepthExact": true,
+      "actual": 11416,
+      "forecast": [
+        660,
+        3577,
+        11950
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=yes",
+      "loss": 12438.44,
+      "shareOfTotal": 0.006626979259849714
+    },
+    {
+      "rank": 14,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 19,
+      "loopDepthExact": true,
+      "actual": 8586,
+      "forecast": [
+        534,
+        2025,
+        6547
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes",
+      "loss": 11949.510000000002,
+      "shareOfTotal": 0.006366486065404244
+    },
+    {
+      "rank": 15,
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "firstTool": "Edit",
+      "loopDepth": 90,
+      "loopDepthExact": true,
+      "actual": 7216,
+      "forecast": [
+        374,
+        1366,
+        4264
+      ],
+      "groupKey": "model=claude-opus-5|thinking=no|promptPath=yes",
+      "loss": 11608.48,
+      "shareOfTotal": 0.00618479135634213
+    },
+    {
+      "rank": 16,
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "firstTool": "Write",
+      "loopDepth": 63,
+      "loopDepthExact": true,
+      "actual": 6231,
+      "forecast": [
+        225,
+        839,
+        2566
+      ],
+      "groupKey": "model=claude-opus-5|thinking=no",
+      "loss": 11484.15,
+      "shareOfTotal": 0.0061185505470945775
+    },
+    {
+      "rank": 17,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 21,
+      "loopDepthExact": true,
+      "actual": 8484,
+      "forecast": [
+        679,
+        2479,
+        6463
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=no",
+      "loss": 11307.79,
+      "shareOfTotal": 0.006024589080683429
+    },
+    {
+      "rank": 18,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Bash",
+      "loopDepth": 0,
+      "loopDepthExact": true,
+      "actual": 8270,
+      "forecast": [
+        534,
+        2025,
+        6547
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes",
+      "loss": 11194.27,
+      "shareOfTotal": 0.005964107646871943
+    },
+    {
+      "rank": 19,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "Edit",
+      "loopDepth": 6,
+      "loopDepthExact": true,
+      "actual": 10275,
+      "forecast": [
+        660,
+        3577,
+        11950
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=yes",
+      "loss": 10852.45,
+      "shareOfTotal": 0.005781992039882495
+    },
+    {
+      "rank": 20,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 16,
+      "loopDepthExact": true,
+      "actual": 7513,
+      "forecast": [
+        545,
+        2142,
+        6469
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=no",
+      "loss": 9351.460000000001,
+      "shareOfTotal": 0.0049822913057677816
+    },
+    {
+      "rank": 21,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "(other-tool)",
+      "loopDepth": 15,
+      "loopDepthExact": true,
+      "actual": 7494,
+      "forecast": [
+        679,
+        2479,
+        6463
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=no",
+      "loss": 8941.69,
+      "shareOfTotal": 0.004763973149205655
+    },
+    {
+      "rank": 22,
+      "model": "claude-fable-5",
+      "thinking": "yes",
+      "firstTool": "Bash",
+      "loopDepth": 13,
+      "loopDepthExact": true,
+      "actual": 7639,
+      "forecast": [
+        675,
+        2489,
+        6945
+      ],
+      "groupKey": "model=claude-fable-5|thinking=yes|promptPath=no",
+      "loss": 8804.06,
+      "shareOfTotal": 0.004690646336877652
+    },
+    {
+      "rank": 23,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 73,
+      "loopDepthExact": true,
+      "actual": 8050,
+      "forecast": [
+        565,
+        2561,
+        14392
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=yes",
+      "loss": 8746.02,
+      "shareOfTotal": 0.00465972365877319
+    },
+    {
+      "rank": 24,
+      "model": "claude-opus-5",
+      "thinking": "yes",
+      "firstTool": "Write",
+      "loopDepth": 14,
+      "loopDepthExact": true,
+      "actual": 7073,
+      "forecast": [
+        545,
+        2142,
+        6469
+      ],
+      "groupKey": "model=claude-opus-5|thinking=yes|promptPath=no",
+      "loss": 8299.86,
+      "shareOfTotal": 0.004422017558444326
+    },
+    {
+      "rank": 25,
+      "model": "claude-opus-5",
+      "thinking": "no",
+      "firstTool": "Write",
+      "loopDepth": 18,
+      "loopDepthExact": true,
+      "actual": 5677,
+      "forecast": [
+        266,
+        910,
+        4798
+      ],
+      "groupKey": "model=claude-opus-5|thinking=no|promptPath=yes",
+      "loss": 7866.01,
+      "shareOfTotal": 0.004190870006831278
+    }
+  ],
+  "concentration": {
+    "0.01": 0.2276845739572348,
+    "0.05": 0.46101410304816237,
+    "0.1": 0.5708244968965783,
+    "0.25": 0.7145138706459083,
+    "0.5": 0.8657669612953933
+  },
+  "worstComposition": {
+    "thinking": [
+      {
+        "key": "yes",
+        "share": 0.4806227227558794,
+        "worstShare": 0.7086092715231788,
+        "lift": 1.474356575278068
+      },
+      {
+        "key": "no",
+        "share": 0.5193772772441205,
+        "worstShare": 0.2913907284768212,
+        "lift": 0.5610386538721449
+      }
+    ],
+    "firstTool": [
+      {
+        "key": "Write",
+        "share": 0.031136137793971515,
+        "worstShare": 0.304635761589404,
+        "lift": 9.783993236578835
+      },
+      {
+        "key": "(no-tool)",
+        "share": 0.038092083471348126,
+        "worstShare": 0.08609271523178808,
+        "lift": 2.260120932911028
+      },
+      {
+        "key": "(other-tool)",
+        "share": 0.025505134150380922,
+        "worstShare": 0.039735099337748346,
+        "lift": 1.5579255181904188
+      },
+      {
+        "key": "Edit",
+        "share": 0.2957933090427294,
+        "worstShare": 0.2847682119205298,
+        "lift": 0.9627270232789245
+      },
+      {
+        "key": "Bash",
+        "share": 0.4620735342828751,
+        "worstShare": 0.23178807947019867,
+        "lift": 0.5016259583659711
+      },
+      {
+        "key": "Read",
+        "share": 0.14375621066578337,
+        "worstShare": 0.052980132450331126,
+        "lift": 0.3685415204321421
+      },
+      {
+        "key": "ToolSearch",
+        "share": 0.00364359059291156,
+        "worstShare": 0,
+        "lift": 0
+      }
+    ],
+    "loopDepth": [
+      {
+        "key": "d0",
+        "share": 0.04272938058959921,
+        "worstShare": 0.07947019867549669,
+        "lift": 1.8598490682273217
+      },
+      {
+        "key": "d5",
+        "share": 0.03212984431931103,
+        "worstShare": 0.052980132450331126,
+        "lift": 1.6489383491499967
+      },
+      {
+        "key": "d2",
+        "share": 0.0364359059291156,
+        "worstShare": 0.052980132450331126,
+        "lift": 1.4540638169777242
+      },
+      {
+        "key": "d3",
+        "share": 0.03444849287843657,
+        "worstShare": 0.039735099337748346,
+        "lift": 1.153464085583291
+      },
+      {
+        "key": "d6",
+        "share": 0.7810533289168599,
+        "worstShare": 0.7218543046357616,
+        "lift": 0.9242061686579154
+      },
+      {
+        "key": "d4",
+        "share": 0.033123550844650546,
+        "worstShare": 0.026490066225165563,
+        "lift": 0.7997350993377483
+      },
+      {
+        "key": "d1",
+        "share": 0.040079496522027164,
+        "worstShare": 0.026490066225165563,
+        "lift": 0.6609380986262383
+      }
+    ]
+  },
+  "worstOracle": {
+    "n": 151,
+    "shippedMean": 5730.4347019867555,
+    "oracleMean": 4376.039867549671,
+    "reduction": 0.23635115045766308,
+    "usedJointCell": 96,
+    "usedActionOnly": 55
+  }
+}

@@ -1,0 +1,726 @@
+{
+  "generatedAt": "2026-08-05T11:15:12.594Z",
+  "source": "~/.claude/projects",
+  "minGroup": 100,
+  "asOf": null,
+  "coverage": {
+    "calls": 15093,
+    "withPrompt": 13566,
+    "depthZero": 1083,
+    "depthZeroWithPrompt": 938,
+    "missingChainBroken": 1
+  },
+  "marginalContrasts": {
+    "lengthBucket": [
+      {
+        "key": "gte1200",
+        "n": 1909,
+        "p50": 471,
+        "p90": 2526,
+        "p99": 9774.080000000013
+      },
+      {
+        "key": "300-1200",
+        "n": 1653,
+        "p50": 434,
+        "p90": 2182,
+        "p99": 9281.52000000001
+      },
+      {
+        "key": "80-300",
+        "n": 5415,
+        "p50": 431,
+        "p90": 2012.6000000000004,
+        "p99": 6825.159999999982
+      },
+      {
+        "key": "lt80",
+        "n": 4589,
+        "p50": 422,
+        "p90": 1693.199999999999,
+        "p99": 5596.639999999995
+      }
+    ],
+    "verbClass": [
+      {
+        "key": "write",
+        "n": 2142,
+        "p50": 465,
+        "p90": 2018.6000000000004,
+        "p99": 6802.660000000011
+      },
+      {
+        "key": "other",
+        "n": 5954,
+        "p50": 440,
+        "p90": 1993,
+        "p99": 6486.750000000006
+      },
+      {
+        "key": "fix",
+        "n": 1281,
+        "p50": 430,
+        "p90": 1813,
+        "p99": 5670.000000000009
+      },
+      {
+        "key": "run",
+        "n": 980,
+        "p50": 420.5,
+        "p90": 2028.7000000000003,
+        "p99": 7032.280000000006
+      },
+      {
+        "key": "read",
+        "n": 2766,
+        "p50": 414,
+        "p90": 2039,
+        "p99": 8403.149999999909
+      },
+      {
+        "key": "explain",
+        "n": 443,
+        "p50": 387,
+        "p90": 1744.4,
+        "p99": 5730.89999999999
+      }
+    ],
+    "hasLimit": [
+      {
+        "key": "none",
+        "n": 12059,
+        "p50": 433,
+        "p90": 1917,
+        "p99": 6592.9400000000005
+      },
+      {
+        "key": "limit",
+        "n": 1507,
+        "p50": 427,
+        "p90": 2492.2000000000003,
+        "p99": 10458.30000000001
+      }
+    ],
+    "hasExpansive": [
+      {
+        "key": "expansive",
+        "n": 1941,
+        "p50": 446,
+        "p90": 2447,
+        "p99": 10377.199999999979
+      },
+      {
+        "key": "none",
+        "n": 11625,
+        "p50": 431,
+        "p90": 1913,
+        "p99": 6589.280000000001
+      }
+    ],
+    "mentionsPath": [
+      {
+        "key": "path",
+        "n": 2451,
+        "p50": 452,
+        "p90": 2491,
+        "p99": 10372.5
+      },
+      {
+        "key": "none",
+        "n": 11115,
+        "p50": 428,
+        "p90": 1891.800000000001,
+        "p99": 6383.8000000000175
+      }
+    ],
+    "isQuestion": [
+      {
+        "key": "question",
+        "n": 3007,
+        "p50": 463,
+        "p90": 2056.600000000001,
+        "p99": 6478.240000000005
+      },
+      {
+        "key": "command",
+        "n": 10559,
+        "p50": 426,
+        "p90": 1956.2000000000044,
+        "p99": 7091.340000000002
+      }
+    ],
+    "requirementBucket": [
+      {
+        "key": "2-3",
+        "n": 3658,
+        "p50": 449,
+        "p90": 2109.6000000000004,
+        "p99": 6716.009999999982
+      },
+      {
+        "key": "gte8",
+        "n": 2734,
+        "p50": 447,
+        "p90": 2302.4000000000005,
+        "p99": 9519.770000000002
+      },
+      {
+        "key": "1",
+        "n": 5111,
+        "p50": 423,
+        "p90": 1758,
+        "p99": 6173.399999999936
+      },
+      {
+        "key": "4-7",
+        "n": 2063,
+        "p50": 414,
+        "p90": 1903.8,
+        "p99": 7722.599999999974
+      }
+    ]
+  },
+  "gates": {
+    "verbClass": {
+      "explain": {
+        "days": 17,
+        "cells": 26,
+        "effect": 0.5132719683185273,
+        "z": 0.49233116075281474,
+        "withinCellRatio": 0.9700724659149568,
+        "naiveRatio": 0.9347826086956522,
+        "signAgreement": 0.5555555555555556,
+        "signCells": 9,
+        "signP": 1,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 12,
+          "pooledRatio": 0.7351147372538155,
+          "q": 78.83386292684372,
+          "df": 11,
+          "p": 2.4791374647652652e-12,
+          "iSquared": 0.8604660536525048
+        }
+      },
+      "fix": {
+        "days": 24,
+        "cells": 35,
+        "effect": 0.4898374184865967,
+        "z": -0.7013090868441008,
+        "withinCellRatio": 0.9754122356038291,
+        "naiveRatio": 1.038647342995169,
+        "signAgreement": 0.5,
+        "signCells": 20,
+        "signP": 1,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 23,
+          "pooledRatio": 1.021086046903721,
+          "q": 45.52539756660412,
+          "df": 22,
+          "p": 0.0022749694129463155,
+          "iSquared": 0.5167532591491645
+        }
+      },
+      "other": {
+        "days": 28,
+        "cells": 58,
+        "effect": 0.5176085599506746,
+        "z": 2.1287981265009863,
+        "withinCellRatio": 1.077186945316929,
+        "naiveRatio": 1.0628019323671498,
+        "signAgreement": 0.5135135135135135,
+        "signCells": 37,
+        "signP": 1,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 37,
+          "pooledRatio": 1.08324116207424,
+          "q": 86.4057779668768,
+          "df": 36,
+          "p": 0.000004983083111702926,
+          "iSquared": 0.583361195893631
+        }
+      },
+      "run": {
+        "days": 24,
+        "cells": 35,
+        "effect": 0.47907571410752153,
+        "z": -1.3687468328272512,
+        "withinCellRatio": 0.9389494300942941,
+        "naiveRatio": 1.0157004830917875,
+        "signAgreement": 0.5882352941176471,
+        "signCells": 17,
+        "signP": 0.6290588378906247,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 17,
+          "pooledRatio": 0.9620046348228691,
+          "q": 81.95468565388262,
+          "df": 16,
+          "p": 7.379688118594558e-11,
+          "iSquared": 0.8047701620432974
+        }
+      },
+      "write": {
+        "days": 26,
+        "cells": 42,
+        "effect": 0.5379353972357471,
+        "z": 3.332202309409448,
+        "withinCellRatio": 1.0946731121368671,
+        "naiveRatio": 1.1231884057971016,
+        "signAgreement": 0.5384615384615384,
+        "signCells": 26,
+        "signP": 0.8450189828872686,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 27,
+          "pooledRatio": 1.050755180984204,
+          "q": 83.94073239896746,
+          "df": 26,
+          "p": 5.1100755289404496e-8,
+          "iSquared": 0.6902576465925638
+        }
+      }
+    },
+    "lengthBucket": {
+      "300-1200": {
+        "days": 26,
+        "cells": 42,
+        "effect": 0.5038165897176341,
+        "z": 0.33388406814561,
+        "withinCellRatio": 1.0992607480683934,
+        "naiveRatio": 1.028436018957346,
+        "signAgreement": 0.6551724137931034,
+        "signCells": 29,
+        "signP": 0.13604594767093597,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 30,
+          "pooledRatio": 1.127435352712911,
+          "q": 85.46429660275298,
+          "df": 29,
+          "p": 1.7866896900761717e-7,
+          "iSquared": 0.6606770177399921
+        }
+      },
+      "80-300": {
+        "days": 28,
+        "cells": 54,
+        "effect": 0.4914310645278985,
+        "z": -1.1437176024312188,
+        "withinCellRatio": 0.9878114809383202,
+        "naiveRatio": 1.0213270142180095,
+        "signAgreement": 0.525,
+        "signCells": 40,
+        "signP": 0.8746293123804214,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 42,
+          "pooledRatio": 0.9771632513621399,
+          "q": 76.42383979462137,
+          "df": 41,
+          "p": 0.0006530176733572161,
+          "iSquared": 0.46351818869371264
+        }
+      },
+      "gte1200": {
+        "days": 22,
+        "cells": 37,
+        "effect": 0.5326991856776253,
+        "z": 2.7884313144742507,
+        "withinCellRatio": 1.0406167222749818,
+        "naiveRatio": 1.1161137440758293,
+        "signAgreement": 0.5789473684210527,
+        "signCells": 19,
+        "signP": 0.6476058959960947,
+        "heterogeneity": {
+          "testable": true,
+          "cells": 21,
+          "pooledRatio": 1.0719643139412012,
+          "q": 54.07711003503938,
+          "df": 20,
+          "p": 0.00005634427400954221,
+          "iSquared": 0.6301577509034607
+        }
+      }
+    }
+  },
+  "candidates": {
+    "shipped": {
+      "meanLoss": 632.5999470023183,
+      "vsShipped": null,
+      "promptRungFired": null
+    },
+    "promptLength": {
+      "meanLoss": 638.4246240476972,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": 5.824677045379233,
+        "ciLower": -6.979414448669157,
+        "ciUpper": 16.844427797258415,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.9327591917853594
+    },
+    "promptVerb": {
+      "meanLoss": 649.5146836700883,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": 16.914736667770626,
+        "ciLower": 4.375987504338749,
+        "ciUpper": 28.684946974422967,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.9327591917853594
+    },
+    "promptLimit": {
+      "meanLoss": 631.1364226565092,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": -1.4635243458098877,
+        "ciLower": -7.412637025680244,
+        "ciUpper": 3.608730950401837,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.9327591917853594
+    },
+    "promptExpansive": {
+      "meanLoss": 627.7320006624686,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": -4.867946339847572,
+        "ciLower": -12.737419758232777,
+        "ciUpper": 3.9665027137042252,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.9327591917853594
+    },
+    "promptPath": {
+      "meanLoss": 621.7090526664462,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": -10.89089433587296,
+        "ciLower": -21.89924128011496,
+        "ciUpper": -0.4055149501661716,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.9327591917853594
+    },
+    "promptQuestion": {
+      "meanLoss": 640.1324213315687,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": 7.532474329248286,
+        "ciLower": 2.5991192076405674,
+        "ciUpper": 12.019860394537373,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.9327591917853594
+    },
+    "promptRequirements": {
+      "meanLoss": 632.6826432593582,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": 0.08269625703875831,
+        "ciLower": -8.733896694214922,
+        "ciUpper": 8.680603174603242,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.9327591917853594
+    },
+    "promptVerbLength": {
+      "meanLoss": 673.0778370321307,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": 40.47789002981106,
+        "ciLower": 23.318433996383312,
+        "ciUpper": 56.61675657220857,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.8893673401788672
+    },
+    "promptAll": {
+      "meanLoss": 666.9806591586627,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": 34.3807121563429,
+        "ciLower": 16.64310860179339,
+        "ciUpper": 50.56509960159331,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.8367008943358728
+    },
+    "oracleAction": {
+      "meanLoss": 512.5119377277235,
+      "vsShipped": {
+        "n": 3019,
+        "meanDifference": -120.08800927459518,
+        "ciLower": -179.02951854066993,
+        "ciUpper": -70.70838021338464,
+        "blocks": 53,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRungFired": 0.997350115932428
+    }
+  },
+  "rSquared": {
+    "marginal": {
+      "rSquared": 0,
+      "rank": 0,
+      "n": 13566
+    },
+    "model only": {
+      "rSquared": 0.02487346344102532,
+      "rank": 5,
+      "n": 13566
+    },
+    "model + thinking (shipped)": {
+      "rSquared": 0.191944944131973,
+      "rank": 6,
+      "n": 13566
+    },
+    "+ all metadata ever tried": {
+      "rSquared": 0.23681320193377708,
+      "rank": 28,
+      "n": 13566
+    },
+    "+ PROMPT FEATURES": {
+      "rSquared": 0.2435034532869449,
+      "rank": 43,
+      "n": 13566
+    },
+    "prompt features alone": {
+      "rSquared": 0.007196929037998343,
+      "rank": 15,
+      "n": 13566
+    },
+    "+ true first tool (ORACLE)": {
+      "rSquared": 0.3985419829001973,
+      "rank": 34,
+      "n": 13566
+    }
+  },
+  "writeSignal": {
+    "baseRate": 0.03206545776205219,
+    "byVerb": [
+      {
+        "verb": "write",
+        "n": 2142,
+        "rate": 0.03828197945845005,
+        "lift": 1.1938697318007663
+      },
+      {
+        "verb": "other",
+        "n": 5954,
+        "rate": 0.035774269398723545,
+        "lift": 1.1156637670415714
+      },
+      {
+        "verb": "fix",
+        "n": 1281,
+        "rate": 0.02810304449648712,
+        "lift": 0.8764273600904465
+      },
+      {
+        "verb": "read",
+        "n": 2766,
+        "rate": 0.02566883586406363,
+        "lift": 0.8005136260503154
+      },
+      {
+        "verb": "run",
+        "n": 980,
+        "rate": 0.024489795918367346,
+        "lift": 0.763743842364532
+      },
+      {
+        "verb": "explain",
+        "n": 443,
+        "rate": 0.020316027088036117,
+        "lift": 0.6335798240834436
+      }
+    ]
+  },
+  "byDepthBand": [
+    {
+      "band": "depth 0 (turn opener)",
+      "n": 938,
+      "rSquaredShipped": 0.2883682943354307,
+      "rSquaredWithPrompt": 0.3454308606699991,
+      "gain": 0.05706256633456841,
+      "rSquaredPromptAlone": 0.21917989136749083
+    },
+    {
+      "band": "depth 1-2",
+      "n": 1478,
+      "rSquaredShipped": 0.203170160460908,
+      "rSquaredWithPrompt": 0.2358421843228441,
+      "gain": 0.0326720238619361,
+      "rSquaredPromptAlone": 0.02242928116934868
+    },
+    {
+      "band": "depth 3+",
+      "n": 11150,
+      "rSquaredShipped": 0.17931007517792785,
+      "rSquaredWithPrompt": 0.18705550311368502,
+      "gain": 0.007745427935757165,
+      "rSquaredPromptAlone": 0.0041641995003956975
+    }
+  ],
+  "byDepthBandControlled": [
+    {
+      "band": "depth 0 (turn opener)",
+      "n": 938,
+      "rSquaredWithCell": 0.3594855199893024,
+      "rSquaredWithCellAndPrompt": 0.40522155082803535,
+      "gain": 0.045736030838732955
+    },
+    {
+      "band": "depth 1-2",
+      "n": 1478,
+      "rSquaredWithCell": 0.2438231982929681,
+      "rSquaredWithCellAndPrompt": 0.2720997555664075,
+      "gain": 0.028276557273439362
+    },
+    {
+      "band": "depth 3+",
+      "n": 11150,
+      "rSquaredWithCell": 0.2018131806995194,
+      "rSquaredWithCellAndPrompt": 0.20868837117814806,
+      "gain": 0.006875190478628668
+    }
+  ],
+  "depthZeroHoldout": {
+    "n": 121,
+    "candidates": {
+      "promptLength": {
+        "n": 121,
+        "meanDifference": 55.43363636363635,
+        "ciLower": 3.4716528925619783,
+        "ciUpper": 107.13939597315434,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptVerb": {
+        "n": 121,
+        "meanDifference": 29.206694214876023,
+        "ciLower": -12.247017543859625,
+        "ciUpper": 90.22246268656723,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptLimit": {
+        "n": 121,
+        "meanDifference": 17.29289256198347,
+        "ciLower": 3.9059459459459367,
+        "ciUpper": 30.281452991453047,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptExpansive": {
+        "n": 121,
+        "meanDifference": 9.107768595041335,
+        "ciLower": -7.276407766990305,
+        "ciUpper": 25.539067796610187,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptPath": {
+        "n": 121,
+        "meanDifference": 10.69619834710746,
+        "ciLower": -7.139611650485431,
+        "ciUpper": 29.48368852459017,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptQuestion": {
+        "n": 121,
+        "meanDifference": 17.36140495867769,
+        "ciLower": -6.14819672131146,
+        "ciUpper": 39.70087999999999,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptRequirements": {
+        "n": 121,
+        "meanDifference": 1.9987603305785437,
+        "ciLower": -57.04514285714285,
+        "ciUpper": 57.54700729927008,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptVerbLength": {
+        "n": 121,
+        "meanDifference": 57.40206611570246,
+        "ciLower": 4.800854700854699,
+        "ciUpper": 131.78674999999996,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "promptAll": {
+        "n": 121,
+        "meanDifference": 48.5772727272727,
+        "ciLower": -7.827352941176496,
+        "ciUpper": 125.0921052631578,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      },
+      "oracleAction": {
+        "n": 121,
+        "meanDifference": 4.123388429752063,
+        "ciLower": -111.58572368421046,
+        "ciUpper": 122.58511999999999,
+        "blocks": 51,
+        "blockKind": "session",
+        "resamples": 2000
+      }
+    }
+  },
+  "killCondition": {
+    "beatsShipped": true,
+    "liftsRSquared": false,
+    "rSquaredThreshold": 0.25,
+    "best": {
+      "name": "promptPath",
+      "n": 3019,
+      "meanDifference": -10.89089433587296,
+      "ciLower": -21.89924128011496,
+      "ciUpper": -0.4055149501661716,
+      "blocks": 53,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "fires": true,
+    "depthZeroSignalIsReal": true,
+    "promptPredictsWrite": false
+  }
+}

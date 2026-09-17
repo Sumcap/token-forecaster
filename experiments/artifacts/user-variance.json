@@ -1,0 +1,2368 @@
+{
+  "generatedAt": "2026-08-26T16:31:47.615Z",
+  "probe": "probe-user-variance.mjs",
+  "readThisFirst": "The project is a pseudo-user with the PERSON HELD FIXED: one prompting style, one toolchain, one machine, one era, one account. Between-user variation is not plausibly SMALLER than what is measured here, so every project term below is a lower bound on the between-user term, never a clearance.",
+  "privacy": "Aggregates and salted workload hashes only. No prompt text, no response text, no file paths.",
+  "corpus": {
+    "source": "~/.claude/projects",
+    "filesScanned": 682,
+    "calls": 23370,
+    "sessions": 434,
+    "projects": 20
+  },
+  "method": {
+    "model": "log(outputTokens) = mean + project + session(project) + call",
+    "estimator": "method of moments, Searle unbalanced two-fold nested design",
+    "negativeComponents": "reported raw as well as clamped; a negative component means indistinguishable from zero at this sample size, not zero",
+    "iccInterval": "project-block bootstrap, 500 draws. WEAK BY CONSTRUCTION: resampling 3 to 8 projects with replacement cannot give a tight interval, and it is published only so the point estimate is not read as precise."
+  },
+  "eligibility": {
+    "declaredBeforeRunning": true,
+    "minProjectCalls": 30,
+    "minProjects": 3,
+    "minCellCalls": 200
+  },
+  "readingGuide": {
+    "shapeTravels": [
+      0.8,
+      1.3
+    ],
+    "p50IsPersonal": [
+      2,
+      3
+    ],
+    "comparison": "the band itself spans roughly 4x to 15x from p50 to p99"
+  },
+  "varianceExplained": {
+    "model": {
+      "groups": 6,
+      "etaSquared": 0.020197545079769442
+    },
+    "thinking": {
+      "groups": 2,
+      "etaSquared": 0.15172103192401593
+    },
+    "modelThinking": {
+      "groups": 10,
+      "etaSquared": 0.1676554470925009
+    },
+    "project": {
+      "groups": 20,
+      "etaSquared": 0.02670160112036298
+    },
+    "modelThinkingProject": {
+      "groups": 71,
+      "etaSquared": 0.18863566471799034
+    },
+    "projectMarginal": 0.020980217625489433
+  },
+  "byModelThinking": [
+    {
+      "label": "model=claude-opus-5|thinking=yes",
+      "eligible": true,
+      "droppedProjects": 4,
+      "droppedCalls": 67,
+      "pooled": {
+        "calls": 6162,
+        "p50": 523,
+        "p90": 2061,
+        "p99": 8441
+      },
+      "bandSpan": {
+        "p90OverP50": 3.9407265774378586,
+        "p99OverP50": 16.1395793499044
+      },
+      "components": {
+        "projects": 11,
+        "sessions": 169,
+        "calls": 6162,
+        "raw": {
+          "project": 0.017885037841188705,
+          "session": 0.11139129638690068,
+          "call": 1.4456365210578244
+        },
+        "clamped": {
+          "project": 0.017885037841188705,
+          "session": 0.11139129638690068,
+          "call": 1.4456365210578244
+        },
+        "iccProject": 0.011356207920432404,
+        "iccSession": 0.07072854603544297,
+        "totalRaw": 1.5749128552859137,
+        "projectSdRatio": 1.1430898077664193,
+        "sessionSdRatio": 1.3961987239800329,
+        "callSdRatio": 3.3279159150317654
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 2561,
+          "sessions": 80,
+          "p50": 447,
+          "p90": 1591,
+          "p99": 4838
+        },
+        {
+          "workloadId": "w07",
+          "calls": 278,
+          "sessions": 4,
+          "p50": 471,
+          "p90": 1076,
+          "p99": 1925
+        },
+        {
+          "workloadId": "w06",
+          "calls": 156,
+          "sessions": 5,
+          "p50": 472,
+          "p90": 1308,
+          "p99": 2491
+        },
+        {
+          "workloadId": "w05",
+          "calls": 31,
+          "sessions": 1,
+          "p50": 520,
+          "p90": 1563,
+          "p99": 10896
+        },
+        {
+          "workloadId": "w10",
+          "calls": 717,
+          "sessions": 19,
+          "p50": 569,
+          "p90": 1885,
+          "p99": 6920
+        },
+        {
+          "workloadId": "w11",
+          "calls": 37,
+          "sessions": 4,
+          "p50": 584,
+          "p90": 1721,
+          "p99": 12732
+        },
+        {
+          "workloadId": "w02",
+          "calls": 910,
+          "sessions": 27,
+          "p50": 602,
+          "p90": 2883,
+          "p99": 9770
+        },
+        {
+          "workloadId": "w01",
+          "calls": 184,
+          "sessions": 8,
+          "p50": 640,
+          "p90": 2082,
+          "p99": 4834
+        },
+        {
+          "workloadId": "w09",
+          "calls": 645,
+          "sessions": 4,
+          "p50": 651,
+          "p90": 3022,
+          "p99": 16388
+        },
+        {
+          "workloadId": "w13",
+          "calls": 562,
+          "sessions": 13,
+          "p50": 652,
+          "p90": 3116,
+          "p99": 9778
+        },
+        {
+          "workloadId": "w04",
+          "calls": 81,
+          "sessions": 4,
+          "p50": 805,
+          "p90": 2801,
+          "p99": 10942
+        }
+      ],
+      "medianSpread": {
+        "min": 447,
+        "max": 805,
+        "maxOverMin": 1.8008948545861299,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.8546845124282982
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 0.9005736137667304
+          },
+          {
+            "workloadId": "w06",
+            "ratio": 0.9024856596558317
+          },
+          {
+            "workloadId": "w05",
+            "ratio": 0.994263862332696
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 1.0879541108986617
+          },
+          {
+            "workloadId": "w11",
+            "ratio": 1.1166347992351817
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 1.1510516252390057
+          },
+          {
+            "workloadId": "w01",
+            "ratio": 1.2237093690248566
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.2447418738049714
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.2466539196940727
+          },
+          {
+            "workloadId": "w04",
+            "ratio": 1.5391969407265775
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-fable-5|thinking=yes",
+      "eligible": true,
+      "droppedProjects": 1,
+      "droppedCalls": 18,
+      "pooled": {
+        "calls": 5893,
+        "p50": 669,
+        "p90": 2906,
+        "p99": 9435
+      },
+      "bandSpan": {
+        "p90OverP50": 4.343796711509716,
+        "p99OverP50": 14.103139013452914
+      },
+      "components": {
+        "projects": 8,
+        "sessions": 173,
+        "calls": 5893,
+        "raw": {
+          "project": 0.026740340289457664,
+          "session": 0.04301617901674592,
+          "call": 1.176614239101728
+        },
+        "clamped": {
+          "project": 0.026740340289457664,
+          "session": 0.04301617901674592,
+          "call": 1.176614239101728
+        },
+        "iccProject": 0.02145456326624254,
+        "iccSession": 0.03451314845647792,
+        "totalRaw": 1.2463707584079315,
+        "projectSdRatio": 1.1776544889094542,
+        "sessionSdRatio": 1.2304788726058087,
+        "callSdRatio": 2.9586068739407168
+      },
+      "perProject": [
+        {
+          "workloadId": "w07",
+          "calls": 61,
+          "sessions": 1,
+          "p50": 434,
+          "p90": 914,
+          "p99": 1661
+        },
+        {
+          "workloadId": "w00",
+          "calls": 2304,
+          "sessions": 69,
+          "p50": 566,
+          "p90": 2460,
+          "p99": 8064
+        },
+        {
+          "workloadId": "w02",
+          "calls": 676,
+          "sessions": 31,
+          "p50": 589,
+          "p90": 2471,
+          "p99": 9417
+        },
+        {
+          "workloadId": "w06",
+          "calls": 159,
+          "sessions": 6,
+          "p50": 624,
+          "p90": 2551,
+          "p99": 10754
+        },
+        {
+          "workloadId": "w10",
+          "calls": 110,
+          "sessions": 4,
+          "p50": 699,
+          "p90": 2464,
+          "p99": 4650
+        },
+        {
+          "workloadId": "w09",
+          "calls": 921,
+          "sessions": 12,
+          "p50": 763,
+          "p90": 3679,
+          "p99": 10039
+        },
+        {
+          "workloadId": "w11",
+          "calls": 73,
+          "sessions": 1,
+          "p50": 810,
+          "p90": 3677,
+          "p99": 10608
+        },
+        {
+          "workloadId": "w13",
+          "calls": 1589,
+          "sessions": 49,
+          "p50": 862,
+          "p90": 3311,
+          "p99": 9779
+        }
+      ],
+      "medianSpread": {
+        "min": 434,
+        "max": 862,
+        "maxOverMin": 1.9861751152073732,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w07",
+            "ratio": 0.648729446935725
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.8460388639760837
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 0.8804185351270553
+          },
+          {
+            "workloadId": "w06",
+            "ratio": 0.9327354260089686
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 1.0448430493273542
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.14050822122571
+          },
+          {
+            "workloadId": "w11",
+            "ratio": 1.210762331838565
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.288490284005979
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-opus-5|thinking=no",
+      "eligible": true,
+      "droppedProjects": 6,
+      "droppedCalls": 93,
+      "pooled": {
+        "calls": 5485,
+        "p50": 217,
+        "p90": 877,
+        "p99": 3878
+      },
+      "bandSpan": {
+        "p90OverP50": 4.04147465437788,
+        "p99OverP50": 17.870967741935484
+      },
+      "components": {
+        "projects": 8,
+        "sessions": 155,
+        "calls": 5485,
+        "raw": {
+          "project": 0.021353595011730515,
+          "session": 0.06926934624620412,
+          "call": 0.8221002567227792
+        },
+        "clamped": {
+          "project": 0.021353595011730515,
+          "session": 0.06926934624620412,
+          "call": 0.8221002567227792
+        },
+        "iccProject": 0.023395477466742032,
+        "iccSession": 0.07589304884487862,
+        "totalRaw": 0.9127231979807138,
+        "projectSdRatio": 1.1573451210545302,
+        "sessionSdRatio": 1.3010748144135895,
+        "callSdRatio": 2.4761314547054756
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 2517,
+          "sessions": 80,
+          "p50": 184,
+          "p90": 689,
+          "p99": 2569
+        },
+        {
+          "workloadId": "w09",
+          "calls": 437,
+          "sessions": 5,
+          "p50": 217,
+          "p90": 791,
+          "p99": 6267
+        },
+        {
+          "workloadId": "w07",
+          "calls": 325,
+          "sessions": 4,
+          "p50": 222,
+          "p90": 858,
+          "p99": 2911
+        },
+        {
+          "workloadId": "w10",
+          "calls": 678,
+          "sessions": 17,
+          "p50": 233,
+          "p90": 755,
+          "p99": 1916
+        },
+        {
+          "workloadId": "w13",
+          "calls": 262,
+          "sessions": 12,
+          "p50": 249,
+          "p90": 2028,
+          "p99": 9902
+        },
+        {
+          "workloadId": "w06",
+          "calls": 171,
+          "sessions": 5,
+          "p50": 255,
+          "p90": 939,
+          "p99": 1823
+        },
+        {
+          "workloadId": "w02",
+          "calls": 942,
+          "sessions": 26,
+          "p50": 294,
+          "p90": 1373,
+          "p99": 5092
+        },
+        {
+          "workloadId": "w01",
+          "calls": 153,
+          "sessions": 6,
+          "p50": 333,
+          "p90": 1070,
+          "p99": 4251
+        }
+      ],
+      "medianSpread": {
+        "min": 184,
+        "max": 333,
+        "maxOverMin": 1.809782608695652,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.847926267281106
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 1.023041474654378
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 1.0737327188940091
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.1474654377880185
+          },
+          {
+            "workloadId": "w06",
+            "ratio": 1.1751152073732718
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 1.3548387096774193
+          },
+          {
+            "workloadId": "w01",
+            "ratio": 1.5345622119815667
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-fable-5|thinking=no",
+      "eligible": true,
+      "droppedProjects": 2,
+      "droppedCalls": 31,
+      "pooled": {
+        "calls": 3692,
+        "p50": 195,
+        "p90": 833,
+        "p99": 3192
+      },
+      "bandSpan": {
+        "p90OverP50": 4.271794871794872,
+        "p99OverP50": 16.369230769230768
+      },
+      "components": {
+        "projects": 7,
+        "sessions": 157,
+        "calls": 3692,
+        "raw": {
+          "project": 0.007395076273874563,
+          "session": 0.04338626641142176,
+          "call": 0.7435107790220353
+        },
+        "clamped": {
+          "project": 0.007395076273874563,
+          "session": 0.04338626641142176,
+          "call": 0.7435107790220353
+        },
+        "iccProject": 0.009310272721802704,
+        "iccSession": 0.054622556645989306,
+        "totalRaw": 0.7942921217073317,
+        "projectSdRatio": 1.0898004753324064,
+        "sessionSdRatio": 1.231574832777641,
+        "callSdRatio": 2.368532845645489
+      },
+      "perProject": [
+        {
+          "workloadId": "w07",
+          "calls": 39,
+          "sessions": 1,
+          "p50": 162,
+          "p90": 286,
+          "p99": 398
+        },
+        {
+          "workloadId": "w10",
+          "calls": 61,
+          "sessions": 3,
+          "p50": 183,
+          "p90": 1016,
+          "p99": 4055
+        },
+        {
+          "workloadId": "w00",
+          "calls": 1666,
+          "sessions": 67,
+          "p50": 187,
+          "p90": 719,
+          "p99": 2611
+        },
+        {
+          "workloadId": "w02",
+          "calls": 480,
+          "sessions": 22,
+          "p50": 189,
+          "p90": 721,
+          "p99": 3717
+        },
+        {
+          "workloadId": "w09",
+          "calls": 504,
+          "sessions": 12,
+          "p50": 202,
+          "p90": 857,
+          "p99": 3072
+        },
+        {
+          "workloadId": "w06",
+          "calls": 93,
+          "sessions": 6,
+          "p50": 205,
+          "p90": 1710,
+          "p99": 6049
+        },
+        {
+          "workloadId": "w13",
+          "calls": 849,
+          "sessions": 46,
+          "p50": 220,
+          "p90": 1016,
+          "p99": 3383
+        }
+      ],
+      "medianSpread": {
+        "min": 162,
+        "max": 220,
+        "maxOverMin": 1.3580246913580247,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w07",
+            "ratio": 0.8307692307692308
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 0.9384615384615385
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.958974358974359
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 0.9692307692307692
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.035897435897436
+          },
+          {
+            "workloadId": "w06",
+            "ratio": 1.0512820512820513
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.1282051282051282
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=yes",
+      "eligible": true,
+      "droppedProjects": 3,
+      "droppedCalls": 56,
+      "pooled": {
+        "calls": 1131,
+        "p50": 711,
+        "p90": 2684,
+        "p99": 12292
+      },
+      "bandSpan": {
+        "p90OverP50": 3.7749648382559773,
+        "p99OverP50": 17.28832630098453
+      },
+      "components": {
+        "projects": 5,
+        "sessions": 53,
+        "calls": 1131,
+        "raw": {
+          "project": 0.03908764357570444,
+          "session": 0.0875638926608684,
+          "call": 1.1863552097408767
+        },
+        "clamped": {
+          "project": 0.03908764357570444,
+          "session": 0.0875638926608684,
+          "call": 1.1863552097408767
+        },
+        "iccProject": 0.02976956797476786,
+        "iccSession": 0.06668959845722856,
+        "totalRaw": 1.3130067459774495,
+        "projectSdRatio": 1.2186040134290343,
+        "sessionSdRatio": 1.3443518053157901,
+        "callSdRatio": 2.9718936535792064
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 281,
+          "sessions": 11,
+          "p50": 534,
+          "p90": 1734,
+          "p99": 4180
+        },
+        {
+          "workloadId": "w10",
+          "calls": 34,
+          "sessions": 11,
+          "p50": 597,
+          "p90": 1369,
+          "p99": 1773
+        },
+        {
+          "workloadId": "w13",
+          "calls": 448,
+          "sessions": 21,
+          "p50": 764,
+          "p90": 3209,
+          "p99": 15806
+        },
+        {
+          "workloadId": "w07",
+          "calls": 319,
+          "sessions": 4,
+          "p50": 804,
+          "p90": 2768,
+          "p99": 7261
+        },
+        {
+          "workloadId": "w08",
+          "calls": 49,
+          "sessions": 6,
+          "p50": 1068,
+          "p90": 4024,
+          "p99": 5320
+        }
+      ],
+      "medianSpread": {
+        "min": 534,
+        "max": 1068,
+        "maxOverMin": 2,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.7510548523206751
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 0.8396624472573839
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.0745428973277074
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 1.130801687763713
+          },
+          {
+            "workloadId": "w08",
+            "ratio": 1.5021097046413503
+          }
+        ]
+      },
+      "verdict": "p50-is-personal"
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=no",
+      "eligible": true,
+      "droppedProjects": 4,
+      "droppedCalls": 34,
+      "pooled": {
+        "calls": 643,
+        "p50": 272,
+        "p90": 925,
+        "p99": 4125
+      },
+      "bandSpan": {
+        "p90OverP50": 3.400735294117647,
+        "p99OverP50": 15.165441176470589
+      },
+      "components": {
+        "projects": 4,
+        "sessions": 48,
+        "calls": 643,
+        "raw": {
+          "project": 0.055921023286440615,
+          "session": 0.3046301029936374,
+          "call": 0.6896985852970596
+        },
+        "clamped": {
+          "project": 0.055921023286440615,
+          "session": 0.3046301029936374,
+          "call": 0.6896985852970596
+        },
+        "iccProject": 0.05324545455238945,
+        "iccSession": 0.29005492659091603,
+        "totalRaw": 1.0502497115771376,
+        "projectSdRatio": 1.2667774866338757,
+        "sessionSdRatio": 1.7366067408041739,
+        "callSdRatio": 2.2944219453982884
+      },
+      "perProject": [
+        {
+          "workloadId": "w10",
+          "calls": 42,
+          "sessions": 17,
+          "p50": 180,
+          "p90": 548,
+          "p99": 1190
+        },
+        {
+          "workloadId": "w00",
+          "calls": 176,
+          "sessions": 9,
+          "p50": 217,
+          "p90": 692,
+          "p99": 2071
+        },
+        {
+          "workloadId": "w07",
+          "calls": 108,
+          "sessions": 4,
+          "p50": 302,
+          "p90": 906,
+          "p99": 4567
+        },
+        {
+          "workloadId": "w13",
+          "calls": 317,
+          "sessions": 18,
+          "p50": 333,
+          "p90": 1033,
+          "p99": 5685
+        }
+      ],
+      "medianSpread": {
+        "min": 180,
+        "max": 333,
+        "maxOverMin": 1.85,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w10",
+            "ratio": 0.6617647058823529
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.7977941176470589
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 1.1102941176470589
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.224264705882353
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-sonnet-5|thinking=no",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 3
+    },
+    {
+      "label": "model=claude-sonnet-4-6|thinking=no",
+      "eligible": false,
+      "reason": "1 projects with 30+ calls, 36 usable calls",
+      "droppedProjects": 0,
+      "droppedCalls": 0
+    },
+    {
+      "label": "model=claude-haiku-4-5-20251001|thinking=yes",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 5,
+      "droppedCalls": 13
+    },
+    {
+      "label": "model=claude-sonnet-5|thinking=yes",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 13
+    }
+  ],
+  "iccIntervals": {
+    "model=claude-opus-5|thinking=yes": [
+      0,
+      0.019930937931197948
+    ],
+    "model=claude-fable-5|thinking=yes": [
+      0,
+      0.02882331851296926
+    ],
+    "model=claude-opus-5|thinking=no": [
+      0,
+      0.03803438542894551
+    ],
+    "model=claude-fable-5|thinking=no": [
+      0,
+      0.016053049494410644
+    ],
+    "model=claude-opus-4-8|thinking=yes": [
+      0,
+      0.057172447772609686
+    ],
+    "model=claude-opus-4-8|thinking=no": [
+      0,
+      0.13324552493671318
+    ]
+  },
+  "byModelThinkingFortnight": [
+    {
+      "label": "model=claude-opus-5|thinking=yes|fortnight=2",
+      "eligible": true,
+      "droppedProjects": 2,
+      "droppedCalls": 35,
+      "pooled": {
+        "calls": 2861,
+        "p50": 498,
+        "p90": 1841,
+        "p99": 8571
+      },
+      "bandSpan": {
+        "p90OverP50": 3.6967871485943773,
+        "p99OverP50": 17.210843373493976
+      },
+      "components": {
+        "projects": 6,
+        "sessions": 64,
+        "calls": 2861,
+        "raw": {
+          "project": 0.05228711184761964,
+          "session": 0.08120641682531564,
+          "call": 1.822906262424194
+        },
+        "clamped": {
+          "project": 0.05228711184761964,
+          "session": 0.08120641682531564,
+          "call": 1.822906262424194
+        },
+        "iccProject": 0.026726189649763532,
+        "iccSession": 0.0415080890904082,
+        "totalRaw": 1.9563997910971294,
+        "projectSdRatio": 1.256919332349085,
+        "sessionSdRatio": 1.329718673365762,
+        "callSdRatio": 3.858005959443883
+      },
+      "perProject": [
+        {
+          "workloadId": "w07",
+          "calls": 38,
+          "sessions": 1,
+          "p50": 370,
+          "p90": 841,
+          "p99": 1595
+        },
+        {
+          "workloadId": "w00",
+          "calls": 1284,
+          "sessions": 34,
+          "p50": 428,
+          "p90": 1327,
+          "p99": 4189
+        },
+        {
+          "workloadId": "w02",
+          "calls": 328,
+          "sessions": 11,
+          "p50": 476,
+          "p90": 2430,
+          "p99": 8318
+        },
+        {
+          "workloadId": "w10",
+          "calls": 299,
+          "sessions": 7,
+          "p50": 606,
+          "p90": 1568,
+          "p99": 3997
+        },
+        {
+          "workloadId": "w09",
+          "calls": 472,
+          "sessions": 4,
+          "p50": 655,
+          "p90": 2590,
+          "p99": 12900
+        },
+        {
+          "workloadId": "w13",
+          "calls": 440,
+          "sessions": 7,
+          "p50": 674,
+          "p90": 3348,
+          "p99": 11316
+        }
+      ],
+      "medianSpread": {
+        "min": 370,
+        "max": 674,
+        "maxOverMin": 1.8216216216216217,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w07",
+            "ratio": 0.7429718875502008
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.8594377510040161
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 0.9558232931726908
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 1.216867469879518
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.3152610441767068
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.3534136546184738
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-opus-5|thinking=no|fortnight=1",
+      "eligible": true,
+      "droppedProjects": 0,
+      "droppedCalls": 0,
+      "pooled": {
+        "calls": 2821,
+        "p50": 237,
+        "p90": 959,
+        "p99": 3303
+      },
+      "bandSpan": {
+        "p90OverP50": 4.046413502109704,
+        "p99OverP50": 13.936708860759493
+      },
+      "components": {
+        "projects": 7,
+        "sessions": 81,
+        "calls": 2821,
+        "raw": {
+          "project": 0.07897380303301238,
+          "session": 0.01847595974031886,
+          "call": 0.7268426242185488
+        },
+        "clamped": {
+          "project": 0.07897380303301238,
+          "session": 0.01847595974031886,
+          "call": 0.7268426242185488
+        },
+        "iccProject": 0.09580799759805415,
+        "iccSession": 0.022414327769960177,
+        "totalRaw": 0.8242923869918801,
+        "projectSdRatio": 1.324483775695111,
+        "sessionSdRatio": 1.1455974629369114,
+        "callSdRatio": 2.345622107736983
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 1398,
+          "sessions": 46,
+          "p50": 194,
+          "p90": 761,
+          "p99": 3417
+        },
+        {
+          "workloadId": "w10",
+          "calls": 359,
+          "sessions": 11,
+          "p50": 222,
+          "p90": 699,
+          "p99": 2031
+        },
+        {
+          "workloadId": "w07",
+          "calls": 259,
+          "sessions": 3,
+          "p50": 232,
+          "p90": 957,
+          "p99": 3723
+        },
+        {
+          "workloadId": "w06",
+          "calls": 171,
+          "sessions": 5,
+          "p50": 255,
+          "p90": 939,
+          "p99": 1823
+        },
+        {
+          "workloadId": "w13",
+          "calls": 42,
+          "sessions": 5,
+          "p50": 323,
+          "p90": 1265,
+          "p99": 2865
+        },
+        {
+          "workloadId": "w01",
+          "calls": 95,
+          "sessions": 2,
+          "p50": 405,
+          "p90": 1183,
+          "p99": 4432
+        },
+        {
+          "workloadId": "w02",
+          "calls": 497,
+          "sessions": 9,
+          "p50": 441,
+          "p90": 1444,
+          "p99": 3594
+        }
+      ],
+      "medianSpread": {
+        "min": 194,
+        "max": 441,
+        "maxOverMin": 2.2731958762886597,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.8185654008438819
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 0.9367088607594937
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 0.9789029535864979
+          },
+          {
+            "workloadId": "w06",
+            "ratio": 1.0759493670886076
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.3628691983122363
+          },
+          {
+            "workloadId": "w01",
+            "ratio": 1.7088607594936709
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 1.860759493670886
+          }
+        ]
+      },
+      "verdict": "p50-is-personal"
+    },
+    {
+      "label": "model=claude-opus-5|thinking=yes|fortnight=1",
+      "eligible": true,
+      "droppedProjects": 1,
+      "droppedCalls": 6,
+      "pooled": {
+        "calls": 2566,
+        "p50": 527,
+        "p90": 2058,
+        "p99": 6874
+      },
+      "bandSpan": {
+        "p90OverP50": 3.905123339658444,
+        "p99OverP50": 13.043643263757115
+      },
+      "components": {
+        "projects": 7,
+        "sessions": 84,
+        "calls": 2566,
+        "raw": {
+          "project": -0.005295268275622531,
+          "session": 0.13693916742962248,
+          "call": 0.9901725130345999
+        },
+        "clamped": {
+          "project": 0,
+          "session": 0.13693916742962248,
+          "call": 0.9901725130345999
+        },
+        "iccProject": 0,
+        "iccSession": 0.12149565105493494,
+        "totalRaw": 1.1218164121885998,
+        "projectSdRatio": 1,
+        "sessionSdRatio": 1.4478112382969393,
+        "callSdRatio": 2.7049248347575423
+      },
+      "perProject": [
+        {
+          "workloadId": "w06",
+          "calls": 156,
+          "sessions": 5,
+          "p50": 472,
+          "p90": 1308,
+          "p99": 2491
+        },
+        {
+          "workloadId": "w00",
+          "calls": 1226,
+          "sessions": 46,
+          "p50": 490,
+          "p90": 1792,
+          "p99": 5389
+        },
+        {
+          "workloadId": "w07",
+          "calls": 233,
+          "sessions": 3,
+          "p50": 494,
+          "p90": 1088,
+          "p99": 2151
+        },
+        {
+          "workloadId": "w10",
+          "calls": 418,
+          "sessions": 12,
+          "p50": 530,
+          "p90": 2166,
+          "p99": 8898
+        },
+        {
+          "workloadId": "w13",
+          "calls": 98,
+          "sessions": 5,
+          "p50": 599,
+          "p90": 2707,
+          "p99": 4751
+        },
+        {
+          "workloadId": "w01",
+          "calls": 68,
+          "sessions": 4,
+          "p50": 711,
+          "p90": 2662,
+          "p99": 8374
+        },
+        {
+          "workloadId": "w02",
+          "calls": 367,
+          "sessions": 9,
+          "p50": 726,
+          "p90": 3296,
+          "p99": 13299
+        }
+      ],
+      "medianSpread": {
+        "min": 472,
+        "max": 726,
+        "maxOverMin": 1.5381355932203389,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w06",
+            "ratio": 0.8956356736242884
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.9297912713472486
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 0.937381404174573
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 1.0056925996204933
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.1366223908918407
+          },
+          {
+            "workloadId": "w01",
+            "ratio": 1.349146110056926
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 1.3776091081593929
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-opus-5|thinking=no|fortnight=2",
+      "eligible": true,
+      "droppedProjects": 2,
+      "droppedCalls": 26,
+      "pooled": {
+        "calls": 2310,
+        "p50": 204,
+        "p90": 771,
+        "p99": 5265
+      },
+      "bandSpan": {
+        "p90OverP50": 3.7794117647058822,
+        "p99OverP50": 25.808823529411764
+      },
+      "components": {
+        "projects": 6,
+        "sessions": 61,
+        "calls": 2310,
+        "raw": {
+          "project": 0.00842219305972205,
+          "session": 0.06665154034142305,
+          "call": 0.9531262783556991
+        },
+        "clamped": {
+          "project": 0.00842219305972205,
+          "session": 0.06665154034142305,
+          "call": 0.9531262783556991
+        },
+        "iccProject": 0.008191201092607835,
+        "iccSession": 0.06482351641636167,
+        "totalRaw": 1.0282000117568442,
+        "projectSdRatio": 1.0961154352377342,
+        "sessionSdRatio": 1.2945583520328356,
+        "callSdRatio": 2.6545678264027504
+      },
+      "perProject": [
+        {
+          "workloadId": "w07",
+          "calls": 51,
+          "sessions": 1,
+          "p50": 158,
+          "p90": 447,
+          "p99": 1310
+        },
+        {
+          "workloadId": "w00",
+          "calls": 1067,
+          "sessions": 33,
+          "p50": 182,
+          "p90": 600,
+          "p99": 1667
+        },
+        {
+          "workloadId": "w02",
+          "calls": 326,
+          "sessions": 10,
+          "p50": 191,
+          "p90": 848,
+          "p99": 5620
+        },
+        {
+          "workloadId": "w09",
+          "calls": 333,
+          "sessions": 4,
+          "p50": 220,
+          "p90": 815,
+          "p99": 7527
+        },
+        {
+          "workloadId": "w13",
+          "calls": 214,
+          "sessions": 7,
+          "p50": 222,
+          "p90": 2412,
+          "p99": 10158
+        },
+        {
+          "workloadId": "w10",
+          "calls": 319,
+          "sessions": 6,
+          "p50": 261,
+          "p90": 797,
+          "p99": 1714
+        }
+      ],
+      "medianSpread": {
+        "min": 158,
+        "max": 261,
+        "maxOverMin": 1.6518987341772151,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w07",
+            "ratio": 0.7745098039215687
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.8921568627450981
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 0.9362745098039216
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.0784313725490196
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.088235294117647
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 1.2794117647058822
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-fable-5|thinking=yes|fortnight=2",
+      "eligible": true,
+      "droppedProjects": 1,
+      "droppedCalls": 18,
+      "pooled": {
+        "calls": 2171,
+        "p50": 693,
+        "p90": 3130,
+        "p99": 8571
+      },
+      "bandSpan": {
+        "p90OverP50": 4.516594516594517,
+        "p99OverP50": 12.367965367965368
+      },
+      "components": {
+        "projects": 5,
+        "sessions": 63,
+        "calls": 2171,
+        "raw": {
+          "project": 0.01895579931581278,
+          "session": 0.036835552409098714,
+          "call": 1.0787867595029006
+        },
+        "clamped": {
+          "project": 0.01895579931581278,
+          "session": 0.036835552409098714,
+          "call": 1.0787867595029006
+        },
+        "iccProject": 0.016707355031994484,
+        "iccSession": 0.032466299186079135,
+        "totalRaw": 1.134578111227812,
+        "projectSdRatio": 1.1476083273675988,
+        "sessionSdRatio": 1.2115807396670528,
+        "callSdRatio": 2.8253905417456497
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 363,
+          "sessions": 16,
+          "p50": 576,
+          "p90": 2672,
+          "p99": 7438
+        },
+        {
+          "workloadId": "w10",
+          "calls": 58,
+          "sessions": 2,
+          "p50": 613,
+          "p90": 1729,
+          "p99": 3082
+        },
+        {
+          "workloadId": "w02",
+          "calls": 625,
+          "sessions": 28,
+          "p50": 614,
+          "p90": 2443,
+          "p99": 7404
+        },
+        {
+          "workloadId": "w09",
+          "calls": 879,
+          "sessions": 11,
+          "p50": 760,
+          "p90": 3658,
+          "p99": 10203
+        },
+        {
+          "workloadId": "w13",
+          "calls": 246,
+          "sessions": 6,
+          "p50": 855,
+          "p90": 4141,
+          "p99": 9679
+        }
+      ],
+      "medianSpread": {
+        "min": 576,
+        "max": 855,
+        "maxOverMin": 1.484375,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.8311688311688312
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 0.8845598845598845
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 0.886002886002886
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.0966810966810967
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.2337662337662338
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-fable-5|thinking=yes|fortnight=0",
+      "eligible": true,
+      "droppedProjects": 0,
+      "droppedCalls": 0,
+      "pooled": {
+        "calls": 2115,
+        "p50": 705,
+        "p90": 2786,
+        "p99": 7909
+      },
+      "bandSpan": {
+        "p90OverP50": 3.9517730496453902,
+        "p99OverP50": 11.218439716312057
+      },
+      "components": {
+        "projects": 3,
+        "sessions": 56,
+        "calls": 2115,
+        "raw": {
+          "project": 0.08330083727607246,
+          "session": 0.0637005409445541,
+          "call": 1.2399587913876349
+        },
+        "clamped": {
+          "project": 0.08330083727607246,
+          "session": 0.0637005409445541,
+          "call": 1.2399587913876349
+        },
+        "iccProject": 0.06006000684186935,
+        "iccSession": 0.045928168912410756,
+        "totalRaw": 1.3869601696082614,
+        "projectSdRatio": 1.3345829476538809,
+        "sessionSdRatio": 1.2870974711820118,
+        "callSdRatio": 3.045101911878777
+      },
+      "perProject": [
+        {
+          "workloadId": "w07",
+          "calls": 61,
+          "sessions": 1,
+          "p50": 434,
+          "p90": 914,
+          "p99": 1661
+        },
+        {
+          "workloadId": "w00",
+          "calls": 714,
+          "sessions": 13,
+          "p50": 528,
+          "p90": 1781,
+          "p99": 6637
+        },
+        {
+          "workloadId": "w13",
+          "calls": 1340,
+          "sessions": 42,
+          "p50": 866,
+          "p90": 3171,
+          "p99": 9714
+        }
+      ],
+      "medianSpread": {
+        "min": 434,
+        "max": 866,
+        "maxOverMin": 1.9953917050691243,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w07",
+            "ratio": 0.6156028368794326
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.7489361702127659
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.2283687943262411
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-fable-5|thinking=yes|fortnight=1",
+      "eligible": true,
+      "droppedProjects": 1,
+      "droppedCalls": 26,
+      "pooled": {
+        "calls": 1438,
+        "p50": 592,
+        "p90": 2644,
+        "p99": 9489
+      },
+      "bandSpan": {
+        "p90OverP50": 4.466216216216216,
+        "p99OverP50": 16.028716216216218
+      },
+      "components": {
+        "projects": 3,
+        "sessions": 48,
+        "calls": 1438,
+        "raw": {
+          "project": 0.004824932744668429,
+          "session": 0.022964164718037097,
+          "call": 1.2067026605125855
+        },
+        "clamped": {
+          "project": 0.004824932744668429,
+          "session": 0.022964164718037097,
+          "call": 1.2067026605125855
+        },
+        "iccProject": 0.003908436580072333,
+        "iccSession": 0.018602120726752342,
+        "totalRaw": 1.234491757975291,
+        "projectSdRatio": 1.0719310438695087,
+        "sessionSdRatio": 1.1636240515824943,
+        "callSdRatio": 2.9996637133994266
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 1227,
+          "sessions": 40,
+          "p50": 580,
+          "p90": 2633,
+          "p99": 9389
+        },
+        {
+          "workloadId": "w06",
+          "calls": 159,
+          "sessions": 6,
+          "p50": 624,
+          "p90": 2551,
+          "p99": 10754
+        },
+        {
+          "workloadId": "w10",
+          "calls": 52,
+          "sessions": 2,
+          "p50": 803,
+          "p90": 3120,
+          "p99": 5329
+        }
+      ],
+      "medianSpread": {
+        "min": 580,
+        "max": 803,
+        "maxOverMin": 1.3844827586206896,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.9797297297297297
+          },
+          {
+            "workloadId": "w06",
+            "ratio": 1.054054054054054
+          },
+          {
+            "workloadId": "w10",
+            "ratio": 1.3564189189189189
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-fable-5|thinking=no|fortnight=2",
+      "eligible": true,
+      "droppedProjects": 1,
+      "droppedCalls": 9,
+      "pooled": {
+        "calls": 1409,
+        "p50": 191,
+        "p90": 741,
+        "p99": 3061
+      },
+      "bandSpan": {
+        "p90OverP50": 3.8795811518324608,
+        "p99OverP50": 16.026178010471206
+      },
+      "components": {
+        "projects": 5,
+        "sessions": 52,
+        "calls": 1409,
+        "raw": {
+          "project": -0.003510774101003717,
+          "session": 0.018503244325105486,
+          "call": 0.6928017783048619
+        },
+        "clamped": {
+          "project": 0,
+          "session": 0.018503244325105486,
+          "call": 0.6928017783048619
+        },
+        "iccProject": 0,
+        "iccSession": 0.026013093871728753,
+        "totalRaw": 0.7077942485289637,
+        "projectSdRatio": 1,
+        "sessionSdRatio": 1.1457124045878158,
+        "callSdRatio": 2.2987078256316185
+      },
+      "perProject": [
+        {
+          "workloadId": "w10",
+          "calls": 39,
+          "sessions": 1,
+          "p50": 163,
+          "p90": 585,
+          "p99": 971
+        },
+        {
+          "workloadId": "w00",
+          "calls": 325,
+          "sessions": 16,
+          "p50": 171,
+          "p90": 702,
+          "p99": 2080
+        },
+        {
+          "workloadId": "w02",
+          "calls": 431,
+          "sessions": 19,
+          "p50": 188,
+          "p90": 782,
+          "p99": 3743
+        },
+        {
+          "workloadId": "w09",
+          "calls": 479,
+          "sessions": 11,
+          "p50": 196,
+          "p90": 799,
+          "p99": 2360
+        },
+        {
+          "workloadId": "w13",
+          "calls": 135,
+          "sessions": 5,
+          "p50": 231,
+          "p90": 618,
+          "p99": 3138
+        }
+      ],
+      "medianSpread": {
+        "min": 163,
+        "max": 231,
+        "maxOverMin": 1.4171779141104295,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w10",
+            "ratio": 0.8534031413612565
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.8952879581151832
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 0.9842931937172775
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.0261780104712042
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.2094240837696335
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-fable-5|thinking=no|fortnight=0",
+      "eligible": true,
+      "droppedProjects": 0,
+      "droppedCalls": 0,
+      "pooled": {
+        "calls": 1201,
+        "p50": 206,
+        "p90": 927,
+        "p99": 2965
+      },
+      "bandSpan": {
+        "p90OverP50": 4.5,
+        "p99OverP50": 14.393203883495145
+      },
+      "components": {
+        "projects": 3,
+        "sessions": 53,
+        "calls": 1201,
+        "raw": {
+          "project": 0.012160649889517887,
+          "session": 0.03442552889169191,
+          "call": 0.7209170890330335
+        },
+        "clamped": {
+          "project": 0.012160649889517887,
+          "session": 0.03442552889169191,
+          "call": 0.7209170890330335
+        },
+        "iccProject": 0.01584442750862801,
+        "iccSession": 0.04485391832888433,
+        "totalRaw": 0.7675032678142434,
+        "projectSdRatio": 1.1165854651220692,
+        "sessionSdRatio": 1.203869772216744,
+        "callSdRatio": 2.3374681708679304
+      },
+      "perProject": [
+        {
+          "workloadId": "w07",
+          "calls": 39,
+          "sessions": 1,
+          "p50": 162,
+          "p90": 286,
+          "p99": 398
+        },
+        {
+          "workloadId": "w00",
+          "calls": 451,
+          "sessions": 12,
+          "p50": 201,
+          "p90": 747,
+          "p99": 2806
+        },
+        {
+          "workloadId": "w13",
+          "calls": 711,
+          "sessions": 40,
+          "p50": 217,
+          "p90": 1061,
+          "p99": 3281
+        }
+      ],
+      "medianSpread": {
+        "min": 162,
+        "max": 217,
+        "maxOverMin": 1.3395061728395061,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w07",
+            "ratio": 0.7864077669902912
+          },
+          {
+            "workloadId": "w00",
+            "ratio": 0.9757281553398058
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.0533980582524272
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=yes|fortnight=0",
+      "eligible": true,
+      "droppedProjects": 3,
+      "droppedCalls": 55,
+      "pooled": {
+        "calls": 979,
+        "p50": 711,
+        "p90": 2547,
+        "p99": 12921
+      },
+      "bandSpan": {
+        "p90OverP50": 3.5822784810126582,
+        "p99OverP50": 18.172995780590718
+      },
+      "components": {
+        "projects": 3,
+        "sessions": 31,
+        "calls": 979,
+        "raw": {
+          "project": 0.03926592832341663,
+          "session": 0.09358626980180855,
+          "call": 1.2280276607897893
+        },
+        "clamped": {
+          "project": 0.03926592832341663,
+          "session": 0.09358626980180855,
+          "call": 1.2280276607897893
+        },
+        "iccProject": 0.028853339305588727,
+        "iccSession": 0.06876894326029769,
+        "totalRaw": 1.3608798589150146,
+        "projectSdRatio": 1.2191529605084999,
+        "sessionSdRatio": 1.357871948780167,
+        "callSdRatio": 3.028792710385223
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 280,
+          "sessions": 10,
+          "p50": 533,
+          "p90": 1734,
+          "p99": 4195
+        },
+        {
+          "workloadId": "w13",
+          "calls": 380,
+          "sessions": 17,
+          "p50": 764,
+          "p90": 3180,
+          "p99": 16253
+        },
+        {
+          "workloadId": "w07",
+          "calls": 319,
+          "sessions": 4,
+          "p50": 804,
+          "p90": 2768,
+          "p99": 7261
+        }
+      ],
+      "medianSpread": {
+        "min": 533,
+        "max": 804,
+        "maxOverMin": 1.5084427767354596,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.749648382559775
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.0745428973277074
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 1.130801687763713
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-opus-5|thinking=yes|fortnight=3",
+      "eligible": true,
+      "droppedProjects": 4,
+      "droppedCalls": 74,
+      "pooled": {
+        "calls": 687,
+        "p50": 617,
+        "p90": 2800,
+        "p99": 14046
+      },
+      "bandSpan": {
+        "p90OverP50": 4.538087520259319,
+        "p99OverP50": 22.764991896272285
+      },
+      "components": {
+        "projects": 7,
+        "sessions": 21,
+        "calls": 687,
+        "raw": {
+          "project": 0.0077256502822960135,
+          "session": 0.048646191051141686,
+          "call": 1.6348055173618812
+        },
+        "clamped": {
+          "project": 0.0077256502822960135,
+          "session": 0.048646191051141686,
+          "call": 1.6348055173618812
+        },
+        "iccProject": 0.004568208202749396,
+        "iccSession": 0.028764689168184247,
+        "totalRaw": 1.691177358695319,
+        "projectSdRatio": 1.09187421002756,
+        "sessionSdRatio": 1.246773252050735,
+        "callSdRatio": 3.591590477240149
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 51,
+          "sessions": 1,
+          "p50": 324,
+          "p90": 1223,
+          "p99": 2449
+        },
+        {
+          "workloadId": "w05",
+          "calls": 31,
+          "sessions": 1,
+          "p50": 520,
+          "p90": 1563,
+          "p99": 10896
+        },
+        {
+          "workloadId": "w11",
+          "calls": 37,
+          "sessions": 4,
+          "p50": 584,
+          "p90": 1721,
+          "p99": 12732
+        },
+        {
+          "workloadId": "w09",
+          "calls": 173,
+          "sessions": 1,
+          "p50": 635,
+          "p90": 4186,
+          "p99": 18108
+        },
+        {
+          "workloadId": "w01",
+          "calls": 99,
+          "sessions": 3,
+          "p50": 671,
+          "p90": 1749,
+          "p99": 3776
+        },
+        {
+          "workloadId": "w02",
+          "calls": 215,
+          "sessions": 7,
+          "p50": 699,
+          "p90": 2674,
+          "p99": 7431
+        },
+        {
+          "workloadId": "w04",
+          "calls": 81,
+          "sessions": 4,
+          "p50": 805,
+          "p90": 2801,
+          "p99": 10942
+        }
+      ],
+      "medianSpread": {
+        "min": 324,
+        "max": 805,
+        "maxOverMin": 2.484567901234568,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.5251215559157212
+          },
+          {
+            "workloadId": "w05",
+            "ratio": 0.8427876823338736
+          },
+          {
+            "workloadId": "w11",
+            "ratio": 0.946515397082658
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.0291734197730957
+          },
+          {
+            "workloadId": "w01",
+            "ratio": 1.087520259319287
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 1.13290113452188
+          },
+          {
+            "workloadId": "w04",
+            "ratio": 1.3047001620745542
+          }
+        ]
+      },
+      "verdict": "p50-is-personal"
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=no|fortnight=0",
+      "eligible": true,
+      "droppedProjects": 2,
+      "droppedCalls": 22,
+      "pooled": {
+        "calls": 582,
+        "p50": 285,
+        "p90": 932,
+        "p99": 4666
+      },
+      "bandSpan": {
+        "p90OverP50": 3.270175438596491,
+        "p99OverP50": 16.371929824561402
+      },
+      "components": {
+        "projects": 3,
+        "sessions": 27,
+        "calls": 582,
+        "raw": {
+          "project": 0.027269863210050656,
+          "session": 0.10698129106392613,
+          "call": 0.683572373794672
+        },
+        "clamped": {
+          "project": 0.027269863210050656,
+          "session": 0.10698129106392613,
+          "call": 0.683572373794672
+        },
+        "iccProject": 0.033344434678286246,
+        "iccSession": 0.13081219528688595,
+        "totalRaw": 0.8178235280686488,
+        "projectSdRatio": 1.1795534010606357,
+        "sessionSdRatio": 1.386912350818843,
+        "callSdRatio": 2.2859560912082806
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 176,
+          "sessions": 9,
+          "p50": 217,
+          "p90": 692,
+          "p99": 2071
+        },
+        {
+          "workloadId": "w07",
+          "calls": 108,
+          "sessions": 4,
+          "p50": 302,
+          "p90": 906,
+          "p99": 4567
+        },
+        {
+          "workloadId": "w13",
+          "calls": 298,
+          "sessions": 14,
+          "p50": 341,
+          "p90": 1048,
+          "p99": 5854
+        }
+      ],
+      "medianSpread": {
+        "min": 217,
+        "max": 341,
+        "maxOverMin": 1.5714285714285714,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.7614035087719299
+          },
+          {
+            "workloadId": "w07",
+            "ratio": 1.0596491228070175
+          },
+          {
+            "workloadId": "w13",
+            "ratio": 1.1964912280701754
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-opus-5|thinking=no|fortnight=3",
+      "eligible": true,
+      "droppedProjects": 7,
+      "droppedCalls": 90,
+      "pooled": {
+        "calls": 331,
+        "p50": 188,
+        "p90": 929,
+        "p99": 2648
+      },
+      "bandSpan": {
+        "p90OverP50": 4.941489361702128,
+        "p99OverP50": 14.085106382978724
+      },
+      "components": {
+        "projects": 4,
+        "sessions": 13,
+        "calls": 331,
+        "raw": {
+          "project": -0.16631074189461137,
+          "session": 0.30716980697463964,
+          "call": 0.7413793658069442
+        },
+        "clamped": {
+          "project": 0,
+          "session": 0.30716980697463964,
+          "call": 0.7413793658069442
+        },
+        "iccProject": 0,
+        "iccSession": 0.29294745058048327,
+        "totalRaw": 0.8822384308869725,
+        "projectSdRatio": 1,
+        "sessionSdRatio": 1.7405985012666585,
+        "callSdRatio": 2.365605213725662
+      },
+      "perProject": [
+        {
+          "workloadId": "w00",
+          "calls": 52,
+          "sessions": 1,
+          "p50": 131,
+          "p90": 209,
+          "p99": 1043
+        },
+        {
+          "workloadId": "w02",
+          "calls": 119,
+          "sessions": 7,
+          "p50": 174,
+          "p90": 1424,
+          "p99": 3903
+        },
+        {
+          "workloadId": "w09",
+          "calls": 104,
+          "sessions": 2,
+          "p50": 204,
+          "p90": 676,
+          "p99": 2002
+        },
+        {
+          "workloadId": "w01",
+          "calls": 56,
+          "sessions": 3,
+          "p50": 256,
+          "p90": 599,
+          "p99": 993
+        }
+      ],
+      "medianSpread": {
+        "min": 131,
+        "max": 256,
+        "maxOverMin": 1.9541984732824427,
+        "perProjectOverPooled": [
+          {
+            "workloadId": "w00",
+            "ratio": 0.6968085106382979
+          },
+          {
+            "workloadId": "w02",
+            "ratio": 0.925531914893617
+          },
+          {
+            "workloadId": "w09",
+            "ratio": 1.0851063829787233
+          },
+          {
+            "workloadId": "w01",
+            "ratio": 1.3617021276595744
+          }
+        ]
+      },
+      "verdict": "between"
+    },
+    {
+      "label": "model=claude-sonnet-5|thinking=no|fortnight=0",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 2
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=yes|fortnight=1",
+      "eligible": false,
+      "reason": "2 projects with 30+ calls, 117 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 13
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=no|fortnight=1",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 3,
+      "droppedCalls": 35
+    },
+    {
+      "label": "model=claude-fable-5|thinking=no|fortnight=1",
+      "eligible": false,
+      "reason": "2 projects with 30+ calls, 983 usable calls",
+      "droppedProjects": 2,
+      "droppedCalls": 45
+    },
+    {
+      "label": "model=claude-sonnet-4-6|thinking=no|fortnight=1",
+      "eligible": false,
+      "reason": "1 projects with 30+ calls, 36 usable calls",
+      "droppedProjects": 0,
+      "droppedCalls": 0
+    },
+    {
+      "label": "model=claude-haiku-4-5-20251001|thinking=yes|fortnight=1",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 2
+    },
+    {
+      "label": "model=claude-haiku-4-5-20251001|thinking=yes|fortnight=2",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 3,
+      "droppedCalls": 6
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=yes|fortnight=2",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 3,
+      "droppedCalls": 23
+    },
+    {
+      "label": "model=claude-opus-4-8|thinking=no|fortnight=2",
+      "eligible": false,
+      "reason": "1 projects with 30+ calls, 37 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 1
+    },
+    {
+      "label": "model=claude-sonnet-5|thinking=yes|fortnight=2",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 13
+    },
+    {
+      "label": "model=claude-sonnet-5|thinking=no|fortnight=2",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 1
+    },
+    {
+      "label": "model=claude-fable-5|thinking=yes|fortnight=3",
+      "eligible": false,
+      "reason": "2 projects with 30+ calls, 115 usable calls",
+      "droppedProjects": 2,
+      "droppedCalls": 28
+    },
+    {
+      "label": "model=claude-fable-5|thinking=no|fortnight=3",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 4,
+      "droppedCalls": 76
+    },
+    {
+      "label": "model=claude-haiku-4-5-20251001|thinking=yes|fortnight=3",
+      "eligible": false,
+      "reason": "0 projects with 30+ calls, 0 usable calls",
+      "droppedProjects": 1,
+      "droppedCalls": 5
+    }
+  ]
+}

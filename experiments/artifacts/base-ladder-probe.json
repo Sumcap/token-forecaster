@@ -1,0 +1,672 @@
+{
+  "generatedAt": "2026-08-31T10:39:19.551Z",
+  "source": "<redacted-path>",
+  "question": "Does the promptPath rung earn its place in the shipped base ladder, given that the trained correction is fitted on top of it?",
+  "ladders": {
+    "shipped": "model+thinking+promptPath -> pooled promptPath -> model+thinking -> model -> overall",
+    "noPromptPath": "model+thinking -> model -> overall"
+  },
+  "dataset": {
+    "filesScanned": 523,
+    "calls": 16839,
+    "sessions": 354
+  },
+  "singleSplit": {
+    "trainCalls": 13471,
+    "holdoutCalls": 3368,
+    "trainThrough": "2026-08-07T21:39:36.688Z",
+    "holdoutFrom": "2026-08-07T21:39:40.409Z",
+    "n": 3368,
+    "shippedBase": {
+      "n": 3368,
+      "loss": 542.1442695962005,
+      "coverage": [
+        0.5564133016627079,
+        0.9296318289786223,
+        0.9902019002375297
+      ],
+      "width": [
+        1386.1057007125892,
+        6379.98663895487
+      ]
+    },
+    "plainBase": {
+      "n": 3368,
+      "loss": 522.8188954869353,
+      "coverage": [
+        0.5501781472684085,
+        0.9308194774346793,
+        0.9910926365795725
+      ],
+      "width": [
+        1289.558491686461,
+        5469.843824228028
+      ]
+    },
+    "shippedStack": {
+      "n": 3368,
+      "loss": 526.2159471496441,
+      "coverage": [
+        0.5522565320665083,
+        0.9233966745843231,
+        0.9902019002375297
+      ],
+      "width": [
+        1260.605106888361,
+        5728.657957244655
+      ]
+    },
+    "plainStack": {
+      "n": 3368,
+      "loss": 510.3714222090263,
+      "coverage": [
+        0.5442399049881235,
+        0.922209026128266,
+        0.9907957244655582
+      ],
+      "width": [
+        1196.8904394299288,
+        5077.230106888361
+      ]
+    },
+    "stackDifference": {
+      "n": 3368,
+      "meanDifference": -15.844524940617596,
+      "ciLower": -28.3852207711443,
+      "ciUpper": -3.7971304056319366,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "baseDifference": {
+      "n": 3368,
+      "meanDifference": -19.325374109264143,
+      "ciLower": -38.874245283020485,
+      "ciUpper": 1.101003989361778,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "shippedBoostGain": {
+      "n": 3368,
+      "meanDifference": -15.928322446555834,
+      "ciLower": -25.817605873589958,
+      "ciUpper": -6.637616300036053,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "plainBoostGain": {
+      "n": 3368,
+      "meanDifference": -12.447473277909774,
+      "ciLower": -21.852179161372415,
+      "ciUpper": -5.365082883577489,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    }
+  },
+  "rolling": {
+    "folds": [
+      {
+        "fold": 1,
+        "n": 673,
+        "shippedBase": {
+          "n": 673,
+          "loss": 416.98668647845454,
+          "coverage": [
+            0.600297176820208,
+            0.9494799405646359,
+            0.9955423476968797
+          ],
+          "width": [
+            1310.0713224368499,
+            6153.91381872214
+          ]
+        },
+        "plainBase": {
+          "n": 673,
+          "loss": 396.5650222882618,
+          "coverage": [
+            0.6136701337295691,
+            0.9569093610698366,
+            0.9970282317979198
+          ],
+          "width": [
+            1262.9375928677564,
+            5337.387815750371
+          ]
+        },
+        "shippedStack": {
+          "n": 673,
+          "loss": 391.2880237741461,
+          "coverage": [
+            0.5943536404160475,
+            0.9450222882615156,
+            0.9955423476968797
+          ],
+          "width": [
+            1155.261515601783,
+            5261.4130757800895
+          ]
+        },
+        "plainStack": {
+          "n": 673,
+          "loss": 376.73904903417554,
+          "coverage": [
+            0.5973254086181278,
+            0.9420505200594353,
+            0.9955423476968797
+          ],
+          "width": [
+            1141.329866270431,
+            4626.67161961367
+          ]
+        },
+        "stackDifference": {
+          "n": 673,
+          "meanDifference": -14.548974739970308,
+          "ciLower": -29.87413461538461,
+          "ciUpper": 2.072159827213825,
+          "blocks": 14,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "baseDifference": {
+          "n": 673,
+          "meanDifference": -20.421664190193173,
+          "ciLower": -60.30034539473671,
+          "ciUpper": 16.116050000000083,
+          "blocks": 14,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "shippedBoostGain": {
+          "n": 673,
+          "meanDifference": -25.698662704309093,
+          "ciLower": -40.42638376383765,
+          "ciUpper": -12.58893871449925,
+          "blocks": 14,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "plainBoostGain": {
+          "n": 673,
+          "meanDifference": -19.825973254086126,
+          "ciLower": -49.84877682403425,
+          "ciUpper": 3.2060725720384182,
+          "blocks": 14,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      {
+        "fold": 2,
+        "n": 673,
+        "shippedBase": {
+          "n": 673,
+          "loss": 756.2583060921255,
+          "coverage": [
+            0.5676077265973254,
+            0.9049034175334324,
+            0.9821693907875185
+          ],
+          "width": [
+            1360.8662704309063,
+            7768.445765230312
+          ]
+        },
+        "plainBase": {
+          "n": 673,
+          "loss": 712.816686478454,
+          "coverage": [
+            0.5676077265973254,
+            0.9108469539375929,
+            0.9851411589895989
+          ],
+          "width": [
+            1224.445765230312,
+            5245.106983655275
+          ]
+        },
+        "shippedStack": {
+          "n": 673,
+          "loss": 710.5883655274894,
+          "coverage": [
+            0.5453194650817236,
+            0.8989598811292719,
+            0.9851411589895989
+          ],
+          "width": [
+            1106.404160475483,
+            7010.484398216939
+          ]
+        },
+        "plainStack": {
+          "n": 673,
+          "loss": 694.8246656760774,
+          "coverage": [
+            0.5453194650817236,
+            0.9063893016344725,
+            0.986627043090639
+          ],
+          "width": [
+            1175.8662704309063,
+            5923.888558692422
+          ]
+        },
+        "stackDifference": {
+          "n": 673,
+          "meanDifference": -15.763699851411609,
+          "ciLower": -17.399405940594086,
+          "ciUpper": -15.02782608695649,
+          "blocks": 4,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "baseDifference": {
+          "n": 673,
+          "meanDifference": -43.441619613670035,
+          "ciLower": -51.48954372623591,
+          "ciUpper": -12.697867298578172,
+          "blocks": 4,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "shippedBoostGain": {
+          "n": 673,
+          "meanDifference": -45.66994056463592,
+          "ciLower": -125.48752173913047,
+          "ciUpper": -16.453129251700698,
+          "blocks": 4,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "plainBoostGain": {
+          "n": 673,
+          "meanDifference": -17.992020802377414,
+          "ciLower": -97.16091304347836,
+          "ciUpper": -5.5180934579438965,
+          "blocks": 4,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      {
+        "fold": 3,
+        "n": 673,
+        "shippedBase": {
+          "n": 673,
+          "loss": 604.1689598811284,
+          "coverage": [
+            0.5601783060921248,
+            0.9167904903417533,
+            0.986627043090639
+          ],
+          "width": [
+            1378.2838038632988,
+            5733.734026745914
+          ]
+        },
+        "plainBase": {
+          "n": 673,
+          "loss": 598.9938632986622,
+          "coverage": [
+            0.5408618127786032,
+            0.9138187221396731,
+            0.9851411589895989
+          ],
+          "width": [
+            1347.8573551263,
+            5718.077265973254
+          ]
+        },
+        "shippedStack": {
+          "n": 673,
+          "loss": 598.0175037147101,
+          "coverage": [
+            0.5215453194650818,
+            0.912332838038633,
+            0.9836552748885586
+          ],
+          "width": [
+            1326.4650817236256,
+            5396.793462109956
+          ]
+        },
+        "plainStack": {
+          "n": 673,
+          "loss": 597.526285289747,
+          "coverage": [
+            0.5200594353640416,
+            0.8989598811292719,
+            0.9836552748885586
+          ],
+          "width": [
+            1282.1203566121842,
+            5444.848439821694
+          ]
+        },
+        "stackDifference": {
+          "n": 673,
+          "meanDifference": -0.491218424962847,
+          "ciLower": -18.77321739130433,
+          "ciUpper": 16.214546722454667,
+          "blocks": 20,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "baseDifference": {
+          "n": 673,
+          "meanDifference": -5.175096582466599,
+          "ciLower": -29.874570858283573,
+          "ciUpper": 7.615958549222786,
+          "blocks": 20,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "shippedBoostGain": {
+          "n": 673,
+          "meanDifference": -6.1514561664190035,
+          "ciLower": -23.225687022900747,
+          "ciUpper": 11.403616714697396,
+          "blocks": 20,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "plainBoostGain": {
+          "n": 673,
+          "meanDifference": -1.4675780089152968,
+          "ciLower": -20.38204081632653,
+          "ciUpper": 14.574748201438847,
+          "blocks": 20,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      {
+        "fold": 4,
+        "n": 673,
+        "shippedBase": {
+          "n": 673,
+          "loss": 393.11921248142653,
+          "coverage": [
+            0.462109955423477,
+            0.9361069836552749,
+            0.9955423476968797
+          ],
+          "width": [
+            1185.4576523031203,
+            4915.102526002972
+          ]
+        },
+        "plainBase": {
+          "n": 673,
+          "loss": 402.16968796433895,
+          "coverage": [
+            0.475482912332838,
+            0.9405646359583952,
+            0.9970282317979198
+          ],
+          "width": [
+            1232.5631500742943,
+            5410.774145616642
+          ]
+        },
+        "shippedStack": {
+          "n": 673,
+          "loss": 397.59989598811273,
+          "coverage": [
+            0.46656760772659733,
+            0.9271916790490342,
+            0.9925705794947994
+          ],
+          "width": [
+            1112.3417533432391,
+            4264.646359583952
+          ]
+        },
+        "plainStack": {
+          "n": 673,
+          "loss": 401.18319465081703,
+          "coverage": [
+            0.4769687964338782,
+            0.9286775631500743,
+            0.9940564635958395
+          ],
+          "width": [
+            1103.5230312035662,
+            4454.5586924219915
+          ]
+        },
+        "stackDifference": {
+          "n": 673,
+          "meanDifference": 3.5832986627043075,
+          "ciLower": -1.223206650831349,
+          "ciUpper": 10.307113702623896,
+          "blocks": 24,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "baseDifference": {
+          "n": 673,
+          "meanDifference": 9.050475482912317,
+          "ciLower": 4.918525252525231,
+          "ciUpper": 16.264050632911374,
+          "blocks": 24,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "shippedBoostGain": {
+          "n": 673,
+          "meanDifference": 4.480683506686467,
+          "ciLower": -4.010456521739142,
+          "ciUpper": 15.869709821428561,
+          "blocks": 24,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "plainBoostGain": {
+          "n": 673,
+          "meanDifference": -0.9864933135215396,
+          "ciLower": -8.653700159489619,
+          "ciUpper": 8.854677419354832,
+          "blocks": 24,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      },
+      {
+        "fold": 5,
+        "n": 676,
+        "shippedBase": {
+          "n": 676,
+          "loss": 491.9598816568052,
+          "coverage": [
+            0.5177514792899408,
+            0.915680473372781,
+            0.992603550295858
+          ],
+          "width": [
+            1279.6923076923076,
+            5666.501479289941
+          ]
+        },
+        "plainBase": {
+          "n": 676,
+          "loss": 496.87639053254424,
+          "coverage": [
+            0.507396449704142,
+            0.9142011834319527,
+            0.9911242603550295
+          ],
+          "width": [
+            1198.707100591716,
+            5257.494082840237
+          ]
+        },
+        "shippedStack": {
+          "n": 676,
+          "loss": 480.09492603550353,
+          "coverage": [
+            0.5384615384615384,
+            0.9201183431952663,
+            0.992603550295858
+          ],
+          "width": [
+            1256.2692307692307,
+            5118.53550295858
+          ]
+        },
+        "plainStack": {
+          "n": 676,
+          "loss": 483.10599112426064,
+          "coverage": [
+            0.5133136094674556,
+            0.9142011834319527,
+            0.9866863905325444
+          ],
+          "width": [
+            1173.2189349112425,
+            4962.210059171598
+          ]
+        },
+        "stackDifference": {
+          "n": 676,
+          "meanDifference": 3.011065088757375,
+          "ciLower": -20.869402985074625,
+          "ciUpper": 10.594373333333301,
+          "blocks": 25,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "baseDifference": {
+          "n": 676,
+          "meanDifference": 4.916508875739604,
+          "ciLower": -35.38203389830502,
+          "ciUpper": 11.660150564617297,
+          "blocks": 25,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "shippedBoostGain": {
+          "n": 676,
+          "meanDifference": -11.864955621301709,
+          "ciLower": -38.930123456790106,
+          "ciUpper": 12.440847457627202,
+          "blocks": 25,
+          "blockKind": "session",
+          "resamples": 2000
+        },
+        "plainBoostGain": {
+          "n": 676,
+          "meanDifference": -13.770399408284073,
+          "ciLower": -28.190909090909077,
+          "ciUpper": 14.174540540540542,
+          "blocks": 25,
+          "blockKind": "session",
+          "resamples": 2000
+        }
+      }
+    ],
+    "n": 3368,
+    "shippedBase": {
+      "n": 3368,
+      "loss": 532.462500000001,
+      "coverage": [
+        0.5415676959619953,
+        0.9245843230403801,
+        0.9904988123515439
+      ],
+      "width": [
+        1302.853622327791,
+        6047.200118764846
+      ]
+    },
+    "plainBase": {
+      "n": 3368,
+      "loss": 521.4624109263635,
+      "coverage": [
+        0.5409738717339667,
+        0.9272565320665083,
+        0.9910926365795725
+      ],
+      "width": [
+        1253.2535629453682,
+        5393.646674584323
+      ]
+    },
+    "shippedStack": {
+      "n": 3368,
+      "loss": 515.4861906175767,
+      "coverage": [
+        0.5332541567695962,
+        0.9207244655581948,
+        0.9899049881235155
+      ],
+      "width": [
+        1191.4061757719714,
+        5410.114608076009
+      ]
+    },
+    "plainStack": {
+      "n": 3368,
+      "loss": 510.6512796912112,
+      "coverage": [
+        0.5305819477434679,
+        0.9180522565320665,
+        0.9893111638954869
+      ],
+      "width": [
+        1175.209916864608,
+        5082.3283847981
+      ]
+    },
+    "stackDifference": {
+      "n": 3368,
+      "meanDifference": -4.834910926365773,
+      "ciLower": -12.145543032786835,
+      "ciUpper": 2.9009598715890803,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "baseDifference": {
+      "n": 3368,
+      "meanDifference": -11.000089073633745,
+      "ciLower": -26.987210715894207,
+      "ciUpper": 5.629096238397705,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "shippedBoostGain": {
+      "n": 3368,
+      "meanDifference": -16.976309382422603,
+      "ciLower": -26.922773907536392,
+      "ciUpper": -6.217714122028063,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    },
+    "plainBoostGain": {
+      "n": 3368,
+      "meanDifference": -10.811131235154443,
+      "ciLower": -19.947708860759498,
+      "ciUpper": -3.168951551854629,
+      "blocks": 81,
+      "blockKind": "session",
+      "resamples": 2000
+    }
+  },
+  "gate": {
+    "rule": "adopt the promptPath-free base iff the paired rolling (plainStack - shippedStack) CI upper bound < 0 AND plainStack p90 coverage in [0.88, 0.93]",
+    "meanDifference": -4.834910926365773,
+    "ciLower": -12.145543032786835,
+    "ciUpper": 2.9009598715890803,
+    "p90Coverage": 0.9180522565320665,
+    "beatsShipped": false,
+    "coverageInBand": true,
+    "adopt": false
+  }
+}

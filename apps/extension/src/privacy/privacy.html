@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Token Forecaster privacy</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <p class="kicker">Privacy</p>
+      <h1>Token Forecaster data choices</h1>
+      <p class="lede">
+        Forecasting works without telemetry. Both contribution choices are off
+        until you explicitly enable them, and turning them down does not remove
+        any feature.
+      </p>
+
+      <section>
+        <h2>Reliability diagnostics</h2>
+        <p class="note">
+          If enabled, the extension sends its version, the supported Claude
+          surface, enumerated success or failure stages, and coarse timing
+          buckets. It does not send prompt text, reply text, page URLs, account
+          identifiers, cookies, or arbitrary error stacks.
+        </p>
+      </section>
+
+      <section>
+        <h2>Forecast research</h2>
+        <p class="note">
+          If separately enabled, the extension derives numeric and categorical
+          features from the draft in the browser, then sends those features,
+          the forecast frozen at send, and an estimated token count of the
+          visible reply. Raw prompts and replies are not sent. Browser outcomes
+          are marked <code>dom_estimate</code> so they cannot be mistaken for
+          provider-exact usage.
+        </p>
+      </section>
+
+      <section>
+        <h2>Storage, identifiers, and deletion</h2>
+        <p class="note">
+          The collector issues a random credential for this installation and
+          stores only its keyed hash. Events are queued locally while delivery
+          is unavailable. Settings lets you stop either contribution, clear the
+          local queue, and permanently delete this installation&rsquo;s collected
+          rows. No data is sold or used for advertising.
+        </p>
+        <p class="note">
+          Before a public release, this packaged notice must also be published
+          at the privacy-policy URL entered in the Chrome Web Store dashboard,
+          together with the operator&rsquo;s legal identity, contact details,
+          retention period, hosting region, subprocessors, and applicable data
+          rights.
+        </p>
+      </section>
+
+      <div class="actions">
+        <a class="button primary" href="options.html">Open data settings</a>
+        <a class="button" href="welcome.html">Back to welcome</a>
+      </div>
+    </main>
+  </body>
+</html>
