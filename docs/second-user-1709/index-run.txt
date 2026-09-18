@@ -1,0 +1,10 @@
+[load-history] study salt not set for this run
+indexed in 16.9s
+  openai: 13 files, 422 usable rows, skipped duplicate_usage=13 zero_output=1
+  anthropic: 1,324 files, 23,415 usable rows, skipped no_turn_context=19
+  stored anthropic call: 23,415 observations, 4 models, 2026-08-18 → 2026-09-17
+  stored anthropic turn: 2,131 observations, 4 models, 2026-08-18 → 2026-09-17
+  stored openai call: 190 observations, 1 models, 2026-08-09 → 2026-08-18
+  stored openai turn: 21 observations, 1 models, 2026-08-09 → 2026-08-18
+node --no-warnings apps/companion/dist/cli.js index  12,97s user 4,71s system 103% cpu 17,144 total
+exit 0
