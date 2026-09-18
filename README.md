@@ -188,6 +188,8 @@ One person's fit does not transfer. Holding the person fixed and swapping projec
 
 This is the crucial limitation. Between users, calibration is unmeasured, and the gap is expected to be at least as wide as it is between one person's projects. The next experiment, below, exists because of this chart.
 
+**A second user, 17 Sep 2026.** One other person ran the index and the evaluation on their own machine and history, unchanged code. The daemon indexed 1,324 Claude Code files, 23,415 usable calls, in 17 seconds and fitted a personal profile. On a chronological 70/30 holdout of that history (7,025 calls scored) the personal profile's p90 line covered 88.3 percent of held-out calls against 80.9 percent for the bundled cold-start prior, with pinball loss per call 394 against 455. On whole turns (640 scored) the best personal candidate reached 80.6 percent p90 coverage; the bundled prior 79.8 percent. Two of the four forecast types beat the generic model on that machine. One user, one run, no confidence intervals yet: the logs are in [docs/second-user-1709/](docs/second-user-1709/).
+
 ## Forecasting the whole turn
 
 The prompt predicts the turn, never the call. Prompt features were refused for the per-call forecast (best variant +14.5 [-2.3, +29.0], 12 Aug 2026). On whole-turn totals a draft that reads "can you write" forecasts 3,564 / 24,884 at p50 / p90 and the full intent 9,054 / 38,283 (12 Aug 2026, 1,182 turns).

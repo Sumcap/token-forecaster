@@ -1,0 +1,20 @@
+chronological holdout — train fraction 0.7
+
+anthropic · call — fit on 16,390, scored on 7,025
+  candidate         n      P50cov  P90cov  P99cov  pinball   P90-P50   medP50
+  cold_start       7,025   37.2%   80.9%   96.1%    455.5     1,184      348
+  personal_flat    7,025   47.1%   86.5%   98.6%    425.2     1,801      475
+  personal_core    7,025   33.3%   88.3%   99.4%    394.1     2,043      443  <- best
+  personal_prompt  7,025   34.7%   88.1%   99.5%    402.6     2,050      285
+  conditioning beats this user's flat baseline: yes; prompt rungs help: no
+
+anthropic · turn — fit on 1,491, scored on 640
+  candidate         n      P50cov  P90cov  P99cov  pinball   P90-P50   medP50
+  cold_start         640   31.9%   79.8%   96.4%   4350.2    25,888    4,334
+  personal_flat      640   37.8%   76.4%   96.3%   4447.2    20,929    5,783
+  personal_core      640   38.9%   79.7%   94.4%   4436.6    24,179    7,047
+  personal_prompt    640   36.6%   80.6%   94.1%   4181.2    22,496    3,841  <- best
+  conditioning beats this user's flat baseline: no; prompt rungs help: yes
+
+prompt rungs adopted: true — prompt rungs lowered held-out pinball loss on 1/2 slices
+excluded: slice_too_small=64
